@@ -23,7 +23,7 @@ enum Planet {
 class ObsInfo {
 public:
     // c'tor: lon & lat are passed in DEGREES
-    ObsInfo(double _lng_deg = 0, double _lat_deg = 0, Planet _planet = EARTH, double _sec = 0);
+    ObsInfo(double _lng_deg = 0, double _lat_deg = 0, Planet _planet = EARTH, unsigned long _sec = 0);
     
     void    setLatitude(double _deg);
     void    setLongitude(double _deg);
