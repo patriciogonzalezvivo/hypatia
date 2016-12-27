@@ -18,9 +18,6 @@ struct TimeOps {
     // Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
     static unsigned long getCurrentMilliseconds();
     
-    // Return UT Hours
-    static double getUT( double _tz_offset = 0.0 );
-    
     // to Julian Dates (_milli == 0 means NOW)
     static double julianDates( unsigned long _sec = 0.0 );
     

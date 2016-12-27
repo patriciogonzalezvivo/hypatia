@@ -58,7 +58,7 @@ public:
     // t = decimal julian centuries
     Lunar( double t ) { calcFundamentals( t ); }
 
-    static constexpr double const SYNODIC_MONTH = 29.530588861;
+    static double const SYNODIC_MONTH = 29.530588861;
 
     double illuminatedFraction();
 
