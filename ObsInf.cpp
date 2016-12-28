@@ -8,7 +8,7 @@
 #include <string.h>
 #include <iostream>
 
-ObsInfo::ObsInfo( double _lng_deg, double _lat_deg, Planet _planet, unsigned long _sec) : m_longitude(MathOps::toRadians(_lng_deg)), m_latitude(MathOps::toRadians(_lat_deg)), m_sec(_sec), m_jd(0.0), m_century(0.0),  m_obliquity(0.0), m_lst(0.0), m_planet(_planet), m_change(true) {
+ObsInfo::ObsInfo( double _lng_deg, double _lat_deg, Planet _planet, unsigned long _sec) : m_longitude(MathOps::toRadians(_lng_deg)), m_latitude(MathOps::toRadians(_lat_deg)), m_sec(_sec), m_jd(0.0), m_century(0.0), m_obliquity(0.0), m_lst(0.0), m_planet(_planet), m_change(true) {
 }
 
 // set: lat passed in DEGREES
@@ -105,6 +105,6 @@ void ObsInfo::copyEclipticHelioLocation(AstroVector &_v) {
 
 void ObsInfo::update() {
     if (m_change) {
-        setJuliaDay( TimeOps::julianDates(m_sec) );
+        setTime(m_sec);
     }
 }
