@@ -97,10 +97,10 @@ double ObsInfo::getLST() {
     return m_lst;
 }
 
-void ObsInfo::copyEclipticHelioLocation(AstroVector &_vector) {
+void ObsInfo::copyEclipticHelioLocation(AstroVector &_v) {
     if (m_change)
         update();
-     memcpy(_vector, m_eclipticHelioLocation, sizeof(AstroVector) );
+     memcpy(_v, m_eclipticHelioLocation, sizeof(AstroVector) );
 }
 
 void ObsInfo::update() {
