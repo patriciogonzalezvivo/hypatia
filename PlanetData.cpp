@@ -16,10 +16,10 @@
 #include "Pluto.h"
 #include "Vsop.h"
 
-PlanetData::PlanetData() : m_planet( NAP ), m_jd(0) {
+PlanetData::PlanetData() :  m_jd(0), m_planet( NAP ) {
 }
 
-PlanetData::PlanetData( Planet _planet, ObsInfo& _obs ) : m_planet(_planet), m_jd(0) {
+PlanetData::PlanetData( Planet _planet, ObsInfo& _obs ) : m_jd(0), m_planet(_planet){
     update(_obs);
 }
 
@@ -36,7 +36,9 @@ void PlanetData::update(ObsInfo& _obs) {
         if (LUNA == m_planet) {          /* not VSOP */
             static Lunar luna;
             luna.calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, _obs.getCenturyDate());
-            AstroOps::eclipticToEquatorial(_obs.getJulianDate(), m_eclipticLon, m_eclipticLat, m_ra, m_dec);
+            AstroOps::eclipticToEquatorial( _obs, 
+                                            m_eclipticLon, m_eclipticLat, 
+                                            m_ra, m_dec);
         }
         else if (PLUTO == m_planet) {    /* not VSOP */
             Pluto::calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, _obs.getCenturyDate());
@@ -58,7 +60,9 @@ void PlanetData::update(ObsInfo& _obs) {
             m_eclipticLon += MathOps::HD_PI;
             m_eclipticLat *= -1.;
             
-            AstroOps::eclipticToEquatorial(_obs.getJulianDate(), m_eclipticLon, m_eclipticLat, m_ra, m_dec);
+            AstroOps::eclipticToEquatorial( _obs, 
+                                            m_eclipticLon, m_eclipticLat, 
+                                            m_ra, m_dec);
         }
         else {
             Vsop::calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, _obs.getCenturyDate(), m_planet);

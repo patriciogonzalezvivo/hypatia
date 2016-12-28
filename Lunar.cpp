@@ -22,6 +22,8 @@
 // a list of terms needed to do lunar calcs data extracted from vsop.bin file
 //----------------------------------------------------------------------------
 
+const double Lunar::SYNODIC_MONTH = 29.530588861;
+
 // Lunar Fundimentals
 
 const double LunarFundimentals_Lp[5] = {

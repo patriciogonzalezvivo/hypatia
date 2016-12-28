@@ -217,8 +217,8 @@ void AstroOps::nutation( double t, double* pDPhi, double* pDEpsilon ){
 
 //----------------------------------------------------------------------------
 
-void AstroOps::eclipticToEquatorial ( double _jd, double _lng, double _lat, double &_ra, double &_dec ) {
-    double e = meanObliquity(TimeOps::toMillenia(_jd));
+void AstroOps::eclipticToEquatorial ( ObsInfo &_loc, double _lng, double _lat, double &_ra, double &_dec ) {
+    double e = meanObliquity(TimeOps::toMillenia(_loc.getJulianDate()));
     double sl = sin(_lng);
     double cl = cos(_lng);
     double sb = sin(_lat);
@@ -235,7 +235,7 @@ void AstroOps::eclipticToEquatorial ( double _jd, double _lng, double _lat, doub
 }
 
 
-void AstroOps::equatorialToHorizontal ( ObsInfo _obs, double _ra, double _dec, double &_alt, double &_az ) {
+void AstroOps::equatorialToHorizontal ( ObsInfo &_obs, double _ra, double _dec, double &_alt, double &_az ) {
     // compute hour angle in degrees
     double ha = (MathOps::HD_PI*_obs.getLST()/12.) - _ra;
     double sd = sin(_dec);
@@ -251,7 +251,7 @@ void AstroOps::equatorialToHorizontal ( ObsInfo _obs, double _ra, double _dec, d
         _az = 2.*MathOps::HD_PI - _az;
 }
 
-void AstroOps::heliocentricToGeocentric(ObsInfo _obs,
+void AstroOps::heliocentricToGeocentric(ObsInfo &_obs,
                                         double planet_eclipticLon, double planet_eclipticLat, double planet_rad,
                                         double &_ra, double &_dec) {
     AstroVector earth_eclipticLoc;

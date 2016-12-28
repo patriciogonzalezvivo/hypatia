@@ -15,15 +15,15 @@
 class AstroOps {
 public:
     // Transform celestial coordinates ( https://en.wikipedia.org/wiki/Celestial_coordinate_system )
-    static void   eclipticToEquatorial( double _jd,
+    static void   eclipticToEquatorial( ObsInfo &_loc,
                                         double _lng, double _lat,       // IN
                                         double &_ra, double &_dec);     // OUT
     
-    static void   equatorialToHorizontal( ObsInfo _loc,
+    static void   equatorialToHorizontal( ObsInfo &_loc,
                                           double _ra, double _dec,
                                           double &_alt, double &_az);
     
-    static void   heliocentricToGeocentric( ObsInfo _loc,
+    static void   heliocentricToGeocentric( ObsInfo &_loc,
                                             double planet_eclipticLon, double planet_eclipticLat, double planet_rad,
                                             double &_ra, double &_dec);
     
