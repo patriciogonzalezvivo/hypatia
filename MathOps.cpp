@@ -15,6 +15,12 @@ const double MathOps::SECONDS_PER_DEGREE = 3600.;
 
 const double MathOps::TO_RADS = HD_PI / 180.;
 
+void MathOps::toDegreesMinSec ( double _rad, int &_deg, int &_min, int &_sec ) {
+    int totalSeconds = (int)round( MathOps::normalizeRadians(_rad) * 360 * 60 * 60 / TAU);
+    _sec = totalSeconds % 60;
+    _min = (totalSeconds / 60) % 60;
+    _deg = totalSeconds / (60 * 60);
+}
 
 //----------------------------------------------------------------------------
 // reduce an angle in degrees to (0 <= d < 360)
@@ -36,29 +42,25 @@ double MathOps::normalizeRadians ( double r ) {
     return r;
 }
 
-void MathOps::rotateVector( AstroVector& v, double angle, int axis ) {
-    const double sinAng = sin( angle );
-    const double cosAng = cos( angle );
-    const int a = (axis + 1) % 3;
-    const int b = (axis + 2) % 3;
-    
-    double temp = v[a] * cosAng - v[b] * sinAng;
-    v[b] = v[b] * cosAng + v[a] * sinAng;
-    v[a] = temp;
+AstroVector::AstroVector(): x(0.), y(0.), z(0.) {
 }
 
-// convert polar coords to cartesian
-//
-void MathOps::polar3ToCartesian( AstroVector& v, double lon, double lat ) {
-    const double cosLat = cos(lat);
-    v[0] = cos(lon) * cosLat;
-    v[1] = sin(lon) * cosLat;
-    v[2] = sin(lat);
+AstroVector::AstroVector(double _radiant_lon, double _radiant_lat, double _radius): x(0.), y(0.), z(0.) {
+    // http://www.stjarnhimlen.se/comp/tutorial.html
+    const double cosLat = cos(_radiant_lat);
+    x = cos(_radiant_lon) * cosLat * _radius;
+    y = sin(_radiant_lon) * cosLat * _radius;
+    z = sin(_radiant_lat) * _radius;
 }
 
-void MathOps::polar3ToCartesian( AstroVector& v, double lon, double lat, double rad ) {
-    const double cosLat = cos(lat);
-    v[0] = cos(lon) * cosLat * rad;
-    v[1] = sin(lon) * cosLat * rad;
-    v[2] = sin(lat) * rad;
+double AstroVector::getLongitud() {
+    return atan2(y, x);
+}
+
+double AstroVector::getLatitud() {
+    return atan2(z, sqrt(x*x + y*y));
+}
+
+double AstroVector::getRadius() {
+    return sqrt(x*x + y*y + z*z);
 }

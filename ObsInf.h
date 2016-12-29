@@ -42,7 +42,7 @@ public:
     double  getObliquity();
     double  getLST();
     
-    void    copyEclipticHelioLocation(AstroVector &_v);
+    AstroVector    getEclipticHelioLocation();
     
     void    update();
     

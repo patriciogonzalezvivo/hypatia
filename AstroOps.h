@@ -23,11 +23,10 @@ public:
                                           double _ra, double _dec,
                                           double &_alt, double &_az);
     
-    static void   heliocentricToGeocentric( ObsInfo &_loc,
-                                            double planet_eclipticLon, double planet_eclipticLat, double planet_rad,
-                                            double &_ra, double &_dec);
+    static void   heliocentricToGeocentric( ObsInfo &_loc, 
+                                            double &_planet_eclipticLon, double &_planet_eclipticLat, double &_planet_rad);
     
-    static double meanObliquity( double _jd);
+    static double meanObliquity( double _jd );
     static void   nutation( double t, double* d_lon, double* d_obliq );
 };
 

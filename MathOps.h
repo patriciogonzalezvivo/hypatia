@@ -9,7 +9,18 @@
 #pragma once
 
 // * * * * * Handy Type Definitions * * * * *
-typedef double AstroVector[3];
+struct AstroVector {
+    AstroVector();
+    AstroVector(double _radiant_lon, double _radiant_lat, double _radius = 1.);
+    
+    double getLongitud();
+    double getLatitud();
+    double getRadius();
+
+    double x;
+    double y;
+    double z;
+};
 
 // * * * * * Generic Handy Constants and Conversions * * * * *
 
@@ -29,11 +40,8 @@ struct MathOps {
     
     // convert radians to degrees
     static double toDegrees( double rad ) { return rad / TO_RADS; }
+    static void toDegreesMinSec ( double rad, int &_deg, int &_min, int &_sec );
     
     static double normalizeDegrees( double d );
     static double normalizeRadians( double d );
-    
-    static void rotateVector( AstroVector& _v, double _radiant_angle, int _axis );
-    static void polar3ToCartesian( AstroVector& _v, double _radiant_lon, double _radiant_lat );
-    static void polar3ToCartesian( AstroVector& _v, double _radiant_lon, double _radiant_lat, double _radius );
 };

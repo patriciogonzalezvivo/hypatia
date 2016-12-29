@@ -36,17 +36,10 @@ void PlanetData::update(ObsInfo& _obs) {
         if (LUNA == m_planet) {          /* not VSOP */
             static Lunar luna;
             luna.calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, _obs.getCenturyDate());
-            AstroOps::eclipticToEquatorial( _obs, 
-                                            m_eclipticLon, m_eclipticLat, 
-                                            m_ra, m_dec);
         }
         else if (PLUTO == m_planet) {    /* not VSOP */
             Pluto::calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, _obs.getCenturyDate());
-            AstroOps::heliocentricToGeocentric(_obs,
-                                               m_eclipticLon, m_eclipticLat, m_r,
-                                               m_ra, m_dec);
-            
-            //AstroOps::eclipticToEquatorial(_obs.getJulianDate(), m_eclipticLon, m_eclipticLat, m_ra, m_dec);
+            AstroOps::heliocentricToGeocentric(_obs, m_eclipticLon, m_eclipticLat, m_r);
         }
         else if (SUN == m_planet) {
             Vsop::calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, _obs.getCenturyDate(), EARTH);
@@ -59,18 +52,13 @@ void PlanetData::update(ObsInfo& _obs) {
              */
             m_eclipticLon += MathOps::HD_PI;
             m_eclipticLat *= -1.;
-            
-            AstroOps::eclipticToEquatorial( _obs, 
-                                            m_eclipticLon, m_eclipticLat, 
-                                            m_ra, m_dec);
         }
         else {
             Vsop::calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, _obs.getCenturyDate(), m_planet);
-            AstroOps::heliocentricToGeocentric(_obs,
-                                               m_eclipticLon, m_eclipticLat, m_r,
-                                               m_ra, m_dec);
+            AstroOps::heliocentricToGeocentric(_obs, m_eclipticLon, m_eclipticLat, m_r);
         }
         
+        AstroOps::eclipticToEquatorial(_obs, m_eclipticLon, m_eclipticLat, m_ra, m_dec);
         AstroOps::equatorialToHorizontal(_obs, m_ra, m_dec, m_alt, m_az);
     }
 }

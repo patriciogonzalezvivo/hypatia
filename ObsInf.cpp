@@ -41,7 +41,7 @@ void ObsInfo::setJuliaDay (double _jd ) {
     double planet_eclipticLat;
     double planet_eclipticRad;
     Vsop::calcAllLocs(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad, m_century, m_planet);
-    MathOps::polar3ToCartesian(m_eclipticHelioLocation, planet_eclipticLon, planet_eclipticLat, planet_eclipticRad);
+    m_eclipticHelioLocation = AstroVector(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad);
     
     //std::cout << "Observation data UPDATED" << std::endl;
     m_change = false;
@@ -97,10 +97,10 @@ double ObsInfo::getLST() {
     return m_lst;
 }
 
-void ObsInfo::copyEclipticHelioLocation(AstroVector &_v) {
+AstroVector ObsInfo::getEclipticHelioLocation() {
     if (m_change)
         update();
-     memcpy(_v, m_eclipticHelioLocation, sizeof(AstroVector) );
+    return m_eclipticHelioLocation;
 }
 
 void ObsInfo::update() {

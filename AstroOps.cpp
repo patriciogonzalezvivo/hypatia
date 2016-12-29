@@ -234,7 +234,6 @@ void AstroOps::eclipticToEquatorial ( ObsInfo &_loc, double _lng, double _lat, d
         _ra += MathOps::TAU;
 }
 
-
 void AstroOps::equatorialToHorizontal ( ObsInfo &_obs, double _ra, double _dec, double &_alt, double &_az ) {
     // compute hour angle in degrees
     double ha = (MathOps::HD_PI*_obs.getLST()/12.) - _ra;
@@ -251,24 +250,20 @@ void AstroOps::equatorialToHorizontal ( ObsInfo &_obs, double _ra, double _dec, 
         _az = 2.*MathOps::HD_PI - _az;
 }
 
-void AstroOps::heliocentricToGeocentric(ObsInfo &_obs,
-                                        double planet_eclipticLon, double planet_eclipticLat, double planet_rad,
-                                        double &_ra, double &_dec) {
-    AstroVector earth_eclipticLoc;
-    _obs.copyEclipticHelioLocation(earth_eclipticLoc);
+
+void AstroOps::heliocentricToGeocentric ( ObsInfo &_obs,
+                                          double &_planet_eclipticLon, double &_planet_eclipticLat, double &_planet_rad) {
+    // http://www.astrosurf.com/jephem/astro/ephemeris/et520transfo_en.htm
+
+    AstroVector earth_eclipticLoc = _obs.getEclipticHelioLocation();
+    AstroVector planet_eclipticLoc = AstroVector(_planet_eclipticLon, _planet_eclipticLat, _planet_rad);
+
+    planet_eclipticLoc.x -= earth_eclipticLoc.x;
+    planet_eclipticLoc.y -= earth_eclipticLoc.y;
+    planet_eclipticLoc.z -= earth_eclipticLoc.z;
     
-    AstroVector planet_eclipticLoc;
-    MathOps::polar3ToCartesian(planet_eclipticLoc, planet_eclipticLon, planet_eclipticLat, planet_rad);
-    
-    planet_eclipticLoc[0] -= earth_eclipticLoc[0];
-    planet_eclipticLoc[1] -= earth_eclipticLoc[1];
-    planet_eclipticLoc[2] -= earth_eclipticLoc[2];
-    
-    AstroVector planet_equatorialLoc;
-    memcpy(planet_equatorialLoc, planet_eclipticLoc, sizeof(AstroVector) );
-    MathOps::rotateVector(planet_equatorialLoc, _obs.getObliquity(), 0);
-    
-    _ra = atan2(planet_equatorialLoc[1], planet_equatorialLoc[0]);
-    _dec = atan2(planet_equatorialLoc[2],sqrt(planet_equatorialLoc[0]*planet_equatorialLoc[0]+planet_equatorialLoc[1]*planet_equatorialLoc[1]));
+    _planet_eclipticLon = planet_eclipticLoc.getLongitud();
+    _planet_eclipticLat = planet_eclipticLoc.getLatitud();
+    _planet_rad = planet_eclipticLoc.getRadius();
 }
 
