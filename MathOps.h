@@ -13,6 +13,26 @@ struct AstroVector {
     AstroVector();
     AstroVector(double _radiant_lon, double _radiant_lat, double _radius = 1.);
     
+    AstroVector operator+ (const AstroVector& _vec) const;
+    AstroVector operator- (const AstroVector& _vec) const;
+    AstroVector operator* (const AstroVector& _vec) const;
+    AstroVector operator/ (const AstroVector& _vec) const;
+    
+    AstroVector operator+ (double _d) const;
+    AstroVector operator- (double _d) const;
+    AstroVector operator* (double _d) const;
+    AstroVector operator/ (double _d) const;
+    
+    AstroVector& operator+= (const AstroVector& _vec);
+    AstroVector& operator-= (const AstroVector& _vec);
+    AstroVector& operator*= (const AstroVector& _vec);
+    AstroVector& operator/= (const AstroVector& _vec);
+    
+    AstroVector& operator+= (double _d);
+    AstroVector& operator-= (double _d);
+    AstroVector& operator*= (double _d);
+    AstroVector& operator/= (double _d);
+    
     double getLongitud();
     double getLatitud();
     double getRadius();

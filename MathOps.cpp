@@ -53,6 +53,115 @@ AstroVector::AstroVector(double _radiant_lon, double _radiant_lat, double _radiu
     z = sin(_radiant_lat) * _radius;
 }
 
+AstroVector AstroVector::operator+ (const AstroVector& _vec) const {
+    AstroVector rta;
+    rta.x = x + _vec.x;
+    rta.y = y + _vec.y;
+    rta.z = z + _vec.z;
+    return rta;
+}
+
+AstroVector AstroVector::operator- (const AstroVector& _vec) const {
+    AstroVector rta;
+    rta.x = x - _vec.x;
+    rta.y = y - _vec.y;
+    rta.z = z - _vec.z;
+    return rta;
+}
+AstroVector AstroVector::operator* (const AstroVector& _vec) const {
+    AstroVector rta;
+    rta.x = x * _vec.x;
+    rta.y = y * _vec.y;
+    rta.z = z * _vec.z;
+    return rta;
+}
+AstroVector AstroVector::operator/ (const AstroVector& _vec) const {
+    AstroVector rta;
+    rta.x = x / _vec.x;
+    rta.y = y / _vec.y;
+    rta.z = z / _vec.z;
+    return rta;
+}
+AstroVector AstroVector::operator+ (double _d) const {
+    AstroVector rta;
+    rta.x = x + _d;
+    rta.y = y + _d;
+    rta.z = z + _d;
+    return rta;
+}
+
+AstroVector AstroVector::operator- (double _d) const {
+    AstroVector rta;
+    rta.x = x - _d;
+    rta.y = y - _d;
+    rta.z = z - _d;
+    return rta;
+}
+AstroVector AstroVector::operator* (double _d) const {
+    AstroVector rta;
+    rta.x = x * _d;
+    rta.y = y * _d;
+    rta.z = z * _d;
+    return rta;
+}
+AstroVector AstroVector::operator/ (double _d) const {
+    AstroVector rta;
+    rta.x = x / _d;
+    rta.y = y / _d;
+    rta.z = z / _d;
+    return rta;
+}
+
+AstroVector& AstroVector::operator+= (const AstroVector& _vec) {
+    x += _vec.x;
+    y += _vec.y;
+    z += _vec.z;
+    return *this;
+}
+AstroVector& AstroVector::operator-= (const AstroVector& _vec) {
+    x -= _vec.x;
+    y -= _vec.y;
+    z -= _vec.z;
+    return *this;
+}
+AstroVector& AstroVector::operator*= (const AstroVector& _vec) {
+    x *= _vec.x;
+    y *= _vec.y;
+    z *= _vec.z;
+    return *this;
+}
+AstroVector& AstroVector::operator/= (const AstroVector& _vec) {
+    x /= _vec.x;
+    y /= _vec.y;
+    z /= _vec.z;
+    return *this;
+}
+
+AstroVector& AstroVector::operator+= (double _d) {
+    x += _d;
+    y += _d;
+    z += _d;
+    return *this;
+}
+AstroVector& AstroVector::operator-= (double _d) {
+    x -= _d;
+    y -= _d;
+    z -= _d;
+    return *this;
+}
+AstroVector& AstroVector::operator*= (double _d) {
+    x *= _d;
+    y *= _d;
+    z *= _d;
+    return *this;
+}
+AstroVector& AstroVector::operator/= (double _d) {
+    x /= _d;
+    y /= _d;
+    z /= _d;
+    return *this;
+}
+
 double AstroVector::getLongitud() {
     return atan2(y, x);
 }
