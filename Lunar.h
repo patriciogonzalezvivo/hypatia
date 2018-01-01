@@ -35,7 +35,7 @@ struct LunarFundamentals {
 //
 static const int N_LTERM1 = 60;
 struct LunarTerms1 {
-    char d, m, mp, f;
+    short d, m, mp, f;
     long sl, sr;
 };
 
@@ -43,7 +43,7 @@ struct LunarTerms1 {
 //
 static const int N_LTERM2 = 60;
 struct LunarTerms2 {
-    char d, m, mp, f;
+    short d, m, mp, f;
     long sb;
 };
 
