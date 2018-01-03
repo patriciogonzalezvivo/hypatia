@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 """
-astro:
-
+astro: is an astronomy library based on Mark Huss's and Bill Gray's code. Both authors have very technical and ambitious projects, with over comboluted code for my porposes. I mostly:
+- simplify the C++ interfaces by making simpler and clear objects and classes
+- clean the dependences so the C++ code can be added to other C++ projects easily
+- add Python package which makes a C++ wrapper usign swig
 """
 
 from distutils.core import setup, Extension

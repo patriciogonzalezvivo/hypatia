@@ -2,7 +2,7 @@ Astronomy library based on Mark Huss's and Bill Gray's code. Both authors have v
 
 - simplify the C++ interfaces by making simpler and clear objects and classes
 - clean the dependences so the C++ code can be added to other C++ projects easily
-- add Python wrapper usign Swig (that compiles into a package) to make it easy to use on Python projects
+- add a Python package which makes a C++ wrapper usign swig
 
 References:
  - Bill Gray: https://github.com/Bill-Gray/lunar 
