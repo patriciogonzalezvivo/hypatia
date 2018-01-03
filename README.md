@@ -5,7 +5,7 @@ Astronomy library based on Mark Huss's and Bill Gray's code. Both authors have v
 - add a Python package which makes a C++ wrapper usign swig
 
 References:
- - Bill Gray: https://github.com/Bill-Gray/lunar 
+ - Bill Gray: https://github.com/Bill-Gray 
  - Mark Huss: http://mhuss.com/AstroLib
 
 ## As Python package
