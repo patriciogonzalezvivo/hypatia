@@ -1,0 +1,6 @@
+.DS_Store
+*.pyc
+*.so
+build/*
+astro_wrap.cxx
+astro.py
