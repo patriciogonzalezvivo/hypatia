@@ -19,7 +19,7 @@ References:
     * normalizeDegrees()
     * normalizeRadians()
 
-# TimeOps
+* TimeOps
     * SECONDS_PER_DAY, TROPICAL_YEAR, JULIAN_EPOCH, SPEED_OF_LIGHT, TO_CENTURIES, HOURS_PER_DAY, IHOURS_PER_DAY and J2000 constants
     * getCurrentSeconds()
     * getCurrentMilliseconds()
