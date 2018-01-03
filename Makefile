@@ -6,3 +6,6 @@ all:
 
 clean:
 	@rm -rvf $(LIB) *.o */*.o *.so astro.py* astro_wrap.c* build
+
+install:
+	python setup.py install
