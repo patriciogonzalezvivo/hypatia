@@ -8,6 +8,44 @@ References:
  - Bill Gray: https://github.com/Bill-Gray 
  - Mark Huss: http://mhuss.com/AstroLib
 
+## Content
+
+* MathOps
+    * AstroVector class
+    * HD_PI, TAU, PI_OVER_TWO, TWO_OVER_PI, DEG_PER_CIRCLE, MINUTES_PER_DEGREE, SECONDS_PER_DEGREE and TO_RADS constants 
+    * toRadians()
+    * toDegrees()
+    * toDegreesMinSec()
+    * normalizeDegrees()
+    * normalizeRadians()
+
+# TimeOps
+    * SECONDS_PER_DAY, TROPICAL_YEAR, JULIAN_EPOCH, SPEED_OF_LIGHT, TO_CENTURIES, HOURS_PER_DAY, IHOURS_PER_DAY and J2000 constants
+    * getCurrentSeconds()
+    * getCurrentMilliseconds()
+    * julianDates()
+    * modifiedJulianDates()
+    * MJDtoJCT()
+    * jordanCosmologicalTheory()
+    * MJDtoGMS()
+    * greenwichMeanSiderealTime()
+    * greenwichSiderealTime()
+    * greenwichSiderealHour()
+    * toDays()
+    * toMillenia()
+    * localSiderealTime()
+
+* AstroOps
+    * eclipticToEquatorial()
+    * equatorialToHorizontal()
+    * heliocentricToGeocentric()
+    * meanObliquity()
+    * nutation()
+
+* ObsInf
+* PlanetData
+* Lunar
+
 ## As C++ code
 
 ```cpp
