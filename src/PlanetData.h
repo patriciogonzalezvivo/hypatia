@@ -19,17 +19,19 @@ public:
     PlanetData( Planet _planet, ObsInfo& _obs );
     
     Planet getPlanet() const { return m_planet; }
-    double getJulianDay() const { return ( NAP == m_planet ) ? -1. : m_jd; }
 
+    // Ecliptic (GeoCentric)
     double getEclipticLon() const { return ( NAP == m_planet ) ? -1. : m_eclipticLon; }
     double getEclipticLat() const { return ( NAP == m_planet ) ? -1. : m_eclipticLat; }
     double getRadius() const { return ( NAP == m_planet ) ? -1. : m_r; }
     
-    double getAzimuth() const { return ( NAP == m_planet ) ? -1. : m_az; }
-    double getAltitud() const { return ( NAP == m_planet ) ? -1. : m_alt; }
-    
+    // Ecuatorial (Geocentric)
     double getDeclination() const { return ( NAP == m_planet ) ? -1. : m_dec; }
     double getRightAscension() const { return ( NAP == m_planet ) ? -1. : m_ra; }
+
+    // Horizontal (Topocentric)
+    double getAzimuth() const { return ( NAP == m_planet ) ? -1. : m_az; }
+    double getAltitud() const { return ( NAP == m_planet ) ? -1. : m_alt; }
     
     // Calculate the data for a given planet, jd, and location
     // This function must be called (directly or via c'tor) before calling

@@ -31,7 +31,7 @@ void ObsInfo::setTime(unsigned long _sec) {
     setJuliaDay( TimeOps::julianDates(m_sec) );
 }
 
-void ObsInfo::setJuliaDay (double _jd ) {
+void ObsInfo::setJuliaDay(double _jd ) {
     m_jd = _jd;
     m_century = TimeOps::toMillenia(m_jd);
     m_obliquity = AstroOps::meanObliquity(m_century);

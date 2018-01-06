@@ -31,10 +31,10 @@ public:
     void    setJuliaDay(double _jd);
     
     double  getLongitude();
-    double  getDegLatitude();
+    double  getDegLongitude();
     
     double  getLatitude();
-    double  getDegLongitude();
+    double  getDegLatitude();
     
     unsigned long  getTime();
     double  getJulianDate();
