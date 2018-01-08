@@ -11,15 +11,15 @@ References:
 ## As C++ code
 
 ```cpp
-#include "Astro/PlanetData.h"
+#include "Astro/Body.h"
 #include "Astro/Lunar.h"
 
 double lat = 40.781098831465;
 double lng = -73.97715657655;
-obs = ObsInfo(lng, lat);
+obs = Observer(lng, lat);
 
-sun = PlanetData(SUN, obs);
-moon = PlanetData(LUNA, obs);
+sun = Body(SUN, obs);
+moon = Body(LUNA, obs);
 moon_phase = Lunar::ageOfMoonInDays(obs.getJulianDate()) / Lunar::SYNODIC_MONTH
 ```
 
@@ -38,9 +38,9 @@ import astro
 
 lat = 40.781098831465;
 lng = -73.97715657655;
-astro.ObsInfo(lng, lat)
+astro.Observer(lng, lat)
 
-sun = astro.PlanetData(astro.SUN, obs)
-moon = astro.PlanetData(astro.LUNA, obs)
+sun = astro.Body(astro.SUN, obs)
+moon = astro.Body(astro.LUNA, obs)
 moon_phase = astro.Lunar.ageOfMoonInDays(obs.getJulianDate()) / astro.Lunar.SYNODIC_MONTH
 ```

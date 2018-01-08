@@ -12,18 +12,18 @@
 
 // bodies of interest
 //
-enum Planet {
-    NAP=-1, // NotAPlanet
+enum BodyName {
+    NAB=-1, // NotABody
     SUN=0,
     MERCURY=1, VENUS=2, EARTH=3, MARS=4, JUPITER=5, SATURN=6, URANUS=7, NEPTUNE=8, PLUTO=9,
     LUNA=10
 };
 
 // * * * * * Observer's Location Info * * * * *
-class ObsInfo {
+class Observer {
 public:
     // c'tor: lon & lat are passed in DEGREES
-    ObsInfo(double _lng_deg = 0, double _lat_deg = 0, Planet _planet = EARTH, unsigned long _sec = 0);
+    Observer(double _lng_deg = 0, double _lat_deg = 0, BodyName _body = EARTH, unsigned long _sec = 0);
     
     void    setLatitude(double _deg);
     void    setLongitude(double _deg);
@@ -31,14 +31,14 @@ public:
     void    setJuliaDay(double _jd);
     
     double  getLongitude();
-    double  getDegLongitude();
+    double  getLongitudeRadians();
     
     double  getLatitude();
-    double  getDegLatitude();
+    double  getLatitudeRadians();
     
     unsigned long  getTime();
     double  getJulianDate();
-    double  getCenturyDate();
+    double  getJulianCentury();
     double  getObliquity();
     double  getLST();
     
@@ -54,11 +54,11 @@ private:
     
     unsigned long m_sec;
     double m_jd;
-    double m_century;
+    double m_jcentury;
     double m_obliquity;
     double m_lst;
     
-    Planet m_planet;
+    BodyName m_body;
     
     bool m_change;
 };

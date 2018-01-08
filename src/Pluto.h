@@ -20,6 +20,6 @@ struct PlutoCoeffs {
 
 class Pluto {
 public:
-    static void calcAllLocs (double& lon, double& lat, double& r, const double t);
+    static void calcAllLocs (double& _lon, double& _lat, double& _r, const double _jcentury);
 };
 

@@ -14,7 +14,7 @@
 #include "TimeOps.h"
 #include "AstroOps.h"
 #include "Vsop.h"
-#include "PlanetData.h"
+#include "Body.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -23,6 +23,22 @@
 //----------------------------------------------------------------------------
 
 const double Lunar::SYNODIC_MONTH = 29.530588861;
+
+// terms for longitude & radius
+//
+static const int N_LTERM1 = 60;
+struct LunarTerms1 {
+    short d, m, mp, f;
+    long sl, sr;
+};
+
+// terms for latitude
+//
+static const int N_LTERM2 = 60;
+struct LunarTerms2 {
+    short d, m, mp, f;
+    long sb;
+};
 
 // Lunar Fundimentals
 
@@ -193,16 +209,46 @@ const LunarTerms2 LunarLat[60] = {
     { 2, -2,  0,  1,     107 }
 };
 
+//-------------------------------------------------------------------------
+double Lunar::getPositionAngleRadians(Observer &_obs) { 
+    // https://github.com/Hedwig1958/libastro/blob/master/astro.c#L233
+
+    double moon_eclipticLon, moon_eclipticLat, moon_radius;
+    calcAllLocs(moon_eclipticLon, moon_eclipticLat, moon_radius, _obs.getJulianCentury());
+
+    double moon_ra, moon_dec;
+    AstroOps::eclipticToEquatorial(_obs, moon_eclipticLon, moon_eclipticLat, moon_ra, moon_dec);
+
+    double moon_alt, moon_az;
+    AstroOps::equatorialToHorizontal(_obs, moon_ra, moon_dec, moon_alt, moon_az);
+
+    double sun_eclipticLon, sun_eclipticLat, sun_radius;
+    Vsop::calcAllLocs(sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH);
+    sun_eclipticLon += MathOps::HD_PI;
+    sun_eclipticLat *= -1.;    
+    double sun_ra, sun_dec;
+    AstroOps::eclipticToEquatorial(_obs, sun_eclipticLon, sun_eclipticLat, sun_ra, sun_dec);
+    double sun_alt, sun_az;
+    AstroOps::equatorialToHorizontal(_obs, sun_ra, sun_dec, sun_alt, sun_az);
+
+    double delta_az = moon_az - sun_az;
+    return atan2(cos(sun_alt) * sin(delta_az),
+                 sin(sun_alt)* cos(moon_alt) - cos(sun_alt) * sin(moon_alt) * cos(delta_az));
+}
+
+double Lunar::getPositionAngle(Observer &_obs) {
+    return MathOps::toDegrees(getPositionAngleRadians(_obs));
+}
 
 //-------------------------------------------------------------------------
 /**
  * calculate current phase angle in radians (Meeus' easy lower precision method)
  */
-double Lunar::phaseAngle() {
+double Lunar::getPhaseAngle() {
     if ( !m_initialized )
         return -1.;
 
-    return normalize(
+    return MathOps::normalizeDegrees(
         180 - MathOps::toDegrees(m_f.D)
           - 6.289 * sin( m_f.Mp )
           + 2.110 * sin( m_f.M )
@@ -213,12 +259,19 @@ double Lunar::phaseAngle() {
           );
 }
 
-//-------------------------------------------------------------------------
-double Lunar::illuminatedFraction() {
+double Lunar::getPhaseAngleRadians() { 
     if ( !m_initialized )
         return -1.;
 
-    return (1. + cos( phaseAngle() )) / 2.;
+    return MathOps::toRadians( getPhaseAngle() ); 
+}
+
+//-------------------------------------------------------------------------
+double Lunar::getPhase() {
+    if ( !m_initialized )
+        return -1.;
+
+    return (1. + cos( getPhaseAngleRadians() )) / 2.;
 }
 
 //-------------------------------------------------------------------------
@@ -226,12 +279,10 @@ double Lunar::illuminatedFraction() {
   * Calculate age of the moon in days (0.0 to 29.53...)
   * @param jd - Julian day for which lunar age is required
   */
-double Lunar::ageOfMoonInDays( double jd ) {
-    double jCenturies = TimeOps::toMillenia( jd ); // convert jd to jm ref. J2000
-
+double Lunar::getAge( double _jcentury ) {
     // first calculate solar ecliptic longitude (in RAD)
     //
-    double earthLon = Vsop::calcLoc( jCenturies, EARTH, Vsop::ECLIPTIC_LON );
+    double earthLon = Vsop::calcLoc( _jcentury, EARTH, Vsop::ECLIPTIC_LON );
     /*
     * What we _really_ want is the location of the sun as seen from
     * the earth (geocentric view).  VSOP gives us the opposite
@@ -242,8 +293,8 @@ double Lunar::ageOfMoonInDays( double jd ) {
 
     // next calculate lunar ecliptic longitude (in RAD)
     //
-    Lunar luna(jCenturies);
-    double moonLon = luna.longitudeRadians();
+    Lunar luna(_jcentury);
+    double moonLon = luna.getLongitudeRadians();
 
     // age of moon in radians = difference
     double moonAge = MathOps::normalizeRadians( MathOps::TAU - (sunLon - moonLon) );
@@ -251,6 +302,17 @@ double Lunar::ageOfMoonInDays( double jd ) {
     // convert radians to Synodic day
     double sday = SYNODIC_MONTH * (moonAge / MathOps::TAU);
     return sday;
+}
+
+double Lunar::getAge( Observer &_obs ) {
+    return getAge( _obs.getJulianCentury() );
+}
+
+double Lunar::getAge() {
+    if ( !m_initialized )
+        return -1.;
+
+    return getAge( m_jcentury );
 }
 
 //----------------------------------------------------------------------------
@@ -265,7 +327,7 @@ double Lunar::getFund( const double* tptr, double t ) {
         d += tpow * (*tptr++);
         tpow *= t;
     }
-    return normalize( d );
+    return MathOps::toRadians( MathOps::normalizeDegrees( d ) );
 }
 
 //----------------------------------------------------------------------------
@@ -280,10 +342,10 @@ void Lunar::calcFundamentals( double t ) {
     m_f.Mp = getFund( LunarFundimentals_Mp, t );
     m_f.F = getFund( LunarFundimentals_F, t );
 
-    m_f.A1 = normalize( 119.75 + 131.849 * t );
-    m_f.A2 = normalize( 53.09 + 479264.290 * t );
-    m_f.A3 = normalize( 313.45 + 481266.484 * t );
-    m_f.T  = normalize( t );
+    m_f.A1 = MathOps::toRadians( MathOps::normalizeDegrees( 119.75 + 131.849 * t ));
+    m_f.A2 = MathOps::toRadians( MathOps::normalizeDegrees( 53.09 + 479264.290 * t ));
+    m_f.A3 = MathOps::toRadians( MathOps::normalizeDegrees( 313.45 + 481266.484 * t ));
+    m_f.T  = MathOps::toRadians( MathOps::normalizeDegrees( t ));
 
     // indicate values need to be recalculated
     m_lat = m_lon = m_r = -1.;
@@ -381,9 +443,10 @@ void Lunar::calcLonRad() {
 //
 // NOTE: calcFundamentals() must have been called first
 //
-double Lunar::latitude() {
-    if ( !m_initialized )
+double Lunar::getLatitude() {
+    if ( !m_initialized ) {
         return -1.;
+    }
 
     if ( m_lat < 0. ) {
         const LunarTerms2* tptr = LunarLat;

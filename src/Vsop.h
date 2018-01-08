@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "PlanetData.h"  // for enum Planet
+#include "Body.h"  // for enum Body
 
 // * * * * * simple support structs * * * * *
 
@@ -47,7 +47,7 @@ public:
     //
     static double calcLoc(
                           double cen,             // time in decimal centuries
-                          Planet planet,          // must be in the range SUN...NEPTUNE
+                          BodyName planet,          // must be in the range SUN...NEPTUNE
                           LocType value);         // 0=ecliptic lon, 1=ecliptic lat, 2=radius
 
     // calculate all three location elements of the spec'd body at the given time
@@ -57,7 +57,7 @@ public:
                             double& lat,            // returned latitude
                             double& rad,            // returned radius vector
                             double cen,             // time in decimal centuries
-                            Planet planet)          // must be in the range SUN...NEPTUNE
+                            BodyName planet)          // must be in the range SUN...NEPTUNE
     {
         lon = calcLoc( cen, planet, ECLIPTIC_LON );
         lat = calcLoc( cen, planet, ECLIPTIC_LAT );

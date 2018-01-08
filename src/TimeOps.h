@@ -23,6 +23,19 @@ struct TimeOps {
     
     // to Modified Julian Dates ( http://scienceworld.wolfram.com/astronomy/ModifiedJulianDate.html )
     static double modifiedJulianDates( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
+
+    /* given the modified Julian date (number of days elapsed since 1900 jan 0.5,),
+     * mj, return the calendar date in months, *mn, days, *dy, and years, *yr.
+     */
+    static void MJDtoMDY(double _mjd, int &_mont, double &_day, int &_year);
+
+    /* given a date in months, mn, days, dy, years, yr,
+     * return the modified Julian date (number of days elapsed since 1900 jan 0.5)
+     */
+    static double MDYtoMJD (int _month, double _day, int _year);
+
+    /* given a mjd, return the year as a double. */
+    static double MJDtoYears (double _mjd);
     
     // Modified Julian Dates to Jordan Cosmological Theory
     static double MJDtoJCT( double _mjd );

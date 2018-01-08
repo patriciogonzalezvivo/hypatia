@@ -3251,7 +3251,7 @@ const AstroTerms NeptuneTerms = {
  * returns 0. if planet is <1 (mercury) or >8 (neptune)
  */
 double Vsop::calcLoc(double t,         // time in decimal centuries
-                     Planet planet,
+                     BodyName planet,
                      LocType ltype) {
     double rval = 0.0;
     

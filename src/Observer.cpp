@@ -1,5 +1,5 @@
 
-#include "ObsInf.h"
+#include "Observer.h"
 #include "MathOps.h"
 #include "AstroOps.h"
 #include "TimeOps.h"
@@ -8,22 +8,22 @@
 #include <string.h>
 #include <iostream>
 
-ObsInfo::ObsInfo( double _lng_deg, double _lat_deg, Planet _planet, unsigned long _sec) : m_longitude(MathOps::toRadians(_lng_deg)), m_latitude(MathOps::toRadians(_lat_deg)), m_sec(_sec), m_jd(0.0), m_century(0.0), m_obliquity(0.0), m_lst(0.0), m_planet(_planet), m_change(true) {
+Observer::Observer( double _lng_deg, double _lat_deg, BodyName _body, unsigned long _sec) : m_longitude(MathOps::toRadians(_lng_deg)), m_latitude(MathOps::toRadians(_lat_deg)), m_sec(_sec), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_body(_body), m_change(true) {
 }
 
 // set: lat passed in DEGREES
-void ObsInfo::setLatitude(double _deg) {
+void Observer::setLatitude(double _deg) {
     m_latitude = MathOps::toRadians(_deg);
     m_change = true;
 }
 
 // set: lon passed in DEGREES
-void ObsInfo::setLongitude(double _deg) {
+void Observer::setLongitude(double _deg) {
     m_longitude = MathOps::toRadians(_deg);
     m_change = true;
 }
 
-void ObsInfo::setTime(unsigned long _sec) {
+void Observer::setTime(unsigned long _sec) {
     if (_sec == 0) {
         _sec = TimeOps::getCurrentSeconds();
     }
@@ -31,79 +31,78 @@ void ObsInfo::setTime(unsigned long _sec) {
     setJuliaDay( TimeOps::julianDates(m_sec) );
 }
 
-void ObsInfo::setJuliaDay(double _jd ) {
+void Observer::setJuliaDay(double _jd ) {
     m_jd = _jd;
-    m_century = TimeOps::toMillenia(m_jd);
-    m_obliquity = AstroOps::meanObliquity(m_century);
+    m_jcentury = TimeOps::toMillenia(m_jd);
+    m_obliquity = AstroOps::meanObliquity(m_jcentury);
     m_lst = TimeOps::localSiderealTime(m_jd, MathOps::toDegrees(m_longitude));
     
     double planet_eclipticLon;
     double planet_eclipticLat;
     double planet_eclipticRad;
-    Vsop::calcAllLocs(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad, m_century, m_planet);
+    Vsop::calcAllLocs(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad, m_jcentury, m_body);
     m_eclipticHelioLocation = AstroVector(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad);
     
     //std::cout << "Observation data UPDATED" << std::endl;
     m_change = false;
 }
 
-double ObsInfo::getLongitude() {
+double Observer::getLongitudeRadians() {
     if (m_change)
         update();
     return m_longitude;
 }
 
-double ObsInfo::getDegLongitude() {
-    return MathOps::toDegrees(getLongitude());
+double Observer::getLongitude() {
+    return MathOps::toDegrees( getLongitudeRadians() );
 }
-
-double ObsInfo::getLatitude() {
+double Observer::getLatitudeRadians() {
     if (m_change)
         update();
     return m_latitude;
 }
 
-double ObsInfo::getDegLatitude() {
-    return MathOps::toDegrees(getLatitude());
+double Observer::getLatitude() {
+    return MathOps::toDegrees( getLatitudeRadians() );
 }
 
-unsigned long ObsInfo::getTime() {
+unsigned long Observer::getTime() {
     if (m_change)
         update();
     return m_sec;
 }
 
-double ObsInfo::getJulianDate() {
+double Observer::getJulianDate() {
     if (m_change)
         update();
     return m_jd;
 }
 
-double ObsInfo::getCenturyDate() {
+double Observer::getJulianCentury() {
     if (m_change)
         update();
-    return m_century;
+    return m_jcentury;
 }
 
-double ObsInfo::getObliquity() {
+double Observer::getObliquity() {
     if (m_change)
         update();
     return m_obliquity;
 }
 
-double ObsInfo::getLST() {
+double Observer::getLST() {
     if (m_change)
         update();
     return m_lst;
 }
 
-AstroVector ObsInfo::getEclipticHelioLocation() {
+AstroVector Observer::getEclipticHelioLocation() {
     if (m_change)
         update();
     return m_eclipticHelioLocation;
 }
 
-void ObsInfo::update() {
+void Observer::update() {
     if (m_change) {
         setTime(m_sec);
     }

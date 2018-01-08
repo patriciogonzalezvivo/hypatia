@@ -16,12 +16,13 @@ astro_module = Extension(
     'astro_wrap.cxx', 
     'src/MathOps.cpp', 
     'src/TimeOps.cpp', 
-    'src/ObsInf.cpp', 
+    'src/Observer.cpp', 
     'src/AstroOps.cpp', 
     'src/Vsop.cpp', 
-    'src/PlanetData.cpp', 
+    'src/Body.cpp', 
     'src/Lunar.cpp', 
-    'src/Pluto.cpp'
+    'src/Pluto.cpp',
+    'src/Constellation.cpp'
    ],
    swig_opts = ['-c++']
 )

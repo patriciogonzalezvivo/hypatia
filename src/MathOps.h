@@ -56,11 +56,15 @@ struct MathOps {
     static const double TO_RADS;
     
     // convert degrees to radians
-    static double toRadians( double deg ) { return deg * TO_RADS; }
+    static double toRadians( double deg ) { return deg * TO_RADS; };
     
     // convert radians to degrees
-    static double toDegrees( double rad ) { return rad / TO_RADS; }
+    static double toDegrees( double rad ) { return rad / TO_RADS; };
+
+    static double toHrs( int deg ) { return float(deg)*0.06666666667; }; 
+    static double toHrs( double rad ) { return toDegrees(rad)*0.06666666667; };
     static void toDegreesMinSec ( double rad, int &_deg, int &_min, int &_sec );
+    
     
     static double normalizeDegrees( double d );
     static double normalizeRadians( double d );

@@ -68,7 +68,6 @@ PlutoCoeffs plutoCoeff[N_COEFFS] = {
 };
 
 // t is in julian centuries from J2000.0
-
 void Pluto::calcAllLocs (double& lon, double& lat, double& rad, const double t) {
 
     // jupiter's mean longitude
