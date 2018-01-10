@@ -211,11 +211,11 @@ const LunarTerms2 LunarLat[60] = {
     { 2, -2,  0,  1,     107 }
 };
 
-Luna::Luna(): m_age(-1.), m_pangle(-1.) {
+Luna::Luna(): m_age(-1.), m_pos_angle(-1.), m_par_angle(-1.) {
     m_bodyId = LUNA;
 }
 
-Luna::Luna( Observer &_obs ): m_age(-1.), m_pangle(-1.) {
+Luna::Luna( Observer &_obs ): m_age(-1.), m_pos_angle(-1.), m_par_angle(-1.) {
     m_bodyId = LUNA;
     update( _obs ); 
 }
@@ -450,7 +450,10 @@ void Luna::update( Observer &_obs ) {
         m_age = SYNODIC_MONTH * (moonAge / MathOps::TAU);
 
         double delta_az = m_az - sun_az;
-        m_pangle = atan2(cos(sun_alt) * sin(delta_az),
-                         sin(sun_alt)* cos(m_alt) - cos(sun_alt) * sin(m_alt) * cos(delta_az));
+        m_pos_angle = atan2(cos(sun_alt) * sin(delta_az),
+                            sin(sun_alt)* cos(m_alt) - cos(sun_alt) * sin(m_alt) * cos(delta_az));
+
+        // double hour_angle = MathOps::toRadians(localSiderealTime(obs.getJulianDay(), obs.getLongitud())) - m_ra;
+        
     }
 }

@@ -14,6 +14,7 @@ const double MathOps::MINUTES_PER_DEGREE = 60.;
 const double MathOps::SECONDS_PER_DEGREE = 3600.;
 
 const double MathOps::TO_RADS = HD_PI / 180.;
+const double MathOps::TO_HRS = 1./15;
 
 void MathOps::toDegreesMinSec ( double _rad, int &_deg, int &_min, int &_sec ) {
     int totalSeconds = (int)round( MathOps::normalizeRadians(_rad) * 360 * 60 * 60 / TAU);
