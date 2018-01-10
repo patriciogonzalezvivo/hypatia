@@ -20,7 +20,7 @@ astro_module = Extension(
     'src/AstroOps.cpp', 
     'src/Vsop.cpp', 
     'src/Body.cpp', 
-    'src/Lunar.cpp', 
+    'src/Luna.cpp', 
     'src/Pluto.cpp',
     'src/Constellation.cpp'
    ],

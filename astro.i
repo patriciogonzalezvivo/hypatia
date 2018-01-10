@@ -15,7 +15,7 @@
     #include "src/Observer.h"
     #include "src/AstroOps.h"
     #include "src/Body.h"
-    #include "src/Lunar.h"
+    #include "src/Luna.h"
     #include "src/Constellation.h"
 %}
 
@@ -24,5 +24,5 @@
 %include "src/Observer.h"
 %include "src/AstroOps.h"
 %include "src/Body.h"
-%include "src/Lunar.h"
+%include "src/Luna.h"
 %include "src/Constellation.h"

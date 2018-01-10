@@ -674,7 +674,7 @@ Constellation::Constellation( Body &_body, double _epoch ) {
     m_id = cns_pick(ra, dec, _epoch);
 }
 
-Constellation::Constellation( Lunar &_luna, double _epoch ) {
+Constellation::Constellation( Luna &_luna, double _epoch ) {
     double ra = _luna.getRightAscensionRadians();
     double dec = _luna.getDeclinationRadians(); 
     m_id = cns_pick(ra, dec, _epoch);

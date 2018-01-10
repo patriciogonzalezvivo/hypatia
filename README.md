@@ -12,7 +12,7 @@ References:
 
 ```cpp
 #include "Astro/Body.h"
-#include "Astro/Lunar.h"
+#include "Astro/Luna.h"
 
 double lat = 40.781098831465;
 double lng = -73.97715657655;
@@ -20,7 +20,7 @@ obs = Observer(lng, lat);
 
 sun = Body(SUN, obs);
 moon = Body(LUNA, obs);
-moon_phase = Lunar::ageOfMoonInDays(obs.getJulianDate()) / Lunar::SYNODIC_MONTH
+moon_phase = Luna::ageOfMoonInDays(obs.getJulianDate()) / Luna::SYNODIC_MONTH
 ```
 
 ## As Python package

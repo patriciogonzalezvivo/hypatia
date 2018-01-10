@@ -1,7 +1,7 @@
 /*****************************************************************************\
  * Lunar.cpp
  *
- * Lunar is a class that can calculate lunar fundmentals for any reasonable
+ * Luna is a class that can calculate lunar fundmentals for any reasonable
  *   time.
  *
  * author: mark huss (mark@mhuss.com)
@@ -9,7 +9,7 @@
  *
 \*****************************************************************************/
 
-#include "Lunar.h"
+#include "Luna.h"
 
 #include "TimeOps.h"
 #include "AstroOps.h"
@@ -22,7 +22,9 @@
 // a list of terms needed to do lunar calcs data extracted from vsop.bin file
 //----------------------------------------------------------------------------
 
-const double Lunar::SYNODIC_MONTH = 29.530588861;
+const double Luna::SYNODIC_MONTH = 29.530588861;
+const double Luna::PERIGEE_KM = 356355.0;
+const double Luna::APOGEE_KM = 406725.0;
 
 // terms for longitude & radius
 //
@@ -40,7 +42,7 @@ struct LunarTerms2 {
     long sb;
 };
 
-// Lunar Fundimentals
+// Luna Fundimentals
 
 const double LunarFundimentals_Lp[5] = {
     218.3164591,
@@ -79,7 +81,7 @@ const double LunarFundimentals_F[5] = {
 };
 
 
-// Lunar longitude & radius terms
+// Luna longitude & radius terms
 
 const LunarTerms1 LunarLonRad[60] = {
     { 0,  0,  1,  0,  6288774, -20905335 },
@@ -144,7 +146,7 @@ const LunarTerms1 LunarLonRad[60] = {
     { 2,  0, -1, -2,        0,      8752 }
 };
 
-// Lunar latitude terms
+// Luna latitude terms
 
 const LunarTerms2 LunarLat[60] = {
     { 0,  0,  0,  1, 5128122 },
@@ -209,11 +211,12 @@ const LunarTerms2 LunarLat[60] = {
     { 2, -2,  0,  1,     107 }
 };
 
-Lunar::Lunar(): m_jcentury(-1.), m_r(-1.), m_eclipticLon(-1.), m_eclipticLat(-1.), m_az(-1.), m_alt(-1.), m_dec(-1.), m_ra(-1.), m_age(-1.), m_pangle(-1.), m_initialized( false ) {
-
+Luna::Luna(): m_age(-1.), m_pangle(-1.) {
+    m_bodyId = LUNA;
 }
 
-Lunar::Lunar( Observer &_obs ) { 
+Luna::Luna( Observer &_obs ): m_age(-1.), m_pangle(-1.) {
+    m_bodyId = LUNA;
     update( _obs ); 
 }
 
@@ -221,7 +224,7 @@ Lunar::Lunar( Observer &_obs ) {
 /**
  * calculate current phase angle in radians (Meeus' easy lower precision method)
  */
-double Lunar::getPhaseAngle() {
+double Luna::getPhaseAngle() {
     if ( !m_initialized )
         return -1.;
 
@@ -236,7 +239,7 @@ double Lunar::getPhaseAngle() {
           );
 }
 
-double Lunar::getPhaseAngleRadians() { 
+double Luna::getPhaseAngleRadians() { 
     if ( !m_initialized )
         return -1.;
 
@@ -244,7 +247,7 @@ double Lunar::getPhaseAngleRadians() {
 }
 
 //-------------------------------------------------------------------------
-double Lunar::getPhase() {
+double Luna::getPhase() {
     if ( !m_initialized )
         return -1.;
 
@@ -271,7 +274,7 @@ double getFund( const double* tptr, double _jcentury ) {
 //   ad has vsop.bin data
 //   t = decimal julian centuries
 //
-void Lunar::update( Observer &_obs ) {
+void Luna::update( Observer &_obs ) {
     if (m_jcentury != _obs.getJulianCentury()) {
         m_jcentury = _obs.getJulianCentury();
 
@@ -429,21 +432,17 @@ void Lunar::update( Observer &_obs ) {
             m_r = 385000.56 + sr / 1000.;
         }
         
-        // Update Geo Equatorial
-        AstroOps::eclipticToEquatorial(_obs, m_eclipticLon, m_eclipticLat, m_ra, m_dec);
-
-        // Update Geo Horizontal
-        AstroOps::equatorialToHorizontal(_obs, m_ra, m_dec, m_alt, m_az);
+        updateGeoTopoCentric( _obs );
 
         // Compute Sun's coords
         double sun_eclipticLon, sun_eclipticLat, sun_radius;
-        Vsop::calcAllLocs(sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH);
+        Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH );
         sun_eclipticLon += MathOps::HD_PI;
         sun_eclipticLat *= -1.;    
         double sun_ra, sun_dec;
-        AstroOps::eclipticToEquatorial(_obs, sun_eclipticLon, sun_eclipticLat, sun_ra, sun_dec);
+        AstroOps::eclipticToEquatorial( _obs, sun_eclipticLon, sun_eclipticLat, sun_ra, sun_dec );
         double sun_alt, sun_az;
-        AstroOps::equatorialToHorizontal(_obs, sun_ra, sun_dec, sun_alt, sun_az);
+        AstroOps::equatorialToHorizontal( _obs, sun_ra, sun_dec, sun_alt, sun_az );
 
         double moonAge = MathOps::normalizeRadians( MathOps::TAU - (sun_eclipticLon - m_eclipticLon) );
 
@@ -452,9 +451,6 @@ void Lunar::update( Observer &_obs ) {
 
         double delta_az = m_az - sun_az;
         m_pangle = atan2(cos(sun_alt) * sin(delta_az),
-                            sin(sun_alt)* cos(m_alt) - cos(sun_alt) * sin(m_alt) * cos(delta_az));
-
-        // set init'd flag to true
-        m_initialized = true;
+                         sin(sun_alt)* cos(m_alt) - cos(sun_alt) * sin(m_alt) * cos(delta_az));
     }
 }
