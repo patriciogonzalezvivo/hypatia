@@ -8,7 +8,7 @@
 #include <string.h>
 #include <iostream>
 
-Observer::Observer( double _lng_deg, double _lat_deg, BodyName _body, unsigned long _sec) : m_longitude(MathOps::toRadians(_lng_deg)), m_latitude(MathOps::toRadians(_lat_deg)), m_sec(_sec), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_body(_body), m_change(true) {
+Observer::Observer( double _lng_deg, double _lat_deg, BodyId _body, unsigned long _sec) : m_longitude(MathOps::toRadians(_lng_deg)), m_latitude(MathOps::toRadians(_lat_deg)), m_sec(_sec), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_body(_body), m_change(true) {
 }
 
 // set: lat passed in DEGREES

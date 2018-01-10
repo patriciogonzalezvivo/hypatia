@@ -12,7 +12,7 @@
 
 // bodies of interest
 //
-enum BodyName {
+enum BodyId {
     NAB=-1, // NotABody
     SUN=0,
     MERCURY=1, VENUS=2, EARTH=3, MARS=4, JUPITER=5, SATURN=6, URANUS=7, NEPTUNE=8, PLUTO=9,
@@ -23,7 +23,7 @@ enum BodyName {
 class Observer {
 public:
     // c'tor: lon & lat are passed in DEGREES
-    Observer(double _lng_deg = 0, double _lat_deg = 0, BodyName _body = EARTH, unsigned long _sec = 0);
+    Observer(double _lng_deg = 0, double _lat_deg = 0, BodyId _body = EARTH, unsigned long _sec = 0);
     
     void    setLatitude(double _deg);
     void    setLongitude(double _deg);
@@ -58,7 +58,7 @@ private:
     double m_obliquity;
     double m_lst;
     
-    BodyName m_body;
+    BodyId m_body;
     
     bool m_change;
 };

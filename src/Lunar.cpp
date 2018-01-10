@@ -209,35 +209,12 @@ const LunarTerms2 LunarLat[60] = {
     { 2, -2,  0,  1,     107 }
 };
 
-//-------------------------------------------------------------------------
-double Lunar::getPositionAngleRadians(Observer &_obs) { 
-    // https://github.com/Hedwig1958/libastro/blob/master/astro.c#L233
+Lunar::Lunar(): m_jcentury(-1.), m_r(-1.), m_eclipticLon(-1.), m_eclipticLat(-1.), m_az(-1.), m_alt(-1.), m_dec(-1.), m_ra(-1.), m_age(-1.), m_pangle(-1.), m_initialized( false ) {
 
-    double moon_eclipticLon, moon_eclipticLat, moon_radius;
-    calcAllLocs(moon_eclipticLon, moon_eclipticLat, moon_radius, _obs.getJulianCentury());
-
-    double moon_ra, moon_dec;
-    AstroOps::eclipticToEquatorial(_obs, moon_eclipticLon, moon_eclipticLat, moon_ra, moon_dec);
-
-    double moon_alt, moon_az;
-    AstroOps::equatorialToHorizontal(_obs, moon_ra, moon_dec, moon_alt, moon_az);
-
-    double sun_eclipticLon, sun_eclipticLat, sun_radius;
-    Vsop::calcAllLocs(sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH);
-    sun_eclipticLon += MathOps::HD_PI;
-    sun_eclipticLat *= -1.;    
-    double sun_ra, sun_dec;
-    AstroOps::eclipticToEquatorial(_obs, sun_eclipticLon, sun_eclipticLat, sun_ra, sun_dec);
-    double sun_alt, sun_az;
-    AstroOps::equatorialToHorizontal(_obs, sun_ra, sun_dec, sun_alt, sun_az);
-
-    double delta_az = moon_az - sun_az;
-    return atan2(cos(sun_alt) * sin(delta_az),
-                 sin(sun_alt)* cos(moon_alt) - cos(sun_alt) * sin(moon_alt) * cos(delta_az));
 }
 
-double Lunar::getPositionAngle(Observer &_obs) {
-    return MathOps::toDegrees(getPositionAngleRadians(_obs));
+Lunar::Lunar( Observer &_obs ) { 
+    update( _obs ); 
 }
 
 //-------------------------------------------------------------------------
@@ -274,58 +251,17 @@ double Lunar::getPhase() {
     return (1. + cos( getPhaseAngleRadians() )) / 2.;
 }
 
-//-------------------------------------------------------------------------
-/**
-  * Calculate age of the moon in days (0.0 to 29.53...)
-  * @param jd - Julian day for which lunar age is required
-  */
-double Lunar::getAge( double _jcentury ) {
-    // first calculate solar ecliptic longitude (in RAD)
-    //
-    double earthLon = Vsop::calcLoc( _jcentury, EARTH, Vsop::ECLIPTIC_LON );
-    /*
-    * What we _really_ want is the location of the sun as seen from
-    * the earth (geocentric view).  VSOP gives us the opposite
-    * (heliocentric) view, i.e., the earth as seen from the sun.
-    * To work around this, we add PI to the longitude (rotate 180 degrees)
-    */
-    double sunLon = earthLon + MathOps::HD_PI;
-
-    // next calculate lunar ecliptic longitude (in RAD)
-    //
-    Lunar luna(_jcentury);
-    double moonLon = luna.getLongitudeRadians();
-
-    // age of moon in radians = difference
-    double moonAge = MathOps::normalizeRadians( MathOps::TAU - (sunLon - moonLon) );
-
-    // convert radians to Synodic day
-    double sday = SYNODIC_MONTH * (moonAge / MathOps::TAU);
-    return sday;
-}
-
-double Lunar::getAge( Observer &_obs ) {
-    return getAge( _obs.getJulianCentury() );
-}
-
-double Lunar::getAge() {
-    if ( !m_initialized )
-        return -1.;
-
-    return getAge( m_jcentury );
-}
-
 //----------------------------------------------------------------------------
 // calculate an individual fundimental
 //  tptr - points to array of doubles
-//  t - time in decimal Julian centuries
+//  _jcentury - time in decimal Julian centuries
 //
-double Lunar::getFund( const double* tptr, double t ) {
+double getFund( const double* tptr, double _jcentury ) {
     double d = *tptr++;
-    double tpow = t;
+    double tpow = _jcentury;
     for (int i=4; i!=0; i--) {
         d += tpow * (*tptr++);
-        tpow *= t;
+        tpow *= _jcentury;
     }
     return MathOps::toRadians( MathOps::normalizeDegrees( d ) );
 }
@@ -335,182 +271,190 @@ double Lunar::getFund( const double* tptr, double t ) {
 //   ad has vsop.bin data
 //   t = decimal julian centuries
 //
-void Lunar::calcFundamentals( double t ) {
-    m_f.Lp = getFund( LunarFundimentals_Lp, t );
-    m_f.D = getFund( LunarFundimentals_D, t );
-    m_f.M = getFund( LunarFundimentals_M, t );
-    m_f.Mp = getFund( LunarFundimentals_Mp, t );
-    m_f.F = getFund( LunarFundimentals_F, t );
+void Lunar::update( Observer &_obs ) {
+    if (m_jcentury != _obs.getJulianCentury()) {
+        m_jcentury = _obs.getJulianCentury();
 
-    m_f.A1 = MathOps::toRadians( MathOps::normalizeDegrees( 119.75 + 131.849 * t ));
-    m_f.A2 = MathOps::toRadians( MathOps::normalizeDegrees( 53.09 + 479264.290 * t ));
-    m_f.A3 = MathOps::toRadians( MathOps::normalizeDegrees( 313.45 + 481266.484 * t ));
-    m_f.T  = MathOps::toRadians( MathOps::normalizeDegrees( t ));
+        m_f.Lp = getFund( LunarFundimentals_Lp, m_jcentury );
+        m_f.D = getFund( LunarFundimentals_D, m_jcentury );
+        m_f.M = getFund( LunarFundimentals_M, m_jcentury );
+        m_f.Mp = getFund( LunarFundimentals_Mp, m_jcentury );
+        m_f.F = getFund( LunarFundimentals_F, m_jcentury );
 
-    // indicate values need to be recalculated
-    m_lat = m_lon = m_r = -1.;
+        m_f.A1 = MathOps::toRadians( MathOps::normalizeDegrees( 119.75 + 131.849 * m_jcentury ));
+        m_f.A2 = MathOps::toRadians( MathOps::normalizeDegrees( 53.09 + 479264.290 * m_jcentury ));
+        m_f.A3 = MathOps::toRadians( MathOps::normalizeDegrees( 313.45 + 481266.484 * m_jcentury ));
+        m_f.T  = MathOps::toRadians( MathOps::normalizeDegrees( m_jcentury ));
 
-    // set init'd flag to true
-    m_initialized = true;
-}
+        // indicate values need to be recalculated
+        m_eclipticLat = m_eclipticLon = m_r = -1.;
 
-//----------------------------------------------------------------------------
-// calculate longitude and radius
-//
-// NOTE: calcFundamentals() must have been called first
-//
-void Lunar::calcLonRad() {
-    if ( !m_initialized ) {
-        m_r = m_lon = -1.;
-    }
-    else {
-        const LunarTerms1* tptr = LunarLonRad;
+        {
+            // Compute Ecliptic Geocentric Latitud
+            const LunarTerms2* tptr = LunarLat;
+            double rval = 0.;
 
-        double sl = 0., sr = 0.;
-        const double e = 1. - .002516 * m_f.T - .0000074 * m_f.T * m_f.T;
+            const double e = 1. - .002516 * m_f.T - .0000074 * m_f.T * m_f.T;
 
-        for( int i=N_LTERM1; i!=0; i-- ) {
-            if( labs( tptr->sl ) > 0 || labs( tptr->sr ) > 0 ) {
-                double arg;
+            for( int i=N_LTERM2; i!=0; i-- ) {
 
-                switch( tptr->d ){
-                    case  1:   arg = m_f.D;          break;
-                    case -1:   arg =-m_f.D;          break;
-                    case  2:   arg = m_f.D+m_f.D;    break;
-                    case -2:   arg =-m_f.D-m_f.D;    break;
-                    case  0:   arg = 0.;             break;
-                    default:   arg = (double)(tptr->d) * m_f.D;  break;
-                }
+                if( labs( tptr->sb ) > 0. ) {
+                    double arg;
 
-                switch( tptr->m ){
-                    case  1:   arg += m_f.M;         break;
-                    case -1:   arg -= m_f.M;         break;
-                    case  2:   arg += m_f.M+m_f.M;   break;
-                    case -2:   arg -= m_f.M+m_f.M;   break;
-                    case  0:           ;             break;
-                    default:   arg += (double)(tptr->m) * m_f.M;  break;
-                }
+                    switch( tptr->d ) {
+                        case  1:   arg = m_f.D;          break;
+                        case -1:   arg =-m_f.D;          break;
+                        case  2:   arg = m_f.D+m_f.D;    break;
+                        case -2:   arg =-m_f.D-m_f.D;    break;
+                        case  0:   arg = 0.;             break;
+                        default:   arg = (double)(tptr->d) * m_f.D;  break;
+                    }
 
-                switch( tptr->mp ){
-                    case  1:   arg += m_f.Mp;        break;
-                    case -1:   arg -= m_f.Mp;        break;
-                    case  2:   arg += m_f.Mp+m_f.Mp; break;
-                    case -2:   arg -= m_f.Mp+m_f.Mp; break;
-                    case  0:           ;             break;
-                    default:   arg += (double)(tptr->mp) * m_f.Mp;  break;
-                }
+                    switch( tptr->m ) {
+                        case  1:   arg += m_f.M;         break;
+                        case -1:   arg -= m_f.M;         break;
+                        case  2:   arg += m_f.M+m_f.M;   break;
+                        case -2:   arg -= m_f.M+m_f.M;   break;
+                        case  0:           ;             break;
+                        default:   arg += (double)(tptr->m) * m_f.M;  break;
+                    }
 
-                switch( tptr->f ){
-                    case  1:   arg += m_f.F;         break;
-                    case -1:   arg -= m_f.F;         break;
-                    case  2:   arg += m_f.F+m_f.F;   break;
-                    case -2:   arg -= m_f.F+m_f.F;   break;
-                    case  0:           ;             break;
-                    default:   arg += (double)(tptr->f) * m_f.F;  break;
-                }
+                    switch( tptr->mp ) {
+                        case  1:   arg += m_f.Mp;        break;
+                        case -1:   arg -= m_f.Mp;        break;
+                        case  2:   arg += m_f.Mp+m_f.Mp; break;
+                        case -2:   arg -= m_f.Mp+m_f.Mp; break;
+                        case  0:           ;             break;
+                        default:   arg += (double)(tptr->mp) * m_f.Mp;  break;
+                    }
 
-                if ( tptr->sl ){
-                    double term = (double)(tptr->sl) * sin(arg);
-                    for( int j=abs(tptr->m); j!=0; j-- )
+                    switch( tptr->f ) {
+                        case  1:   arg += m_f.F;         break;
+                        case -1:   arg -= m_f.F;         break;
+                        case  2:   arg += m_f.F+m_f.F;   break;
+                        case -2:   arg -= m_f.F+m_f.F;   break;
+                        case  0:           ;             break;
+                        default:   arg += (double)(tptr->f) * m_f.F;  break;
+                    }
+
+                    double term = (double)(tptr->sb) * sin( arg );
+                    for( int j = abs(tptr->m); j!=0; j-- )
                         term *= e;
-                    sl += term;
-                }
 
-                if ( tptr->sr ){
-                    double term = (double)(tptr->sr) * cos(arg);
-                    for( int j=abs(tptr->m); j!=0; j-- )
-                        term *= e;
-                    sr += term;
+                    rval += term;
                 }
+                rval +=   -2235. * sin( m_f.Lp ) +
+                           382.  * sin( m_f.A3 ) +
+                           175.  * sin( m_f.A1 - m_f.F ) +
+                           175.  * sin( m_f.A1 + m_f.F ) +
+                           127.  * sin( m_f.Lp - m_f.Mp ) -
+                           115.  * sin( m_f.Lp + m_f.Mp );
+
+                tptr++;
             }
-            tptr++;
+            m_eclipticLat = MathOps::toRadians(rval * 1.e-6);
         }
 
-        sl += 3958. * sin( m_f.A1 ) +
-              1962. * sin( m_f.Lp - m_f.F ) +
-              318.  * sin( m_f.A2 );
+        {
+            // Compute Ecliptic Geocentric Latitud
+            const LunarTerms1* tptr = LunarLonRad;
 
-        m_lon = (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6;
+            double sl = 0., sr = 0.;
+            const double e = 1. - .002516 * m_f.T - .0000074 * m_f.T * m_f.T;
 
-        // reduce signed angle to ( 0 < m_lon < 360 )
-        m_lon = MathOps::normalizeDegrees( m_lon );
-        m_r = 385000.56 + sr / 1000.;
-    }
-}
+            for( int i=N_LTERM1; i!=0; i-- ) {
+                if( labs( tptr->sl ) > 0 || labs( tptr->sr ) > 0 ) {
+                    double arg;
 
-//----------------------------------------------------------------------------
-// calculate (or return prev. calculated) latitude
-//
-// NOTE: calcFundamentals() must have been called first
-//
-double Lunar::getLatitude() {
-    if ( !m_initialized ) {
-        return -1.;
-    }
+                    switch( tptr->d ){
+                        case  1:   arg = m_f.D;          break;
+                        case -1:   arg =-m_f.D;          break;
+                        case  2:   arg = m_f.D+m_f.D;    break;
+                        case -2:   arg =-m_f.D-m_f.D;    break;
+                        case  0:   arg = 0.;             break;
+                        default:   arg = (double)(tptr->d) * m_f.D;  break;
+                    }
 
-    if ( m_lat < 0. ) {
-        const LunarTerms2* tptr = LunarLat;
-        double rval = 0.;
+                    switch( tptr->m ){
+                        case  1:   arg += m_f.M;         break;
+                        case -1:   arg -= m_f.M;         break;
+                        case  2:   arg += m_f.M+m_f.M;   break;
+                        case -2:   arg -= m_f.M+m_f.M;   break;
+                        case  0:           ;             break;
+                        default:   arg += (double)(tptr->m) * m_f.M;  break;
+                    }
 
-        const double e = 1. - .002516 * m_f.T - .0000074 * m_f.T * m_f.T;
+                    switch( tptr->mp ){
+                        case  1:   arg += m_f.Mp;        break;
+                        case -1:   arg -= m_f.Mp;        break;
+                        case  2:   arg += m_f.Mp+m_f.Mp; break;
+                        case -2:   arg -= m_f.Mp+m_f.Mp; break;
+                        case  0:           ;             break;
+                        default:   arg += (double)(tptr->mp) * m_f.Mp;  break;
+                    }
 
-        for( int i=N_LTERM2; i!=0; i-- ) {
+                    switch( tptr->f ){
+                        case  1:   arg += m_f.F;         break;
+                        case -1:   arg -= m_f.F;         break;
+                        case  2:   arg += m_f.F+m_f.F;   break;
+                        case -2:   arg -= m_f.F+m_f.F;   break;
+                        case  0:           ;             break;
+                        default:   arg += (double)(tptr->f) * m_f.F;  break;
+                    }
 
-            if( labs( tptr->sb ) > 0. ) {
-                double arg;
+                    if ( tptr->sl ){
+                        double term = (double)(tptr->sl) * sin(arg);
+                        for( int j=abs(tptr->m); j!=0; j-- )
+                            term *= e;
+                        sl += term;
+                    }
 
-                switch( tptr->d ) {
-                    case  1:   arg = m_f.D;          break;
-                    case -1:   arg =-m_f.D;          break;
-                    case  2:   arg = m_f.D+m_f.D;    break;
-                    case -2:   arg =-m_f.D-m_f.D;    break;
-                    case  0:   arg = 0.;             break;
-                    default:   arg = (double)(tptr->d) * m_f.D;  break;
+                    if ( tptr->sr ){
+                        double term = (double)(tptr->sr) * cos(arg);
+                        for( int j=abs(tptr->m); j!=0; j-- )
+                            term *= e;
+                        sr += term;
+                    }
                 }
-
-                switch( tptr->m ) {
-                    case  1:   arg += m_f.M;         break;
-                    case -1:   arg -= m_f.M;         break;
-                    case  2:   arg += m_f.M+m_f.M;   break;
-                    case -2:   arg -= m_f.M+m_f.M;   break;
-                    case  0:           ;             break;
-                    default:   arg += (double)(tptr->m) * m_f.M;  break;
-                }
-
-                switch( tptr->mp ) {
-                    case  1:   arg += m_f.Mp;        break;
-                    case -1:   arg -= m_f.Mp;        break;
-                    case  2:   arg += m_f.Mp+m_f.Mp; break;
-                    case -2:   arg -= m_f.Mp+m_f.Mp; break;
-                    case  0:           ;             break;
-                    default:   arg += (double)(tptr->mp) * m_f.Mp;  break;
-                }
-
-                switch( tptr->f ) {
-                    case  1:   arg += m_f.F;         break;
-                    case -1:   arg -= m_f.F;         break;
-                    case  2:   arg += m_f.F+m_f.F;   break;
-                    case -2:   arg -= m_f.F+m_f.F;   break;
-                    case  0:           ;             break;
-                    default:   arg += (double)(tptr->f) * m_f.F;  break;
-                }
-
-                double term = (double)(tptr->sb) * sin( arg );
-                for( int j = abs(tptr->m); j!=0; j-- )
-                    term *= e;
-
-                rval += term;
+                tptr++;
             }
-            rval +=   -2235. * sin( m_f.Lp ) +
-                       382.  * sin( m_f.A3 ) +
-                       175.  * sin( m_f.A1 - m_f.F ) +
-                       175.  * sin( m_f.A1 + m_f.F ) +
-                       127.  * sin( m_f.Lp - m_f.Mp ) -
-                       115.  * sin( m_f.Lp + m_f.Mp );
 
-            tptr++;
+            sl += 3958. * sin( m_f.A1 ) +
+                  1962. * sin( m_f.Lp - m_f.F ) +
+                  318.  * sin( m_f.A2 );
+
+            m_eclipticLon = (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6;
+            // reduce signed angle to ( 0 < m_eclipticLon < 360 )
+            m_eclipticLon = MathOps::toRadians(MathOps::normalizeDegrees( m_eclipticLon ));
+            m_r = 385000.56 + sr / 1000.;
         }
-        m_lat = rval * 1.e-6;
+        
+        // Update Geo Equatorial
+        AstroOps::eclipticToEquatorial(_obs, m_eclipticLon, m_eclipticLat, m_ra, m_dec);
+
+        // Update Geo Horizontal
+        AstroOps::equatorialToHorizontal(_obs, m_ra, m_dec, m_alt, m_az);
+
+        // Compute Sun's coords
+        double sun_eclipticLon, sun_eclipticLat, sun_radius;
+        Vsop::calcAllLocs(sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH);
+        sun_eclipticLon += MathOps::HD_PI;
+        sun_eclipticLat *= -1.;    
+        double sun_ra, sun_dec;
+        AstroOps::eclipticToEquatorial(_obs, sun_eclipticLon, sun_eclipticLat, sun_ra, sun_dec);
+        double sun_alt, sun_az;
+        AstroOps::equatorialToHorizontal(_obs, sun_ra, sun_dec, sun_alt, sun_az);
+
+        double moonAge = MathOps::normalizeRadians( MathOps::TAU - (sun_eclipticLon - m_eclipticLon) );
+
+        // convert radians to Synodic day
+        m_age = SYNODIC_MONTH * (moonAge / MathOps::TAU);
+
+        double delta_az = m_az - sun_az;
+        m_pangle = atan2(cos(sun_alt) * sin(delta_az),
+                            sin(sun_alt)* cos(m_alt) - cos(sun_alt) * sin(m_alt) * cos(delta_az));
+
+        // set init'd flag to true
+        m_initialized = true;
     }
-    return m_lat;
 }
