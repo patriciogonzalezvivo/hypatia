@@ -211,11 +211,11 @@ const LunarTerms2 LunarLat[60] = {
     { 2, -2,  0,  1,     107 }
 };
 
-Luna::Luna(): m_age(-1.), m_posAngle(-1.) {
+Luna::Luna(): m_age(0.0), m_posAngle(0.0) {
     m_bodyId = LUNA;
 }
 
-Luna::Luna( Observer &_obs ): m_age(-1.), m_posAngle(-1.) {
+Luna::Luna( Observer &_obs ): m_age(0.0), m_posAngle(0.0) {
     m_bodyId = LUNA;
     update( _obs ); 
 }
@@ -225,9 +225,6 @@ Luna::Luna( Observer &_obs ): m_age(-1.), m_posAngle(-1.) {
  * calculate current phase angle in radians (Meeus' easy lower precision method)
  */
 double Luna::getPhaseAngle() {
-    if ( !m_initialized )
-        return -1.;
-
     return MathOps::normalizeDegrees(
         180 - MathOps::toDegrees(m_f.D)
           - 6.289 * sin( m_f.Mp )
@@ -240,17 +237,11 @@ double Luna::getPhaseAngle() {
 }
 
 double Luna::getPhaseAngleRadians() { 
-    if ( !m_initialized )
-        return -1.;
-
     return MathOps::toRadians( getPhaseAngle() ); 
 }
 
 //-------------------------------------------------------------------------
 double Luna::getPhase() {
-    if ( !m_initialized )
-        return -1.;
-
     return (1. + cos( getPhaseAngleRadians() )) / 2.;
 }
 
@@ -288,9 +279,6 @@ void Luna::update( Observer &_obs ) {
         m_f.A2 = MathOps::toRadians( MathOps::normalizeDegrees( 53.09 + 479264.290 * m_jcentury ));
         m_f.A3 = MathOps::toRadians( MathOps::normalizeDegrees( 313.45 + 481266.484 * m_jcentury ));
         m_f.T  = MathOps::toRadians( MathOps::normalizeDegrees( m_jcentury ));
-
-        // indicate values need to be recalculated
-        m_eclipticLat = m_eclipticLon = m_r = -1.;
 
         {
             // Compute Ecliptic Geocentric Latitud

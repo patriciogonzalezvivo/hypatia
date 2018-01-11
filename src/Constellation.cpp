@@ -834,10 +834,10 @@ std::string cns_name (int id) {
     return (cns_namemap[id]);
 }
 
-Constellation::Constellation() : m_ra(-1.), m_dec(-1), m_id(-1) {
+Constellation::Constellation() : m_ra(0.0), m_dec(0.0), m_id(-1) {
 }
 
-Constellation::Constellation( int _id ) : m_ra(-1.), m_dec(-1), m_id(-1) {
+Constellation::Constellation( int _id ) : m_ra(0.0), m_dec(0.0), m_id(-1) {
     if (_id >= N_CONSTELATIONS) {
         return;
     }

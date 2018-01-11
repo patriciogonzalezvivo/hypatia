@@ -16,11 +16,11 @@
 #include "Pluto.h"
 #include "Vsop.h"
 
-Body::Body() : m_jcentury(-1.), m_r(-1.), m_eclipticLon(-1.), m_eclipticLat(-1.), m_dec(-1.), m_ra(-1.), m_az(-1.), m_alt(-1.), m_bodyId( NAB ), m_initialized(false) {
+Body::Body() : m_jcentury(0.0), m_r(0.0), m_eclipticLon(0.0), m_eclipticLat(0.0), m_dec(0.0), m_ra(0.0), m_az(0.0), m_alt(0.0), m_bodyId( NAB ) {
 
 };
 
-Body::Body( BodyId _body, Observer& _obs ) : m_jcentury(-1.), m_r(-1.), m_eclipticLon(-1.), m_eclipticLat(-1.), m_dec(-1.), m_ra(-1.), m_az(-1.), m_alt(-1.), m_bodyId( _body ), m_initialized(false){
+Body::Body( BodyId _body, Observer& _obs ) : m_jcentury(0.0), m_r(0.0), m_eclipticLon(0.0), m_eclipticLat(0.0), m_dec(0.0), m_ra(0.0), m_az(0.0), m_alt(0.0), m_bodyId( _body ) {
     update(_obs);
 }
 
@@ -79,5 +79,4 @@ void Body::update(Observer& _obs) {
 void Body::updateGeoTopoCentric( Observer& _obs ) {
     AstroOps::eclipticToEquatorial(_obs, m_eclipticLon, m_eclipticLat, m_ra, m_dec);
     AstroOps::equatorialToHorizontal(_obs, m_ra, m_dec, m_alt, m_az);
-    m_initialized = true;
 }

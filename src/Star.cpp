@@ -2844,10 +2844,10 @@ StarData sts_data[N_STARS] = {
     {118322,4.49,359.979,-65.58}
 };
 
-Star::Star() : m_mag(-1.), m_ra(-1.), m_dec(-1.), m_alt(-1.), m_az(-1.), m_id(-1) {
+Star::Star() : m_mag(-1.), m_ra(0.0), m_dec(0.0), m_alt(0.0), m_az(0.0), m_id(-1) {
 }
 
-Star::Star( int _id ) : m_mag(-1.), m_ra(-1.), m_dec(-1.), m_alt(-1.), m_az(-1.), m_id(_id) {
+Star::Star( int _id ) : m_mag(-1.), m_ra(0.0), m_dec(0.0), m_alt(0.0), m_az(0.0), m_id(_id) {
     for (int i = 0; i < N_STARS; i++) {
         if ( _id == sts_data[i].id ) {
             m_id = _id;

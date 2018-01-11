@@ -21,23 +21,23 @@ public:
     BodyId getBodyId() const { return m_bodyId; }
 
     // Ecliptic (GeoCentric)
-    double getEclipticLon() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : MathOps::toDegrees( m_eclipticLon ); }
-    double getEclipticLonRadians() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : m_eclipticLon; }
-    double getEclipticLat() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : MathOps::toDegrees( m_eclipticLat); }
-    double getEclipticLatRadians() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : m_eclipticLat; }
-    double getRadius() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : m_r; }
+    double getEclipticLon() const { return MathOps::toDegrees( m_eclipticLon ); }
+    double getEclipticLonRadians() const { return m_eclipticLon; }
+    double getEclipticLat() const { return MathOps::toDegrees( m_eclipticLat); }
+    double getEclipticLatRadians() const { return m_eclipticLat; }
+    double getRadius() const { return m_r; }
     
     // Ecuatorial (Geocentric)
-    double getDeclination() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : MathOps::toDegrees( m_dec ); }
-    double getDeclinationRadians() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : m_dec; }
-    double getRightAscension() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : MathOps::toDegrees( m_ra ); }
-    double getRightAscensionRadians() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : m_ra; }
+    double getDeclination() const { return MathOps::toDegrees( m_dec ); }
+    double getDeclinationRadians() const { return m_dec; }
+    double getRightAscension() const { return MathOps::toDegrees( m_ra ); }
+    double getRightAscensionRadians() const { return m_ra; }
 
     // Horizontal (Topocentric)
-    double getAzimuth() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : MathOps::toDegrees( m_az ); }
-    double getAzimuthRadians() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : m_az; }
-    double getAltitud() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : MathOps::toDegrees( m_alt ); }
-    double getAltitudRadians() const { return ( NAB == m_bodyId || !m_initialized ) ? -1. : m_alt; }
+    double getAzimuth() const { return MathOps::toDegrees( m_az ); }
+    double getAzimuthRadians() const { return m_az; }
+    double getAltitud() const { return MathOps::toDegrees( m_alt ); }
+    double getAltitudRadians() const { return m_alt; }
     
     // Calculate the data for a given planet, jd, and location
     // This function must be called (directly or via c'tor) before calling
@@ -61,5 +61,4 @@ protected:
     double  m_alt;
     
     BodyId  m_bodyId;
-    bool    m_initialized;
 };
