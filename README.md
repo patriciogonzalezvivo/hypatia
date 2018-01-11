@@ -3,10 +3,12 @@ Astronomy library based on Mark Huss's and Bill Gray's code. Both authors have v
 - simplify the C++ interfaces by making simpler and clear objects and classes
 - clean the dependences so the C++ code can be added to other C++ projects easily
 - add a Python package which makes a C++ wrapper usign swig
+- Add a basic Constellations and Stars database:  
 
 References:
  - Bill Gray: https://github.com/Bill-Gray 
  - Mark Huss: http://mhuss.com/AstroLib
+ - Stuart Lowe: https://github.com/slowe/VirtualSky
 
 ## As C++ code
 

@@ -54,10 +54,11 @@ protected:
     double  m_eclipticLon;
     double  m_eclipticLat;
     
-    double  m_az;
-    double  m_alt;
     double  m_dec;
     double  m_ra;
+
+    double  m_az;
+    double  m_alt;
     
     BodyId  m_bodyId;
     bool    m_initialized;

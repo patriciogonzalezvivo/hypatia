@@ -44,8 +44,8 @@ public:
     double getPhaseAngleRadians();
 
     // Position Angle of bright limb
-    double getPositionAngle() const { return MathOps::toDegrees( m_pos_angle ); };
-    double getPositionAngleRadians() const { return m_pos_angle; };
+    double getPositionAngle() const { return MathOps::toDegrees( m_posAngle ); };
+    double getPositionAngleRadians() const { return m_posAngle; };
 
     // calculate all three location elements of the spec'd body at the given time
     void update( Observer &_obs );
@@ -54,7 +54,6 @@ private:
     LunarFundamentals m_f;      // our calculated fundmentals
 
     double m_age;
-    double m_pos_angle;
-    double m_par_angle;
+    double m_posAngle;
 };
 

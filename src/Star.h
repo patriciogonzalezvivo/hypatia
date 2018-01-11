@@ -1,28 +1,13 @@
 #pragma once
 
-#include <string>
-#include <vector>
+#include "Observer.h"
 
-#include "Body.h"
-#include "Luna.h"
-#include "TimeOps.h"
-
-class Constellation {
+class Star {
 public:
-
-    static const int TOTAL;
-
-    Constellation();
-    Constellation( int _id );
-    Constellation( Body &_body);
-    Constellation( Luna &_luna);
-    Constellation( double _ra, double _dec);
+    Star();
+    Star( int _id );
 
     int getId() const { return m_id; };
-    std::string getName();
-    std::string getAbbreviation();
-
-    std::vector<int> getStarsIds() const { return m_starsIds; };
 
     // Ecuatorial Centroid (Geocentric)
     double getDeclination() const { return ( m_id == -1. ) ? -1. : MathOps::toDegrees( m_dec ); }
@@ -36,17 +21,15 @@ public:
     double getAltitud() const { return ( m_id == -1. ) ? -1. : MathOps::toDegrees( m_alt ); }
     double getAltitudRadians() const { return ( m_id == -1. ) ? -1. : m_alt; }
 
-    void update(Observer &_obs);
-
+    void update( Observer &_obs );
 protected:
-    std::vector<int> m_starsIds;
+    double m_mag;
 
-    // Centroid
     double m_ra;
     double m_dec;
 
-    double m_az;
     double m_alt;
-
+    double m_az;
+    
     int m_id;
 };

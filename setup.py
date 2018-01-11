@@ -22,7 +22,8 @@ astro_module = Extension(
     'src/Body.cpp', 
     'src/Luna.cpp', 
     'src/Pluto.cpp',
-    'src/Constellation.cpp'
+    'src/Constellation.cpp',
+    'src/Star.cpp'
    ],
    swig_opts = ['-c++']
 )

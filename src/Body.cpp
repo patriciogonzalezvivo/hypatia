@@ -16,11 +16,11 @@
 #include "Pluto.h"
 #include "Vsop.h"
 
-Body::Body() : m_jcentury(-1.), m_r(-1.), m_eclipticLon(-1.), m_eclipticLat(-1.), m_az(-1.), m_alt(-1.), m_dec(-1.), m_ra(-1.), m_bodyId( NAB ), m_initialized(false) {
+Body::Body() : m_jcentury(-1.), m_r(-1.), m_eclipticLon(-1.), m_eclipticLat(-1.), m_dec(-1.), m_ra(-1.), m_az(-1.), m_alt(-1.), m_bodyId( NAB ), m_initialized(false) {
 
 };
 
-Body::Body( BodyId _body, Observer& _obs ) : m_jcentury(-1.), m_r(-1.), m_eclipticLon(-1.), m_eclipticLat(-1.), m_az(-1.), m_alt(-1.), m_dec(-1.), m_ra(-1.), m_bodyId( _body ), m_initialized(false){
+Body::Body( BodyId _body, Observer& _obs ) : m_jcentury(-1.), m_r(-1.), m_eclipticLon(-1.), m_eclipticLat(-1.), m_dec(-1.), m_ra(-1.), m_az(-1.), m_alt(-1.), m_bodyId( _body ), m_initialized(false){
     update(_obs);
 }
 
