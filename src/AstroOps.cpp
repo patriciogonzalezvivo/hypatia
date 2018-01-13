@@ -42,7 +42,6 @@ double AstroOps::meanObliquity( double t ){
     };
 
     if( t0 != t ) {
-
         t0 = t;
         u = u0 = t / 100.;     // u is in julian 10000's of years
         rval = rvalStart;
