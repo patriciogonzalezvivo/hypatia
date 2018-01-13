@@ -9,168 +9,115 @@ const double MathOps::TAU = 6.2831853071795864769252867665590;
 const double MathOps::PI_OVER_TWO = HD_PI / 2.;
 const double MathOps::TWO_OVER_PI = 2. / HD_PI;
 
+const double MathOps::RADS_TO_DEGS = 5.7295779513082320877e1;
+const double MathOps::DEGS_TO_RADS = 1.7453292519943295769e-2;
+
 const double MathOps::DEG_PER_CIRCLE = 360.;
 const double MathOps::MINUTES_PER_DEGREE = 60.;
 const double MathOps::SECONDS_PER_DEGREE = 3600.;
 
-const double MathOps::TO_RADS = HD_PI / 180.;
-const double MathOps::TO_HRS = 1./15;
+const double MathOps::DEGS_TO_HRS = 1. / 15.;
 
-void MathOps::toDegreesMinSec ( double _rad, int &_deg, int &_min, int &_sec ) {
-    int totalSeconds = (int)round( MathOps::normalizeRadians(_rad) * 360 * 60 * 60 / TAU);
-    _sec = totalSeconds % 60;
-    _min = (totalSeconds / 60) % 60;
-    _deg = totalSeconds / (60 * 60);
+const double MathOps::RADS_TO_ARCS = 2.0626480624709635516e5;
+const double MathOps::ARCS_TO_RADS = 4.8481368110953599359e-6;
+
+const double MathOps::RADIAN = (180.0 / M_PI);
+
+void MathOps::toDMS ( double degrees, int &_deg, int &_min, double &_sec ) {
+    // int totalSeconds = (int)round( rangeDegrees(_rad) * SECONDS_PER_DEGREE);
+    // _sec = totalSeconds % 60;
+    // _min = (totalSeconds / 60) % 60;
+    // _deg = totalSeconds / (360);
+
+    double dtemp;
+    int sign = 1;
+
+    if (degrees < 0) 
+        sign = -1;
+
+    degrees = fabs(degrees);
+    _deg = (int)degrees;
+    
+    /* multiply remainder by 60 to get minutes */
+    dtemp = 60*(degrees - _deg);
+    _min = (unsigned short)dtemp;
+    
+    /* multiply remainder by 60 to get seconds */
+    _sec = 60*(dtemp - _min);
+    
+    /* catch any overflows */
+    if (_sec > 59) {
+        _sec = 0;
+        _min ++;
+    }
+    if (_min > 59) {
+        _min = 0;
+        _deg ++;
+    }
+
+    _deg *= sign;
+}
+
+void MathOps::toHMS ( double degrees, int &_hrs, int &_min, double &_sec ) {
+    double dtemp;
+    degrees = rangeDegrees(degrees);
+
+    /* divide degrees by 15 to get the hours */
+    dtemp = degrees * DEGS_TO_HRS;
+    _hrs = (unsigned short) dtemp;
+    
+    /* multiply remainder by 60 to get minutes */
+    dtemp = 60 * ( dtemp - _hrs );    
+    _min = (unsigned short) dtemp;
+    
+    /* multiply remainder by 60 to get seconds */
+    _sec = 60 * ( dtemp - _min );
+    
+    /* catch any overflows */
+    if ( _sec > 59 ) {
+        _sec = 0;
+        _min ++;
+    }
+    if ( _min > 59)  {
+        _min = 0;
+        _hrs ++;
+    }
 }
 
 //----------------------------------------------------------------------------
 // reduce an angle in degrees to (0 <= d < 360)
 //
-double MathOps::normalizeDegrees ( double d ) {
-    d = fmod( d, MathOps::DEG_PER_CIRCLE);
-    if( d < 0.)
-        d += MathOps::DEG_PER_CIRCLE;
-    return d;
+double MathOps::rangeDegrees ( double d ) {
+    if (d >= 0.0 && d < MathOps::DEG_PER_CIRCLE)
+        return d;
+
+    // d = fmod( d, MathOps::DEG_PER_CIRCLE);
+    // if ( d < 0.)
+    //     d += MathOps::DEG_PER_CIRCLE;
+    // return d;
+
+    double temp = (int)(d / MathOps::DEG_PER_CIRCLE);
+    if (d < 0.0)
+        temp --;
+    temp *= MathOps::DEG_PER_CIRCLE;
+    return d - temp;
 }
 
 //----------------------------------------------------------------------------
 // reduce an angle in radians to (0 <= r < 2PI)
 //
-double MathOps::normalizeRadians ( double r ) {
-    r = fmod( r, MathOps::TAU );
-    if( r < 0. )
-        r += MathOps::TAU;
-    return r;
-}
+double MathOps::rangeRadians ( double r ) {
+    if (r >= 0.0 && r < MathOps::TAU)
+        return r;
 
-AstroVector::AstroVector(): x(0.), y(0.), z(0.) {
-}
+    // r = fmod( r, MathOps::TAU );
+    // if ( r < 0. )
+    //     r += MathOps::TAU;
+    // return r;
 
-AstroVector::AstroVector(double _radiant_lon, double _radiant_lat, double _radius): x(0.), y(0.), z(0.) {
-    // http://www.stjarnhimlen.se/comp/tutorial.html
-    const double cosLat = cos(_radiant_lat);
-    x = cos(_radiant_lon) * cosLat * _radius;
-    y = sin(_radiant_lon) * cosLat * _radius;
-    z = sin(_radiant_lat) * _radius;
-}
-
-AstroVector AstroVector::operator+ (const AstroVector& _vec) const {
-    AstroVector rta;
-    rta.x = x + _vec.x;
-    rta.y = y + _vec.y;
-    rta.z = z + _vec.z;
-    return rta;
-}
-
-AstroVector AstroVector::operator- (const AstroVector& _vec) const {
-    AstroVector rta;
-    rta.x = x - _vec.x;
-    rta.y = y - _vec.y;
-    rta.z = z - _vec.z;
-    return rta;
-}
-AstroVector AstroVector::operator* (const AstroVector& _vec) const {
-    AstroVector rta;
-    rta.x = x * _vec.x;
-    rta.y = y * _vec.y;
-    rta.z = z * _vec.z;
-    return rta;
-}
-AstroVector AstroVector::operator/ (const AstroVector& _vec) const {
-    AstroVector rta;
-    rta.x = x / _vec.x;
-    rta.y = y / _vec.y;
-    rta.z = z / _vec.z;
-    return rta;
-}
-AstroVector AstroVector::operator+ (double _d) const {
-    AstroVector rta;
-    rta.x = x + _d;
-    rta.y = y + _d;
-    rta.z = z + _d;
-    return rta;
-}
-
-AstroVector AstroVector::operator- (double _d) const {
-    AstroVector rta;
-    rta.x = x - _d;
-    rta.y = y - _d;
-    rta.z = z - _d;
-    return rta;
-}
-AstroVector AstroVector::operator* (double _d) const {
-    AstroVector rta;
-    rta.x = x * _d;
-    rta.y = y * _d;
-    rta.z = z * _d;
-    return rta;
-}
-AstroVector AstroVector::operator/ (double _d) const {
-    AstroVector rta;
-    rta.x = x / _d;
-    rta.y = y / _d;
-    rta.z = z / _d;
-    return rta;
-}
-
-AstroVector& AstroVector::operator+= (const AstroVector& _vec) {
-    x += _vec.x;
-    y += _vec.y;
-    z += _vec.z;
-    return *this;
-}
-AstroVector& AstroVector::operator-= (const AstroVector& _vec) {
-    x -= _vec.x;
-    y -= _vec.y;
-    z -= _vec.z;
-    return *this;
-}
-AstroVector& AstroVector::operator*= (const AstroVector& _vec) {
-    x *= _vec.x;
-    y *= _vec.y;
-    z *= _vec.z;
-    return *this;
-}
-AstroVector& AstroVector::operator/= (const AstroVector& _vec) {
-    x /= _vec.x;
-    y /= _vec.y;
-    z /= _vec.z;
-    return *this;
-}
-
-AstroVector& AstroVector::operator+= (double _d) {
-    x += _d;
-    y += _d;
-    z += _d;
-    return *this;
-}
-AstroVector& AstroVector::operator-= (double _d) {
-    x -= _d;
-    y -= _d;
-    z -= _d;
-    return *this;
-}
-AstroVector& AstroVector::operator*= (double _d) {
-    x *= _d;
-    y *= _d;
-    z *= _d;
-    return *this;
-}
-AstroVector& AstroVector::operator/= (double _d) {
-    x /= _d;
-    y /= _d;
-    z /= _d;
-    return *this;
-}
-
-double AstroVector::getLongitud() {
-    return atan2(y, x);
-}
-
-double AstroVector::getLatitud() {
-    return atan2(z, sqrt(x*x + y*y));
-}
-
-double AstroVector::getRadius() {
-    return sqrt(x*x + y*y + z*z);
+    double temp = (int)(r / MathOps::TAU);
+    if (r < 0.0)
+        temp --;
+    temp *= MathOps::TAU;
+    return r - temp;
 }

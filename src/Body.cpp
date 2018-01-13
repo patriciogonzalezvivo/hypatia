@@ -16,21 +16,18 @@
 #include "Pluto.h"
 #include "Vsop.h"
 
-Body::Body() : m_jcentury(0.0), m_r(0.0), m_eclipticLon(0.0), m_eclipticLat(0.0), m_dec(0.0), m_ra(0.0), m_az(0.0), m_alt(0.0), m_bodyId( NAB ) {
-
+Body::Body() : m_jcentury(0.0), m_r(0.0), m_eclipticLon(0.0), m_eclipticLat(0.0), m_bodyId( NAB ) {
 };
 
-Body::Body( BodyId _body, Observer& _obs ) : m_jcentury(0.0), m_r(0.0), m_eclipticLon(0.0), m_eclipticLat(0.0), m_dec(0.0), m_ra(0.0), m_az(0.0), m_alt(0.0), m_bodyId( _body ) {
-    update(_obs);
+Body::Body( BodyId _body ) : m_jcentury(0.0), m_r(0.0), m_eclipticLon(0.0), m_eclipticLat(0.0), m_bodyId( _body ) {
 }
 
 Body::~Body() {
-    
 }
 
 // calculate the data for a given planet, jd, and location
 //
-void Body::update(Observer& _obs) {
+void Body::compute( Observer& _obs ) {
     // There's a lot of calculating here, but the one we need most often
     // is the last one (AltAzLoc), which depends on all the previous
     // calculations
@@ -43,7 +40,7 @@ void Body::update(Observer& _obs) {
         if (LUNA == m_bodyId) {       /* not VSOP */   
 
             static Luna luna;
-            luna.update(_obs);
+            luna.compute(_obs);
             m_eclipticLon = luna.getEclipticLonRadians();
             m_eclipticLat = luna.getEclipticLatRadians();
 
@@ -72,11 +69,11 @@ void Body::update(Observer& _obs) {
             AstroOps::heliocentricToGeocentric(_obs, m_eclipticLon, m_eclipticLat, m_r);
         }
         
-        updateGeoTopoCentric( _obs );
+        computeElipcticAngles( _obs );
     }
 }
 
-void Body::updateGeoTopoCentric( Observer& _obs ) {
-    AstroOps::eclipticToEquatorial(_obs, m_eclipticLon, m_eclipticLat, m_ra, m_dec);
-    AstroOps::equatorialToHorizontal(_obs, m_ra, m_dec, m_alt, m_az);
+void Body::computeElipcticAngles( Observer& _obs ) {
+    AstroOps::eclipticToEquatorial( _obs, m_eclipticLon, m_eclipticLat, m_ra, m_dec );
+    AstroOps::equatorialToHorizontal( _obs, m_ra, m_dec, m_alt, m_az );
 }

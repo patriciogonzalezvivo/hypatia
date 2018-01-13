@@ -15,15 +15,15 @@ public:
     // Transform celestial coordinates ( https://en.wikipedia.org/wiki/Celestial_coordinate_system )
 
     // to GeoCentric
-    static void   heliocentricToGeocentric( Observer &_loc, 
+    static void heliocentricToGeocentric( Observer &_loc, 
                                             double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad); // OUT
 
-    static void   eclipticToEquatorial( Observer &_loc,
+    static void eclipticToEquatorial( Observer &_loc,
                                         double _lng, double _lat,       // IN
                                         double &_ra, double &_dec);     // OUT
     
     // to TopoCentric
-    static void   equatorialToHorizontal( Observer &_loc,
+    static void equatorialToHorizontal( Observer &_loc,
                                           double _ra, double _dec,      // IN
                                           double &_alt, double &_az);   // OUT
 

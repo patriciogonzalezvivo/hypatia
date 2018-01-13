@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "MathOps.h"
+#include "Vector.h"
 
 // bodies of interest
 //
@@ -23,7 +23,7 @@ enum BodyId {
 class Observer {
 public:
     // c'tor: lon & lat are passed in DEGREES
-    Observer(double _lng_deg = 0, double _lat_deg = 0, BodyId _body = EARTH, unsigned long _sec = 0);
+    Observer(double _lng_deg = 0, double _lat_deg = 0, unsigned long _sec = 0, BodyId _body = EARTH);
     
     void    setLatitude(double _deg);
     void    setLongitude(double _deg);
@@ -42,12 +42,12 @@ public:
     double  getObliquity();
     double  getLST();
     
-    AstroVector    getEclipticHelioLocation();
+    Vector  getEclipticHelioLocation();
     
     void    update();
     
 private:
-    AstroVector m_eclipticHelioLocation;
+    Vector m_eclipticHelioLocation;
     
     double m_longitude;   // in radians, N positive
     double m_latitude;    // in radians, E positive

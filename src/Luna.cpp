@@ -215,17 +215,12 @@ Luna::Luna(): m_age(0.0), m_posAngle(0.0) {
     m_bodyId = LUNA;
 }
 
-Luna::Luna( Observer &_obs ): m_age(0.0), m_posAngle(0.0) {
-    m_bodyId = LUNA;
-    update( _obs ); 
-}
-
 //-------------------------------------------------------------------------
 /**
  * calculate current phase angle in radians (Meeus' easy lower precision method)
  */
 double Luna::getPhaseAngle() {
-    return MathOps::normalizeDegrees(
+    return MathOps::rangeDegrees(
         180 - MathOps::toDegrees(m_f.D)
           - 6.289 * sin( m_f.Mp )
           + 2.110 * sin( m_f.M )
@@ -257,7 +252,7 @@ double getFund( const double* tptr, double _jcentury ) {
         d += tpow * (*tptr++);
         tpow *= _jcentury;
     }
-    return MathOps::toRadians( MathOps::normalizeDegrees( d ) );
+    return MathOps::toRadians( MathOps::rangeDegrees( d ) );
 }
 
 //----------------------------------------------------------------------------
@@ -265,7 +260,7 @@ double getFund( const double* tptr, double _jcentury ) {
 //   ad has vsop.bin data
 //   t = decimal julian centuries
 //
-void Luna::update( Observer &_obs ) {
+void Luna::compute( Observer &_obs ) {
     if (m_jcentury != _obs.getJulianCentury()) {
         m_jcentury = _obs.getJulianCentury();
 
@@ -275,10 +270,10 @@ void Luna::update( Observer &_obs ) {
         m_f.Mp = getFund( LunarFundimentals_Mp, m_jcentury );
         m_f.F = getFund( LunarFundimentals_F, m_jcentury );
 
-        m_f.A1 = MathOps::toRadians( MathOps::normalizeDegrees( 119.75 + 131.849 * m_jcentury ));
-        m_f.A2 = MathOps::toRadians( MathOps::normalizeDegrees( 53.09 + 479264.290 * m_jcentury ));
-        m_f.A3 = MathOps::toRadians( MathOps::normalizeDegrees( 313.45 + 481266.484 * m_jcentury ));
-        m_f.T  = MathOps::toRadians( MathOps::normalizeDegrees( m_jcentury ));
+        m_f.A1 = MathOps::toRadians( MathOps::rangeDegrees( 119.75 + 131.849 * m_jcentury ));
+        m_f.A2 = MathOps::toRadians( MathOps::rangeDegrees( 53.09 + 479264.290 * m_jcentury ));
+        m_f.A3 = MathOps::toRadians( MathOps::rangeDegrees( 313.45 + 481266.484 * m_jcentury ));
+        m_f.T  = MathOps::toRadians( MathOps::rangeDegrees( m_jcentury ));
 
         {
             // Compute Ecliptic Geocentric Latitud
@@ -416,11 +411,11 @@ void Luna::update( Observer &_obs ) {
 
             m_eclipticLon = (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6;
             // reduce signed angle to ( 0 < m_eclipticLon < 360 )
-            m_eclipticLon = MathOps::toRadians(MathOps::normalizeDegrees( m_eclipticLon ));
+            m_eclipticLon = MathOps::toRadians(MathOps::rangeDegrees( m_eclipticLon ));
             m_r = 385000.56 + sr / 1000.;
         }
         
-        updateGeoTopoCentric( _obs );
+        computeElipcticAngles( _obs );
 
         // Compute Sun's coords
         double sun_eclipticLon, sun_eclipticLat, sun_radius;
@@ -432,7 +427,7 @@ void Luna::update( Observer &_obs ) {
         double sun_alt, sun_az;
         AstroOps::equatorialToHorizontal( _obs, sun_ra, sun_dec, sun_alt, sun_az );
 
-        double moonAge = MathOps::normalizeRadians( MathOps::TAU - (sun_eclipticLon - m_eclipticLon) );
+        double moonAge = MathOps::rangeRadians( MathOps::TAU - (sun_eclipticLon - m_eclipticLon) );
 
         // convert radians to Synodic day
         m_age = SYNODIC_MONTH * (moonAge / MathOps::TAU);

@@ -1,28 +1,31 @@
-Astronomy library based on Mark Huss's and Bill Gray's code. Both authors have very technical and ambitious projects, with over comboluted code for my porposes. I mostly:
+Astronomy library mostly based on Mark Huss's and Bill Gray's code. Both authors have very technical and ambitious projects, for profesional astronomers. I took some artistic licenses and mostly:
 
-- simplify the C++ interfaces by making simpler and clear objects and classes
+- simplify the C++ interfaces by making simpler and clear objects and classes. I took a lot from the style of Brandon Rhodes's [PyEphem project](https://github.com/brandon-rhodes/pyephem)
 - clean the dependences so the C++ code can be added to other C++ projects easily
 - add a Python package which makes a C++ wrapper usign swig
-- Add a basic Constellations and Stars database:  
+- Add a basic Constellations and Stars database 
 
 References:
  - Bill Gray: https://github.com/Bill-Gray 
  - Mark Huss: http://mhuss.com/AstroLib
  - Stuart Lowe: https://github.com/slowe/VirtualSky
+ - Brandon Rhodes: https://github.com/brandon-rhodes/pyephem
 
 ## As C++ code
 
 ```cpp
 #include "Astro/Body.h"
 #include "Astro/Luna.h"
+#include "Astro/Constellation.h"
 
-double lat = 40.781098831465;
-double lng = -73.97715657655;
-obs = Observer(lng, lat);
+obs = Observer(40.781098831465, -73.97715657655);
 
-sun = Body(SUN, obs);
-moon = Body(LUNA, obs);
-moon_phase = Luna::ageOfMoonInDays(obs.getJulianDate()) / Luna::SYNODIC_MONTH
+sun = Body(SUN);
+moon = Luna(LUNA);
+std::cout << "Moon's phase: " << moon.getPhase() << std::endl
+
+const = Constellation(moon)
+std::cout << "Moon's transit constelation: " << const.getName() << std::endl
 ```
 
 ## As Python package
@@ -36,13 +39,17 @@ make install
 * Then use it:
 
 ```python
-import astro
+from astro import *
 
-lat = 40.781098831465;
-lng = -73.97715657655;
-astro.Observer(lng, lat)
+obs = Observer(40.781098831465, -73.97715657655)
 
-sun = astro.Body(astro.SUN, obs)
-moon = astro.Body(astro.LUNA, obs)
-moon_phase = astro.Lunar.ageOfMoonInDays(obs.getJulianDate()) / astro.Lunar.SYNODIC_MONTH
+sun = Body(SUN)
+sun.compute(obs)
+
+moon = Luna(LUNA)
+moon.compute(obs)
+print("Moon's phase: ", const.getPhase())
+
+const = Constellation(moon)
+print("Moon's transit constelation: ", const.getName())
 ```

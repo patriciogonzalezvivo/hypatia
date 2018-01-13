@@ -12,6 +12,8 @@
 #include "MathOps.h"
 #include "TimeOps.h"
 
+#include "Vector.h"
+
 #include <math.h>
 #include <string.h>
 
@@ -99,8 +101,8 @@ void AstroOps::heliocentricToGeocentric ( Observer &_obs,
                                           double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad) {
     // http://www.astrosurf.com/jephem/astro/ephemeris/et520transfo_en.htm
 
-    AstroVector earth_eclipticLoc = _obs.getEclipticHelioLocation();
-    AstroVector planet_eclipticLoc = AstroVector(_body_eclipticLon, _body_eclipticLat, _body_rad);
+    Vector earth_eclipticLoc = _obs.getEclipticHelioLocation();
+    Vector planet_eclipticLoc = Vector(_body_eclipticLon, _body_eclipticLat, _body_rad);
 
     planet_eclipticLoc.x -= earth_eclipticLoc.x;
     planet_eclipticLoc.y -= earth_eclipticLoc.y;

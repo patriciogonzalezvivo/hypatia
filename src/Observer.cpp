@@ -8,30 +8,30 @@
 #include <string.h>
 #include <iostream>
 
-Observer::Observer( double _lng_deg, double _lat_deg, BodyId _body, unsigned long _sec) : m_longitude(MathOps::toRadians(_lng_deg)), m_latitude(MathOps::toRadians(_lat_deg)), m_sec(_sec), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_body(_body), m_change(true) {
+Observer::Observer( double _lng_deg, double _lat_deg, unsigned long _sec, BodyId _body ) : m_longitude(MathOps::toRadians(_lng_deg)), m_latitude(MathOps::toRadians(_lat_deg)), m_sec(_sec), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_body(_body), m_change(true) {
 }
 
 // set: lat passed in DEGREES
-void Observer::setLatitude(double _deg) {
+void Observer::setLatitude( double _deg ) {
     m_latitude = MathOps::toRadians(_deg);
     m_change = true;
 }
 
 // set: lon passed in DEGREES
-void Observer::setLongitude(double _deg) {
+void Observer::setLongitude( double _deg ) {
     m_longitude = MathOps::toRadians(_deg);
     m_change = true;
 }
 
-void Observer::setTime(unsigned long _sec) {
-    if (_sec == 0) {
+void Observer::setTime( unsigned long _sec ) {
+    if ( _sec == 0 ) {
         _sec = TimeOps::getCurrentSeconds();
     }
     m_sec = _sec;
     setJuliaDay( TimeOps::julianDates(m_sec) );
 }
 
-void Observer::setJuliaDay(double _jd ) {
+void Observer::setJuliaDay( double _jd ) {
     m_jd = _jd;
     m_jcentury = TimeOps::toMillenia(m_jd);
     m_obliquity = AstroOps::meanObliquity(m_jcentury);
@@ -41,7 +41,7 @@ void Observer::setJuliaDay(double _jd ) {
     double planet_eclipticLat;
     double planet_eclipticRad;
     Vsop::calcAllLocs(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad, m_jcentury, m_body);
-    m_eclipticHelioLocation = AstroVector(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad);
+    m_eclipticHelioLocation = Vector(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad);
     
     //std::cout << "Observation data UPDATED" << std::endl;
     m_change = false;
@@ -96,7 +96,7 @@ double Observer::getLST() {
     return m_lst;
 }
 
-AstroVector Observer::getEclipticHelioLocation() {
+Vector Observer::getEclipticHelioLocation() {
     if (m_change)
         update();
     return m_eclipticHelioLocation;

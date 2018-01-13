@@ -1,9 +1,5 @@
 #include "Star.h"
 
-#include "AstroOps.h"
-
-#include <map>
-
 struct StarData {
     int id;  
     double mag;
@@ -2844,23 +2840,21 @@ StarData sts_data[N_STARS] = {
     {118322,4.49,359.979,-65.58}
 };
 
-Star::Star() : m_mag(-1.), m_ra(0.0), m_dec(0.0), m_alt(0.0), m_az(0.0), m_id(-1) {
+Star::Star() : m_mag(0.0), m_id(-1) {
 }
 
-Star::Star( int _id ) : m_mag(-1.), m_ra(0.0), m_dec(0.0), m_alt(0.0), m_az(0.0), m_id(_id) {
+Star::Star( int _id ) : m_mag(0.0), m_id(-1) {
     for (int i = 0; i < N_STARS; i++) {
         if ( _id == sts_data[i].id ) {
             m_id = _id;
             m_mag = sts_data[i].mag;
-            m_ra = MathOps::toRadians(sts_data[i].ra);
-            m_dec = MathOps::toRadians(sts_data[i].dec);
+            setEqAngles(sts_data[i].ra, sts_data[i].dec);
+            break;
         }
     }
 }
 
-void Star::update( Observer &_obs ) {
-    if (m_id < 0){
-        return;
-    }
-    AstroOps::equatorialToHorizontal(_obs, m_ra, m_dec, m_alt, m_az);
+Star::Star( double _ra, double _dec, double _mag ) : m_mag(_mag), m_id(-1) {
+    setEqAngles(_ra, _dec);
 }
+

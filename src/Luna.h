@@ -27,33 +27,31 @@ struct LunarFundamentals {
 class Luna : public Body {
 public:
     Luna();
-    Luna( Observer &_obs );
 
     static const double SYNODIC_MONTH;
     static const double PERIGEE_KM;
     static const double APOGEE_KM;
 
     // Calculate age of the moon in days (0.0 to 29.53...)
-    double getAge() const { return m_age; };
+    virtual double getAge() const { return m_age; };
 
     // Illuminated Fraction of the Moon's disk.
-    double getPhase();
+    virtual double getPhase();
 
     // Phase Angle of the Moon's.
-    double getPhaseAngle();
-    double getPhaseAngleRadians();
+    virtual double getPhaseAngle();
+    virtual double getPhaseAngleRadians();
 
     // Position Angle of bright limb
-    double getPositionAngle() const { return MathOps::toDegrees( m_posAngle ); };
-    double getPositionAngleRadians() const { return m_posAngle; };
+    virtual double getPositionAngle() const { return MathOps::toDegrees( m_posAngle ); };
+    virtual double getPositionAngleRadians() const { return m_posAngle; };
 
     // calculate all three location elements of the spec'd body at the given time
-    void update( Observer &_obs );
+    virtual void compute( Observer &_obs );
 
 private:
     LunarFundamentals m_f;      // our calculated fundmentals
 
-    double m_age;
-    double m_posAngle;
+    double m_age, m_posAngle;
 };
 
