@@ -829,28 +829,13 @@ Constellation::Constellation( double _ra, double _dec ) : m_id(-1) {
     setId( getConstellationId(_ra, _dec) );
 }
 
-Constellation::Constellation( Body &_body ) : m_id(-1) {
-    double ra = _body.getRightAscension();
-    double dec = _body.getDeclination();
-    setId( getConstellationId( ra, dec ) );
-}
-
-Constellation::Constellation( Luna &_luna ) : m_id(-1){
-    double ra = _luna.getRightAscension();
-    double dec = _luna.getDeclination();
+Constellation::Constellation( EqPoint &_point ) : m_id(-1) {
+    double ra = _point.getRightAscension();
+    double dec = _point.getDeclination();
     setId( getConstellationId( ra, dec ) );
 }
 
 Constellation::Constellation( char * _abbr ) : m_id(-1) {
-    for ( int i = 0; i < N_CONSTELATIONS; i++) {
-        if ( _abbr == cns_namemap[i].substr(0,3) ) {
-            setId( i );
-            break;
-        }
-    }
-}
-
-Constellation::Constellation( std::string _abbr ) : m_id(-1) {
     for ( int i = 0; i < N_CONSTELATIONS; i++) {
         if ( _abbr == cns_namemap[i].substr(0,3) ) {
             setId( i );
