@@ -6,12 +6,13 @@ class Star : public EqPoint {
 public:
 
     static const int TOTAL;
-    
+
     Star();
     Star( int _id );
     Star( double _ra, double _dec, double _mag );
 
     virtual int getId() const { return m_id; };
+    virtual double getMagnitud() const { return m_mag; };
 
 protected:
     double m_mag;
