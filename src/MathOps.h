@@ -25,18 +25,18 @@ struct MathOps {
     static const double ARCS_TO_RADS;
 
     static const double RADIAN;
-    
-    // convert degrees to radians
-    static double toRadians( double deg ) { return deg * DEGS_TO_RADS; };
+
+    static double rangeDegrees( double deg );
+    static double rangeRadians( double rad );
     
     // convert radians to degrees
     static double toDegrees( double rad ) { return rad * RADS_TO_DEGS; };
 
-    static double toHrs( double rad ) { return toDegrees(rad) * DEGS_TO_HRS; };
-
-    static void toDMS ( double degrees, int &_deg, int &_min, double &_sec );
-    static void toHMS ( double degrees, int &_hrs, int &_min, double &_sec );
+    // convert degrees to radians
+    static double toRadians( double deg ) { return deg * DEGS_TO_RADS; };
     
-    static double rangeDegrees( double d );
-    static double rangeRadians( double d );
+    static double toHrs( double deg ) { return deg * DEGS_TO_HRS; };
+
+    static void toDMS ( double deg, int &_deg, int &_min, double &_sec );
+    static void toHMS ( double deg, int &_hrs, int &_min, double &_sec );
 };

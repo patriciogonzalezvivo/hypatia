@@ -26,9 +26,11 @@ public:
     Vector& operator*= (double _d);
     Vector& operator/= (double _d);
     
-    double getLongitud();
-    double getLatitud();
-    double getRadius();
+    double getLongitude() const;
+    double getLongitudeRadians() const;
+    double getLatitude() const;
+    double getLatitudeRadians() const;
+    double getRadius() const;
 
     double x, y, z;
 };

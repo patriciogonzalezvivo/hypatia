@@ -1,5 +1,6 @@
 #include "Vector.h"
 
+#include "MathOps.h"
 #include <math.h>
 
 Vector::Vector(): x(0.0), y(0.0), z(0.0) {
@@ -134,15 +135,22 @@ Vector& Vector::operator/= (double _d) {
     z /= _d;
     return *this;
 }
+double Vector::getLongitude() const {
+    return MathOps::toDegrees(getLongitudeRadians());
+}
 
-double Vector::getLongitud() {
+double Vector::getLongitudeRadians() const {
     return atan2(y, x);
 }
 
-double Vector::getLatitud() {
+double Vector::getLatitude() const {
+    return MathOps::toDegrees(getLatitudeRadians());
+}
+
+double Vector::getLatitudeRadians() const {
     return atan2(z, sqrt(x*x + y*y));
 }
 
-double Vector::getRadius() {
+double Vector::getRadius() const {
     return sqrt(x*x + y*y + z*z);
 }

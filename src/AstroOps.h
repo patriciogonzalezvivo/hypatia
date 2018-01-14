@@ -29,11 +29,5 @@ public:
 
     // Others
     static double meanObliquity( double _jcentury );
-
-    /* corrects (on place) ra and dec, both in radians, for precession from epoch 1 to epoch 2.
-     * the epochs are given by their modified JDs, mjd1 and mjd2, respectively.
-     * N.B. ra and dec are modifed IN PLACE.
-     */
-    static void precession( double mjd1, double mjd2, double &_ra, double &_dec );
 };
 

@@ -338,7 +338,7 @@ void Luna::compute( Observer &_obs ) {
 
                 tptr++;
             }
-            m_eclipticLat = MathOps::toRadians(rval * 1.e-6);
+            m_gEclipticLat = MathOps::toRadians(rval * 1.e-6);
         }
 
         {
@@ -409,10 +409,10 @@ void Luna::compute( Observer &_obs ) {
                   1962. * sin( m_f.Lp - m_f.F ) +
                   318.  * sin( m_f.A2 );
 
-            m_eclipticLon = (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6;
-            // reduce signed angle to ( 0 < m_eclipticLon < 360 )
-            m_eclipticLon = MathOps::toRadians(MathOps::rangeDegrees( m_eclipticLon ));
-            m_r = 385000.56 + sr / 1000.;
+            m_gEclipticLon = (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6;
+            // reduce signed angle to ( 0 < m_gEclipticLon < 360 )
+            m_gEclipticLon = MathOps::toRadians(MathOps::rangeDegrees( m_gEclipticLon ));
+            m_gEclipticRad = 385000.56 + sr / 1000.;
         }
         
         computeElipcticAngles( _obs );
@@ -427,7 +427,7 @@ void Luna::compute( Observer &_obs ) {
         double sun_alt, sun_az;
         AstroOps::equatorialToHorizontal( _obs, sun_ra, sun_dec, sun_alt, sun_az );
 
-        double moonAge = MathOps::rangeRadians( MathOps::TAU - (sun_eclipticLon - m_eclipticLon) );
+        double moonAge = MathOps::rangeRadians( MathOps::TAU - (sun_eclipticLon - m_gEclipticLon) );
 
         // convert radians to Synodic day
         m_age = SYNODIC_MONTH * (moonAge / MathOps::TAU);

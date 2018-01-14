@@ -14,6 +14,7 @@ public:
     Constellation();
     Constellation( int _id );
     Constellation( char * _abbr );
+    Constellation( std::string _abbr );
     Constellation( EqPoint &_point );
     Constellation( double _ra, double _dec );
 
@@ -23,10 +24,10 @@ public:
     std::string getName();
     std::string getAbbreviation();
 
-    std::vector<int> getStarsIds() const { return m_starsIds; };
+    std::vector<int> getStarIndices() const { return m_sIndices; };
 
 protected:
-    std::vector<int> m_starsIds;
+    std::vector<int> m_sIndices;
 
     int m_id;
 };

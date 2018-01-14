@@ -10,7 +10,9 @@
 
 #pragma once
 
+#include <string>
 #include "EqPoint.h"
+#include "Vector.h"
 
 class Body : public EqPoint {
 public:
@@ -18,14 +20,17 @@ public:
     Body( BodyId _body );
     virtual ~Body();
     
-    BodyId getBodyId() const { return m_bodyId; }
+    virtual BodyId getBodyId() const { return m_bodyId; }
+    virtual std::string getZodiacSign() const;
 
-    // Ecliptic (GeoCentric)
-    virtual double getEclipticLon() const { return MathOps::toDegrees( m_eclipticLon ); }
-    virtual double getEclipticLonRadians() const { return m_eclipticLon; }
-    virtual double getEclipticLat() const { return MathOps::toDegrees( m_eclipticLat); }
-    virtual double getEclipticLatRadians() const { return m_eclipticLat; }
-    virtual double getRadius() const { return m_r; }
+    // Heliocentric
+    virtual Vector  getHeliocentricVector() const;
+
+    // Geocentric
+    virtual Vector  getGeocentricVector() const;
+    virtual double getEclipticLonRadians() const { return m_gEclipticLon; }
+    virtual double getEclipticLatRadians() const { return m_gEclipticLat; }
+    virtual double getRadius() const { return m_gEclipticRad; }
     
     // Calculate the data for a given planet, jd, and location
     // This function must be called (directly or via c'tor) before calling
@@ -35,9 +40,11 @@ public:
     
 protected:
     virtual void computeElipcticAngles( Observer& _obs );
+    Vector  m_heliocentricLoc;
 
     double  m_jcentury;
-    double  m_r, m_eclipticLon, m_eclipticLat;
+    double  m_hEclipticRad, m_hEclipticLon, m_hEclipticLat;
+    double  m_gEclipticRad, m_gEclipticLon, m_gEclipticLat;
     
     BodyId  m_bodyId;
 };

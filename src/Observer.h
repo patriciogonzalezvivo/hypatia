@@ -10,8 +10,6 @@
 
 #include "Vector.h"
 
-// bodies of interest
-//
 enum BodyId {
     NAB=-1, // NotABody
     SUN=0,
@@ -42,12 +40,12 @@ public:
     double  getObliquity();
     double  getLST();
     
-    Vector  getEclipticHelioLocation();
+    Vector  getHeliocentricVector();
     
     void    update();
     
 private:
-    Vector m_eclipticHelioLocation;
+    Vector m_heliocentricLoc;
     
     double m_longitude;   // in radians, N positive
     double m_latitude;    // in radians, E positive

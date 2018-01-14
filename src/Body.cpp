@@ -16,11 +16,21 @@
 #include "Pluto.h"
 #include "Vsop.h"
 
-Body::Body() : m_jcentury(0.0), m_r(0.0), m_eclipticLon(0.0), m_eclipticLat(0.0), m_bodyId( NAB ) {
-};
+std::string zodiacSigns[] = { "Ari", "Tau", "Gem", "Cnc", "Leo", "Vir", "Lib", "Sco", "Sgr", "Cap", "Aqr", "Psc" };
 
-Body::Body( BodyId _body ) : m_jcentury(0.0), m_r(0.0), m_eclipticLon(0.0), m_eclipticLat(0.0), m_bodyId( _body ) {
-}
+Body::Body() : 
+m_jcentury(0.0), 
+m_hEclipticRad(0.0), m_hEclipticLon(0.0), m_hEclipticLat(0.0),
+m_gEclipticRad(0.0), m_gEclipticLon(0.0), m_gEclipticLat(0.0),
+m_bodyId( NAB ) 
+{};
+
+Body::Body( BodyId _body ) : 
+m_jcentury(0.0), 
+m_hEclipticRad(0.0), m_hEclipticLon(0.0), m_hEclipticLat(0.0),
+m_gEclipticRad(0.0), m_gEclipticLon(0.0), m_gEclipticLat(0.0),
+m_bodyId( _body ) 
+{};
 
 Body::~Body() {
 }
@@ -41,19 +51,25 @@ void Body::compute( Observer& _obs ) {
 
             static Luna luna;
             luna.compute(_obs);
-            m_eclipticLon = luna.getEclipticLonRadians();
-            m_eclipticLat = luna.getEclipticLatRadians();
+            m_gEclipticLon = luna.getEclipticLonRadians();
+            m_gEclipticLat = luna.getEclipticLatRadians();
+            m_gEclipticRad = luna.getRadius();
 
         } 
         else if (PLUTO == m_bodyId) {    /* not VSOP */
 
-            Pluto::calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, m_jcentury);
-            AstroOps::heliocentricToGeocentric(_obs, m_eclipticLon, m_eclipticLat, m_r);
+            Pluto::calcAllLocs(m_hEclipticLon, m_hEclipticLat, m_hEclipticRad, m_jcentury);
+            m_gEclipticLon = m_hEclipticLon;
+            m_gEclipticLat = m_hEclipticLat;
+            m_gEclipticRad = m_hEclipticRad;
+            AstroOps::heliocentricToGeocentric(_obs, m_gEclipticLon, m_gEclipticLat, m_gEclipticRad);
 
         }
         else if (SUN == m_bodyId) {
-            
-            Vsop::calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, m_jcentury, EARTH);
+            m_hEclipticLon = 0.0;
+            m_hEclipticLat = 0.0;
+            m_hEclipticRad = 0.0;
+            Vsop::calcAllLocs(m_gEclipticLon, m_gEclipticLat, m_hEclipticRad, m_jcentury, EARTH);
             /*
              * What we _really_ want is the location of the sun as seen from
              * the earth (geocentric view).  VSOP gives us the opposite
@@ -61,12 +77,15 @@ void Body::compute( Observer& _obs ) {
              * To work around this, we add PI to the longitude (rotate 180 degrees)
              * and negate the latitude.
              */
-            m_eclipticLon += MathOps::HD_PI;
-            m_eclipticLat *= -1.;
+            m_gEclipticLon += MathOps::HD_PI;
+            m_gEclipticLat *= -1.;
         }
         else {
-            Vsop::calcAllLocs(m_eclipticLon, m_eclipticLat, m_r, m_jcentury, m_bodyId);
-            AstroOps::heliocentricToGeocentric(_obs, m_eclipticLon, m_eclipticLat, m_r);
+            Vsop::calcAllLocs(m_hEclipticLon, m_hEclipticLat, m_hEclipticRad, m_jcentury, m_bodyId);
+            m_gEclipticLon = m_hEclipticLon;
+            m_gEclipticLat = m_hEclipticLat;
+            m_gEclipticRad = m_hEclipticRad;
+            AstroOps::heliocentricToGeocentric(_obs, m_gEclipticLon, m_gEclipticLat, m_gEclipticRad);
         }
         
         computeElipcticAngles( _obs );
@@ -74,6 +93,18 @@ void Body::compute( Observer& _obs ) {
 }
 
 void Body::computeElipcticAngles( Observer& _obs ) {
-    AstroOps::eclipticToEquatorial( _obs, m_eclipticLon, m_eclipticLat, m_ra, m_dec );
+    AstroOps::eclipticToEquatorial( _obs, m_gEclipticLon, m_gEclipticLat, m_ra, m_dec );
     AstroOps::equatorialToHorizontal( _obs, m_ra, m_dec, m_alt, m_az );
+}
+
+std::string Body::getZodiacSign() const {
+    return zodiacSigns[ int((getEclipticLonRadians()/MathOps::TAU)*12.)%12 ];
+}
+
+Vector Body::getHeliocentricVector() const {
+    return Vector(m_hEclipticLon, m_hEclipticLat, m_hEclipticRad);
+}
+
+Vector Body::getGeocentricVector() const {
+    return Vector(m_gEclipticLon, m_gEclipticLat, m_gEclipticRad);
 }

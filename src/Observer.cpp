@@ -41,7 +41,7 @@ void Observer::setJuliaDay( double _jd ) {
     double planet_eclipticLat;
     double planet_eclipticRad;
     Vsop::calcAllLocs(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad, m_jcentury, m_body);
-    m_eclipticHelioLocation = Vector(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad);
+    m_heliocentricLoc = Vector(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad);
     
     //std::cout << "Observation data UPDATED" << std::endl;
     m_change = false;
@@ -96,10 +96,10 @@ double Observer::getLST() {
     return m_lst;
 }
 
-Vector Observer::getEclipticHelioLocation() {
+Vector Observer::getHeliocentricVector() {
     if (m_change)
         update();
-    return m_eclipticHelioLocation;
+    return m_heliocentricLoc;
 }
 
 void Observer::update() {
