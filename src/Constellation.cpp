@@ -580,7 +580,7 @@ static short start[] = {
     23,  16,  12,   6,   4,   0,   0
 };
 
-double cns_centroid[N_CONSTELATIONS][2] = {
+static double cns_centroid[N_CONSTELATIONS][2] = {
     {12.113,37.432},
     {155,-34},
     {242.16,-75.3},
@@ -672,7 +672,7 @@ double cns_centroid[N_CONSTELATIONS][2] = {
     {269.8682,-7.966}
 };
 
-int cns_stars[N_CONSTELATIONS][55] = {
+static int cns_stars[N_CONSTELATIONS][55] = {
     {10,0,12,12,26,52,26,26,19,19,17,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
     {2,354,339,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
     {4,469,536,536,542,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -864,7 +864,7 @@ char* Constellation::getName() {
     if ( m_id < 0 ) {
         return ((char*)"????");
     }
-    int len = strlen(cns_namemap[m_id]);
+    int len = strlen(cns_namemap[m_id]);// / sizeof(cns_namemap[m_id][0]); //strlen(cns_namemap[m_id]);
     char *cstr = new char[len];
     strncpy(cstr, cns_namemap[m_id]+5, len);
     return cstr;
@@ -874,7 +874,6 @@ char* Constellation::getAbbreviation() {
     if ( m_id < 0 ) {
         return ((char*)"???");
     }
-
     char *cstr = new char[3];
     strncpy(cstr, cns_namemap[m_id], 3);
     return cstr;
