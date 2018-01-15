@@ -1,7 +1,6 @@
 
 %module astro
 %include "typemaps.i"
-%include <std_string.i>
 %include <std_vector.i>
 
 %apply double &OUTPUT { double &_alt, double &_az };

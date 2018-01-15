@@ -1,7 +1,6 @@
 #include "Constellation.h"
 
 #include "AstroOps.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -115,96 +114,96 @@ const int Constellation::TOTAL = N_CONSTELATIONS;
 #define Vul 87
 #define Se2 88
 
-static std::string cns_namemap[ N_CONSTELATIONS ] = {
-    /*  0 */   "And: Andromeda",
-    /*  1 */   "Ant: Antlia",
-    /*  2 */   "Aps: Apus",
-    /*  3 */   "Aql: Aquila",
-    /*  4 */   "Aqr: Aquarius",
-    /*  5 */   "Ara: Ara",
-    /*  6 */   "Ari: Aries",
-    /*  7 */   "Aur: Auriga",
-    /*  8 */   "Boo: Bootes",
-    /*  9 */   "CMa: Canis Major",
-    /* 10 */   "CMi: Canis Minor",
-    /* 11 */   "CVn: Canes Venatici",
-    /* 12 */   "Cae: Caelum",
-    /* 13 */   "Cam: Camelopardalis",
-    /* 14 */   "Cap: Capricornus",
-    /* 15 */   "Car: Carina",
-    /* 16 */   "Cas: Cassiopeia",
-    /* 17 */   "Cen: Centaurus",
-    /* 18 */   "Cep: Cepheus",
-    /* 19 */   "Cet: Cetus",
-    /* 20 */   "Cha: Chamaeleon",
-    /* 21 */   "Cir: Circinus",
-    /* 22 */   "Cnc: Cancer",
-    /* 23 */   "Col: Columba",
-    /* 24 */   "Com: Coma Berenices",
-    /* 25 */   "CrA: Corona Australis",
-    /* 26 */   "CrB: Corona Borealis",
-    /* 27 */   "Crt: Crater",
-    /* 28 */   "Cru: Crux",
-    /* 29 */   "Crv: Corvus",
-    /* 30 */   "Cyg: Cygnus",
-    /* 31 */   "Del: Delphinus",
-    /* 32 */   "Dor: Dorado",
-    /* 33 */   "Dra: Draco",
-    /* 34 */   "Equ: Equuleus",
-    /* 35 */   "Eri: Eridanus",
-    /* 36 */   "For: Fornax",
-    /* 37 */   "Gem: Gemini",
-    /* 38 */   "Gru: Grus",
-    /* 39 */   "Her: Hercules",
-    /* 40 */   "Hor: Horologium",
-    /* 41 */   "Hya: Hydra",
-    /* 42 */   "Hyi: Hydrus",
-    /* 43 */   "Ind: Indus",
-    /* 44 */   "LMi: Leo Minor",
-    /* 45 */   "Lac: Lacerta",
-    /* 46 */   "Leo: Leo",
-    /* 47 */   "Lep: Lepus",
-    /* 48 */   "Lib: Libra",
-    /* 49 */   "Lup: Lupus",
-    /* 50 */   "Lyn: Lynx",
-    /* 51 */   "Lyr: Lyra",
-    /* 52 */   "Men: Mensa",
-    /* 53 */   "Mic: Microscopium",
-    /* 54 */   "Mon: Monoceros",
-    /* 55 */   "Mus: Musca",
-    /* 56 */   "Nor: Norma",
-    /* 57 */   "Oct: Octans",
-    /* 58 */   "Oph: Ophiuchus",
-    /* 59 */   "Ori: Orion",
-    /* 60 */   "Pav: Pavo",
-    /* 61 */   "Peg: Pegasus",
-    /* 62 */   "Per: Perseus",
-    /* 63 */   "Phe: Phoenix",
-    /* 64 */   "Pic: Pictor",
-    /* 65 */   "PsA: Piscis Austrinus",
-    /* 66 */   "Psc: Pisces",
-    /* 67 */   "Pup: Puppis",
-    /* 68 */   "Pyx: Pyxis",
-    /* 69 */   "Ret: Reticulum",
-    /* 70 */   "Scl: Sculptor",
-    /* 71 */   "Sco: Scorpius",
-    /* 72 */   "Sct: Scutum",
-    /* 73 */   "Se1: Serpens Caput",
-    /* 74 */   "Sex: Sextans",
-    /* 75 */   "Sge: Sagitta",
-    /* 76 */   "Sgr: Sagittarius",
-    /* 77 */   "Tau: Taurus",
-    /* 78 */   "Tel: Telescopium",
-    /* 79 */   "TrA: Triangulum Australe",
-    /* 80 */   "Tri: Triangulum",
-    /* 81 */   "Tuc: Tucana",
-    /* 82 */   "UMa: Ursa Major",
-    /* 83 */   "UMi: Ursa Minor",
-    /* 84 */   "Vel: Vela",
-    /* 85 */   "Vir: Virgo",
-    /* 86 */   "Vol: Volans",
-    /* 87 */   "Vul: Vulpecula",
-    /* 88 */   "Se2: Serpens Cauda"
+static char *cns_namemap[ N_CONSTELATIONS ] = {
+    /*  0 */(char*)"And: Andromeda",
+    /*  1 */(char*)"Ant: Antlia",
+    /*  2 */(char*)"Aps: Apus",
+    /*  3 */(char*)"Aql: Aquila",
+    /*  4 */(char*)"Aqr: Aquarius",
+    /*  5 */(char*)"Ara: Ara",
+    /*  6 */(char*)"Ari: Aries",
+    /*  7 */(char*)"Aur: Auriga",
+    /*  8 */(char*)"Boo: Bootes",
+    /*  9 */(char*)"CMa: Canis Major",
+    /* 10 */(char*)"CMi: Canis Minor",
+    /* 11 */(char*)"CVn: Canes Venatici",
+    /* 12 */(char*)"Cae: Caelum",
+    /* 13 */(char*)"Cam: Camelopardalis",
+    /* 14 */(char*)"Cap: Capricornus",
+    /* 15 */(char*)"Car: Carina",
+    /* 16 */(char*)"Cas: Cassiopeia",
+    /* 17 */(char*)"Cen: Centaurus",
+    /* 18 */(char*)"Cep: Cepheus",
+    /* 19 */(char*)"Cet: Cetus",
+    /* 20 */(char*)"Cha: Chamaeleon",
+    /* 21 */(char*)"Cir: Circinus",
+    /* 22 */(char*)"Cnc: Cancer",
+    /* 23 */(char*)"Col: Columba",
+    /* 24 */(char*)"Com: Coma Berenices",
+    /* 25 */(char*)"CrA: Corona Australis",
+    /* 26 */(char*)"CrB: Corona Borealis",
+    /* 27 */(char*)"Crt: Crater",
+    /* 28 */(char*)"Cru: Crux",
+    /* 29 */(char*)"Crv: Corvus",
+    /* 30 */(char*)"Cyg: Cygnus",
+    /* 31 */(char*)"Del: Delphinus",
+    /* 32 */(char*)"Dor: Dorado",
+    /* 33 */(char*)"Dra: Draco",
+    /* 34 */(char*)"Equ: Equuleus",
+    /* 35 */(char*)"Eri: Eridanus",
+    /* 36 */(char*)"For: Fornax",
+    /* 37 */(char*)"Gem: Gemini",
+    /* 38 */(char*)"Gru: Grus",
+    /* 39 */(char*)"Her: Hercules",
+    /* 40 */(char*)"Hor: Horologium",
+    /* 41 */(char*)"Hya: Hydra",
+    /* 42 */(char*)"Hyi: Hydrus",
+    /* 43 */(char*)"Ind: Indus",
+    /* 44 */(char*)"LMi: Leo Minor",
+    /* 45 */(char*)"Lac: Lacerta",
+    /* 46 */(char*)"Leo: Leo",
+    /* 47 */(char*)"Lep: Lepus",
+    /* 48 */(char*)"Lib: Libra",
+    /* 49 */(char*)"Lup: Lupus",
+    /* 50 */(char*)"Lyn: Lynx",
+    /* 51 */(char*)"Lyr: Lyra",
+    /* 52 */(char*)"Men: Mensa",
+    /* 53 */(char*)"Mic: Microscopium",
+    /* 54 */(char*)"Mon: Monoceros",
+    /* 55 */(char*)"Mus: Musca",
+    /* 56 */(char*)"Nor: Norma",
+    /* 57 */(char*)"Oct: Octans",
+    /* 58 */(char*)"Oph: Ophiuchus",
+    /* 59 */(char*)"Ori: Orion",
+    /* 60 */(char*)"Pav: Pavo",
+    /* 61 */(char*)"Peg: Pegasus",
+    /* 62 */(char*)"Per: Perseus",
+    /* 63 */(char*)"Phe: Phoenix",
+    /* 64 */(char*)"Pic: Pictor",
+    /* 65 */(char*)"PsA: Piscis Austrinus",
+    /* 66 */(char*)"Psc: Pisces",
+    /* 67 */(char*)"Pup: Puppis",
+    /* 68 */(char*)"Pyx: Pyxis",
+    /* 69 */(char*)"Ret: Reticulum",
+    /* 70 */(char*)"Scl: Sculptor",
+    /* 71 */(char*)"Sco: Scorpius",
+    /* 72 */(char*)"Sct: Scutum",
+    /* 73 */(char*)"Se1: Serpens Caput",
+    /* 74 */(char*)"Sex: Sextans",
+    /* 75 */(char*)"Sge: Sagitta",
+    /* 76 */(char*)"Sgr: Sagittarius",
+    /* 77 */(char*)"Tau: Taurus",
+    /* 78 */(char*)"Tel: Telescopium",
+    /* 79 */(char*)"TrA: Triangulum Australe",
+    /* 80 */(char*)"Tri: Triangulum",
+    /* 81 */(char*)"Tuc: Tucana",
+    /* 82 */(char*)"UMa: Ursa Major",
+    /* 83 */(char*)"UMi: Ursa Minor",
+    /* 84 */(char*)"Vel: Vela",
+    /* 85 */(char*)"Vir: Virgo",
+    /* 86 */(char*)"Vol: Volans",
+    /* 87 */(char*)"Vul: Vulpecula",
+    /* 88 */(char*)"Se2: Serpens Cauda"
 };
 
 static struct {
@@ -834,17 +833,8 @@ Constellation::Constellation( EqPoint &_point ) : m_id(-1) {
 }
 
 Constellation::Constellation( char * _abbr ) : m_id(-1) {
-    for ( int i = 0; i < N_CONSTELATIONS; i++) {
-        if ( _abbr == cns_namemap[i].substr(0,3) ) {
-            setId( i );
-            break;
-        }
-    }
-}
-
-Constellation::Constellation( std::string _abbr ) : m_id(-1) {
-    for ( int i = 0; i < N_CONSTELATIONS; i++) {
-        if ( _abbr == cns_namemap[i].substr(0,3) ) {
+    for (int i = 0; i < N_CONSTELATIONS; i++) {
+        if (strncmp (_abbr, cns_namemap[i], 3) == 0) {
             setId( i );
             break;
         }
@@ -870,16 +860,22 @@ void Constellation::setId( int _id ) {
  * return "???: ????" if id is invalid.
  */
 
-std::string Constellation::getName() {
+char* Constellation::getName() {
     if ( m_id < 0 ) {
-        return std::string("????");
+        return ((char*)"????");
     }
-    return cns_namemap[m_id].substr(5);
+    int len = strlen(cns_namemap[m_id]);
+    char *cstr = new char[len];
+    strncpy(cstr, cns_namemap[m_id]+5, len);
+    return cstr;
 }
 
-std::string Constellation::getAbbreviation() {
+char* Constellation::getAbbreviation() {
     if ( m_id < 0 ) {
-        return std::string("???");
+        return ((char*)"???");
     }
-    return cns_namemap[m_id].substr(0,3);
+
+    char *cstr = new char[3];
+    strncpy(cstr, cns_namemap[m_id], 3);
+    return cstr;
 }
