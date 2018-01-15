@@ -16,7 +16,7 @@
 #include "Pluto.h"
 #include "Vsop.h"
 
-std::string zodiacSigns[] = { "Ari", "Tau", "Gem", "Cnc", "Leo", "Vir", "Lib", "Sco", "Sgr", "Cap", "Aqr", "Psc" };
+static char* zodiacSigns[] = { (char*)"Ari", (char*)"Tau", (char*)"Gem", (char*)"Cnc", (char*)"Leo", (char*)"Vir", (char*)"Lib", (char*)"Sco", (char*)"Sgr", (char*)"Cap", (char*)"Aqr", (char*)"Psc" };
 
 Body::Body() : 
 m_jcentury(0.0), 
@@ -97,7 +97,7 @@ void Body::computeElipcticAngles( Observer& _obs ) {
     AstroOps::equatorialToHorizontal( _obs, m_ra, m_dec, m_alt, m_az );
 }
 
-std::string Body::getZodiacSign() const {
+char * Body::getZodiacSign() const {
     return zodiacSigns[ int((getEclipticLonRadians()/MathOps::TAU)*12.)%12 ];
 }
 

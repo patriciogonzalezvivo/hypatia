@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <string>
 #include "EqPoint.h"
 #include "Vector.h"
 
@@ -20,23 +19,23 @@ public:
     Body( BodyId _body );
     virtual ~Body();
     
-    virtual BodyId getBodyId() const { return m_bodyId; }
-    virtual std::string getZodiacSign() const;
+    virtual BodyId  getBodyId() const { return m_bodyId; }
+    virtual char*   getZodiacSign() const;
 
     // Heliocentric
     virtual Vector  getHeliocentricVector() const;
 
     // Geocentric
     virtual Vector  getGeocentricVector() const;
-    virtual double getEclipticLonRadians() const { return m_gEclipticLon; }
-    virtual double getEclipticLatRadians() const { return m_gEclipticLat; }
-    virtual double getRadius() const { return m_gEclipticRad; }
+    virtual double  getEclipticLonRadians() const { return m_gEclipticLon; }
+    virtual double  getEclipticLatRadians() const { return m_gEclipticLat; }
+    virtual double  getRadius() const { return m_gEclipticRad; }
     
     // Calculate the data for a given planet, jd, and location
     // This function must be called (directly or via c'tor) before calling
     // any of the other fns!
     //
-    virtual void compute( Observer& _obs );
+    virtual void    compute( Observer& _obs );
     
 protected:
     virtual void computeElipcticAngles( Observer& _obs );
