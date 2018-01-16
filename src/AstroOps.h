@@ -27,6 +27,10 @@ public:
                                           double _ra, double _dec,      // IN
                                           double &_alt, double &_az);   // OUT
 
+
+    static double parallaticAngle(  Observer &_loc, 
+                                    double _alt, double _dec);
+
     // Others
     static double meanObliquity( double _jcentury );
 };

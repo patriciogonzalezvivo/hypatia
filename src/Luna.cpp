@@ -433,8 +433,8 @@ void Luna::compute( Observer &_obs ) {
         m_age = SYNODIC_MONTH * (moonAge / MathOps::TAU);
 
         double delta_az = m_az - sun_az;
-        m_posAngle = atan2(cos(sun_alt) * sin(delta_az),
-                            sin(sun_alt)* cos(m_alt) - cos(sun_alt) * sin(m_alt) * cos(delta_az));
+        m_posAngle = atan2( cos(sun_alt) * sin(delta_az),
+                            sin(sun_alt) * cos(m_alt) - cos(sun_alt) * sin(m_alt) * cos(delta_az));
 
         // double hour_angle = MathOps::toRadians(localSiderealTime(obs.getJulianDay(), obs.getLongitud())) - m_ra;
         

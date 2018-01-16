@@ -97,7 +97,7 @@ void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec,
 
 
 void AstroOps::heliocentricToGeocentric ( Observer &_obs,
-                                          double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad) {
+                                          double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad ) {
     // http://www.astrosurf.com/jephem/astro/ephemeris/et520transfo_en.htm
 
     Vector earth_eclipticLoc = _obs.getHeliocentricVector();
@@ -112,4 +112,33 @@ void AstroOps::heliocentricToGeocentric ( Observer &_obs,
     _body_eclipticLon = planet_eclipticLoc.getLongitudeRadians();
     _body_eclipticLat = planet_eclipticLoc.getLatitudeRadians();
     _body_rad = planet_eclipticLoc.getRadius();
+}
+
+/* compute parallactic angle given latitude, object dec and alt.
+ * all angles in rads.
+ * N.B. always return >= 0, caller must determine sign and degenerate cases at
+ *   pole or zenith.
+ */
+// https://github.com/brandon-rhodes/pyephem/blob/592ecff661adb9c5cbed7437a23d705555d7ce57/libastro-3.7.7/parallactic.c#L15
+double AstroOps::parallaticAngle(   Observer &_loc, 
+                                    double _alt, double _dec ) {
+    double ca = sin(_loc.getLatitudeRadians());
+    double cb = sin(_dec);
+    double sb = cos(_dec);
+    double cc = sin(_alt);
+    double sc = cos(_alt);
+    double cpa;
+
+    /* given three sides find an angle */
+    if ( sb == 0.0 || sc == 0.0 ) {
+        return (0.0);
+    }
+    cpa = (ca - cb * cc) / (sb * sc);
+    if (cpa < -1.0) {
+        cpa = -1.0;
+    }
+    if (cpa >  1) {
+        cpa =  1.0;
+    }
+    return acos (cpa);
 }
