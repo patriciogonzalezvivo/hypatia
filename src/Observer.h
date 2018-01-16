@@ -12,9 +12,9 @@
 
 enum BodyId {
     NAB=-1, // NotABody
-    MERCURY=0, VENUS=1, EARTH=2, MARS=3, JUPITER=4, SATURN=5, URANUS=6, NEPTUNE=7, PLUTO=8,
-    LUNA=9,
-    SUN=10
+    SUN=0,
+    MERCURY=1, VENUS=2, EARTH=3, MARS=4, JUPITER=5, SATURN=6, URANUS=7, NEPTUNE=8, PLUTO=9,
+    LUNA=10
 };
 
 // * * * * * Observer's Location Info * * * * *
