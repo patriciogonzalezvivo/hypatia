@@ -21,7 +21,7 @@ const double MathOps::DEGS_TO_HRS = 1. / 15.;
 const double MathOps::RADS_TO_ARCS = 2.0626480624709635516e5;
 const double MathOps::ARCS_TO_RADS = 4.8481368110953599359e-6;
 
-const double MathOps::RADIAN = (180.0 / M_PI);
+const double MathOps::RADIAN = (180.0 / HD_PI);
 
 void MathOps::toDMS ( double degrees, int &_deg, int &_min, double &_sec ) {
     // int totalSeconds = (int)round( rangeDegrees(_rad) * SECONDS_PER_DEGREE);
