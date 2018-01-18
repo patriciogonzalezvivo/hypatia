@@ -69,7 +69,7 @@ void Body::compute( Observer& _obs ) {
             m_hEclipticLon = 0.0;
             m_hEclipticLat = 0.0;
             m_hEclipticRad = 0.0;
-            Vsop::calcAllLocs(m_gEclipticLon, m_gEclipticLat, m_hEclipticRad, m_jcentury, EARTH);
+            Vsop::calcAllLocs(m_gEclipticLon, m_gEclipticLat, m_gEclipticRad, m_jcentury, EARTH);
             /*
              * What we _really_ want is the location of the sun as seen from
              * the earth (geocentric view).  VSOP gives us the opposite
