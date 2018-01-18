@@ -413,30 +413,43 @@ void Luna::compute( Observer &_obs ) {
             // reduce signed angle to ( 0 < m_gEclipticLon < 360 )
             m_gEclipticLon = MathOps::toRadians(MathOps::rangeDegrees( m_gEclipticLon ));
             m_gEclipticRad = 385000.56 + sr / 1000.;
+            m_gEclipticRad *= 0.0000001;
         }
         
         computeElipcticAngles( _obs );
 
         // Compute Sun's coords
         double sun_eclipticLon, sun_eclipticLat, sun_radius;
-        Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH );
+        Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH);
+        
+        // Get HelioCentric values
+        Vector Sun2Earth = Vector(sun_eclipticLon, sun_eclipticLat, sun_radius);
+        Vector Earth2Moon = Vector(m_gEclipticLon, m_gEclipticLat, m_gEclipticRad);
+        Vector Sun2Moon = Sun2Earth + Earth2Moon;
+        
+        m_hEclipticLon = Sun2Moon.getLongitudeRadians();
+        m_hEclipticLat = Sun2Moon.getLatitudeRadians();
+        m_hEclipticRad = Sun2Moon.getRadius();
+        
+        // Distance toSun from the Earth
         sun_eclipticLon += MathOps::HD_PI;
         sun_eclipticLat *= -1.;    
         double sun_ra, sun_dec;
         AstroOps::eclipticToEquatorial( _obs, sun_eclipticLon, sun_eclipticLat, sun_ra, sun_dec );
         double sun_alt, sun_az;
         AstroOps::equatorialToHorizontal( _obs, sun_ra, sun_dec, sun_alt, sun_az );
-
+        
+        // Compute moon age
         double moonAge = MathOps::rangeRadians( MathOps::TAU - (sun_eclipticLon - m_gEclipticLon) );
 
         // convert radians to Synodic day
         m_age = SYNODIC_MONTH * (moonAge / MathOps::TAU);
 
+        // Position Angle
         double delta_az = m_az - sun_az;
         m_posAngle = atan2( cos(sun_alt) * sin(delta_az),
                             sin(sun_alt) * cos(m_alt) - cos(sun_alt) * sin(m_alt) * cos(delta_az));
 
         // double hour_angle = MathOps::toRadians(localSiderealTime(obs.getJulianDay(), obs.getLongitud())) - m_ra;
-        
     }
 }

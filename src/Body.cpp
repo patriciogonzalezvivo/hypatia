@@ -54,7 +54,11 @@ void Body::compute( Observer& _obs ) {
             m_gEclipticLon = luna.getEclipticLonRadians();
             m_gEclipticLat = luna.getEclipticLatRadians();
             m_gEclipticRad = luna.getRadius();
-
+            
+            Vector helioCentric = luna.getHeliocentricVector();
+            m_hEclipticLon = helioCentric.getLongitudeRadians();
+            m_hEclipticLat = helioCentric.getLatitudeRadians();
+            m_hEclipticRad = helioCentric.getRadius();
         } 
         else if (PLUTO == m_bodyId) {    /* not VSOP */
 
@@ -66,9 +70,7 @@ void Body::compute( Observer& _obs ) {
 
         }
         else if (SUN == m_bodyId) {
-            m_hEclipticLon = 0.0;
-            m_hEclipticLat = 0.0;
-            m_hEclipticRad = 0.0;
+            m_hEclipticLon = m_hEclipticLat = m_hEclipticRad = 0.0;
             Vsop::calcAllLocs(m_gEclipticLon, m_gEclipticLat, m_gEclipticRad, m_jcentury, EARTH);
             /*
              * What we _really_ want is the location of the sun as seen from
@@ -86,6 +88,10 @@ void Body::compute( Observer& _obs ) {
             m_gEclipticLat = m_hEclipticLat;
             m_gEclipticRad = m_hEclipticRad;
             AstroOps::heliocentricToGeocentric(_obs, m_gEclipticLon, m_gEclipticLat, m_gEclipticRad);
+        }
+        
+        if (m_bodyId == EARTH) {
+            m_gEclipticLon = m_gEclipticLat = m_gEclipticRad = 0.0;
         }
         
         computeElipcticAngles( _obs );
