@@ -4,6 +4,7 @@ struct TimeOps {
     static const double SECONDS_PER_DAY;
     static const double TROPICAL_YEAR;
     static const double JULIAN_EPOCH;
+    static const double MJULIAN_EPOCH;
     static const double SPEED_OF_LIGHT;
     static const double TO_CENTURIES;
     
@@ -23,11 +24,19 @@ struct TimeOps {
     
     // to Modified Julian Dates ( http://scienceworld.wolfram.com/astronomy/ModifiedJulianDate.html )
     static double modifiedJulianDates( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
+    
+    // Julian Date to Modify Julian Date (http://tycho.usno.navy.mil/mjd.html)
+    static double JDtoMJD(double _jd);
 
     /* given the modified Julian date (number of days elapsed since 1900 jan 0.5,),
      * mj, return the calendar date in months, *mn, days, *dy, and years, *yr.
      */
     static void MJDtoMDY(double _mjd, int &_mont, double &_day, int &_year);
+    
+    /* given the Julian day return the calendar date in months,  days, and years
+     *  https://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
+     */
+    static void JDtoMDY(double _jd, int &_mont, double &_day, int &_year);
 
     /* given a date in months, mn, days, dy, years, yr,
      * return the modified Julian date (number of days elapsed since 1900 jan 0.5)

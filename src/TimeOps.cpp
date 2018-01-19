@@ -11,6 +11,7 @@
 const double TimeOps::SECONDS_PER_DAY = 86400.0;
 const double TimeOps::TROPICAL_YEAR = 365.242195601852;
 const double TimeOps::JULIAN_EPOCH = 2440587.5;
+const double TimeOps::MJULIAN_EPOCH = 40587.0;
 
 const double TimeOps::SPEED_OF_LIGHT = 299792.458;
 const double TimeOps::TO_CENTURIES = 36525.;
@@ -45,6 +46,11 @@ double TimeOps::modifiedJulianDates (unsigned long _sec) {
     if (_sec == 0.0)
         _sec = getCurrentSeconds();
     return _sec / SECONDS_PER_DAY + 40587.0;
+}
+
+// Julian Date to Modify Julian Date (http://tycho.usno.navy.mil/mjd.html)
+double TimeOps::JDtoMJD(double _jd) {
+    return _jd - 2400000.5;
 }
 
 // Jordan Cosmological Theory??
@@ -248,3 +254,25 @@ double TimeOps::MJDtoYears (double _mjd) {
     return last_yr;
 }
 
+// https://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
+void TimeOps::JDtoMDY(double _jd, int &_month, double &_day, int &_year) {
+    double Q = _jd + 0.5;
+    int Z = int(Q);
+    int W = (Z - 1867216.25)/36524.25;
+    int X = W / 4;
+    int A = Z + 1 + W - X;
+    int B = A + 1524;
+    int C = (B - 122.1) / 365.25;
+    int D = 365.25 * C;
+    int E = (B - D) / 30.6001;
+    int F = 30.6001 * E;
+    
+    _day = B-D-F+(Q-Z);
+    _month = int(E)%12-1;// E-1 or E-13 (must get number less than or equal to 12)
+    if (_month < 3) {
+        _year = C-4715;
+    }
+    else {
+        _year = C-4716;
+    }
+}

@@ -9,7 +9,7 @@
 %apply int &OUTPUT { int &_deg, int &_min, double &_sec };
 %apply int &OUTPUT { int &_hrs, int &_min, double &_sec };
 
-%apply double &OUTPUT { int &_mont, double &_day, int &_year }
+%apply double &OUTPUT { int &_mont, double &_day, int &_year };
 
 namespace std {
     %template(VectorInt) vector<int>;
