@@ -17,6 +17,9 @@
 #include <math.h>
 #include <string.h>
 
+const double AstroOps::KM_TO_AU = 0.000000006684587;
+const double AstroOps::AU_TO_KM = 149597870.7;
+
 /*----------------------------------------------------------------------------
  * The obliquity formula (and all the magic numbers below) come from Meeus,
  * Astro Algorithms.

@@ -412,8 +412,8 @@ void Luna::compute( Observer &_obs ) {
             m_gEclipticLon = (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6;
             // reduce signed angle to ( 0 < m_gEclipticLon < 360 )
             m_gEclipticLon = MathOps::toRadians(MathOps::rangeDegrees( m_gEclipticLon ));
-            m_gEclipticRad = 385000.56 + sr / 1000.;
-            m_gEclipticRad *= 0.0000001;
+            m_gEclipticRad = 385000.56 + sr / 1000.; // Km
+            m_gEclipticRad *= AstroOps::KM_TO_AU; // AU
         }
         
         computeElipcticAngles( _obs );

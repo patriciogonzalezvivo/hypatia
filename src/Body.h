@@ -27,9 +27,11 @@ public:
 
     // Geocentric
     virtual Vector  getGeocentricVector() const;
+    
+    // The Radius is in AU
+    virtual double  getRadius() const { return m_gEclipticRad; }
     virtual double  getEclipticLonRadians() const { return m_gEclipticLon; }
     virtual double  getEclipticLatRadians() const { return m_gEclipticLat; }
-    virtual double  getRadius() const { return m_gEclipticRad; }
     
     // Calculate the data for a given planet, jd, and location
     // This function must be called (directly or via c'tor) before calling

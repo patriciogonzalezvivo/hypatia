@@ -5,11 +5,14 @@
 EqPoint::EqPoint() : m_ra(0.0), m_dec(0.0), m_alt(0.0), m_az(0.0) {
 }
 
-EqPoint::EqPoint( double _ra, double _dec ) : m_ra(MathOps::toRadians(_ra)), m_dec(MathOps::toRadians(_dec)), m_alt(0.0), m_az(0.0){
+EqPoint::EqPoint( double _ra, double _dec ) {
+    m_ra = MathOps::toRadians(_ra);
+    m_dec = MathOps::toRadians(_dec);
+    m_alt = 0.0;
+    m_az = 0.0;
 }
 
 EqPoint::~EqPoint() {
-
 }
 
 void EqPoint::compute( Observer &_obs ) {

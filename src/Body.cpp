@@ -25,12 +25,16 @@ m_gEclipticRad(0.0), m_gEclipticLon(0.0), m_gEclipticLat(0.0),
 m_bodyId( NAB ) 
 {};
 
-Body::Body( BodyId _body ) : 
-m_jcentury(0.0), 
-m_hEclipticRad(0.0), m_hEclipticLon(0.0), m_hEclipticLat(0.0),
-m_gEclipticRad(0.0), m_gEclipticLon(0.0), m_gEclipticLat(0.0),
-m_bodyId( _body ) 
-{};
+Body::Body( BodyId _body ) {
+    m_jcentury = 0.0;
+    m_hEclipticRad = 0.0;
+    m_hEclipticLon = 0.0;
+    m_hEclipticLat = 0.0;
+    m_gEclipticRad = 0.0;
+    m_gEclipticLon = 0.0;
+    m_gEclipticLat = 0.0;
+    m_bodyId = _body;
+};
 
 Body::~Body() {
 }
@@ -67,6 +71,7 @@ void Body::compute( Observer& _obs ) {
             m_gEclipticLat = m_hEclipticLat;
             m_gEclipticRad = m_hEclipticRad;
             AstroOps::heliocentricToGeocentric(_obs, m_gEclipticLon, m_gEclipticLat, m_gEclipticRad);
+            
 
         }
         else if (SUN == m_bodyId) {
@@ -108,9 +113,11 @@ char * Body::getZodiacSign() const {
 }
 
 Vector Body::getHeliocentricVector() const {
-    return Vector(m_hEclipticLon, m_hEclipticLat, m_hEclipticRad);
+    double dist = m_hEclipticRad;
+    return Vector(m_hEclipticLon, m_hEclipticLat, dist);
 }
 
 Vector Body::getGeocentricVector() const {
-    return Vector(m_gEclipticLon, m_gEclipticLat, m_gEclipticRad);
+    double dist = m_gEclipticRad;
+    return Vector(m_gEclipticLon, m_gEclipticLat, dist);
 }

@@ -12,6 +12,10 @@
 
 class AstroOps {
 public:
+    
+    static const double KM_TO_AU;
+    static const double AU_TO_KM;
+    
     // Transform celestial coordinates ( https://en.wikipedia.org/wiki/Celestial_coordinate_system )
 
     // to GeoCentric
