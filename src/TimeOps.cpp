@@ -268,7 +268,10 @@ void TimeOps::JDtoMDY(double _jd, int &_month, double &_day, int &_year) {
     int F = 30.6001 * E;
     
     _day = B-D-F+(Q-Z);
-    _month = int(E)%12-1;// E-1 or E-13 (must get number less than or equal to 12)
+    _month = int(E-1)%12;
+    if (_month == 0) {
+        _month = 12;
+    }
     if (_month < 3) {
         _year = C-4715;
     }
