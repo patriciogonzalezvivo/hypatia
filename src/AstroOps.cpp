@@ -74,8 +74,8 @@ void AstroOps::eclipticToEquatorial ( Observer &_loc, double _lng, double _lat, 
     double tb = tan(_lat);
     double se = sin(e);
     double ce = cos(e);
-    _ra = atan2((sl*ce - tb*se),(cl));
-    _dec = asin(sb*ce+cb*se*sl);
+    _ra = atan2((sl * ce - tb * se),(cl));
+    _dec = asin(sb * ce + cb * se * sl);
     
     // Make sure RA is positive
     if (_ra < 0)
