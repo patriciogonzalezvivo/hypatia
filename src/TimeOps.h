@@ -33,6 +33,12 @@ struct TimeOps {
      */
     static void MJDtoMDY(double _mjd, int &_mont, double &_day, int &_year);
     
+    /* given an mjd, set *dow to 0..6 according to which day of the week it falls
+     * on (0=sunday).
+     * return 0 if ok else -1 if can't figure it out.
+     */
+    static int MJDtoDOW (double _mjd);
+    
     /* given the Julian day return the calendar date in months,  days, and years
      *  https://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
      */

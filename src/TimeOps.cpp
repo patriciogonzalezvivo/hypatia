@@ -279,3 +279,21 @@ void TimeOps::JDtoMDY(double _jd, int &_month, double &_day, int &_year) {
         _year = C-4716;
     }
 }
+
+int TimeOps::MJDtoDOW (double _mjd) {
+    /* cal_mjd() uses Gregorian dates on or after Oct 15, 1582.
+     * (Pope Gregory XIII dropped 10 days, Oct 5..14, and improved the leap-
+     * year algorithm). however, Great Britian and the colonies did not
+     * adopt it until Sept 14, 1752 (they dropped 11 days, Sept 3-13,
+     * due to additional accumulated error). leap years before 1752 thus
+     * can not easily be accounted for from the cal_mjd() number...
+     */
+    if (_mjd < -53798.5) {
+        /* pre sept 14, 1752 too hard to correct |:-S */
+        return (-1);
+    }
+    int dow = ((long)floor(_mjd-.5) + 1) % 7;/* 1/1/1900 (mj 0.5) is a Monday*/
+    if (dow < 0)
+        dow += 7;
+    return dow;
+}
