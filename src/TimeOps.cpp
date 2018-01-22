@@ -13,7 +13,6 @@ const double TimeOps::TROPICAL_YEAR = 365.242195601852;
 const double TimeOps::JULIAN_EPOCH = 2440587.5;
 const double TimeOps::MJULIAN_EPOCH = 40587.0;
 
-const double TimeOps::SPEED_OF_LIGHT = 299792.458;
 const double TimeOps::TO_CENTURIES = 36525.;
 
 const double TimeOps::J2000 = 2451545.0;

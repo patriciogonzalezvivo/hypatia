@@ -17,70 +17,112 @@
 #include <math.h>
 #include <string.h>
 
+const double AstroOps::SPEED_OF_LIGHT = 299792.458;
+
 const double AstroOps::KM_TO_AU = 0.000000006684587;
-const double AstroOps::AU_TO_KM = 149597870.7;
+const double AstroOps::AU_TO_KM = 1.495978707e+8;
+const double AstroOps::AU_TO_M = (AstroOps::AU_TO_KM * 1000.);
+const double AstroOps::AU_PER_DAY = (86400. * AstroOps::SPEED_OF_LIGHT / AstroOps::AU_TO_KM);
 
 /*----------------------------------------------------------------------------
  * The obliquity formula (and all the magic numbers below) come from Meeus,
- * Astro Algorithms.
+ * Astro Algorithms p 135.
  *
- * Input t is time in julian centuries from 2000.
+ * Input _jcentury is time in julian centuries from 2000.
  * Valid range is the years -8000 to +12000 (t = -100 to 100).
  *
  * return value is mean obliquity (epsilon sub 0) in radians.
+ *
+ * https://github.com/Bill-Gray/lunar/blob/master/obliquit.cpp
  */
-
-double AstroOps::meanObliquity( double t ){
+double AstroOps::meanObliquity( double _jcentury ){
     double u, u0;
-    static double t0 = 30000.;
-    static double rval = 0.;
-    static const double rvalStart =  23. * MathOps::SECONDS_PER_DEGREE +
-                                     26. * MathOps::MINUTES_PER_DEGREE +
-                                     21.448;
+    unsigned i;
+    const double obliquit_minus_100_cen = 24.232841111 * MathOps::DEGS_TO_RADS;
+    const double obliquit_plus_100_cen =  22.611485556 * MathOps::DEGS_TO_RADS;
+    static double j2000_obliquit = 23. * 3600. + 26. * 60. + 21.448;
+    static double t0 = 30000., rval;
+    static long coeffs[10] = { -468093L, -155L, 199925L, -5138L,
+        -24967L, -3905L, 712L, 2787L, 579L, 245L };
     
-    static const int OBLIQ_COEFFS = 10;
-    static const double coeffs[ OBLIQ_COEFFS ] = {
-        -468093.,  -155.,  199925.,  -5138.,  -24967.,
-        -3905.,    712.,   2787.,    579.,    245.
-    };
-
-    if( t0 != t ) {
-        t0 = t;
-        u = u0 = t / 100.;     // u is in julian 10000's of years
-        rval = rvalStart;
-
-        for( int i=0; i<OBLIQ_COEFFS; i++ ) {
-            rval += u * coeffs[i] / 100.;
-            u *= u0;
-        }
-        // convert from seconds to radians
-        rval = MathOps::toRadians( rval / MathOps::SECONDS_PER_DEGREE );
+    if( _jcentury == 0.)      /* common J2000 case;  don't do any math */
+        return( j2000_obliquit * MathOps::ARCS_TO_RADS );
+#ifndef CLIP_OBLIQUITY
+    else if( _jcentury > 100.)      /* Diverges outside +/- 10 millennia,  */
+        return( obliquit_plus_100_cen );
+    else if( _jcentury < -100.)  /* so we might as well clip to that  */
+        return( obliquit_minus_100_cen );
+#endif
+    
+    if( t0 == _jcentury )    /* return previous answer */
+        return( rval );
+    
+    rval = j2000_obliquit;
+    t0 = _jcentury;
+    u = u0 = _jcentury / 100.;     /* u is in julian 10000's of years */
+    for( i = 0; i < 10; i++, u *= u0) {
+        rval += u * (double)coeffs[i] / 100.;
     }
-    return rval;
-
-    //double T2 = t*t;
-    //double T3 = T2*t;
-    //return Astro::toRadians(23.4392917 - 0.0130041667*t - 0.00000016667*T2 + 0.0000005027778*T3);
+    rval *= MathOps::ARCS_TO_RADS;
+    return( rval );
 }
 
 //----------------------------------------------------------------------------
 
-void AstroOps::eclipticToEquatorial ( Observer &_loc, double _lng, double _lat, double &_ra, double &_dec ) {
-    double e = _loc.getObliquity();
+// https://github.com/slowe/VirtualSky/blob/gh-pages/0.7.0/virtualsky.js#L1736
+void AstroOps::eclipticToEquatorial ( Observer &_obs, double _lng, double _lat, double &_ra, double &_dec ) {
+    double obliq = _obs.getObliquity();
+    double sin_obliq = sin(obliq);
+    double cos_obliq = cos(obliq);
+    
     double sl = sin(_lng);
     double cl = cos(_lng);
     double sb = sin(_lat);
     double cb = cos(_lat);
     double tb = tan(_lat);
-    double se = sin(e);
-    double ce = cos(e);
-    _ra = atan2((sl * ce - tb * se),(cl));
-    _dec = asin(sb * ce + cb * se * sl);
+
+    _ra = atan2((sl * cos_obliq - tb * sin_obliq),(cl));
+    _dec = asin(sb * cos_obliq + cb * sin_obliq * sl);
     
     // Make sure RA is positive
     if (_ra < 0)
         _ra += MathOps::TAU;
 }
+
+Vector AstroOps::eclipticToEquatorial ( Observer &_obs, Vector _ecliptic ) {
+    double lng = _ecliptic.getLongitudeRadians();
+    double lat = _ecliptic.getLatitudeRadians();
+    double dist = _ecliptic.getRadius();
+    double ra, dec;
+    eclipticToEquatorial(_obs, lng, lat, ra, dec);
+    Vector rta = Vector(ra, dec, dist);
+    return rta;
+}
+
+//Vector AstroOps::eclipticToEquatorial ( Observer &_obs, Vector _ecliptic ) {
+//    double obliq = _obs.getObliquity();
+//    double sin_obliq = sin(obliq);
+//    double cos_obliq = cos(obliq);
+//    
+//    double temp;
+//
+//    temp    = vect[2] * cos_obliq + vect[1] * sin_obliq;
+//    vect[1] = vect[1] * cos_obliq - vect[2] * sin_obliq;
+//    vect[2] = temp;
+//}
+//
+//Vector AstroOps::equatorialToEcliptic ( Observer &_obs, Vector _equatorial ) {
+//    double obliq = _obs.getObliquity();
+//    double sin_obliq = sin(obliq);
+//    double cos_obliq = cos(obliq);
+//    
+//    double temp;
+//    
+//    temp    = vect[2] * cos_obliq_2000 - vect[1] * sin_obliq_2000;
+//    vect[1] = vect[1] * cos_obliq_2000 + vect[2] * sin_obliq_2000;
+//    vect[2] = temp;
+//}
+
 
 void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec, double &_alt, double &_az ) {
     // compute hour angle in degrees

@@ -13,26 +13,33 @@
 class AstroOps {
 public:
     
+    static const double SPEED_OF_LIGHT;
+    
     static const double KM_TO_AU;
     static const double AU_TO_KM;
+    static const double AU_TO_M;
+    static const double AU_PER_DAY;
     
     // Transform celestial coordinates ( https://en.wikipedia.org/wiki/Celestial_coordinate_system )
 
     // to GeoCentric
-    static void heliocentricToGeocentric( Observer &_loc, 
+    static void heliocentricToGeocentric( Observer &_obs,
                                             double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad); // OUT
 
-    static void eclipticToEquatorial( Observer &_loc,
+    static void eclipticToEquatorial( Observer &_obs,
                                         double _lng, double _lat,       // IN
                                         double &_ra, double &_dec);     // OUT
     
+    static Vector eclipticToEquatorial ( Observer &_obs, Vector _ecliptic );
+//    static Vector equatorialToEcliptic ( Observer &_obs, Vector _equatorial );
+    
     // to TopoCentric
-    static void equatorialToHorizontal( Observer &_loc,
+    static void equatorialToHorizontal( Observer &_obs,
                                           double _ra, double _dec,      // IN
                                           double &_alt, double &_az);   // OUT
 
 
-    static double parallaticAngle(  Observer &_loc, 
+    static double parallaticAngle(  Observer &_obs,
                                     double _alt, double _dec);
 
     // Others
