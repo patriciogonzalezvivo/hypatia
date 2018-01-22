@@ -38,6 +38,7 @@ public:
                                           double _ra, double _dec,      // IN
                                           double &_alt, double &_az);   // OUT
 
+    static Vector equatorialToHorizontal ( Observer &_obs, Vector _equatorial );
 
     static double parallaticAngle(  Observer &_obs,
                                     double _alt, double _dec);
