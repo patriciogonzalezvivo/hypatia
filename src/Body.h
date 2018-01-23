@@ -11,7 +11,6 @@
 #pragma once
 
 #include "EqPoint.h"
-#include "Vector.h"
 
 class Body : public EqPoint {
 public:
@@ -27,6 +26,8 @@ public:
 
     // Geocentric
     virtual Vector  getGeocentricVector() const;
+    virtual Vector  getEquatorialVector() const { return Vector(m_ra, m_dec, m_gEclipticRad); }
+    virtual Vector  getHorizontalVector() const { return Vector(m_alt, m_az, m_gEclipticRad); }
     
     // The Radius is in AU
     virtual double  getRadius() const { return m_gEclipticRad; }

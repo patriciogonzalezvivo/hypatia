@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Observer.h"
+#include "EqPoint.h"
 
 class AstroOps {
 public:
@@ -31,7 +32,6 @@ public:
                                         double &_ra, double &_dec);     // OUT
     
     static Vector eclipticToEquatorial ( Observer &_obs, Vector _ecliptic );
-//    static Vector equatorialToEcliptic ( Observer &_obs, Vector _equatorial );
     
     // to TopoCentric
     static void equatorialToHorizontal( Observer &_obs,

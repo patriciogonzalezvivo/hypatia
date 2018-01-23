@@ -99,31 +99,6 @@ Vector AstroOps::eclipticToEquatorial ( Observer &_obs, Vector _ecliptic ) {
     return rta;
 }
 
-//Vector AstroOps::eclipticToEquatorial ( Observer &_obs, Vector _ecliptic ) {
-//    double obliq = _obs.getObliquity();
-//    double sin_obliq = sin(obliq);
-//    double cos_obliq = cos(obliq);
-//    
-//    double temp;
-//
-//    temp    = vect[2] * cos_obliq + vect[1] * sin_obliq;
-//    vect[1] = vect[1] * cos_obliq - vect[2] * sin_obliq;
-//    vect[2] = temp;
-//}
-//
-//Vector AstroOps::equatorialToEcliptic ( Observer &_obs, Vector _equatorial ) {
-//    double obliq = _obs.getObliquity();
-//    double sin_obliq = sin(obliq);
-//    double cos_obliq = cos(obliq);
-//    
-//    double temp;
-//    
-//    temp    = vect[2] * cos_obliq_2000 - vect[1] * sin_obliq_2000;
-//    vect[1] = vect[1] * cos_obliq_2000 + vect[2] * sin_obliq_2000;
-//    vect[2] = temp;
-//}
-
-
 void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec, double &_alt, double &_az ) {
     // compute hour angle in degrees
     double ha = (MathOps::HD_PI*_obs.getLST()/12.) - _ra;
