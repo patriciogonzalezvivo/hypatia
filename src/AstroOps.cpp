@@ -94,8 +94,7 @@ EqPoint AstroOps::eclipticToEquatorial ( Observer &_obs, const Vector &_ecliptic
     double lat = _ecliptic.getLatitudeRadians();
     double ra, dec;
     eclipticToEquatorial(_obs, lng, lat, ra, dec);
-    EqPoint rta;
-    rta.setInRadians(ra, dec);
+    EqPoint rta = EqPoint(ra, dec, true);
     rta.compute(_obs);
     return rta;
 }
@@ -119,7 +118,7 @@ void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec,
 void AstroOps::heliocentricToGeocentric ( Observer &_obs,
                                           double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad ) {
     // http://www.astrosurf.com/jephem/astro/ephemeris/et520transfo_en.htm
-    Vector planet_eclipticLoc = AstroOps::heliocentricToGeocentric(_obs, Vector(_body_eclipticLon, _body_eclipticLat, _body_rad));
+    Vector planet_eclipticLoc = AstroOps::heliocentricToGeocentric(_obs, Vector(_body_eclipticLon, _body_eclipticLat, _body_rad, true));
     
 //    Vector earth_eclipticLoc = _obs.getHeliocentricVector();
 //    Vector planet_eclipticLoc = Vector(_body_eclipticLon, _body_eclipticLat, _body_rad);

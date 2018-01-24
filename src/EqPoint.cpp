@@ -5,21 +5,20 @@
 EqPoint::EqPoint() : m_ra(0.0), m_dec(0.0), m_alt(0.0), m_az(0.0) {
 }
 
-EqPoint::EqPoint( double _ra_deg, double _dec_deg ) {
-    m_ra = MathOps::toRadians(_ra_deg);
-    m_dec = MathOps::toRadians(_dec_deg);
+EqPoint::EqPoint( double _ra, double _dec, bool _radians ) {
+    if (!_radians) {
+        m_ra = MathOps::toRadians(_ra);
+        m_dec = MathOps::toRadians(_dec);
+    }
+    else {
+        m_ra = _ra;
+        m_dec = _dec;
+    }
     m_alt = 0.0;
     m_az = 0.0;
 }
 
 EqPoint::~EqPoint() {
-}
-
-double EqPoint::setInRadians(double _ra_rad, double _dec_rad) {
-    m_ra = _ra_rad;
-    m_dec = _dec_rad;
-    m_alt = 0.0;
-    m_az = 0.0;
 }
 
 void EqPoint::compute( Observer &_obs ) {

@@ -6,12 +6,23 @@
 Vector::Vector(): x(0.0), y(0.0), z(0.0) {
 }
 
-Vector::Vector(double _radiant_lon, double _radiant_lat, double _radius): x(0.0), y(0.0), z(0.0) {
+Vector::Vector(double _lon, double _lat, double _radius, bool _radiant) {
     // http://www.stjarnhimlen.se/comp/tutorial.html
-    const double cosLat = cos(_radiant_lat);
-    x = cos(_radiant_lon) * cosLat * _radius;
-    y = sin(_radiant_lon) * cosLat * _radius;
-    z = sin(_radiant_lat) * _radius;
+    if (!_radiant) {
+        double lon = MathOps::toRadians(_lon);
+        double lat = MathOps::toRadians(_lat);
+        const double cosLat = cos(lat);
+        x = cos(lon) * cosLat * _radius;
+        y = sin(lon) * cosLat * _radius;
+        z = sin(lat) * _radius;
+    }
+    else {
+        const double cosLat = cos(_lat);
+        x = cos(_lon) * cosLat * _radius;
+        y = sin(_lon) * cosLat * _radius;
+        z = sin(_lat) * _radius;
+    }
+    
 }
 
 Vector::~Vector() {

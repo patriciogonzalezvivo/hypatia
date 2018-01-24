@@ -26,8 +26,8 @@ public:
 
     // Geocentric
     virtual Vector  getGeocentricVector() const;
-    virtual Vector  getEquatorialVector() const { return Vector(m_ra, m_dec, m_gEclipticRad); }
-    virtual Vector  getHorizontalVector() const { return Vector(m_alt, m_az, m_gEclipticRad); }
+    virtual Vector  getEquatorialVector() const { return Vector(m_ra, m_dec, m_gEclipticRad, true); }
+    virtual Vector  getHorizontalVector() const { return Vector(m_alt, m_az, m_gEclipticRad, true); }
     
     // The Radius is in AU
     virtual double  getRadius() const { return m_gEclipticRad; }

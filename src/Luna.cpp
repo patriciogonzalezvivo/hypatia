@@ -423,8 +423,8 @@ void Luna::compute( Observer &_obs ) {
         Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH);
         
         // Get HelioCentric values
-        Vector Sun2Earth = Vector(sun_eclipticLon, sun_eclipticLat, sun_radius);
-        Vector Earth2Moon = Vector(m_gEclipticLon, m_gEclipticLat, m_gEclipticRad);
+        Vector Sun2Earth = Vector(sun_eclipticLon, sun_eclipticLat, sun_radius, true);
+        Vector Earth2Moon = Vector(m_gEclipticLon, m_gEclipticLat, m_gEclipticRad, true);
         Vector Sun2Moon = Sun2Earth + Earth2Moon;
         
         m_hEclipticLon = Sun2Moon.getLongitudeRadians();

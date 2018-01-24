@@ -114,10 +114,10 @@ char * Body::getZodiacSign() const {
 
 Vector Body::getHeliocentricVector() const {
     double dist = m_hEclipticRad;
-    return Vector(m_hEclipticLon, m_hEclipticLat, dist);
+    return Vector(m_hEclipticLon, m_hEclipticLat, dist, true);
 }
 
 Vector Body::getGeocentricVector() const {
     double dist = m_gEclipticRad;
-    return Vector(m_gEclipticLon, m_gEclipticLat, dist);
+    return Vector(m_gEclipticLon, m_gEclipticLat, dist, true);
 }
