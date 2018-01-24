@@ -31,7 +31,9 @@ public:
     
     // The Radius is in AU
     virtual double  getRadius() const { return m_gEclipticRad; }
+    virtual double  getEclipticLon() const { return MathOps::toDegrees(m_gEclipticLon); }
     virtual double  getEclipticLonRadians() const { return m_gEclipticLon; }
+    virtual double  getEclipticLat() const { return MathOps::toDegrees(m_gEclipticLat); }
     virtual double  getEclipticLatRadians() const { return m_gEclipticLat; }
     
     // Calculate the data for a given planet, jd, and location
