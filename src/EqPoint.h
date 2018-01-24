@@ -7,8 +7,10 @@
 class EqPoint {
 public:
     EqPoint();
-    EqPoint( double _ra, double _dec );
+    EqPoint( double _ra_deg, double _dec_deg );
     virtual ~EqPoint();
+    
+    virtual double  setInRadians(double _ra_rad, double _dec_rad);
 
     // Equatorial (Geocentric)
     virtual double  getDeclination() const { return MathOps::toDegrees( m_dec ); }

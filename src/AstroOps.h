@@ -23,22 +23,22 @@ public:
     
     // Transform celestial coordinates ( https://en.wikipedia.org/wiki/Celestial_coordinate_system )
 
-    // to GeoCentric
+    // HelioCentric (Ecliptic)
     static void heliocentricToGeocentric( Observer &_obs,
                                             double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad); // OUT
+    
+    static Vector heliocentricToGeocentric( Observer &_obs, const Vector &_heliocentric );
 
+    // GeoCentric
+    static EqPoint eclipticToEquatorial ( Observer &_obs, const Vector &_ecliptic );
     static void eclipticToEquatorial( Observer &_obs,
                                         double _lng, double _lat,       // IN
                                         double &_ra, double &_dec);     // OUT
     
-    static Vector eclipticToEquatorial ( Observer &_obs, Vector _ecliptic );
-    
-    // to TopoCentric
+    // TopoCentric
     static void equatorialToHorizontal( Observer &_obs,
                                           double _ra, double _dec,      // IN
                                           double &_alt, double &_az);   // OUT
-
-    static Vector equatorialToHorizontal ( Observer &_obs, Vector _equatorial );
 
     static double parallaticAngle(  Observer &_obs,
                                     double _alt, double _dec);

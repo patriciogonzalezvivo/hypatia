@@ -28,8 +28,10 @@ public:
     
     double getLongitude() const;
     double getLongitudeRadians() const;
+    
     double getLatitude() const;
     double getLatitudeRadians() const;
+    
     double getRadius() const;
 
     double x, y, z;

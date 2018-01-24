@@ -13,7 +13,7 @@ public:
     Constellation();
     Constellation( int _id );
     Constellation( char * _abbr );
-    Constellation( EqPoint &_point );
+    Constellation( const EqPoint &_point );
     Constellation( double _ra, double _dec );
 
     void setId( int _id );

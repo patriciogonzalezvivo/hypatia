@@ -826,7 +826,7 @@ Constellation::Constellation( double _ra, double _dec ) : m_id(-1) {
     setId( getConstellationId(_ra, _dec) );
 }
 
-Constellation::Constellation( EqPoint &_point ) : m_id(-1) {
+Constellation::Constellation( const EqPoint &_point ) : m_id(-1) {
     double ra = _point.getRightAscension();
     double dec = _point.getDeclination();
     setId( getConstellationId( ra, dec ) );
