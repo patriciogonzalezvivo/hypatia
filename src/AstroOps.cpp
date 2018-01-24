@@ -115,6 +115,16 @@ void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec,
         _az = 2.*MathOps::HD_PI - _az;
 }
 
+Vector AstroOps::equatorialToHorizontal ( Observer &_obs, Vector _equatorial ) {
+    double ra = _equatorial.getLongitudeRadians();
+    double dec = _equatorial.getLatitudeRadians();
+    double dist = _equatorial.getRadius();
+    double alt, az;
+    equatorialToHorizontal(_obs, ra, dec, alt, az);
+    Vector rta = Vector(alt, az, dist);
+    return rta;
+}
+
 
 void AstroOps::heliocentricToGeocentric ( Observer &_obs,
                                           double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad ) {
