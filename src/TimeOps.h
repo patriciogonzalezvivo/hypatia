@@ -5,7 +5,6 @@ struct TimeOps {
     static const double TROPICAL_YEAR;
     static const double JULIAN_EPOCH;
     static const double MJULIAN_EPOCH;
-    static const double SPEED_OF_LIGHT;
     static const double TO_CENTURIES;
     
     static const double HOURS_PER_DAY;
