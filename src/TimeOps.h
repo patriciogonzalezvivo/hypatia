@@ -24,26 +24,37 @@ struct TimeOps {
     // to Modified Julian Dates ( http://scienceworld.wolfram.com/astronomy/ModifiedJulianDate.html )
     static double modifiedJulianDates ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
     
+    static double jordanCosmologicalTheory ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
+
+    static double greenwichMeanSiderealTime ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
+    
+    // to Greenwich sidereal time
+    static double greenwichSiderealTime ( double _jd );
+    
+    // to Greenwich sidereal time in a range of 0~24hs
+    static double greenwichSiderealHour ( double _jd );
+
+    // To Local Sidereal Time http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
+    static double localSiderealTime ( double _jd, double _lng_deg );
+
     // Julian Date to Modify Julian Date (http://tycho.usno.navy.mil/mjd.html)
     static double JDtoMJD ( double _jd );
 
-    /* given the modified Julian date (number of days elapsed since 1900 jan 0.5,),
-     * mj, return the calendar date in months, *mn, days, *dy, and years, *yr.
-     */
-    static void MJDtoMDY ( double _mjd, int &_mont, double &_day, int &_year );
-    
-    /* given an mjd, set *dow to 0..6 according to which day of the week it falls
+     /* given an mjd, set *dow to 0..6 according to which day of the week it falls
      * on (0=sunday).
      * return 0 if ok else -1 if can't figure it out.
      */
     static int MJDtoDOW (double _mjd);
-    
+
     /* given the Julian day return the calendar date in months,  days, and years
      *  https://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
      */
-    static void JDtoMDY ( double _jd, int &_mont, double &_day, int &_year);
+    static void JDtoMDY ( double _jd, int &_month, double &_day, int &_year);
 
-    static void toHMS ( double _day, int &_hours, int &_min, double &_sec );
+    /* given the modified Julian date (number of days elapsed since 1900 jan 0.5,),
+     * mj, return the calendar date in months, *mn, days, *dy, and years, *yr.
+     */
+    static void MJDtoMDY ( double _mjd, int &_month, double &_day, int &_year );
     
     /* given a date in months, mn, days, dy, years, yr,
      * return the modified Julian date (number of days elapsed since 1900 jan 0.5)
@@ -55,24 +66,16 @@ struct TimeOps {
     
     // Modified Julian Dates to Jordan Cosmological Theory
     static double MJDtoJCT ( double _mjd );
-    static double jordanCosmologicalTheory ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
-    
+
     // Modified Julian Dates to Greenwich Mean Sidereal Time ( https://www.cv.nrao.edu/~rfisher/Ephemerides/times.html )
     static double MJDtoGMS ( double _mjd );
-    static double greenwichMeanSiderealTime ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
-    
-    // to Greenwich sidereal time
-    static double greenwichSiderealTime ( double _jd );
-    
-    // to Greenwich sidereal time in a range of 0~24hs
-    static double greenwichSiderealHour ( double _jd );
     
     // convert hour to decimal day, e.g., 12h -> .5d
-    static double toDays ( int hours ) { return (double)hours / HOURS_PER_DAY; }
+    static double toDays ( int _hrs ) { return (double)_hrs / HOURS_PER_DAY; }
+
+    // given decimal day (e.g. 12hs -> .5) convert to hours, mins, and secs
+    static void toHMS ( double _day, int &_hrs, int &_min, double &_sec );
     
     // convert a JD to Julian Millenia referenced to epoch J2000
     static double toMillenia ( double _jd ) { return ( _jd - J2000 ) / TO_CENTURIES; }
-    
-    // To Local Sidereal Time http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
-    static double localSiderealTime ( double _jd, double _lng_deg );
 };

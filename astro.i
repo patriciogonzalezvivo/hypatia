@@ -5,11 +5,11 @@
 
 %apply double &OUTPUT { double &_alt, double &_az };
 %apply double &OUTPUT { double &_ra, double &_dec };
+%apply double &OUTPUT { double &_x, double &_y };
 
-%apply int &OUTPUT { int &_deg, int &_min, double &_sec };
-%apply int &OUTPUT { int &_hrs, int &_min, double &_sec };
-
-%apply double &OUTPUT { int &_mont, double &_day, int &_year };
+%apply double &OUTPUT { int &_deg, int &_min, double &_sec };
+%apply double &OUTPUT { int &_hrs, int &_min, double &_sec };
+%apply double &OUTPUT { int &_month, double &_day, int &_year };
 
 namespace std {
     %template(VectorInt) vector<int>;
@@ -22,6 +22,7 @@ namespace std {
     #include "src/Vector.h"
     #include "src/Observer.h"
     #include "src/AstroOps.h"
+    #include "src/ProjOps.h"
     #include "src/EqPoint.h"
     #include "src/Body.h"
     #include "src/Luna.h"
@@ -34,6 +35,7 @@ namespace std {
 %include "src/Vector.h"
 %include "src/Observer.h"
 %include "src/AstroOps.h"
+%include "src/ProjOps.h"
 %include "src/EqPoint.h"
 %include "src/Body.h"
 %include "src/Luna.h"
