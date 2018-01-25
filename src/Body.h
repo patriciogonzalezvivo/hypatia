@@ -22,10 +22,10 @@ public:
     virtual char*   getZodiacSign() const;
 
     // Heliocentric
-    virtual Vector  getHeliocentricVector() const;
+    virtual Vector  getHeliocentricVector() const { return Vector(m_hEclipticLon, m_hEclipticLat, m_hEclipticRad, true); }
 
     // Geocentric
-    virtual Vector  getGeocentricVector() const;
+    virtual Vector  getGeocentricVector() const { return Vector(m_gEclipticLon, m_gEclipticLat, m_gEclipticRad, true); }
     virtual Vector  getEquatorialVector() const { return Vector(m_ra, m_dec, m_gEclipticRad, true); }
     virtual Vector  getHorizontalVector() const { return Vector(m_alt, m_az, m_gEclipticRad, true); }
     

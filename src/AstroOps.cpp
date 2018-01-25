@@ -119,19 +119,12 @@ void AstroOps::heliocentricToGeocentric ( Observer &_obs,
                                           double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad ) {
     // http://www.astrosurf.com/jephem/astro/ephemeris/et520transfo_en.htm
     Vector planet_eclipticLoc = AstroOps::heliocentricToGeocentric(_obs, Vector(_body_eclipticLon, _body_eclipticLat, _body_rad, true));
-    
-//    Vector earth_eclipticLoc = _obs.getHeliocentricVector();
-//    Vector planet_eclipticLoc = Vector(_body_eclipticLon, _body_eclipticLat, _body_rad);
-//    planet_eclipticLoc -= earth_eclipticLoc;
-    
     _body_eclipticLon = planet_eclipticLoc.getLongitudeRadians();
     _body_eclipticLat = planet_eclipticLoc.getLatitudeRadians();
     _body_rad = planet_eclipticLoc.getRadius();
 }
 
 Vector AstroOps::heliocentricToGeocentric( Observer &_obs, const Vector &_heliocentric ) {
-//    Vector planet_eclipticLoc = _heliocentric - _obs.getHeliocentricVector();
-//    return planet_eclipticLoc;
     return _heliocentric - _obs.getHeliocentricVector();
 }
 

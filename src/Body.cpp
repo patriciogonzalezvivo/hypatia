@@ -111,13 +111,3 @@ void Body::computeElipcticAngles( Observer& _obs ) {
 char * Body::getZodiacSign() const {
     return zodiacSigns[ int((getEclipticLonRadians()/MathOps::TAU)*12.)%12 ];
 }
-
-Vector Body::getHeliocentricVector() const {
-    double dist = m_hEclipticRad;
-    return Vector(m_hEclipticLon, m_hEclipticLat, dist, true);
-}
-
-Vector Body::getGeocentricVector() const {
-    double dist = m_gEclipticRad;
-    return Vector(m_gEclipticLon, m_gEclipticLat, dist, true);
-}
