@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-void ProjOps::toCarthesian( ProjId _id, const EqPoint &_eq, double &_x, double &_y ) {
+void ProjOps::toPolar( PolarProjId _id, const EqPoint &_eq, double &_x, double &_y ) {
     switch(_id) {
         case POLAR: toPolar(_eq, _x, _y);
             break;
@@ -10,9 +10,14 @@ void ProjOps::toCarthesian( ProjId _id, const EqPoint &_eq, double &_x, double &
             break;
         case ORTHO: toOrtho(_eq, _x, _y);
             break;
-        case STEREO: toStereo(_eq, _x, _y);
+    }
+}
+
+void ProjOps::toCartesian( CartesianProjId _id, const EqPoint &_eq, double _width ,double _height, double &_x, double &_y ) {
+    switch(_id) {
+        case STEREO: toStereo(_eq, _width, _height, _x, _y);
             break;
-        case LAMBERT: toLambert(_eq, _x, _y);
+        case LAMBERT: toLambert(_eq, _width, _height, _x, _y);
             break;
     }
 }
@@ -57,7 +62,7 @@ void ProjOps::toOrtho( const EqPoint &_eq, double &_x, double &_y) {
     toOrtho( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _x, _y );
 }
 
-void ProjOps::toStereo( double _alt, double _az, double &_x, double &_y ) {
+void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
     double f = 0.42;
     double sinel1 = 0.0;
     double cosel1 = 1.0;
@@ -68,15 +73,15 @@ void ProjOps::toStereo( double _alt, double _az, double &_x, double &_y ) {
     double k = (1.0 + sinel1 * sinel + cosel1 * cosel * cosaz) * 0.5;
 //    _x = w/2 + f * k * h * cosel * sinaz;
 //    _y = h - f * k * h * (cosel1 * sinel - sinel1 * cosel * cosaz);
-    _x = .5 + f * k * cosel * sinaz;
-    _y = 1. - f * k * (cosel1 * sinel - sinel1 * cosel * cosaz);
+    _x = _width * .5 + f * k * cosel * sinaz;
+    _y = _height - f * _height * k * (cosel1 * sinel - sinel1 * cosel * cosaz);
 }
 
-void ProjOps::toStereo( const EqPoint &_eq, double &_x, double &_y ) {
-    toStereo( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _x, _y );
+void ProjOps::toStereo( const EqPoint &_eq, double _width ,double _height, double &_x, double &_y ) {
+    toStereo( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
 }
 
-void ProjOps::toLambert( double _alt, double _az, double &_x, double &_y ) {
+void ProjOps::toLambert( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
     double cosaz = cos(_az-MathOps::HD_PI);
     double sinaz = sin(_az-MathOps::HD_PI);
     double sinel = sin(_alt);
@@ -84,9 +89,9 @@ void ProjOps::toLambert( double _alt, double _az, double &_x, double &_y ) {
     double k = sqrt( (1.0 + cosel * cosaz) * 0.5);
 //    _x = w / 2 + 0.6 * h * k * cosel * sinaz;
 //    _y = h - 0.6 * h * k * sinel;
-    _x = .5 + 0.6 * k * cosel * sinaz ;
-    _y = 1. - 0.6 * k * sinel;
+    _x = _width * .5 + 0.6 * k * cosel * sinaz ;
+    _y = _height - 0.6 * _height * k * sinel;
 }
-void ProjOps::toLambert( const EqPoint &_eq, double &_x, double &_y ) {
-    toLambert( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _x, _y );
+void ProjOps::toLambert( const EqPoint &_eq, double _width ,double _height, double &_x, double &_y ) {
+    toLambert( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
 }
