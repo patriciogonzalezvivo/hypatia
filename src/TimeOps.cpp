@@ -279,6 +279,34 @@ void TimeOps::JDtoMDY(double _jd, int &_month, double &_day, int &_year) {
     }
 }
 
+
+void TimeOps::toHMS ( double _day, int &_hrs, int &_min, double &_sec ) {
+    _day -= (unsigned short) _day;
+    
+    double dtemp;
+    /* multiply reminder by 24 to get the hours */
+    dtemp = _day * 24.0;
+    _hrs = (unsigned short) dtemp;
+    
+    /* multiply remainder by 60 to get minutes */
+    dtemp = 60 * ( dtemp - _hrs );
+    _min = (unsigned short) dtemp;
+    
+    /* multiply remainder by 60 to get seconds */
+    _sec = 60 * ( dtemp - _min );
+    
+    /* catch any overflows */
+    if ( _sec > 59 ) {
+        _sec = 0;
+        _min ++;
+    }
+    if ( _min > 59)  {
+        _min = 0;
+        _hrs ++;
+    }
+}
+
+
 int TimeOps::MJDtoDOW (double _mjd) {
     /* cal_mjd() uses Gregorian dates on or after Oct 15, 1582.
      * (Pope Gregory XIII dropped 10 days, Oct 5..14, and improved the leap-

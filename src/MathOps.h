@@ -1,5 +1,5 @@
 /*****************************************************************************\
- * Astro     defines misc. handy constants & fns
+ * MathOps  defines misc. handy constants & mathematical fns
  *
  * author: mark huss (mark@mhuss.com)
  * Based on Bill Gray's open-source code at projectpluto.com

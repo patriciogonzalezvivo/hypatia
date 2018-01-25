@@ -15,7 +15,6 @@
 #include "Vector.h"
 
 #include <math.h>
-#include <string.h>
 
 const double AstroOps::SPEED_OF_LIGHT = 299792.458;
 

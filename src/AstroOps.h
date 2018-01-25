@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "Observer.h"
 #include "EqPoint.h"
 
 class AstroOps {
