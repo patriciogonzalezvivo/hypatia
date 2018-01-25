@@ -5,13 +5,13 @@
 class ProjOps {
 public:
     
-    static void ToPolar( double _alt, double _az, double &_x, double &_y );
-    static void ToPolar( const EqPoint &_eq, double &_x, double &_y );
+    static void toPolar( double _alt, double _az, double &_x, double &_y );
+    static void toPolar( const EqPoint &_eq, double &_x, double &_y );
     
-    static void ToFisheye( double _alt, double _az, double &_x, double &_y );
-    static void ToFisheye( const EqPoint &_eq, double &_x, double &_y );
+    static void toFisheye( double _alt, double _az, double &_x, double &_y );
+    static void toFisheye( const EqPoint &_eq, double &_x, double &_y );
     
-    static void ToOrtho( double _alt, double _az, double &_x, double &_y );
-    static void ToOrtho( const EqPoint &_eq, double &_x, double &_y );
+    static void toOrtho( double _alt, double _az, double &_x, double &_y );
+    static void toOrtho( const EqPoint &_eq, double &_x, double &_y );
     
 };
