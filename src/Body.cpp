@@ -16,6 +16,8 @@
 #include "Pluto.h"
 #include "Vsop.h"
 
+static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"Earth", (char*)"Mar", (char*)"Jup", (char*)"Sat", (char*)"Ur", (char*)"Nep", (char*)"Pl", (char*)"Moon" };
+
 static char* zodiacSigns[] = { (char*)"Ari", (char*)"Tau", (char*)"Gem", (char*)"Cnc", (char*)"Leo", (char*)"Vir", (char*)"Lib", (char*)"Sco", (char*)"Sgr", (char*)"Cap", (char*)"Aqr", (char*)"Psc" };
 
 Body::Body() : 
@@ -106,6 +108,10 @@ void Body::compute( Observer& _obs ) {
 void Body::computeElipcticAngles( Observer& _obs ) {
     AstroOps::eclipticToEquatorial( _obs, m_gEclipticLon, m_gEclipticLat, m_ra, m_dec );
     AstroOps::equatorialToHorizontal( _obs, m_ra, m_dec, m_alt, m_az );
+}
+
+char*  Body::getBodyName() const {
+    return bodyNames[m_bodyId];
 }
 
 char * Body::getZodiacSign() const {

@@ -19,6 +19,7 @@ public:
     virtual ~Body();
     
     virtual BodyId  getBodyId() const { return m_bodyId; }
+    virtual char*   getBodyName() const;
     virtual char*   getZodiacSign() const;
 
     // Heliocentric
