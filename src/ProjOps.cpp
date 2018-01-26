@@ -13,17 +13,6 @@ void ProjOps::toPolar( PolarProjId _id, const EqPoint &_eq, double &_x, double &
     }
 }
 
-void ProjOps::toCartesian( CartesianProjId _id, const EqPoint &_eq, double _width ,double _height, double &_x, double &_y ) {
-    switch(_id) {
-        case STEREO: toStereo(_eq, _width, _height, _x, _y);
-            break;
-        case LAMBERT: toLambert(_eq, _width, _height, _x, _y);
-            break;
-        case EQUIRECTANGULAR: toEquirectangular(_eq, _width, _height, _x, _y);
-            break;
-    }
-}
-
 //  https://github.com/slowe/VirtualSky/blob/gh-pages/virtualsky.js
 void ProjOps::toPolar( double _alt, double _az, double &_x, double &_y ) {
     double radius = .5;
@@ -61,6 +50,17 @@ void ProjOps::toOrtho( const EqPoint &_eq, double &_x, double &_y) {
     toOrtho( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _x, _y );
 }
 
+//void ProjOps::toCartesian( CartesianProjId _id, const EqPoint &_eq, double _width ,double _height, double &_x, double &_y ) {
+//    switch(_id) {
+//        case STEREO: toStereo(_eq, _width, _height, _x, _y);
+//            break;
+//        case LAMBERT: toLambert(_eq, _width, _height, _x, _y);
+//            break;
+//        case EQUIRECTANGULAR: toEquirectangular(_eq, _width, _height, _x, _y);
+//            break;
+//    }
+//}
+//
 //void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
 //    double f = 0.42;
 //    double sinel1 = 0.0;
