@@ -7,7 +7,7 @@ enum PolarProjId {
 };
 
 enum CartesianProjId {
-    STEREO=0, LAMBERT=1
+    STEREO=0, LAMBERT=1, EQUIRECTANGULAR=2
 };
 
 class ProjOps {
@@ -34,5 +34,6 @@ public:
     static void toLambert( double _alt, double _az,  double _width ,double _height, double &_x, double &_y );
     static void toLambert( const EqPoint &_eq,  double _width ,double _height, double &_x, double &_y );
     
-    
+    static void toEquirectangular( double _alt, double _az,  double _width ,double _height, double &_x, double &_y );
+    static void toEquirectangular( const EqPoint &_eq,  double _width ,double _height, double &_x, double &_y );
 };
