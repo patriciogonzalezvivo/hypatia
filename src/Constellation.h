@@ -23,9 +23,10 @@ public:
     char * getAbbreviation();
 
     std::vector<int> getStarIndices() const { return m_sIndices; };
+    std::vector<EqPoint> getBoundary() const { return m_boundary; };
 
 protected:
-    std::vector<int> m_sIndices;
-
+    std::vector<int>        m_sIndices;
+    std::vector<EqPoint>    m_boundary;
     int m_id;
 };
