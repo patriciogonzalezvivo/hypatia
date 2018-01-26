@@ -20,6 +20,7 @@ astro_module = Extension(
     'src/Observer.cpp', 
     'src/AstroOps.cpp',
     'src/EqPoint.cpp',
+    'src/ProjOps.cpp',
     'src/Vsop.cpp', 
     'src/Body.cpp', 
     'src/Luna.cpp', 
