@@ -6,7 +6,7 @@
 Vector::Vector(): x(0.0), y(0.0), z(0.0) {
 }
 
-Vector::Vector(double _lon, double _lat, double _radius = 1, bool _radiant = false) {
+Vector::Vector(double _lon, double _lat, double _radius, bool _radiant) {
     // http://www.stjarnhimlen.se/comp/tutorial.html
     if (!_radiant) {
         double lon = MathOps::toRadians(_lon);
