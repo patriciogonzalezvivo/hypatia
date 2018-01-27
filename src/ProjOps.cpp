@@ -2,15 +2,25 @@
 
 #include <math.h>
 
-void ProjOps::toPolar( PolarProjId _id, const EqPoint &_eq, double _width, double _height, double &_x, double &_y ) {
+void ProjOps::toXY( ProjId _id, double _alt, double _az, double _width, double _height, double &_x, double &_y ) {
     switch(_id) {
-        case POLAR: ProjOps::toPolar(_eq, _width, _height, _x, _y);
+        case POLAR: ProjOps::toPolar(_alt, _az, _width, _height, _x, _y);
             break;
-        case FISHEYE: ProjOps::toFisheye(_eq, _width, _height, _x, _y);
+        case FISHEYE: ProjOps::toFisheye(_alt, _az, _width, _height, _x, _y);
             break;
-        case ORTHO: ProjOps::toOrtho(_eq, _width, _height, _x, _y);
+        case ORTHO: ProjOps::toOrtho(_alt, _az, _width, _height, _x, _y);
+            break;
+        case STEREO: ProjOps::toStereo(_alt, _az, _width, _height, _x, _y);
+            break;
+        case LAMBERT: ProjOps::toLambert(_alt, _az, _width, _height, _x, _y);
+            break;
+        case EQUIRECTANGULAR: ProjOps::toEquirectangular(_alt, _az, _width, _height, _x, _y);
             break;
     }
+}
+
+void ProjOps::toXY( ProjId _id, const EqPoint &_eq, double _width, double _height, double &_x, double &_y ) {
+    ProjOps::toXY(_id, _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y);
 }
 
 //  https://github.com/slowe/VirtualSky/blob/gh-pages/virtualsky.js
@@ -50,17 +60,6 @@ void ProjOps::toOrtho( const EqPoint &_eq, double _width, double _height, double
     ProjOps::toOrtho( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
 }
 
-void ProjOps::toCartesian( CartesianProjId _id, const EqPoint &_eq, double _width ,double _height, double &_x, double &_y ) {
-    switch(_id) {
-        case STEREO: toStereo(_eq, _width, _height, _x, _y);
-            break;
-        case LAMBERT: toLambert(_eq, _width, _height, _x, _y);
-            break;
-        case EQUIRECTANGULAR: toEquirectangular(_eq, _width, _height, _x, _y);
-            break;
-    }
-}
-
 void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
     double f = 0.42;
     double sinel1 = 0.0;
@@ -76,7 +75,7 @@ void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, 
 }
 
 void ProjOps::toStereo( const EqPoint &_eq, double _width ,double _height, double &_x, double &_y ) {
-    toStereo( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
+    ProjOps::toStereo( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
 }
 
 void ProjOps::toLambert( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -90,7 +89,7 @@ void ProjOps::toLambert( double _alt, double _az, double _width ,double _height,
     _y = _height - 0.6 * _height * k * sinel;
 }
 void ProjOps::toLambert( const EqPoint &_eq, double _width ,double _height, double &_x, double &_y ) {
-    toLambert( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
+    ProjOps::toLambert( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
 }
 
 void ProjOps::toEquirectangular( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -104,5 +103,5 @@ void ProjOps::toEquirectangular( double _alt, double _az, double _width ,double 
 }
 
 void ProjOps::toEquirectangular( const EqPoint &_eq,  double _width ,double _height, double &_x, double &_y ) {
-    toEquirectangular( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
+    ProjOps::toEquirectangular( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
 }
