@@ -3,7 +3,7 @@
 class Vector {
 public:
     Vector();
-    Vector(double _radiant_lon, double _radiant_lat, double _radius = 1., bool _radiant = false);
+    Vector(double _lng, double _lat, double _radius = 1., bool _radiant = false);
     ~Vector();
     
     Vector operator+ (const Vector& _vec) const;
