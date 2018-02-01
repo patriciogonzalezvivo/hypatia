@@ -146,6 +146,17 @@ Vector& Vector::operator/= (double _d) {
     z /= _d;
     return *this;
 }
+
+double Vector::dot(const Vector& _vec) const {
+    return (x * _vec.x) +
+    (y * _vec.y) +
+    (z * _vec.z);
+}
+
+double Vector::magnitud() const {
+    return sqrt(x*x + y*y + z*z);
+}
+
 double Vector::getLongitude() const {
     return MathOps::toDegrees(getLongitudeRadians());
 }
@@ -163,5 +174,5 @@ double Vector::getLatitudeRadians() const {
 }
 
 double Vector::getRadius() const {
-    return sqrt(x*x + y*y + z*z);
+    return magnitud();
 }

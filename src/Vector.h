@@ -26,6 +26,9 @@ public:
     Vector& operator*= (double _d);
     Vector& operator/= (double _d);
     
+    double magnitud() const;
+    double dot(const Vector& _vec) const;
+    
     double getLongitude() const;
     double getLongitudeRadians() const;
     
