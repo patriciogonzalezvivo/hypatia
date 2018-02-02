@@ -88,7 +88,7 @@ void AstroOps::eclipticToEquatorial ( Observer &_obs, double _lng, double _lat, 
         _ra += MathOps::TAU;
 }
 
-EqPoint AstroOps::eclipticToEquatorial ( Observer &_obs, const Vector &_ecliptic ) {
+EqPoint AstroOps::eclipticToEquatorial ( Observer &_obs, const EcPoint &_ecliptic ) {
     double lng = _ecliptic.getLongitudeRadians();
     double lat = _ecliptic.getLatitudeRadians();
     double ra, dec;
@@ -117,14 +117,15 @@ void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec,
 void AstroOps::heliocentricToGeocentric ( Observer &_obs,
                                           double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad ) {
     // http://www.astrosurf.com/jephem/astro/ephemeris/et520transfo_en.htm
-    Vector planet_eclipticLoc = AstroOps::heliocentricToGeocentric(_obs, Vector(_body_eclipticLon, _body_eclipticLat, _body_rad, true));
+    EcPoint planet_eclipticLoc = AstroOps::heliocentricToGeocentric(_obs, EcPoint(_body_eclipticLon, _body_eclipticLat, _body_rad, true));
     _body_eclipticLon = planet_eclipticLoc.getLongitudeRadians();
     _body_eclipticLat = planet_eclipticLoc.getLatitudeRadians();
     _body_rad = planet_eclipticLoc.getRadius();
 }
 
-Vector AstroOps::heliocentricToGeocentric( Observer &_obs, const Vector &_heliocentric ) {
-    return _heliocentric - _obs.getHeliocentricVector();
+EcPoint AstroOps::heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric ) {
+    Vector heliocentric = _heliocentric.getEclipticVector();
+    return EcPoint(heliocentric - _obs.getHeliocentricVector());
 }
 
 /* compute parallactic angle given latitude, object dec and alt.

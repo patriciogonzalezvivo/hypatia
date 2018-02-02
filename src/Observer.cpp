@@ -5,6 +5,8 @@
 #include "TimeOps.h"
 #include "Vsop.h"
 
+#include "EcPoint.h"
+
 #include <string.h>
 #include <iostream>
 
@@ -37,11 +39,9 @@ void Observer::setJuliaDay( double _jd ) {
     m_obliquity = AstroOps::meanObliquity(m_jcentury);
     m_lst = TimeOps::localSiderealTime(m_jd, MathOps::toDegrees(m_longitude));
     
-    double planet_eclipticLon;
-    double planet_eclipticLat;
-    double planet_eclipticRad;
-    Vsop::calcAllLocs(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad, m_jcentury, m_body);
-    m_heliocentricLoc = Vector(planet_eclipticLon, planet_eclipticLat, planet_eclipticRad, true);
+    double pLng, pLat, pRad = 0.0;
+    Vsop::calcAllLocs(pLng, pLat, pRad, m_jcentury, m_body);
+    m_heliocentricLoc = EcPoint(pLng, pLat, pRad, true).getEclipticVector();
     
     //std::cout << "Observation data UPDATED" << std::endl;
     m_change = false;

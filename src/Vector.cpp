@@ -3,30 +3,28 @@
 #include "MathOps.h"
 #include <math.h>
 
-Vector::Vector(): x(0.0), y(0.0), z(0.0) {
+Vector::Vector() : x(0.0), y(0.0), z(0.0) {
 }
 
-Vector::Vector(double _lon, double _lat, double _radius, bool _radiant) {
-    // http://www.stjarnhimlen.se/comp/tutorial.html
-    if (!_radiant) {
-        double lon = MathOps::toRadians(_lon);
-        double lat = MathOps::toRadians(_lat);
-        const double cosLat = cos(lat);
-        x = cos(lon) * cosLat * _radius;
-        y = sin(lon) * cosLat * _radius;
-        z = sin(lat) * _radius;
-    }
-    else {
-        const double cosLat = cos(_lat);
-        x = cos(_lon) * cosLat * _radius;
-        y = sin(_lon) * cosLat * _radius;
-        z = sin(_lat) * _radius;
-    }
-    
-}
+//Vector::Vector( const Vector& _parent) {
+//    x = _parent.x;
+//    y = _parent.y;
+//    z = _parent.z;
+////    w = _parent.w;
+//}
 
 Vector::~Vector() {
 }
+
+//Vector& Vector::operator=(const Vector& _parent) {
+//    if (this != & _parent){
+//        x = _parent.x;
+//        y = _parent.y;
+//        z = _parent.z;
+////        w = _parent.w;
+//    }
+//    return *this;
+//}
 
 Vector Vector::operator+ (const Vector& _vec) const {
     Vector rta;
@@ -155,24 +153,4 @@ double Vector::dot(const Vector& _vec) const {
 
 double Vector::magnitud() const {
     return sqrt(x*x + y*y + z*z);
-}
-
-double Vector::getLongitude() const {
-    return MathOps::toDegrees(getLongitudeRadians());
-}
-
-double Vector::getLongitudeRadians() const {
-    return atan2(y, x);
-}
-
-double Vector::getLatitude() const {
-    return MathOps::toDegrees(getLatitudeRadians());
-}
-
-double Vector::getLatitudeRadians() const {
-    return atan2(z, sqrt(x*x + y*y));
-}
-
-double Vector::getRadius() const {
-    return magnitud();
 }

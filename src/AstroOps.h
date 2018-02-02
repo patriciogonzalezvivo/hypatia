@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "EcPoint.h"
 #include "EqPoint.h"
 
 class AstroOps {
@@ -26,10 +27,10 @@ public:
     static void heliocentricToGeocentric( Observer &_obs,
                                             double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad); // OUT
     
-    static Vector heliocentricToGeocentric( Observer &_obs, const Vector &_heliocentric );
+    static EcPoint heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric );
 
     // GeoCentric
-    static EqPoint eclipticToEquatorial ( Observer &_obs, const Vector &_ecliptic );
+    static EqPoint eclipticToEquatorial ( Observer &_obs, const EcPoint &_ecliptic );
     static void eclipticToEquatorial( Observer &_obs,
                                         double _lng, double _lat,       // IN
                                         double &_ra, double &_dec);     // OUT

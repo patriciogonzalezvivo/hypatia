@@ -581,10 +581,10 @@ Star::Star( int _id ) : m_mag(0.0), m_id(-1) {
 
     m_id = _id;
     m_mag = sts_data[_id][0];
-    setEqAngles(sts_data[_id][1], sts_data[_id][2]);
+    setEquatorialAngles(sts_data[_id][1], sts_data[_id][2]);
 }
 
 Star::Star( double _ra, double _dec, double _mag ) : m_mag(_mag), m_id(-1) {
-    setEqAngles(_ra, _dec);
+    setEquatorialAngles(_ra, _dec);
 }
 

@@ -338,7 +338,8 @@ void Luna::compute( Observer &_obs ) {
 
                 tptr++;
             }
-            m_gEclipticLat = MathOps::toRadians(rval * 1.e-6);
+            
+            m_geocentric.setLatitude(rval * 1.e-6, false);
         }
 
         {
@@ -409,11 +410,8 @@ void Luna::compute( Observer &_obs ) {
                   1962. * sin( m_f.Lp - m_f.F ) +
                   318.  * sin( m_f.A2 );
 
-            m_gEclipticLon = (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6;
-            // reduce signed angle to ( 0 < m_gEclipticLon < 360 )
-            m_gEclipticLon = MathOps::toRadians(MathOps::rangeDegrees( m_gEclipticLon ));
-            m_gEclipticRad = 385000.56 + sr / 1000.; // Km
-            m_gEclipticRad *= AstroOps::KM_TO_AU; // AU
+            m_geocentric.setLongitude(MathOps::rangeDegrees( (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6 ), false);
+            m_geocentric.setRadius( (385000.56 + sr / 1000.) * AstroOps::KM_TO_AU );
         }
         
         computeElipcticAngles( _obs );
@@ -423,13 +421,11 @@ void Luna::compute( Observer &_obs ) {
         Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH);
         
         // Get HelioCentric values
-        Vector Sun2Earth = Vector(sun_eclipticLon, sun_eclipticLat, sun_radius, true);
-        Vector Earth2Moon = Vector(m_gEclipticLon, m_gEclipticLat, m_gEclipticRad, true);
+        Vector Sun2Earth = EcPoint(sun_eclipticLon, sun_eclipticLat, sun_radius, true).getEclipticVector();
+        Vector Earth2Moon = m_geocentric.getEclipticVector();
         Vector Sun2Moon = Sun2Earth + Earth2Moon;
         
-        m_hEclipticLon = Sun2Moon.getLongitudeRadians();
-        m_hEclipticLat = Sun2Moon.getLatitudeRadians();
-        m_hEclipticRad = Sun2Moon.getRadius();
+        m_heliocentric = EcPoint(Sun2Moon);
         
         // Distance toSun from the Earth
         sun_eclipticLon += MathOps::HD_PI;
@@ -440,7 +436,7 @@ void Luna::compute( Observer &_obs ) {
         AstroOps::equatorialToHorizontal( _obs, sun_ra, sun_dec, sun_alt, sun_az );
         
         // Compute moon age
-        double moonAge = MathOps::rangeRadians( MathOps::TAU - (sun_eclipticLon - m_gEclipticLon) );
+        double moonAge = MathOps::rangeRadians( MathOps::TAU - (sun_eclipticLon - m_geocentric.getLongitudeRadians()) );
 
         // convert radians to Synodic day
         m_age = SYNODIC_MONTH * (moonAge / MathOps::TAU);
