@@ -6,25 +6,8 @@
 Vector::Vector() : x(0.0), y(0.0), z(0.0) {
 }
 
-//Vector::Vector( const Vector& _parent) {
-//    x = _parent.x;
-//    y = _parent.y;
-//    z = _parent.z;
-////    w = _parent.w;
-//}
-
 Vector::~Vector() {
 }
-
-//Vector& Vector::operator=(const Vector& _parent) {
-//    if (this != & _parent){
-//        x = _parent.x;
-//        y = _parent.y;
-//        z = _parent.z;
-////        w = _parent.w;
-//    }
-//    return *this;
-//}
 
 Vector Vector::operator+ (const Vector& _vec) const {
     Vector rta;

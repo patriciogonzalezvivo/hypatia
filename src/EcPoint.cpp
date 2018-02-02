@@ -13,11 +13,19 @@ EcPoint::EcPoint(const Vector& _parent) {
 
 EcPoint::EcPoint(double _lng, double _lat, double _radius, bool _radiant) {
     setLongitude(_lng, _radiant);
-    setLatitude(_lng, _radiant);
+    setLatitude(_lat, _radiant);
     setRadius(_radius);
 }
 
 EcPoint::~EcPoint() {
+}
+
+EcPoint& EcPoint::operator= (const Vector& _vec) {
+    m_lng = atan2(_vec.y, _vec.x);
+    m_lat = atan2(_vec.z, sqrt(_vec.x * _vec.x + _vec.y * _vec.y));
+    m_radius = _vec.magnitud();
+    
+    return *this;
 }
 
 void EcPoint::setLongitude( double _lng, bool _radians ) {

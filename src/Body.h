@@ -28,8 +28,11 @@ public:
     virtual Vector  getHeliocentricVector() const { return m_heliocentric.getEclipticVector(); }
 
     // Geocentric
-    virtual EcPoint getGeocentricEcliptic() const { return m_heliocentric; }
+    virtual EcPoint getGeocentricEcliptic() const { return m_geocentric; }
     virtual Vector  getGeocentricVector() const { return m_geocentric.getEclipticVector(); }
+    
+    virtual Vector  getEquatorialVector() const { return EqPoint::getEquatorialVector() * m_geocentric.getRadius(); }
+    virtual Vector  getHorizontalVector() const { return HorPoint::getHorizontalVector() * m_geocentric.getRadius(); };
     
     // Calculate the data for a given planet, jd, and location
     // This function must be called (directly or via c'tor) before calling
@@ -39,7 +42,6 @@ public:
     
 protected:
     virtual void computeElipcticAngles( Observer& _obs );
-    Vector  m_heliocentricLoc;
 
     double  m_jcentury;
     EcPoint m_heliocentric;

@@ -275,6 +275,7 @@ void Luna::compute( Observer &_obs ) {
         m_f.A3 = MathOps::toRadians( MathOps::rangeDegrees( 313.45 + 481266.484 * m_jcentury ));
         m_f.T  = MathOps::toRadians( MathOps::rangeDegrees( m_jcentury ));
 
+        double lng, lat, rad = 0.0;
         {
             // Compute Ecliptic Geocentric Latitud
             const LunarTerms2* tptr = LunarLat;
@@ -338,12 +339,11 @@ void Luna::compute( Observer &_obs ) {
 
                 tptr++;
             }
-            
-            m_geocentric.setLatitude(rval * 1.e-6, false);
+            lat = MathOps::toRadians(rval * 1.e-6);
         }
 
         {
-            // Compute Ecliptic Geocentric Latitud
+            // Compute Ecliptic Geocentric Longitude and radius
             const LunarTerms1* tptr = LunarLonRad;
 
             double sl = 0., sr = 0.;
@@ -410,9 +410,14 @@ void Luna::compute( Observer &_obs ) {
                   1962. * sin( m_f.Lp - m_f.F ) +
                   318.  * sin( m_f.A2 );
 
-            m_geocentric.setLongitude(MathOps::rangeDegrees( (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6 ), false);
-            m_geocentric.setRadius( (385000.56 + sr / 1000.) * AstroOps::KM_TO_AU );
+            lng = (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6;
+            lng = MathOps::toRadians(MathOps::rangeDegrees( lng ));
+            
+            rad = 385000.56 + sr * 0.001; // Km
         }
+    
+        m_distance = rad;
+        m_geocentric = EcPoint(lng, lat, rad * AstroOps::KM_TO_AU , true);
         
         computeElipcticAngles( _obs );
 
@@ -421,11 +426,12 @@ void Luna::compute( Observer &_obs ) {
         Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH);
         
         // Get HelioCentric values
-        Vector Sun2Earth = EcPoint(sun_eclipticLon, sun_eclipticLat, sun_radius, true).getEclipticVector();
+        EcPoint toEarth = EcPoint(sun_eclipticLon, sun_eclipticLat, sun_radius, true);
+        Vector Sun2Earth = toEarth.getEclipticVector();
         Vector Earth2Moon = m_geocentric.getEclipticVector();
         Vector Sun2Moon = Sun2Earth + Earth2Moon;
         
-        m_heliocentric = EcPoint(Sun2Moon);
+        m_heliocentric = Sun2Moon;
         
         // Distance toSun from the Earth
         sun_eclipticLon += MathOps::HD_PI;

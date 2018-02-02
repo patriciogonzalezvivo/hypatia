@@ -13,6 +13,8 @@ public:
     EcPoint(double _lng, double _lat, double _radius = 1., bool _radiant = false);
     virtual ~EcPoint();
     
+    EcPoint& operator= (const Vector& _vec);
+    
     virtual void    setLongitude( double _lng, bool _radians = false );
     virtual void    setLatitude( double _lat, bool _radians = false );
     virtual void    setRadius( double _radius );

@@ -24,9 +24,9 @@ public:
     // Transform celestial coordinates ( https://en.wikipedia.org/wiki/Celestial_coordinate_system )
 
     // HelioCentric (Ecliptic)
-    static void heliocentricToGeocentric( Observer &_obs,
-                                            double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad); // OUT
-    
+//    static void heliocentricToGeocentric( Observer &_obs,
+//                                            double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad); // OUT
+//    
     static EcPoint heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric );
 
     // GeoCentric

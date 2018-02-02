@@ -38,6 +38,9 @@ public:
     // Illuminated Fraction of the Moon's disk.
     virtual double getPhase();
 
+    // Distance to the earht in km
+    virtual double getDistance() const { return m_distance; }; 
+    
     // Phase Angle of the Moon's.
     virtual double getPhaseAngle();
     virtual double getPhaseAngleRadians();
@@ -51,7 +54,7 @@ public:
 
 private:
     LunarFundamentals m_f;      // our calculated fundmentals
-
-    double m_age, m_posAngle;
+    
+    double m_age, m_posAngle, m_distance;
 };
 

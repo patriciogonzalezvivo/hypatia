@@ -13,13 +13,13 @@ HorPoint::~HorPoint() {
 }
 
 void HorPoint::setHorizontalAngles( double _alt, double _az, bool _radians ) {
-    if (!_radians) {
-        m_alt = MathOps::toRadians( _alt );
-        m_az = MathOps::toRadians( _az );
-    }
-    else {
+    if (_radians) {
         m_alt = _alt;
         m_az = _az;
+    }
+    else {
+        m_alt = MathOps::toRadians( _alt );
+        m_az = MathOps::toRadians( _az );
     }
 }
 
@@ -32,5 +32,4 @@ Vector HorPoint::getHorizontalVector() const {
     v.z = sin(m_az);
     
     return v;
-    
 }

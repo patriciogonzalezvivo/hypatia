@@ -47,8 +47,9 @@ void Body::compute( Observer& _obs ) {
         if (LUNA == m_bodyId) {       /* not VSOP */   
             static Luna luna;
             luna.compute(_obs);
-            m_heliocentric = luna.getHeliocentricEcliptic();
             m_geocentric = luna.getGeocentricEcliptic();
+            m_heliocentric = luna.getHeliocentricEcliptic();
+            
         }
         else if (PLUTO == m_bodyId) {    /* not VSOP */
             double hLng, hLat, rad = 0.0;

@@ -29,13 +29,13 @@ Vector EqPoint::getEquatorialVector() const {
 }
 
 void EqPoint::setEquatorialAngles( double _ra, double _dec, bool _radians ) {
-    if (!_radians) {
-        m_ra = MathOps::toRadians( _ra );
-        m_dec = MathOps::toRadians( _dec );
-    }
-    else {
+    if (_radians) {
         m_ra = _ra;
         m_dec = _dec;
+    }
+    else {
+        m_ra = MathOps::toRadians( _ra );
+        m_dec = MathOps::toRadians( _dec );
     }
     
     m_az = m_alt = 0.0;
