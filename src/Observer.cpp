@@ -10,18 +10,23 @@
 #include <string.h>
 #include <iostream>
 
-Observer::Observer( double _lng_deg, double _lat_deg, unsigned long _sec, BodyId _body ) : m_longitude(MathOps::toRadians(_lng_deg)), m_latitude(MathOps::toRadians(_lat_deg)), m_sec(_sec), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_body(_body), m_change(true) {
+Observer::Observer() : m_sec(0.0), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_change(true) {
 }
 
-// set: lat passed in DEGREES
-void Observer::setLatitude( double _deg ) {
-    m_latitude = MathOps::toRadians(_deg);
-    m_change = true;
+Observer::Observer(const GeoPoint& _location, unsigned long _sec) :  m_sec(_sec), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_change(true) {
+    m_location = _location;
 }
 
-// set: lon passed in DEGREES
-void Observer::setLongitude( double _deg ) {
-    m_longitude = MathOps::toRadians(_deg);
+Observer::Observer( double _lng_deg, double _lat_deg, unsigned long _sec ) : m_sec(_sec), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_change(true) {
+    m_location = GeoPoint(_lng_deg, _lat_deg);
+}
+
+Observer::~Observer() {
+}
+
+
+void Observer::setLocation(const GeoPoint& _location) {
+    m_location = _location;
     m_change = true;
 }
 
@@ -35,35 +40,16 @@ void Observer::setTime( unsigned long _sec ) {
 
 void Observer::setJuliaDay( double _jd ) {
     m_jd = _jd;
-    m_jcentury = TimeOps::toMillenia(m_jd);
+    m_jcentury = TimeOps::toCenturies(m_jd);
     m_obliquity = AstroOps::meanObliquity(m_jcentury);
-    m_lst = TimeOps::localSiderealTime(m_jd, MathOps::toDegrees(m_longitude));
+    m_lst = TimeOps::localSiderealTime(m_jd, m_location.getLongitude());
     
     double pLng, pLat, pRad = 0.0;
-    Vsop::calcAllLocs(pLng, pLat, pRad, m_jcentury, m_body);
+    Vsop::calcAllLocs(pLng, pLat, pRad, m_jcentury, m_location.getBody());
     m_heliocentricLoc = EcPoint(pLng, pLat, pRad, true).getEclipticVector();
     
     //std::cout << "Observation data UPDATED" << std::endl;
     m_change = false;
-}
-
-double Observer::getLongitudeRadians() {
-    if (m_change)
-        update();
-    return m_longitude;
-}
-
-double Observer::getLongitude() {
-    return MathOps::toDegrees( getLongitudeRadians() );
-}
-double Observer::getLatitudeRadians() {
-    if (m_change)
-        update();
-    return m_latitude;
-}
-
-double Observer::getLatitude() {
-    return MathOps::toDegrees( getLatitudeRadians() );
 }
 
 unsigned long Observer::getTime() {

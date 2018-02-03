@@ -8,31 +8,23 @@
 
 #pragma once
 
-#include "Vector.h"
-
-enum BodyId {
-    NAB=-1, // NotABody
-    SUN=0,
-    MERCURY=1, VENUS=2, EARTH=3, MARS=4, JUPITER=5, SATURN=6, URANUS=7, NEPTUNE=8, PLUTO=9,
-    LUNA=10
-};
+#include "GeoPoint.h"
 
 // * * * * * Observer's Location Info * * * * *
 class Observer {
 public:
     // c'tor: lon & lat are passed in DEGREES
-    Observer(double _lng_deg = 0, double _lat_deg = 0, unsigned long _sec = 0, BodyId _body = EARTH);
+    Observer();
+    Observer(const GeoPoint& _location, unsigned long _sec = 0);
+    Observer(double _lng_deg, double _lat_deg, unsigned long _sec = 0);
+    virtual ~Observer();
     
-    void    setLatitude(double _deg);
-    void    setLongitude(double _deg);
+    void    setLocation(const GeoPoint& _location);
+    
     void    setTime(unsigned long _sec = 0);
     void    setJuliaDay(double _jd);
     
-    double  getLongitude();
-    double  getLongitudeRadians();
-    
-    double  getLatitude();
-    double  getLatitudeRadians();
+    GeoPoint getLocation() const { return m_location; };
     
     unsigned long  getTime();
     double  getJulianDate();
@@ -45,18 +37,14 @@ public:
     void    update();
     
 private:
-    Vector m_heliocentricLoc;
-    
-    double m_longitude;   // in radians, N positive
-    double m_latitude;    // in radians, E positive
+    Vector      m_heliocentricLoc;
+    GeoPoint    m_location;
     
     unsigned long m_sec;
     double m_jd;
     double m_jcentury;
     double m_obliquity;
     double m_lst;
-    
-    BodyId m_body;
     
     bool m_change;
 };

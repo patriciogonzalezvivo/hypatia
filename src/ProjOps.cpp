@@ -64,8 +64,8 @@ void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, 
     double f = 0.42;
     double sinel1 = 0.0;
     double cosel1 = 1.0;
-    double cosaz = cos(_az-MathOps::HD_PI);
-    double sinaz = sin(_az-MathOps::HD_PI);
+    double cosaz = cos(_az-MathOps::PI);
+    double sinaz = sin(_az-MathOps::PI);
     double sinel = sin(_alt);
     double cosel = cos(_alt);
     double k = 2.0/(1.0 + sinel1 * sinel + cosel1 * cosel * cosaz);
@@ -79,8 +79,8 @@ void ProjOps::toStereo( const EqPoint &_eq, double _width ,double _height, doubl
 }
 
 void ProjOps::toLambert( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
-    double cosaz = cos(_az-MathOps::HD_PI);
-    double sinaz = sin(_az-MathOps::HD_PI);
+    double cosaz = cos(_az-MathOps::PI);
+    double sinaz = sin(_az-MathOps::PI);
     double sinel = sin(_alt);
     double cosel = cos(_alt);
     double k = sqrt( 2/(1.0 + cosel * cosaz));
@@ -98,7 +98,7 @@ void ProjOps::toEquirectangular( double _alt, double _az, double _width ,double 
     }
     _az = fmod(_az, MathOps::TAU);
     
-    _x = ( (_az-MathOps::HD_PI) / MathOps::PI_OVER_TWO ) * _height + _width*.5;
+    _x = ( (_az-MathOps::PI) / MathOps::PI_OVER_TWO ) * _height + _width*.5;
     _y = _height - (_alt / MathOps::PI_OVER_TWO) * _height;
 }
 

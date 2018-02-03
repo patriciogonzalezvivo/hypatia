@@ -5,7 +5,9 @@ struct TimeOps {
     static const double TROPICAL_YEAR;
     static const double JULIAN_EPOCH;
     static const double MJULIAN_EPOCH;
-    static const double TO_CENTURIES;
+    
+    static const double DAYS_PER_CENTURY;
+    static const double DAYS_PER_MILLENIUM;
     
     static const double HOURS_PER_DAY;
     static const int IHOURS_PER_DAY;
@@ -75,7 +77,10 @@ struct TimeOps {
 
     // given decimal day (e.g. 12hs -> .5) convert to hours, mins, and secs
     static void toHMS ( double _day, int &_hrs, int &_min, double &_sec );
+
+    // convert a JD to Julian Centuries referenced to epoch J2000
+    static double toCenturies ( double _jd ) { return ( _jd - J2000 ) / TimeOps::DAYS_PER_CENTURY; }
     
     // convert a JD to Julian Millenia referenced to epoch J2000
-    static double toMillenia ( double _jd ) { return ( _jd - J2000 ) / TO_CENTURIES; }
+    static double toMillenia ( double _jd ) { return ( _jd - J2000 ) / TimeOps::DAYS_PER_MILLENIUM; }
 };

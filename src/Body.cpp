@@ -69,7 +69,7 @@ void Body::compute( Observer& _obs ) {
              * To work around this, we add PI to the longitude (rotate 180 degrees)
              * and negate the latitude.
              */
-            m_geocentric = EcPoint(hLng + MathOps::HD_PI, hLat * -1., rad, true);
+            m_geocentric = EcPoint(hLng + MathOps::PI, hLat * -1., rad, true);
         }
         else {
             double hLng, hLat, rad = 0.0;

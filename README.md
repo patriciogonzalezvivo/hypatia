@@ -1,11 +1,15 @@
-Astronomy library mostly based on Mark Huss's and Bill Gray's code. Both authors have very technical and ambitious projects, for profesional astronomers. I took some artistic licenses and mostly:
+Astronomy library mostly based on [Jean Meeus](https://en.wikipedia.org/wiki/Jean_Meeus), [Mark Huss](http://mhuss.com/AstroLib), [Bill Gray](https://github.com/Bill-Gray ), [Stuart Lowe](http://mhuss.com/AstroLib) and [Brandon Rhodes](https://github.com/brandon-rhodes/pyephem) code. Each of this authors have very deep and technical knowladege and their project are substantially more ambitious. They are profesional astronomers doing cientific research. This project takes some artistic licenses.
 
-- simplify the C++ interfaces by making simpler and clear objects and classes. I took a lot from the style of Brandon Rhodes's [PyEphem project](https://github.com/brandon-rhodes/pyephem)
-- clean the dependences so the C++ code can be added to other C++ projects easily
-- add a Python package which makes a C++ wrapper usign swig
-- Add a basic Constellations and Stars database 
+Goals:
+
+- Simple interface using Object Oriented Paradigm ( my personal goal for this project is to understand astronomy )
+- Independent self suficiant code that can by use in different projects.
+- Build in basic/standar databases for constellations, stars and planets.
+- Make a Python package which wrapps the C++ code usign swig, to use it in a bigger set of projects
+- Use the Python for unit testing
 
 References:
+ - Jean Meeus: https://www.amazon.com/Astronomical-Algorithms-Jean-Meeus/dp/0943396611 
  - Bill Gray: https://github.com/Bill-Gray 
  - Mark Huss: http://mhuss.com/AstroLib
  - Stuart Lowe: https://github.com/slowe/VirtualSky

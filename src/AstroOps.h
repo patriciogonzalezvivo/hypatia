@@ -21,6 +21,11 @@ public:
     static const double AU_TO_M;
     static const double AU_PER_DAY;
     
+    static const double EARTH_POLAR_RADIUS_KM;
+    static const double EARTH_EQUATORIAL_RADIUS_KM;
+    
+    static const double SUN_DIAMETER_KM;
+    
     // Transform celestial coordinates ( https://en.wikipedia.org/wiki/Celestial_coordinate_system )
 
     // HelioCentric (Ecliptic)

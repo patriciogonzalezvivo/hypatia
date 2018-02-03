@@ -23,8 +23,10 @@
 //----------------------------------------------------------------------------
 
 const double Luna::SYNODIC_MONTH = 29.530588861;
+const double Luna::SYNODIC_WEEK = 29.530588861 * .25;
 const double Luna::PERIGEE_KM = 356355.0;
 const double Luna::APOGEE_KM = 406725.0;
+const double Luna::DIAMETER_KM = 3476.0;
 
 // terms for longitude & radius
 //
@@ -410,7 +412,7 @@ void Luna::compute( Observer &_obs ) {
                   1962. * sin( m_f.Lp - m_f.F ) +
                   318.  * sin( m_f.A2 );
 
-            lng = (m_f.Lp * 180. / MathOps::HD_PI) + sl * 1.e-6;
+            lng = (m_f.Lp * 180. / MathOps::PI) + sl * 1.e-6;
             lng = MathOps::toRadians(MathOps::rangeDegrees( lng ));
             
             rad = 385000.56 + sr * 0.001; // Km
@@ -434,7 +436,7 @@ void Luna::compute( Observer &_obs ) {
         m_heliocentric = Sun2Moon;
         
         // Distance toSun from the Earth
-        sun_eclipticLon += MathOps::HD_PI;
+        sun_eclipticLon += MathOps::PI;
         sun_eclipticLat *= -1.;    
         double sun_ra, sun_dec;
         AstroOps::eclipticToEquatorial( _obs, sun_eclipticLon, sun_eclipticLat, sun_ra, sun_dec );

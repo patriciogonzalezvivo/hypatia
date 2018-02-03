@@ -7,9 +7,10 @@
  \*****************************************************************************/
 
 #pragma once
+#undef PI
 
 struct MathOps {
-    static const double HD_PI;
+    static const double PI;
     static const double TAU;
     static const double PI_OVER_TWO;
     static const double TWO_OVER_PI;

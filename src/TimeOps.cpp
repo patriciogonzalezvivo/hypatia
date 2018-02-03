@@ -13,7 +13,8 @@ const double TimeOps::TROPICAL_YEAR = 365.242195601852;
 const double TimeOps::JULIAN_EPOCH = 2440587.5;
 const double TimeOps::MJULIAN_EPOCH = 40587.0;
 
-const double TimeOps::TO_CENTURIES = 36525.;
+const double TimeOps::DAYS_PER_CENTURY    = 36525.;
+const double TimeOps::DAYS_PER_MILLENIUM  = 365250.;
 
 const double TimeOps::J2000 = 2451545.0;
 
@@ -91,7 +92,7 @@ double TimeOps::greenwichMeanSiderealTime(unsigned long _sec){
  */
 double TimeOps::greenwichSiderealTime ( double jd ) {
     jd -= J2000;      /* set relative to 2000.0 */
-    double jdm = jd / TO_CENTURIES;  /* convert jd to julian centuries */
+    double jdm = jd / DAYS_PER_CENTURY;  /* convert jd to julian centuries */
     double intPart = floor( jd );
     jd -= intPart;
     double rval =   280.46061837 +
@@ -104,7 +105,7 @@ double TimeOps::greenwichSiderealTime ( double jd ) {
 
 double TimeOps::greenwichSiderealHour (double jd) {
     jd -= J2000;      /* set relative to 2000.0 */
-    double jdm = jd / TO_CENTURIES;  /* convert jd to julian centuries */
+    double jdm = jd / DAYS_PER_CENTURY;  /* convert jd to julian centuries */
     double intPart = floor( jd );
     jd -= intPart;
     double rval = 280.46061837 + 360.98564736629 * jd + .98564736629 * intPart + jdm * jdm * ( 3.87933e-4 - jdm / 38710000. );

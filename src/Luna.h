@@ -29,8 +29,10 @@ public:
     Luna();
 
     static const double SYNODIC_MONTH;
+    static const double SYNODIC_WEEK;
     static const double PERIGEE_KM;
     static const double APOGEE_KM;
+    static const double DIAMETER_KM;
 
     // Calculate age of the moon in days (0.0 to 29.53...)
     virtual double getAge() const { return m_age; };

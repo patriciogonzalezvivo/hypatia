@@ -3,6 +3,7 @@
 class Vector {
 public:
     Vector();
+    Vector(const double _x, const double _y, const double _z);
     virtual ~Vector();
 
     Vector operator+ (const Vector& _vec) const;

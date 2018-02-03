@@ -6,6 +6,9 @@
 Vector::Vector() : x(0.0), y(0.0), z(0.0) {
 }
 
+Vector::Vector(const double _x, const double _y, const double _z): x(_x), y(_y), z(_z) {
+}
+
 Vector::~Vector() {
 }
 

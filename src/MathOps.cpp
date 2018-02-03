@@ -4,10 +4,10 @@
 // In-class constants cannot be initialized in the class declaration. Sigh.
 //
 
-const double MathOps::HD_PI = 3.1415926535897932384626433832795028841971693993751058209749445923;
+const double MathOps::PI = 3.1415926535897932384626433832795028841971693993751058209749445923;
 const double MathOps::TAU = 6.2831853071795864769252867665590;
-const double MathOps::PI_OVER_TWO = HD_PI / 2.;
-const double MathOps::TWO_OVER_PI = 2. / HD_PI;
+const double MathOps::PI_OVER_TWO = MathOps::PI / 2.;
+const double MathOps::TWO_OVER_PI = 2. / MathOps::PI;
 
 const double MathOps::RADS_TO_DEGS = 5.7295779513082320877e1;
 const double MathOps::DEGS_TO_RADS = 1.7453292519943295769e-2;
@@ -21,7 +21,7 @@ const double MathOps::DEGS_TO_HRS = 1. / 15.;
 const double MathOps::RADS_TO_ARCS = 2.0626480624709635516e5;
 const double MathOps::ARCS_TO_RADS = 4.8481368110953599359e-6;
 
-const double MathOps::RADIAN = (180.0 / HD_PI);
+const double MathOps::RADIAN = (180.0 / MathOps::PI);
 
 void MathOps::toDMS ( double degrees, int &_deg, int &_min, double &_sec ) {
     // int totalSeconds = (int)round( rangeDegrees(_rad) * SECONDS_PER_DEGREE);

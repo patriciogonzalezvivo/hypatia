@@ -1,23 +1,36 @@
 #include "GeoPoint.h"
-#include "MathOps.h"
 
-GeoPoint::GeoPoint() : longitude(0.0), latitude(0.0), altitude(0.0) {
+#include <math.h>
+
+GeoPoint::GeoPoint() : m_lng(0.0), m_lat(0.0), m_alt(0.0), m_body(NAB) {
 }
 
-GeoPoint::GeoPoint( double _lng, double _lat, double _alt, bool _radians) {
+GeoPoint::GeoPoint( double _lng, double _lat, double _alt, bool _radians, BodyId _body) {
     if (_radians)
     {
-        longitude = _lng;
-        latitude = _lat;
+        m_lng = _lng;
+        m_lat = _lat;
     }
     else
     {
-        longitude = MathOps::toRadians( _lng );
-        latitude = MathOps::toRadians( _lat );
+        m_lng = MathOps::toRadians( _lng );
+        m_lat = MathOps::toRadians( _lat );
     }
-    altitude = _alt;
+    m_alt = _alt;
+    m_body = _body;
 }
 
 GeoPoint::~GeoPoint(){
+}
+
+Vector GeoPoint::getGeoVector() const {
+    const double cosLat = cos(m_lat);
+    const double radius = m_alt;
     
+    Vector v;
+    v.x = cos(m_lng) * cosLat * radius;
+    v.y = sin(m_lng) * cosLat * radius;
+    v.z = sin(m_lat) * radius;
+    
+    return v;
 }

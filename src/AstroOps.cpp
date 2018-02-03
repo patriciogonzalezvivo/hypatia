@@ -23,6 +23,11 @@ const double AstroOps::AU_TO_KM = 1.495978707e+8;
 const double AstroOps::AU_TO_M = (AstroOps::AU_TO_KM * 1000.);
 const double AstroOps::AU_PER_DAY = (86400. * AstroOps::SPEED_OF_LIGHT / AstroOps::AU_TO_KM);
 
+const double AstroOps::EARTH_POLAR_RADIUS_KM = 6356.76;
+const double AstroOps::EARTH_EQUATORIAL_RADIUS_KM = 6378.14;
+
+const double AstroOps::SUN_DIAMETER_KM = 1392000;
+
 /*----------------------------------------------------------------------------
  * The obliquity formula (and all the magic numbers below) come from Meeus,
  * Astro Algorithms p 135.
@@ -100,10 +105,10 @@ EqPoint AstroOps::eclipticToEquatorial ( Observer &_obs, const EcPoint &_eclipti
 
 void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec, double &_alt, double &_az ) {
     // compute hour angle in degrees
-    double ha = (MathOps::HD_PI*_obs.getLST()/12.) - _ra;
+    double ha = (MathOps::PI*_obs.getLST()/12.) - _ra;
     double sd = sin(_dec);
-    double sl = sin(_obs.getLatitudeRadians());
-    double cl = cos(_obs.getLatitudeRadians());
+    double sl = sin(_obs.getLocation().getLatitudeRadians());
+    double cl = cos(_obs.getLocation().getLatitudeRadians());
     // compute altitude in radians
     _alt = asin(sd*sl + cos(_dec)*cl*cos(ha));
     // compute azimuth in radians
@@ -111,17 +116,8 @@ void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec,
     _az = acos((sd - sin(_alt)*sl)/(cos(_alt)*cl));
     // choose hemisphere
     if (sin(ha) > 0.0)
-        _az = 2.*MathOps::HD_PI - _az;
+        _az = 2.*MathOps::PI - _az;
 }
-
-//void AstroOps::heliocentricToGeocentric ( Observer &_obs,
-//                                          double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad ) {
-//    // http://www.astrosurf.com/jephem/astro/ephemeris/et520transfo_en.htm
-//    EcPoint planet_eclipticLoc = AstroOps::heliocentricToGeocentric(_obs, EcPoint(_body_eclipticLon, _body_eclipticLat, _body_rad, true));
-//    _body_eclipticLon = planet_eclipticLoc.getLongitudeRadians();
-//    _body_eclipticLat = planet_eclipticLoc.getLatitudeRadians();
-//    _body_rad = planet_eclipticLoc.getRadius();
-//}
 
 EcPoint AstroOps::heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric ) {
     Vector heliocentric = _heliocentric.getEclipticVector();
@@ -134,9 +130,9 @@ EcPoint AstroOps::heliocentricToGeocentric( Observer &_obs, const EcPoint &_heli
  *   pole or zenith.
  */
 // https://github.com/brandon-rhodes/pyephem/blob/592ecff661adb9c5cbed7437a23d705555d7ce57/libastro-3.7.7/parallactic.c#L15
-double AstroOps::parallaticAngle(   Observer &_loc, 
+double AstroOps::parallaticAngle(   Observer &_obs,
                                     double _alt, double _dec ) {
-    double ca = sin(_loc.getLatitudeRadians());
+    double ca = sin(_obs.getLocation().getLatitudeRadians());
     double cb = sin(_dec);
     double sb = cos(_dec);
     double cc = sin(_alt);
