@@ -26,8 +26,16 @@ public:
     Vector& operator*= (double _d);
     Vector& operator/= (double _d);
     
-    double magnitud() const;
-    double dot(const Vector& _vec) const;
+    double * getPtr();
+    const double * getPtr() const;
+    
+    double& operator[]( int n );
+    double operator[]( int n ) const;
+    
+    double getMagnitud() const;
+    
+    virtual double  dot(const Vector& _vec) const;
+    virtual void    rotate(double _angle, int _axis, bool _radians = false);
 
     double x, y, z;
 };

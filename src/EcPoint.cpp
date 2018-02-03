@@ -8,7 +8,7 @@ EcPoint::EcPoint() : m_lng(0.0), m_lat(0.0), m_radius(0.0) {
 EcPoint::EcPoint(const Vector& _parent) {
     m_lng = atan2(_parent.y, _parent.x);
     m_lat = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
-    m_radius = _parent.magnitud();
+    m_radius = _parent.getMagnitud();
 }
 
 EcPoint::EcPoint(double _lng, double _lat, double _radius, bool _radiant) {
@@ -23,7 +23,7 @@ EcPoint::~EcPoint() {
 EcPoint& EcPoint::operator= (const Vector& _vec) {
     m_lng = atan2(_vec.y, _vec.x);
     m_lat = atan2(_vec.z, sqrt(_vec.x * _vec.x + _vec.y * _vec.y));
-    m_radius = _vec.magnitud();
+    m_radius = _vec.getMagnitud();
     
     return *this;
 }

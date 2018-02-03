@@ -3293,7 +3293,7 @@ double Vsop::calcLoc(double t,         // time in decimal centuries
         rval *= 1.e-8;  // rescale the term
         
         if (ECLIPTIC_LON == ltype) {  /* ensure 0 < rval < 2PI  */
-            rval = MathOps::rangeRadians( rval );
+            rval = MathOps::normalizeRadians( rval );
         }
     }
     return rval;

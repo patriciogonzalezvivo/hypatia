@@ -11,6 +11,9 @@
 %apply double &OUTPUT { int &_hrs, int &_min, double &_sec };
 %apply double &OUTPUT { int &_month, double &_day, int &_year };
 
+%apply int &OUTPUT { int& _day, int& _month, int& _year };
+%apply int &OUTPUT { int &_hrs, int &_min, int &_sec };
+
 namespace std {
     %template(VectorInt) vector<int>;
 };
@@ -23,6 +26,8 @@ namespace std {
     #include "src/Observer.h"
     #include "src/AstroOps.h"
     #include "src/EqPoint.h"
+    #include "src/EcPoint.h"
+    #include "src/HorPoint.h"
     #include "src/ProjOps.h"
     #include "src/Body.h"
     #include "src/Luna.h"
@@ -36,6 +41,8 @@ namespace std {
 %include "src/Observer.h"
 %include "src/AstroOps.h"
 %include "src/EqPoint.h"
+%include "src/EcPoint.h"
+%include "src/HorPoint.h"
 %include "src/ProjOps.h"
 %include "src/Body.h"
 %include "src/Luna.h"

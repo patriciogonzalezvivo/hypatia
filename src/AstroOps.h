@@ -26,12 +26,102 @@ public:
     
     static const double SUN_DIAMETER_KM;
     
+    enum SolExType { SPRING, SUMMER, AUTUMN, WINTER };
+    
+    /**
+     * meanSolarLongitude() - calculate the mean solar latitude on the given T
+     *                  (Meeus, Ch. 25)
+     *
+     * @param _jm - day to use in Julian Millenia
+     *
+     * @return - the longitude in radians
+     */
+    static double meanSolarLongitude( double _jm );
+    
+    /**
+     * solarLongitude() - calculate the solar latitude on the given JD
+     *                   (Meeus, Ch. 25)
+     *
+     * @param _jd - day to use
+     *
+     * @return - the longitude in radians
+     */
+    static double solarLongitude( double _jd );
+    
+    /**
+     * meanSolarAnomaly() - calculate the mean solar anomaly on the given T
+     *                     (Meeus, Ch. 25)
+     *
+     * @param _jc - day to use in Julian Centuries
+     *
+     * @return - the anomaly in radians
+     */
+    static double meanSolarAnomaly( double _jc );
+    
+    /**
+     * earthEccentricity() - calculate the eccentricity of the Earth's orbit on
+     *                       the given T (Meeus, Ch. 25)
+     *
+     * @param _jc - day to use in Julian Centuries
+     *
+     * @return - the eccentricity
+     */
+    static double earthEccentricity( double _jc );
+    
+    /**
+     * equationOfTime() - calculate the equation of time on the given JD
+     *                   (Meeus, Ch. 28)
+     *
+     * @param jd - day to use
+     *
+     * @return - the time in minutes between apparent time and mean time
+     */
+    static double equationOfTime( double _jd );
+    
+    /**
+     * equinoxSolstice() - calculate the time of the Equinoxes and Solstices
+     *
+     * @param _year - year to calculate quarter for
+     * @param _type - which solar quarter (SPRING, etc.)
+     * @param _local - true for local time, else UTC
+     *
+     * @return - the relatively exact jd time of the spec'd event
+     */
+    static double equinoxSolstice( int _year, SolExType _type, bool _local = false );
+    
+    /**
+     * meanObliquity()  - calculate the mean obliquity for a given jd
+     *
+     * @param jd - julian day (valid for years -8000 to +12000)
+     *
+     * @return Mean obliquity (epsilon sub 0) in radians.
+     *
+     * The obliquity formula (and all the magic numbers below) come from Meeus,
+     * Astro Algorithms.
+     *
+     */
+    static double meanObliquity( double _jcentury );
+    
+    /**
+     * nutation() - calculate delta phi and/or delta epsilon for the given jd
+     *
+     * @param - julian day
+     * @param _pDPhi - [out] nutation (delta phi) in arcseconds
+     * @param _pDEpsilon - [out] nutation (delta epsilon) in arcseconds
+     *
+     * The nutation formula (and all the magic numbers below) come from
+     * p 132-5, Meeus,  Astro Algorithms
+     *
+     * Either pointer can be NULL,  in which case that value is
+     * not computed.  (we added this because sometimes,  you want
+     * only pDPhi or pDEpsilon;  in such cases,  computing _both_
+     * is a waste of perfectly good CPU time)
+     */
+    static void   nutation( double _jd, double* _pDPhi, double* _pDEpsilon );
+    
     // Transform celestial coordinates ( https://en.wikipedia.org/wiki/Celestial_coordinate_system )
 
     // HelioCentric (Ecliptic)
-//    static void heliocentricToGeocentric( Observer &_obs,
-//                                            double &_body_eclipticLon, double &_body_eclipticLat, double &_body_rad); // OUT
-//    
     static EcPoint heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric );
 
     // GeoCentric
@@ -47,8 +137,6 @@ public:
 
     static double parallaticAngle(  Observer &_obs,
                                     double _alt, double _dec);
-
-    // Others
-    static double meanObliquity( double _jcentury );
+    
 };
 

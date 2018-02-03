@@ -40,7 +40,7 @@ void Observer::setTime( unsigned long _sec ) {
 
 void Observer::setJuliaDay( double _jd ) {
     m_jd = _jd;
-    m_jcentury = TimeOps::toCenturies(m_jd);
+    m_jcentury = TimeOps::toJulianCenturies(m_jd);
     m_obliquity = AstroOps::meanObliquity(m_jcentury);
     m_lst = TimeOps::localSiderealTime(m_jd, m_location.getLongitude());
     
