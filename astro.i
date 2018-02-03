@@ -3,6 +3,9 @@
 %include "typemaps.i"
 %include <std_vector.i>
 
+%ignore *::operator[];
+%ignore *::operator=;
+
 %apply double &OUTPUT { double &_alt, double &_az };
 %apply double &OUTPUT { double &_ra, double &_dec };
 %apply double &OUTPUT { double &_x, double &_y };
@@ -25,9 +28,9 @@ namespace std {
     #include "src/Vector.h"
     #include "src/Observer.h"
     #include "src/AstroOps.h"
+    #include "src/HorPoint.h"
     #include "src/EqPoint.h"
     #include "src/EcPoint.h"
-    #include "src/HorPoint.h"
     #include "src/ProjOps.h"
     #include "src/Body.h"
     #include "src/Luna.h"
@@ -40,9 +43,9 @@ namespace std {
 %include "src/Vector.h"
 %include "src/Observer.h"
 %include "src/AstroOps.h"
+%include "src/HorPoint.h"
 %include "src/EqPoint.h"
 %include "src/EcPoint.h"
-%include "src/HorPoint.h"
 %include "src/ProjOps.h"
 %include "src/Body.h"
 %include "src/Luna.h"

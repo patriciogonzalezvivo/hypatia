@@ -132,8 +132,10 @@ double AstroOps::equationOfTime( double jd ) {
     // eccentricity of earth's orbit
     double e = earthEccentricity(T);
     
-    double dPsiSec, dEpsSec;
-    nutation( jd, 0 /*&dPsiSec*/, &dEpsSec );
+    // double dPsiSec, dEpsSec;
+    // nutation( jd, 0 /*&dPsiSec*/, &dEpsSec );
+    double dEpsSec;
+    nutation( jd, 0 , &dEpsSec );
     double Eps = meanObliquity(jd) + MathOps::secToRadians(dEpsSec);
     
     double y = tan(Eps/2.);

@@ -46,8 +46,6 @@ struct TimeOps {
     static const double JD_DIFF;
     
     // These are initialized in DateOps.cpp
-    static const char* MONTH[];   // Month names in English
-    static const char* MONTH3[];  // 3-char abbeviated month names
     static const double DST_OFFSET;
     
     // date format specifier.
@@ -168,7 +166,6 @@ struct TimeOps {
      *
      */
     static void dayToHMS ( double _jd,  int& _hrs, int& _min, int& _sec );
-    static void dayToHMS ( double _day, int &_hrs, int &_min, double &_sec );
     
     /**
      * hourToDay(): convert hour to decimal day, e.g., 12h -> .5d
@@ -384,6 +381,8 @@ struct TimeOps {
     static long dstEnd(int year);
 
     /*** CALENDAR ******************************************************************/
+    static char* getMonth( int _month );
+    static char* getMonthAbbreviation( int _month );
     static int  getCalendarYear ( long jd, CalendarType calendar );
     static void getJulGregYearData ( int year, long& days, MonthDays& md, bool julian );
     static int  getCalendarData ( int year, YearEndDays& days, MonthDays& md, CalendarType calendar );

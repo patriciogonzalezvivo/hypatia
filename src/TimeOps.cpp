@@ -33,14 +33,22 @@ const double TimeOps::JD_DIFF = 0.5;
 
 const double TimeOps::DST_OFFSET = DAYS_PER_HOUR;
 
-const char* TimeOps::MONTH[] = { "", /* month 0 */
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+static char* MONTH[] = { (char*)"", /* month 0 */
+    (char*)"January", (char*)"February", (char*)"March", (char*)"April", (char*)"May", (char*)"June",
+    (char*)"July", (char*)"August", (char*)"September", (char*)"October", (char*)"November", (char*)"December"
 };
 
-const char* TimeOps::MONTH3[] = { "", /* month 0 */
-    "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"
+static char* MONTH3[] = { (char*)"", /* month 0 */
+    (char*)"Jan", (char*)"Feb", (char*)"Mar", (char*)"Apr", (char*)"May", (char*)"Jun", (char*)"Jul", (char*)"Aug", (char*)"Sep", (char*)"Oct", (char*)"Nov", (char*)"Dec"
 };
+
+char* TimeOps::getMonth( int _month ) {
+    return MONTH[_month];
+}
+
+char* TimeOps::getMonthAbbreviation( int _month ){
+    return MONTH3[_month];
+}
 
 /*----------------------------------------------------------------------------
  * greenwichSiderealTime (See p 84,  in Meeus)
@@ -100,8 +108,9 @@ int TimeOps::formatTime( FILE* fp, double dayFrac, bool doSecs ) {
     if (!fp)
         return 0;
     
-    int h, m, s, rv = 0;
-    dayToHMS(h, m, s, dayFrac);
+    int h = 0;
+    int m, s, rv = 0;
+    dayToHMS(dayFrac, h, m, s);
     
     if ( doSecs )
         fprintf( fp, "%02d:%02d:%02d", h, m, s );
@@ -188,13 +197,13 @@ void TimeOps::formatDateTime( char* clientBuf, double jd, DATE_FMT fmt ) {
             sprintf ( clientBuf, "%s %02d", MONTH3[m], d );
             break;
         case Y_M_D:
-            sprintf ( clientBuf, "%04d-%%02d-%02d", y, m, d );
+            sprintf ( clientBuf, "%04d-%02d-%02d", y, m, d );
             break;
         case M_D_Y:
             sprintf ( clientBuf, "%02d/%02d/%04d", m, d, y );
             break;
         case M_D:
-            sprintf ( clientBuf, "%%02d/%02d", m, d );
+            sprintf ( clientBuf, "%02d/%02d", m, d );
             break;
             // date + time
         case Y_MON_D_HM:
@@ -268,7 +277,7 @@ time_t TimeOps::dayToTime( double jd ) {
     t.tm_mon--;
     t.tm_year -= 1900;
     
-    dayToHMS( t.tm_hour, t.tm_min, t.tm_sec, jd);
+    dayToHMS(jd, t.tm_hour, t.tm_min, t.tm_sec);
     return mktime( &t );
 }
 
@@ -404,34 +413,6 @@ void TimeOps::dayToHMS( double jd, int& h, int& m, int& s) {
         s = int( (fd * TimeOps::SECONDS_PER_MINUTE) + MathOps::ROUND );
     }
 }
-
-void TimeOps::dayToHMS ( double _day, int &_hrs, int &_min, double &_sec ) {
-    _day -= (unsigned short) _day;
-    
-    double dtemp;
-    /* multiply reminder by 24 to get the hours */
-    dtemp = _day * 24.0;
-    _hrs = (unsigned short) dtemp;
-    
-    /* multiply remainder by 60 to get minutes */
-    dtemp = 60 * ( dtemp - _hrs );
-    _min = (unsigned short) dtemp;
-    
-    /* multiply remainder by 60 to get seconds */
-    _sec = 60 * ( dtemp - _min );
-    
-    /* catch any overflows */
-    if ( _sec > 59 ) {
-        _sec = 0;
-        _min ++;
-    }
-    if ( _min > 59)  {
-        _min = 0;
-        _hrs ++;
-    }
-}
-
-
 
 // Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
 unsigned long TimeOps::getCurrentMilliseconds() {

@@ -19,7 +19,7 @@ struct MathOps {
     
     static const double MINUTES_PER_DEGREE;
     static const double SECONDS_PER_DEGREE;
-    const static double RADS_PER_DEGREE;
+    static const double RADS_PER_DEGREE;
     
     static const double RADS_TO_DEGS;
     static const double DEGS_TO_RADS;
