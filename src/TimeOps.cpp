@@ -246,6 +246,29 @@ void TimeOps::formatDateTime( FILE* fp, double jd, DATE_FMT fmt ) {
 
 
 //----------------------------------------------------------------------------
+/*
+ * dmyToDay()
+ *
+ * Get calendar data for the current year,  including the JD of New Years
+ * Day for that year.  After that, add up the days in intervening months,
+ * plus the day of the month:
+ */
+long TimeOps::DMYtoJD( int day, int month, int year, CalendarType calendar ) {
+  long jd = 0;
+  MonthDays md;
+  YearEndDays yed;
+
+  if( 0 == TimeOps::getCalendarData( year, yed, md, calendar ) ) {
+    jd = yed[0];
+    for( int i=0; i<(month-1); i++ ) {
+      jd += md[i];
+    }
+    jd += long(day - 1);
+  }
+  return jd;
+}
+
+//----------------------------------------------------------------------------
 /**
  * timeToDay() - convert a struct tm to Julian Day
  */
