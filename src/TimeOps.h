@@ -21,6 +21,26 @@ enum CalendarType {
 #endif
 };
 
+// date format specifier.
+// examples provided are for J2000 (January 1, 2000 at noon)
+
+enum DATE_FMT {
+    Y_MON_D,      // 2000 Jan 01
+    MON_D_Y,      // Jan 01 2000
+    MON_D,        // Jan 01
+    Y_M_D,        // 2000-01-01
+    M_D_Y,        // 01/01/2000
+    M_D,          // 01/01
+    // Note: date only above, date + time below
+    //       The code depends on this separation.
+    Y_MON_D_HM,   // 2000 Jan 01 12:00
+    MON_D_Y_HM,   // Jan 01 2000 12:00
+    MON_D_HM,     // Jan 01 12:00
+    Y_M_D_HM,     // 2000-01-01 12:00
+    M_D_Y_HM,     // 01/01/2000 12:00
+    M_D_HM        // 01/01 12:00
+};
+
 struct TimeOps {
     static const double DAYS_PER_HOUR;
     static const double HOURS_PER_DAY;
@@ -48,26 +68,6 @@ struct TimeOps {
     // These are initialized in DateOps.cpp
     static const double DST_OFFSET;
     
-    // date format specifier.
-    // examples provided are for J2000 (January 1, 2000 at noon)
-    
-    enum DATE_FMT {
-        Y_MON_D,      // 2000 Jan 01
-        MON_D_Y,      // Jan 01 2000
-        MON_D,        // Jan 01
-        Y_M_D,        // 2000-01-01
-        M_D_Y,        // 01/01/2000
-        M_D,          // 01/01
-        // Note: date only above, date + time below
-        //       The code depends on this separation.
-        Y_MON_D_HM,   // 2000 Jan 01 12:00
-        MON_D_Y_HM,   // Jan 01 2000 12:00
-        MON_D_HM,     // Jan 01 12:00
-        Y_M_D_HM,     // 2000-01-01 12:00
-        M_D_Y_HM,     // 01/01/2000 12:00
-        M_D_HM        // 01/01 12:00
-    };
-    
     /*** TIME ******************************************************************/
     
     /**
@@ -78,7 +78,7 @@ struct TimeOps {
      *
      * @return Offset (-0.5 ... +0.5 )
      */
-    static double tzOffsetInDays(time_t tt);
+    static double tzOffsetInDays (time_t _tt);
     
     /**
      * tzOffsetInDays(): calculate time zone offset from Universal Time in days
@@ -88,9 +88,7 @@ struct TimeOps {
      *
      * @return Offset (-0.5 ... +0.5 )
      */
-    static double tzOffsetInDays(double jd) {
-        return tzOffsetInDays( dayToTime(jd) );
-    }
+    static double tzOffsetInDays (double _jd);
     
     /**
      * tzOffsetInDays(): calculate time zone offset from Universal Time
@@ -98,9 +96,7 @@ struct TimeOps {
      *
      * @return Offset (-0.5 ... +0.5 )
      */
-    static double tzOffsetInDays() {
-        return tzOffsetInDays( time(0) );
-    }
+    static double tzOffsetInDays ();
     
     /**
      * dstOffsetInDays(): calculate daylight savings time offset in days at
@@ -110,7 +106,7 @@ struct TimeOps {
      *
      * @return Offset ( 0 or 1/24 )
      */
-    static double dstOffsetInDays(time_t tt);
+    static double dstOffsetInDays ( time_t _tt );
     
     /**
      * dstOffsetInDays(): calculate daylight savings time offset in days at
@@ -120,18 +116,14 @@ struct TimeOps {
      *
      * @return Offset ( 0 or 1/24 )
      */
-    static double dstOffsetInDays(double jd) {
-        return dstOffsetInDays( dayToTime(jd) );
-    }
+    static double dstOffsetInDays ( double _jd );
     
     /**
      * dstOffsetInDays(): calculate current daylight savings time offset in days
      *
      * @return Offset ( 0 or 1/24 )
      */
-    static double dstOffsetInDays() {
-        return dstOffsetInDays( time(0) );
-    }
+    static double dstOffsetInDays ();
 
     /**
      * formatTime(): format a time into an HH:MM string
@@ -142,7 +134,17 @@ struct TimeOps {
      *
      * @return 1 if rounding wrapped to 00:00[:00], else 0
      */
-    static int formatTime( char* buf, double dayFrac, bool doSecs = false );
+    static int formatTime ( char* _buf, double _dayFrac, bool _doSecs = false );
+
+    /**
+     * formatTime(): format a time into an HH:MM string
+     *
+     * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
+     * @param doSecs - true to include seconds (HH:MM:SS)
+     *
+     * @return formated string
+     */
+    static char* formatTime ( double _dayFrac, bool _doSecs = false );
 
     /**
      * formatTime(): format a time into an HH:MM string, and write it to a FILE
@@ -153,7 +155,7 @@ struct TimeOps {
      *
      * @return 1 if rounding wrapped to 00:00[:00], else 0
      */
-    static int formatTime( FILE* fp, double dayFrac, bool doSecs = false );
+    static int formatTime ( FILE* _fp, double _dayFrac, bool _doSecs = false );
     
     /**
      * dayToHMS(): break the fractional part of a Julian day into hours, minutes,
@@ -174,7 +176,7 @@ struct TimeOps {
      *
      * @return day fraction
      */
-    static double hourToDay ( int _hrs ) { return (double)_hrs / HOURS_PER_DAY; }
+    static double hourToDay ( int _hrs );
     
     /**
      * formatDateTime(): format a JD into a text string
@@ -183,7 +185,17 @@ struct TimeOps {
      * @param jd  - the day to format
      * @param fmt - format type (see DateOps::DATE_FMT)
      */
-    static void formatDateTime( char* buf, double jd, DATE_FMT fmt );
+    static void  formatDateTime ( char* buf, double _jd, DATE_FMT _fmt );
+
+    /**
+     * formatDateTime(): format a JD into a text string
+     *
+     * @param jd  - the day to format
+     * @param fmt - format type (see DateOps::DATE_FMT)
+     *
+     * @return formatted string
+     */
+    static char* formatDateTime ( double _jd, DATE_FMT _fmt );
     
     /**
      * formatDateTime(): format a JD into a text string and write it to a FILE
@@ -192,7 +204,7 @@ struct TimeOps {
      * @param jd  - the day to format
      * @param fmt - format type (see DateOps::DATE_FMT)
      */
-    static void formatDateTime( FILE* fp, double jd, DATE_FMT fmt );
+    static void formatDateTime ( FILE* _fp, double _jd, DATE_FMT _fmt );
     
     /**
      * formatMS(): format a fractional minute into a text string (MM:SS.S)
@@ -200,7 +212,16 @@ struct TimeOps {
      * @param buf - where to put the formatted string
      * @param m  - the value (in minutes) to format
      */
-    static void formatMS( char* buf, double min );
+    static void  formatMS( char* _buf, double _min );
+
+    /**
+     * formatMS(): format a fractional minute into a text string (MM:SS.S)
+     *
+     * @param m  - the value (in minutes) to format
+     *
+     * @return ormatted string
+     */
+    static char* formatMS( double _min );
     
     /**
      * formatMS(): format a fractional minute into a text string (MM:SS.S) and
@@ -209,7 +230,7 @@ struct TimeOps {
      * @param fp - where to write the formatted string
      * @param m  - the value (in minutes) to format
      */
-    static void formatMS( FILE* fp, double min );
+    static void formatMS( FILE* _fp, double _min );
     
     /**
      * timeToLDay(): convert a "local" time_t to Julian Day
@@ -218,7 +239,7 @@ struct TimeOps {
      *
      * @return Julian Day
      */
-    static double timeToLDay( time_t time );
+    static double timeToLDay( time_t _time );
     
     /**
      * timeToUDay(): convert UTC time_t to Julian Day
@@ -227,7 +248,7 @@ struct TimeOps {
      *
      * @return Julian Day
      */
-    static double timeToUDay( time_t time );
+    static double timeToUDay( time_t _time );
     
     /**
      * dayToTime(): convert a JD to "local" time_t (including DST)
@@ -236,7 +257,7 @@ struct TimeOps {
      *
      * @return equivalent time_t
      */
-    static time_t dayToTime( double jd );
+    static time_t dayToTime( double _jd );
     
     /**
      * now(): Determine the Julian Day value at the present moment
@@ -245,9 +266,7 @@ struct TimeOps {
      *
      * @return The Julian Day value
      */
-    static double now(bool local = false) {
-        return local ? timeToLDay( time(0) ) : timeToUDay( time(0) );
-    }
+    static double now(bool _local = false);
     
     /**
      * greenwichSiderealTime(): convert a "local" time_t to GST
@@ -256,17 +275,20 @@ struct TimeOps {
      *
      * @return apparent Greenwich sidereal time (in Radians) for the given jd
      */
-    static double greenwichSiderealTime( double _jd );
+    static double greenwichSiderealTime ( double _jd );
     
     // to Greenwich sidereal time in a range of 0~24hs
     static double greenwichSiderealHour ( double _jd );
-    
+
+    // To Local Sidereal Time http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
+    static double localSiderealTime ( double _jd, double _lng_deg );
+
     // Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)
     static unsigned long getCurrentSeconds ();
     
     // Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
     static unsigned long getCurrentMilliseconds ();
-    
+
     // to Julian Dates (_milli == 0 means NOW)
     static double julianDates ( unsigned long _sec = 0.0 );
     
@@ -276,9 +298,6 @@ struct TimeOps {
     static double jordanCosmologicalTheory ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
 
     static double greenwichMeanSiderealTime ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
-    
-    // To Local Sidereal Time http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
-    static double localSiderealTime ( double _jd, double _lng_deg );
     
     /*** DATE ******************************************************************/
     
@@ -290,7 +309,7 @@ struct TimeOps {
      *
      * @return centuries since J2000 (12 noon on January 1, 2000)
      */
-    static double toJulianCenturies ( double _jd ) { return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_CENTURY; }
+    static double toJulianCenturies ( double _jd );
     
     /**
      * toJulianMillenia(): convert a JD to Julian Millenia referenced to epoch
@@ -300,7 +319,7 @@ struct TimeOps {
      *
      * @return millenia since J2000 (12 noon on January 1, 2000)
      */
-    static double toJulianMillenia ( double _jd ) { return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_MILLENIUM; }
+    static double toJulianMillenia ( double _jd );
     
     /**
      * dmyToDay(): convert a day/month/year to a long Julian Day
@@ -312,7 +331,7 @@ struct TimeOps {
      *
      * @return equivalent Julian Day rounded to a long
      */
-    static long DMYtoJD(int day, int month, int year, CalendarType calendar = T_GREGORIAN );
+    static long DMYtoJD ( int _day, int _month, int _year, CalendarType _calendar = T_GREGORIAN );
 
     // Julian Date to Modify Julian Date (http://tycho.usno.navy.mil/mjd.html)
     static double JDtoMJD ( double _jd );
@@ -321,25 +340,7 @@ struct TimeOps {
      * on (0=sunday).
      * return 0 if ok else -1 if can't figure it out.
      */
-    static int MJDtoDOW (double _mjd);
-
-    /* given the Julian day return the calendar date in months,  days, and years
-     *  https://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
-     */
-    static void JDtoMDY ( double _jd, int &_month, double &_day, int &_year);
-
-    /* given the modified Julian date (number of days elapsed since 1900 jan 0.5,),
-     * mj, return the calendar date in months, *mn, days, *dy, and years, *yr.
-     */
-    static void MJDtoMDY ( double _mjd, int &_month, double &_day, int &_year );
-    
-    /* given a date in months, mn, days, dy, years, yr,
-     * return the modified Julian date (number of days elapsed since 1900 jan 0.5)
-     */
-    static double MDYtoMJD (int _month, double _day, int _year);
-
-    /* given a mjd, return the year as a double. */
-    static double MJDtoYears (double _mjd);
+    static int MJDtoDOW ( double _mjd );
     
     // Modified Julian Dates to Jordan Cosmological Theory
     static double MJDtoJCT ( double _mjd );
@@ -356,8 +357,8 @@ struct TimeOps {
      * @param year& - where to put the year
      * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
      */
-    static void JDtoDMY( long jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
-    static void JDtoDMY( double jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
+    static void JDtoDMY ( long _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
+    static void JDtoDMY ( double _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
     
     //--------------------------------------------------------------------------
     /**
@@ -368,7 +369,7 @@ struct TimeOps {
      *
      * @return The Julian Day value
      */
-    static long dstStart(int year);
+    static long dstStart ( int _year );
     
     /**
      * dstEnd(): Determine the Julian Day in the specified year where Daylight
@@ -378,15 +379,14 @@ struct TimeOps {
      *
      * @return The Julian Day value
      */
-    static long dstEnd(int year);
+    static long dstEnd ( int _year );
 
     /*** CALENDAR ******************************************************************/
-    static char* getMonth( int _month );
-    static char* getMonthAbbreviation( int _month );
-    static int  getCalendarYear ( long jd, CalendarType calendar );
-    static void getJulGregYearData ( int year, long& days, MonthDays& md, bool julian );
-    static int  getCalendarData ( int year, YearEndDays& days, MonthDays& md, CalendarType calendar );
-    
+    static char* getMonth ( int _month );
+    static char* getMonthAbbreviation ( int _month );
+    static int   getCalendarYear ( long _jd, CalendarType _calendar );
+    static void  getJulGregYearData ( int _year, long& _days, MonthDays& _md, bool _julian );
+    static int   getCalendarData ( int _year, YearEndDays& _days, MonthDays& _md, CalendarType _calendar );
     
 private:
     enum CalendarEpoch {
@@ -408,24 +408,24 @@ private:
         UPPER_PERSIAN_YEAR = 2327
     };
     
-    static int mod( int x, int y );
+    static int mod ( int x, int y );
     
     // Islamic calendar
-    static void getIslamicYearData( int year, int& days, MonthDays& md );
+    static void getIslamicYearData ( int year, int& days, MonthDays& md );
     
     // Hebrew calendar
-    static int lunationsToTishri1( int year );
-    static void lunationsToDaysAndHalakim( int lunations, int& days, int& halakim);
-    static void findTishri1( int year, int& days, int& halakim );
-    static void getHebrewYearData( int year, YearEndDays& days, MonthDays& md );
+    static int lunationsToTishri1 ( int year );
+    static void lunationsToDaysAndHalakim ( int lunations, int& days, int& halakim);
+    static void findTishri1 ( int year, int& days, int& halakim );
+    static void getHebrewYearData ( int year, YearEndDays& days, MonthDays& md );
     
     // French Revolutionary calendar
-    static int jdOfFrenchRevYear( int year );
-    static void getRevolutionaryYearData( int year, YearEndDays& days, MonthDays& md );
+    static int jdOfFrenchRevYear ( int year );
+    static void getRevolutionaryYearData ( int year, YearEndDays& days, MonthDays& md );
     
     // Persian (Jalaali) calendar
-    static int jalaliJd0( int jalaliYear );
-    static void getJalaliYearData( const int year, YearEndDays& days, MonthDays& md );
+    static int jalaliJd0 ( int jalaliYear );
+    static void getJalaliYearData ( const int year, YearEndDays& days, MonthDays& md );
     
 #endif  /* #if defined( CALENDARS_OF_THE_WORLD ) */
     

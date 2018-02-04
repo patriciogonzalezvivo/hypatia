@@ -96,6 +96,11 @@ int TimeOps::formatTime( char* buf, double dayFrac, bool doSecs ) {
     return rv;
 }
 
+char* TimeOps::formatTime ( double dayFrac, bool doSecs ) {
+    char *buf = new char[8];
+    formatTime( buf, dayFrac, doSecs );
+    return buf;
+}
 
 /**
  * formatTime(): format a time into an HH:MM string, and write it to a FILE
@@ -130,6 +135,12 @@ int TimeOps::formatTime( FILE* fp, double dayFrac, bool doSecs ) {
 void TimeOps::formatMS( char* buf, double min ) {
     sprintf( buf, "%02d:%02.1f\n",
             int(min), (min - int(min)) * TimeOps::SECONDS_PER_MINUTE );
+}
+
+char* TimeOps::formatMS( double _min ) {
+    char *buf = new char[5];
+    formatMS( buf, _min );
+    return buf;
 }
 
 /**
@@ -231,6 +242,12 @@ void TimeOps::formatDateTime( char* clientBuf, double jd, DATE_FMT fmt ) {
     
 }
 
+char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
+    char *buf = new char[32];
+    formatDateTime( buf, _jd, _fmt );
+    return buf;
+}
+
 /**
  * formatDateTime(): format a JD into a text string and write it to a FILE
  *
@@ -244,6 +261,31 @@ void TimeOps::formatDateTime( FILE* fp, double jd, DATE_FMT fmt ) {
     fputs( buf, fp );
 }
 
+//----------------------------------------------------------------------------
+/**
+ * toJulianCenturies(): convert a JD to Julian Century referenced to epoch
+ *     J2000. This is the number of days since J2000 converted to centuries.
+ *
+ * @param Julian Day Number
+ *
+ * @return centuries since J2000 (12 noon on January 1, 2000)
+ */
+double TimeOps::toJulianCenturies ( double _jd ) { 
+    return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_CENTURY; 
+}
+
+//----------------------------------------------------------------------------
+/**
+ * toJulianMillenia(): convert a JD to Julian Millenia referenced to epoch
+ *     J2000. This is the number of days since J2000 converted to millenia.
+ *
+ * @param Julian Day Number
+ *
+ * @return millenia since J2000 (12 noon on January 1, 2000)
+ */
+double TimeOps::toJulianMillenia ( double _jd ) { 
+    return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_MILLENIUM; 
+}
 
 //----------------------------------------------------------------------------
 /*
@@ -302,6 +344,18 @@ time_t TimeOps::dayToTime( double jd ) {
     
     dayToHMS(jd, t.tm_hour, t.tm_min, t.tm_sec);
     return mktime( &t );
+}
+
+//----------------------------------------------------------------------------
+/**
+ * now(): Determine the Julian Day value at the present moment
+ *
+ * @param local - true for local time, false for UTC
+ *
+ * @return The Julian Day value
+ */
+double TimeOps::now(bool _local) {
+    return _local ? timeToLDay( time(0) ) : timeToUDay( time(0) );
 }
 
 //----------------------------------------------------------------------------
@@ -394,6 +448,28 @@ double TimeOps::tzOffsetInDays(time_t tt) {
     return hourToDay( localH - gmtH );  // local - GMT
 }
 
+/**
+ * tzOffsetInDays(): calculate time zone offset from Universal Time in days
+ *                   at spec'd date/time (includes DST)
+ *
+ * @param jd - day to do calculation for
+ *
+ * @return Offset (-0.5 ... +0.5 )
+ */
+double TimeOps::tzOffsetInDays(double jd) {
+    return tzOffsetInDays( dayToTime(jd) );
+}
+
+/**
+ * tzOffsetInDays(): calculate time zone offset from Universal Time
+ *                   in days using the current time (includes DST)
+ *
+ * @return Offset (-0.5 ... +0.5 )
+ */
+double TimeOps::tzOffsetInDays() {
+    return tzOffsetInDays( time(0) );
+}
+
 //----------------------------------------------------------------------------
 /**
  * dstOffsetInDays(): calculate daylight savings time offset in days at
@@ -402,9 +478,29 @@ double TimeOps::tzOffsetInDays(time_t tt) {
  * @return Offset ( 0 or 1/24 )
  */
 double TimeOps::dstOffsetInDays(time_t tt) {
-    
     struct tm* pt = localtime(&tt);
     return (pt->tm_isdst > 0) ? DST_OFFSET : 0.;
+}
+
+/**
+ * dstOffsetInDays(): calculate daylight savings time offset in days at
+ *                    the spec'd time
+ *
+ * @param jd - date to use
+ *
+ * @return Offset ( 0 or 1/24 )
+ */
+double TimeOps::dstOffsetInDays(double jd) {
+    return dstOffsetInDays( dayToTime(jd) );
+}
+
+/**
+ * dstOffsetInDays(): calculate current daylight savings time offset in days
+ *
+ * @return Offset ( 0 or 1/24 )
+ */
+double TimeOps::dstOffsetInDays() {
+    return dstOffsetInDays( time(0) );
 }
 
 //----------------------------------------------------------------------------
@@ -436,6 +532,20 @@ void TimeOps::dayToHMS( double jd, int& h, int& m, int& s) {
         s = int( (fd * TimeOps::SECONDS_PER_MINUTE) + MathOps::ROUND );
     }
 }
+
+//----------------------------------------------------------------------------
+/**
+ * hourToDay(): convert hour to decimal day, e.g., 12h -> .5d
+ *
+ * @param hour
+ *
+ * @return day fraction
+ */
+double TimeOps::hourToDay ( int _hrs ) { 
+    return (double)_hrs / HOURS_PER_DAY; 
+}
+
+//----------------------------------------------------------------------------
 
 // Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
 unsigned long TimeOps::getCurrentMilliseconds() {
@@ -519,166 +629,6 @@ double TimeOps::localSiderealTime (double _jd, double _lng_deg) {
         d += 1.;
     return 24.0*d;
 }
-
-/* given the modified Julian date (number of days elapsed since 1900 jan 0.5,),
- * mj, return the calendar date in months, *mn, days, *dy, and years, *yr.
- */
-void TimeOps::MJDtoMDY(double _mjd, int &_month, double &_day, int &_year) {
-    static double last_mj, last_dy;
-    static int last_mn, last_yr;
-    double d, f;
-    double i, a, b, ce, g;
-    
-    /* we get called with 0 quite a bit from unused epoch fields.
-     * 0 is noon the last day of 1899.
-     */
-    if (_mjd == 0.0) {
-        _month = 12;
-        _day = 31.5;
-        _year = 1899;
-        return;
-    }
-    
-    if (_mjd == last_mj) {
-        _month = last_mn;
-        _year = last_yr;
-        _day = last_dy;
-        return;
-    }
-    
-    d = _mjd + 0.5;
-    i = floor(d);
-    f = d-i;
-    if (f == 1) {
-        f = 0;
-        i += 1;
-    }
-    
-    if (i > -115860.0) {
-        a = floor((i/36524.25)+.99835726)+14;
-        i += 1 + a - floor(a/4.0);
-    }
-    
-    b = floor((i/365.25)+.802601);
-    ce = i - floor((365.25*b)+.750001)+416;
-    g = floor(ce/30.6001);
-    _month = (int)(g - 1);
-    _day = ce - floor(30.6001*g)+f;
-    _year = (int)(b + 1899);
-    
-    if (g > 13.5) {
-        _month = (int)(g - 13);
-    }
-    if (_month < 2.5) {
-        _year = (int)(b + 1900);
-    }
-    if (_year < 1) {
-        _year -= 1;
-    }
-    
-    last_mn = _month;
-    last_dy = _day;
-    last_yr = _year;
-    last_mj = _mjd;
-}
-
-/* given a date in months, mn, days, dy, years, yr,
- * return the modified Julian date (number of days elapsed since 1900 jan 0.5),
- * *mjd.
- */
-double TimeOps::MDYtoMJD (int mn, double dy, int yr) {
-    static double last_mjd, last_dy;
-    static int last_mn, last_yr;
-    int b, d, m, y;
-    long c;
-    double mjp;
-    
-    if (mn == last_mn && yr == last_yr && dy == last_dy) {
-        mjp = last_mjd;
-        return mjp;
-    }
-    
-    m = mn;
-    y = (yr < 0) ? yr + 1 : yr;
-    if (mn < 3) {
-        m += 12;
-        y -= 1;
-    }
-    
-    if (yr < 1582 || (yr == 1582 && (mn < 10 || (mn == 10 && dy < 15))))
-        b = 0;
-    else {
-        int a;
-        a = y/100;
-        b = 2 - a + a/4;
-    }
-    
-    if (y < 0)
-        c = (long)((365.25*y) - 0.75) - 694025L;
-    else
-        c = (long)(365.25*y) - 694025L;
-    
-    d = (int)(30.6001*(m+1));
-    
-    mjp = b + c + d + dy - 0.5;
-    
-    last_mn = mn;
-    last_dy = dy;
-    last_yr = yr;
-    last_mjd = mjp;
-    
-    return mjp;
-}
-
-/* given a mjd, return the year as a double. */
-double TimeOps::MJDtoYears (double _mjd) {
-    static double last_mj, last_yr;
-    int m, y;
-    double d;
-    double e0, e1;  /* mjd of start of this year, start of next year */
-    
-    if (_mjd == last_mj) {
-        return last_yr;
-    }
-    
-    MJDtoMDY(_mjd, m, d, y);
-    if (y == -1) {
-        y = -2;
-    }
-    e0 = MDYtoMJD (1, 1.0, y);
-    e1 = MDYtoMJD (1, 1.0, y+1);
-    
-    last_mj = _mjd;
-    last_yr = y + (_mjd - e0)/(e1 - e0);
-    return last_yr;
-}
-
-// https://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
-void TimeOps::JDtoMDY(double _jd, int &_month, double &_day, int &_year) {
-    double Q = _jd + 0.5;
-    int Z = int(Q);
-    int W = (Z - 1867216.25)/36524.25;
-    int X = W / 4;
-    int A = Z + 1 + W - X;
-    int B = A + 1524;
-    int C = (B - 122.1) / 365.25;
-    int D = 365.25 * C;
-    int E = (B - D) / 30.6001;
-    int F = 30.6001 * E;
-    
-    _day = B-D-F+(Q-Z);
-    _month = int(E-1)%12;
-    if (_month == 0) {
-        _month = 12;
-    }
-    if (_month < 3) {
-        _year = C-4715;
-    }
-    else {
-        _year = C-4716;
-    }
-}
-
 
 int TimeOps::MJDtoDOW (double _mjd) {
     /* cal_mjd() uses Gregorian dates on or after Oct 15, 1582.
@@ -913,9 +863,7 @@ long TimeOps::mod( long x, long y ) {
     return rval;
 }
 
-void TimeOps::getIslamicYearData( long year, long& daysInYear, MonthDays& md )
-// long *days, char *month_data)
-{
+void TimeOps::getIslamicYearData( long year, long& daysInYear, MonthDays& md ) {
     static const long THIRTY_ISLAMIC_YEARS = 10631L;
     
     static const int isIslamicLeapYear[30] = {

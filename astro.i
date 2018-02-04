@@ -12,9 +12,8 @@
 
 %apply double &OUTPUT { int &_deg, int &_min, double &_sec };
 %apply double &OUTPUT { int &_hrs, int &_min, double &_sec };
-%apply double &OUTPUT { int &_month, double &_day, int &_year };
 
-%apply int &OUTPUT { int& _day, int& _month, int& _year };
+%apply int &OUTPUT { int &_day, int &_month, int &_year };
 %apply int &OUTPUT { int &_hrs, int &_min, int &_sec };
 
 namespace std {
