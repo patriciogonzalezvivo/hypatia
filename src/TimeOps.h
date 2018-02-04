@@ -147,17 +147,6 @@ struct TimeOps {
     static char* formatTime ( double _dayFrac, bool _doSecs = false );
 
     /**
-     * formatTime(): format a time into an HH:MM string, and write it to a FILE
-     *
-     * @param fp - where to write the string
-     * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
-     * @param doSecs - true to include seconds (HH:MM:SS)
-     *
-     * @return 1 if rounding wrapped to 00:00[:00], else 0
-     */
-    static int formatTime ( FILE* _fp, double _dayFrac, bool _doSecs = false );
-    
-    /**
      * dayToHMS(): break the fractional part of a Julian day into hours, minutes,
      * and seconds
      *
@@ -167,7 +156,7 @@ struct TimeOps {
      * @param s - where to put the second
      *
      */
-    static void dayToHMS ( double _jd,  int& _hrs, int& _min, int& _sec );
+    static void toHMS ( double _jd,  int& _hrs, int& _min, int& _sec );
     
     /**
      * hourToDay(): convert hour to decimal day, e.g., 12h -> .5d
@@ -198,21 +187,12 @@ struct TimeOps {
     static char* formatDateTime ( double _jd, DATE_FMT _fmt );
     
     /**
-     * formatDateTime(): format a JD into a text string and write it to a FILE
-     *
-     * @param fp - where to write the formatted string
-     * @param jd  - the day to format
-     * @param fmt - format type (see DateOps::DATE_FMT)
-     */
-    static void formatDateTime ( FILE* _fp, double _jd, DATE_FMT _fmt );
-    
-    /**
      * formatMS(): format a fractional minute into a text string (MM:SS.S)
      *
      * @param buf - where to put the formatted string
      * @param m  - the value (in minutes) to format
      */
-    static void  formatMS( char* _buf, double _min );
+    static void formatMS( char* _buf, double _min );
 
     /**
      * formatMS(): format a fractional minute into a text string (MM:SS.S)
@@ -222,15 +202,6 @@ struct TimeOps {
      * @return ormatted string
      */
     static char* formatMS( double _min );
-    
-    /**
-     * formatMS(): format a fractional minute into a text string (MM:SS.S) and
-     *             write it the spec'd file.
-     *
-     * @param fp - where to write the formatted string
-     * @param m  - the value (in minutes) to format
-     */
-    static void formatMS( FILE* _fp, double _min );
     
     /**
      * timeToLDay(): convert a "local" time_t to Julian Day
@@ -257,7 +228,7 @@ struct TimeOps {
      *
      * @return equivalent time_t
      */
-    static time_t dayToTime( double _jd );
+    static time_t toTime( double _jd );
     
     /**
      * now(): Determine the Julian Day value at the present moment
@@ -269,35 +240,25 @@ struct TimeOps {
     static double now(bool _local = false);
     
     /**
-     * greenwichSiderealTime(): convert a "local" time_t to GST
+     * greenwichSiderealTime(): convert a "local" time_t to GST. See p 84,  in Meeus
      *
      * @param jd - julian day
      *
      * @return apparent Greenwich sidereal time (in Radians) for the given jd
      */
-    static double greenwichSiderealTime ( double _jd );
+    static double toGreenwichSiderealTime ( double _jd );
     
     // to Greenwich sidereal time in a range of 0~24hs
-    static double greenwichSiderealHour ( double _jd );
+    static double toGreenwichSiderealHour ( double _jd );
 
     // To Local Sidereal Time http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
-    static double localSiderealTime ( double _jd, double _lng_deg );
+    static double toLST ( double _jd, double _lng_deg );
 
     // Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)
     static unsigned long getCurrentSeconds ();
     
-    // Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
-    static unsigned long getCurrentMilliseconds ();
-
     // to Julian Dates (_milli == 0 means NOW)
     static double julianDates ( unsigned long _sec = 0.0 );
-    
-    // to Modified Julian Dates ( http://scienceworld.wolfram.com/astronomy/ModifiedJulianDate.html )
-    static double modifiedJulianDates ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
-    
-    static double jordanCosmologicalTheory ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
-
-    static double greenwichMeanSiderealTime ( unsigned long _sec = 0.0 ); // (_sec == 0 means NOW)
     
     /*** DATE ******************************************************************/
     
@@ -333,21 +294,6 @@ struct TimeOps {
      */
     static long DMYtoJD ( int _day, int _month, int _year, CalendarType _calendar = T_GREGORIAN );
 
-    // Julian Date to Modify Julian Date (http://tycho.usno.navy.mil/mjd.html)
-    static double JDtoMJD ( double _jd );
-
-     /* given an mjd, set *dow to 0..6 according to which day of the week it falls
-     * on (0=sunday).
-     * return 0 if ok else -1 if can't figure it out.
-     */
-    static int MJDtoDOW ( double _mjd );
-    
-    // Modified Julian Dates to Jordan Cosmological Theory
-    static double MJDtoJCT ( double _mjd );
-
-    // Modified Julian Dates to Greenwich Mean Sidereal Time ( https://www.cv.nrao.edu/~rfisher/Ephemerides/times.html )
-    static double MJDtoGMS ( double _mjd );
-    
     /**
      * dayToDmy(): convert a long Julian Day to day/month/year
      *
@@ -357,9 +303,9 @@ struct TimeOps {
      * @param year& - where to put the year
      * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
      */
-    static void JDtoDMY ( long _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
-    static void JDtoDMY ( double _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
-    
+    static void toDMY ( long _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
+    static void toDMY ( double _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
+    static void toYMD ( double _jd, int &_year, int &_month, double &_day );
     //--------------------------------------------------------------------------
     /**
      * dstStart(): Determine the Julian Day in the specified year where Daylight
@@ -380,6 +326,11 @@ struct TimeOps {
      * @return The Julian Day value
      */
     static long dstEnd ( int _year );
+
+    /*** CALENDAR ******************************************************************/
+
+    // Julian Date to Modify Julian Date (http://tycho.usno.navy.mil/mjd.html)
+    static double toMJD ( double _jd );
 
     /*** CALENDAR ******************************************************************/
     static char* getMonth ( int _month );

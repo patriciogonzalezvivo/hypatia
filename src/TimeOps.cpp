@@ -59,7 +59,7 @@ char* TimeOps::getMonthAbbreviation( int _month ){
  *
  * See p 84,  in Meeus
  */
-double TimeOps::greenwichSiderealTime( double jd ) {
+double TimeOps::toGreenwichSiderealTime( double jd ) {
     jd -= TimeOps::J2000;
     double jdc = jd / TimeOps::DAYS_PER_CENTURY;      /* convert jd to julian centuries */
     double intPart = floor( jd );
@@ -85,7 +85,7 @@ int TimeOps::formatTime( char* buf, double dayFrac, bool doSecs ) {
         return 0;
     
     int h, m, s, rv = 0;
-    dayToHMS(dayFrac, h, m, s);
+    toHMS(dayFrac, h, m, s);
     
     if ( doSecs )
         sprintf( buf, "%02d:%02d:%02d", h, m, int(s) );
@@ -103,30 +103,6 @@ char* TimeOps::formatTime ( double dayFrac, bool doSecs ) {
 }
 
 /**
- * formatTime(): format a time into an HH:MM string, and write it to a FILE
- *
- * @param fp - where to write the string
- * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
- * @param doSecs - true to include seconds (HH:MM:SS)
- */
-int TimeOps::formatTime( FILE* fp, double dayFrac, bool doSecs ) {
-    if (!fp)
-        return 0;
-    
-    int h = 0;
-    int m, s, rv = 0;
-    dayToHMS(dayFrac, h, m, s);
-    
-    if ( doSecs )
-        fprintf( fp, "%02d:%02d:%02d", h, m, s );
-    else {
-        rv = roundToNearestMinute( h, m, s );
-        fprintf( fp, "%02d:%02d", h, m );
-    }
-    return rv;
-}
-
-/**
  * formatMS(): format a fractional minute into a text string (MM:SS.S)
  *
  * @param buf - where to put the formatted string
@@ -141,18 +117,6 @@ char* TimeOps::formatMS( double _min ) {
     char *buf = new char[5];
     formatMS( buf, _min );
     return buf;
-}
-
-/**
- * formatMS(): format a fractional minute into a text string (MM:SS.S) and
- *             write it the spec'd file.
- *
- * @param fp - where to write the formatted string
- * @param m  - the value (in minutes) to format
- */
-void TimeOps::formatMS( FILE* fp, double min ) {
-    fprintf( fp, "%02d:%02.1f\n",
-            int(min), (min - int(min)) * TimeOps::SECONDS_PER_MINUTE );
 }
 
 /**
@@ -194,7 +158,10 @@ void TimeOps::formatDateTime( char* clientBuf, double jd, DATE_FMT fmt ) {
     if ( fmt >= Y_MON_D_HM )
         jd += formatTime(tbuf, jd);
     
-    TimeOps::JDtoDMY( jd, d, m, y );
+    TimeOps::toDMY( jd, d, m, y );
+    // double day;
+    // TimeOps::toYMD( jd, y, m, day );
+    // d = floor(day);
     
     switch (fmt) {
             // date only
@@ -248,19 +215,6 @@ char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
     return buf;
 }
 
-/**
- * formatDateTime(): format a JD into a text string and write it to a FILE
- *
- * @param fp - where to write the formatted string
- * @param jd  - the day to format
- * @param fmt - format type (see DateOps::DATE_FMT)
- */
-void TimeOps::formatDateTime( FILE* fp, double jd, DATE_FMT fmt ) {
-    char buf[32];
-    formatDateTime( buf, jd, fmt );
-    fputs( buf, fp );
-}
-
 //----------------------------------------------------------------------------
 /**
  * toJulianCenturies(): convert a JD to Julian Century referenced to epoch
@@ -289,7 +243,7 @@ double TimeOps::toJulianMillenia ( double _jd ) {
 
 //----------------------------------------------------------------------------
 /*
- * dmyToDay()
+ * DMYtoJD()
  *
  * Get calendar data for the current year,  including the JD of New Years
  * Day for that year.  After that, add up the days in intervening months,
@@ -328,21 +282,21 @@ double TimeOps::timeToDay( struct tm* pt )
 
 //----------------------------------------------------------------------------
 /**
- * dayToTime(): convert a JD to "local" time_t
+ * toTime(): convert a JD to "local" time_t
  *
  * @param jd - jd to convert
  *
  * @return time_t
  */
-time_t TimeOps::dayToTime( double jd ) {
+time_t TimeOps::toTime( double jd ) {
     struct tm t;
     t.tm_isdst=-1;
     
-    TimeOps::JDtoDMY( long(floor(jd)), t.tm_mday, t.tm_mon, t.tm_year );
+    TimeOps::toDMY( long(floor(jd)), t.tm_mday, t.tm_mon, t.tm_year );
     t.tm_mon--;
     t.tm_year -= 1900;
     
-    dayToHMS(jd, t.tm_hour, t.tm_min, t.tm_sec);
+    toHMS(jd, t.tm_hour, t.tm_min, t.tm_sec);
     return mktime( &t );
 }
 
@@ -360,7 +314,7 @@ double TimeOps::now(bool _local) {
 
 //----------------------------------------------------------------------------
 /*
- * dayToDmy()
+ * toDMY()
  *
  * Estimates the year corresponding to an input JD and calls get_calendar_data();
  * for that year.  Occasionally,  it will find that the guesstimate was off;
@@ -371,10 +325,10 @@ double TimeOps::now(bool _local) {
  */
 
 // calendar: 0 = gregorian, 1 = julian
-void TimeOps::JDtoDMY( double jd, int& _day, int& _month, int& _year, CalendarType calendar ) {
-    return JDtoDMY( long(floor(jd)), _day, _month, _year, calendar);
+void TimeOps::toDMY( double jd, int& _day, int& _month, int& _year, CalendarType calendar ) {
+    return toDMY( long(floor(jd)), _day, _month, _year, calendar);
 }
-void TimeOps::JDtoDMY( long jd, int& day, int& month, int& year, CalendarType calendar ) {
+void TimeOps::toDMY( long jd, int& day, int& month, int& year, CalendarType calendar ) {
     day = -1;           /* to signal an error */
     
     YearEndDays yed;
@@ -457,7 +411,7 @@ double TimeOps::tzOffsetInDays(time_t tt) {
  * @return Offset (-0.5 ... +0.5 )
  */
 double TimeOps::tzOffsetInDays(double jd) {
-    return tzOffsetInDays( dayToTime(jd) );
+    return tzOffsetInDays( toTime(jd) );
 }
 
 /**
@@ -491,7 +445,7 @@ double TimeOps::dstOffsetInDays(time_t tt) {
  * @return Offset ( 0 or 1/24 )
  */
 double TimeOps::dstOffsetInDays(double jd) {
-    return dstOffsetInDays( dayToTime(jd) );
+    return dstOffsetInDays( toTime(jd) );
 }
 
 /**
@@ -514,7 +468,7 @@ double TimeOps::dstOffsetInDays() {
  * @param s - where to put the second
  *
  */
-void TimeOps::dayToHMS( double jd, int& h, int& m, int& s) {
+void TimeOps::toHMS( double jd, int& h, int& m, int& s) {
     
     if (jd < 0.)
         h = m = s = 0;
@@ -548,11 +502,6 @@ double TimeOps::hourToDay ( int _hrs ) {
 //----------------------------------------------------------------------------
 
 // Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
-unsigned long TimeOps::getCurrentMilliseconds() {
-    return std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
-}
-
-// Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
 unsigned long TimeOps::getCurrentSeconds() {
     return std::chrono::system_clock::now().time_since_epoch() / std::chrono::seconds(1);
 }
@@ -563,30 +512,12 @@ double TimeOps::julianDates (unsigned long _sec) {
     if (_sec == 0.0)
         _sec = getCurrentSeconds();
     
-    return _sec / SECONDS_PER_DAY + 2440587.5;
-}
-
-// Milliseconds elapsed since epoch
-// http://scienceworld.wolfram.com/astronomy/ModifiedJulianDate.html
-double TimeOps::modifiedJulianDates (unsigned long _sec) {
-    if (_sec == 0.0)
-        _sec = getCurrentSeconds();
-    return _sec / SECONDS_PER_DAY + 40587.0;
+    return _sec / SECONDS_PER_DAY + JULIAN_EPOCH;
 }
 
 // Julian Date to Modify Julian Date (http://tycho.usno.navy.mil/mjd.html)
-double TimeOps::JDtoMJD(double _jd) {
+double TimeOps::toMJD(double _jd) {
     return _jd - 2400000.5;
-}
-
-// Jordan Cosmological Theory??
-double TimeOps::MJDtoJCT (double _mjd) {
-    return (_mjd - 51544.5) / 36525.0;
-}
-
-
-double TimeOps::jordanCosmologicalTheory(unsigned long _sec) {
-    return MJDtoJCT(modifiedJulianDates(_sec));
 }
 
 double fract (double _x) {
@@ -597,22 +528,7 @@ double mod (double _x, double _r) {
     return _r * fract(_x/_r);
 }
 
-// Greenwich Mean Sidereal Time
-// https://www.cv.nrao.edu/~rfisher/Ephemerides/times.html
-double TimeOps::MJDtoGMS(double _mjd) {
-    double mjd0 = floor(_mjd);
-    double ut = SECONDS_PER_DAY * (_mjd-mjd0);
-    double t0 = MJDtoJCT(mjd0);
-    double t = MJDtoJCT(_mjd);
-    double gmst = 24110.54841 + 8640184.812866 * t0 + 1.0027379093 * ut + (0.093104 - (6.2e-6) * t) * t * t;
-    return MathOps::TAU / SECONDS_PER_DAY * mod(gmst, SECONDS_PER_DAY);
-}
-
-double TimeOps::greenwichMeanSiderealTime(unsigned long _sec){
-    return MJDtoGMS(modifiedJulianDates(_sec));
-}
-
-double TimeOps::greenwichSiderealHour (double jd) {
+double TimeOps::toGreenwichSiderealHour (double jd) {
     jd -= J2000;      /* set relative to 2000.0 */
     double jdm = jd / DAYS_PER_CENTURY;  /* convert jd to julian centuries */
     double intPart = floor( jd );
@@ -621,8 +537,8 @@ double TimeOps::greenwichSiderealHour (double jd) {
     return (fmod(rval,360.)/360.)*24.;
 }
 
-double TimeOps::localSiderealTime (double _jd, double _lng_deg) {
-    double gst24 = greenwichSiderealHour(_jd);
+double TimeOps::toLST (double _jd, double _lng_deg) {
+    double gst24 = toGreenwichSiderealHour(_jd);
     double d = (gst24 + _lng_deg/15.0)/24.0;
     d = d - floor(d);
     if (d < 0.0)
@@ -630,22 +546,30 @@ double TimeOps::localSiderealTime (double _jd, double _lng_deg) {
     return 24.0*d;
 }
 
-int TimeOps::MJDtoDOW (double _mjd) {
-    /* cal_mjd() uses Gregorian dates on or after Oct 15, 1582.
-     * (Pope Gregory XIII dropped 10 days, Oct 5..14, and improved the leap-
-     * year algorithm). however, Great Britian and the colonies did not
-     * adopt it until Sept 14, 1752 (they dropped 11 days, Sept 3-13,
-     * due to additional accumulated error). leap years before 1752 thus
-     * can not easily be accounted for from the cal_mjd() number...
-     */
-    if (_mjd < -53798.5) {
-        /* pre sept 14, 1752 too hard to correct |:-S */
-        return (-1);
+// https://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
+void TimeOps::toYMD(double _jd, int &_year, int &_month, double &_day) {
+    double Q = _jd + 0.5;
+    int Z = int(Q);
+    int W = (Z - 1867216.25)/36524.25;
+    int X = W / 4;
+    int A = Z + 1 + W - X;
+    int B = A + 1524;
+    int C = (B - 122.1) / 365.25;
+    int D = 365.25 * C;
+    int E = (B - D) / 30.6001;
+    int F = 30.6001 * E;
+    
+    _day = B-D-F+(Q-Z);
+    _month = int(E-1)%12;
+    if (_month == 0) {
+        _month = 12;
     }
-    int dow = ((long)floor(_mjd-.5) + 1) % 7;/* 1/1/1900 (mj 0.5) is a Monday*/
-    if (dow < 0)
-        dow += 7;
-    return dow;
+    if (_month < 3) {
+        _year = C-4715;
+    }
+    else {
+        _year = C-4716;
+    }
 }
 
 //----------------------------------------------------------------------------
