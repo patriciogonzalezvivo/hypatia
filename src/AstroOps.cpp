@@ -67,7 +67,7 @@ double AstroOps::meanSolarLongitude( double t ) {
  */
 double AstroOps::solarLongitude( double jd ) {
     
-    double T = TimeOps::toJulianCenturies(jd);
+    double T = TimeOps::toJC(jd);
     double lon = Vsop::calcLoc( T, SUN, Vsop::ECLIPTIC_LON );
     double rad = Vsop::calcLoc( T, SUN, Vsop::RADIUS );
     
@@ -121,7 +121,7 @@ double AstroOps::earthEccentricity( double _jc ) {
  */
 double AstroOps::equationOfTime( double jd ) {
     
-    double T = TimeOps::toJulianCenturies(jd);
+    double T = TimeOps::toJC(jd);
     
     // calculate mean solar longitude
     double Lm_r = meanSolarLongitude(T/10.); // Julian Millenia
@@ -243,7 +243,7 @@ double AstroOps::equinoxSolstice( int year, SolExType type, bool local ) {
     // refine mean value
     //
     enum { A, B, C };   // to make the terms below like Meeus'
-    double T = TimeOps::toJulianCenturies(jd);
+    double T = TimeOps::toJC(jd);
     double S = 0.;
     
     for ( int i = 0; i < N_S_TERMS; i++ ) {
@@ -410,7 +410,7 @@ void AstroOps::nutation( double jd, double* pDPhi, double* pDEpsilon ) {
     
     double terms[5];
     
-    double t  = TimeOps::toJulianCenturies(jd);
+    double t  = TimeOps::toJC(jd);
     double t2 = t * t;
     double t3 = t2 * t;
     

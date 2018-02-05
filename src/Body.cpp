@@ -39,8 +39,8 @@ void Body::compute( Observer& _obs ) {
     // is the last one (AltAzLoc), which depends on all the previous
     // calculations
     //
-    if (m_jcentury != _obs.getJulianDate()) {
-        m_jcentury = _obs.getJulianCentury();
+    if (m_jcentury != _obs.getJC()) {
+        m_jcentury = _obs.getJC();
 
         // choose appropriate method, based on planet
         //

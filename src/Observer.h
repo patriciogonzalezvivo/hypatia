@@ -21,14 +21,14 @@ public:
     
     void    setLocation(const GeoPoint& _location);
     
-    void    setTime(unsigned long _sec = 0);
-    void    setJuliaDay(double _jd);
+    void    setSeconds(unsigned long _sec = 0);
+    void    setJD(double _jd);
     
     GeoPoint getLocation() const { return m_location; };
     
-    unsigned long  getTime();
-    double  getJulianDate();
-    double  getJulianCentury();
+    unsigned long  getSeconds();
+    double  getJD();
+    double  getJC();
     double  getObliquity();
     double  getLST();
     

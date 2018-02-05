@@ -30,17 +30,17 @@ void Observer::setLocation(const GeoPoint& _location) {
     m_change = true;
 }
 
-void Observer::setTime( unsigned long _sec ) {
+void Observer::setSeconds( unsigned long _sec ) {
     if ( _sec == 0 ) {
         _sec = TimeOps::getCurrentSeconds();
     }
     m_sec = _sec;
-    setJuliaDay( TimeOps::julianDates(m_sec) );
+    setJD( TimeOps::toJD(m_sec) );
 }
 
-void Observer::setJuliaDay( double _jd ) {
+void Observer::setJD( double _jd ) {
     m_jd = _jd;
-    m_jcentury = TimeOps::toJulianCenturies(m_jd);
+    m_jcentury = TimeOps::toJC(m_jd);
     m_obliquity = AstroOps::meanObliquity(m_jcentury);
     m_lst = TimeOps::toLST(m_jd, m_location.getLongitude());
     
@@ -52,19 +52,19 @@ void Observer::setJuliaDay( double _jd ) {
     m_change = false;
 }
 
-unsigned long Observer::getTime() {
+unsigned long Observer::getSeconds() {
     if (m_change)
         update();
     return m_sec;
 }
 
-double Observer::getJulianDate() {
+double Observer::getJD() {
     if (m_change)
         update();
     return m_jd;
 }
 
-double Observer::getJulianCentury() {
+double Observer::getJC() {
     if (m_change)
         update();
     return m_jcentury;
@@ -90,6 +90,6 @@ Vector Observer::getHeliocentricVector() {
 
 void Observer::update() {
     if (m_change) {
-        setTime(m_sec);
+        setSeconds(m_sec);
     }
 }

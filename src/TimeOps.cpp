@@ -42,12 +42,49 @@ static char* MONTH3[] = { (char*)"", /* month 0 */
     (char*)"Jan", (char*)"Feb", (char*)"Mar", (char*)"Apr", (char*)"May", (char*)"Jun", (char*)"Jul", (char*)"Aug", (char*)"Sep", (char*)"Oct", (char*)"Nov", (char*)"Dec"
 };
 
+static char* DOW[] = { 
+    (char*)"Sunday", (char*)"Monday", (char*)"Tuesday", (char*)"Wednesday", (char*)"Thursday", (char*)"Friday",(char*)"Saturday"
+};
+
+static char* DOW3[] = { 
+    (char*)"Sun", (char*)"Mon", (char*)"Tue", (char*)"Wed", (char*)"Thu", (char*)"Fri",(char*)"Sat"
+};
+
 char* TimeOps::getMonth( int _month ) {
     return MONTH[_month];
 }
 
 char* TimeOps::getMonthAbbreviation( int _month ){
     return MONTH3[_month];
+}
+
+char* TimeOps::getDOW( int _dow ) {
+    return DOW[_dow];
+}
+
+char* TimeOps::getDOWAbbreviation( int _dow ){
+    return DOW3[_dow];
+}
+
+//----------------------------------------------------------------------------
+// Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
+unsigned long TimeOps::getCurrentSeconds() {
+    return std::chrono::system_clock::now().time_since_epoch() / std::chrono::seconds(1);
+}
+
+//----------------------------------------------------------------------------
+/**
+ * toJC(): convert a seconds to Julian Century
+ *
+ * @param seconds (time stamp since epoch )
+ *
+ * @return Julian Century
+ */
+double TimeOps::toJD (unsigned long _sec) {
+    if (_sec == 0.0)
+        _sec = getCurrentSeconds();
+    
+    return _sec / SECONDS_PER_DAY + JULIAN_EPOCH;
 }
 
 /*----------------------------------------------------------------------------
@@ -206,7 +243,6 @@ void TimeOps::formatDateTime( char* clientBuf, double jd, DATE_FMT fmt ) {
         default:
             *clientBuf = 0;
     };
-    
 }
 
 char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
@@ -217,39 +253,39 @@ char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
 
 //----------------------------------------------------------------------------
 /**
- * toJulianCenturies(): convert a JD to Julian Century referenced to epoch
+ * toJC(): convert a JD to Julian Century referenced to epoch
  *     J2000. This is the number of days since J2000 converted to centuries.
  *
  * @param Julian Day Number
  *
  * @return centuries since J2000 (12 noon on January 1, 2000)
  */
-double TimeOps::toJulianCenturies ( double _jd ) { 
+double TimeOps::toJC ( double _jd ) { 
     return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_CENTURY; 
 }
 
 //----------------------------------------------------------------------------
 /**
- * toJulianMillenia(): convert a JD to Julian Millenia referenced to epoch
+ * toJM(): convert a JD to Julian Millenia referenced to epoch
  *     J2000. This is the number of days since J2000 converted to millenia.
  *
  * @param Julian Day Number
  *
  * @return millenia since J2000 (12 noon on January 1, 2000)
  */
-double TimeOps::toJulianMillenia ( double _jd ) { 
+double TimeOps::toJM ( double _jd ) { 
     return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_MILLENIUM; 
 }
 
 //----------------------------------------------------------------------------
 /*
- * DMYtoJD()
+ * toJD()
  *
  * Get calendar data for the current year,  including the JD of New Years
  * Day for that year.  After that, add up the days in intervening months,
  * plus the day of the month:
  */
-long TimeOps::DMYtoJD( int day, int month, int year, CalendarType calendar ) {
+long TimeOps::toJD( int day, int month, int year, CalendarType calendar ) {
   long jd = 0;
   MonthDays md;
   YearEndDays yed;
@@ -274,7 +310,7 @@ double TimeOps::timeToDay( struct tm* pt )
     pt->tm_min * TimeOps::ISECONDS_PER_MINUTE +
     pt->tm_sec;
     return double(secs)/TimeOps::SECONDS_PER_DAY +
-    DMYtoJD( pt->tm_mday,
+    toJD( pt->tm_mday,
              pt->tm_mon + 1,        // months are zero-based
              pt->tm_year + 1900 );  // years from 1900
 }
@@ -364,7 +400,7 @@ void TimeOps::toDMY( long jd, int& day, int& month, int& year, CalendarType cale
 // Determine U.S. DST start JD (second Sunday in March as of 2007)
 //
 long TimeOps::dstStart(int year) {
-    long jdStart = DMYtoJD( 7+1, 3, year, T_GREGORIAN );
+    long jdStart = toJD( 7+1, 3, year, T_GREGORIAN );
     while ( 6 != (jdStart % 7 ) ) // Sunday
         jdStart++;
     
@@ -375,7 +411,7 @@ long TimeOps::dstStart(int year) {
 // Determine U.S. DST end JD (first Sunday in November as of 2007)
 //
 long TimeOps::dstEnd(int year) {
-    long jdEnd = DMYtoJD( 1, 11, year, T_GREGORIAN );
+    long jdEnd = toJD( 1, 11, year, T_GREGORIAN );
     while ( 6 != (jdEnd % 7 ) ) // Sunday
         jdEnd++;
     
@@ -459,7 +495,7 @@ double TimeOps::dstOffsetInDays() {
 
 //----------------------------------------------------------------------------
 /**
- * dayToHMS(): break the fractional part of a Julian day into hours, minutes,
+ * ToHMS(): break the fractional part of a Julian day into hours, minutes,
  * and seconds
  *
  * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
@@ -500,22 +536,15 @@ double TimeOps::hourToDay ( int _hrs ) {
 }
 
 //----------------------------------------------------------------------------
-
-// Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
-unsigned long TimeOps::getCurrentSeconds() {
-    return std::chrono::system_clock::now().time_since_epoch() / std::chrono::seconds(1);
-}
-
-
-// To JulianDate
-double TimeOps::julianDates (unsigned long _sec) {
-    if (_sec == 0.0)
-        _sec = getCurrentSeconds();
-    
-    return _sec / SECONDS_PER_DAY + JULIAN_EPOCH;
-}
-
-// Julian Date to Modify Julian Date (http://tycho.usno.navy.mil/mjd.html)
+/**
+ * toMJD():  Julian Date to Modify Julian Date 
+ *           See p 63,  in Meeus
+ *           (http://tycho.usno.navy.mil/mjd.html)
+ *
+ * @param   The Julian Day value
+ *
+ * @return  Modify Julian Date 
+ */
 double TimeOps::toMJD(double _jd) {
     return _jd - 2400000.5;
 }
@@ -546,30 +575,61 @@ double TimeOps::toLST (double _jd, double _lng_deg) {
     return 24.0*d;
 }
 
-// https://quasar.as.utexas.edu/BillInfo/JulianDatesG.html
+/**
+ * toYMD(): convert a long Julian Day to year/month/day
+ *         - See p 63,  in Meeus
+ *
+ * @param jd - Julian Day to convert
+ * @param year& - where to put the year (int)
+ * @param month& - where to put the month of the year (int)
+ * @param day& - where to put the day of the month (double)
+ */
 void TimeOps::toYMD(double _jd, int &_year, int &_month, double &_day) {
-    double Q = _jd + 0.5;
-    int Z = int(Q);
-    int W = (Z - 1867216.25)/36524.25;
-    int X = W / 4;
-    int A = Z + 1 + W - X;
-    int B = A + 1524;
-    int C = (B - 122.1) / 365.25;
-    int D = 365.25 * C;
-    int E = (B - D) / 30.6001;
-    int F = 30.6001 * E;
+    int A, B, C, D, E, Z;
     
-    _day = B-D-F+(Q-Z);
-    _month = int(E-1)%12;
-    if (_month == 0) {
-        _month = 12;
-    }
-    if (_month < 3) {
-        _year = C-4715;
+    double Q = _jd + 0.5;
+    Z = floor(Q);
+    
+    if (Z < 2299161) {
+        A = Z;
     }
     else {
-        _year = C-4716;
+        int a = floor( (Z - 1867216.25) / 36524.25 );
+        A = Z + 1 + a - floor(a / 4);
     }
+
+    B = A + 1524;
+    C = floor( (B - 122.1) / 365.25 );
+    D = floor( 365.25 * C );
+    E = floor( (B - D) / 30.6001 );
+
+    _day = B - D - floor(30.6001 * E) + (Q-Z);
+    if (E < 14) {
+        _month = E - 1;
+    }
+    else {
+        _month = E - 13;
+    }
+
+    if (_month > 2) {
+        _year = C - 4716;
+    }
+    else {
+        _year = C - 4715;
+    }
+}
+
+//----------------------------------------------------------------------------
+/**
+ * toDOW(): convert a JD to Day Of the Week 
+ *          See p 65,  in Meeus
+ *
+ * @param Julian Day Number
+ *
+ * @return day Of the week (sunday = 0)   
+ */
+int TimeOps::toDOW ( double _jd ) {
+    return int(_jd + 1.5) % 7;
 }
 
 //----------------------------------------------------------------------------

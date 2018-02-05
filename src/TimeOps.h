@@ -240,7 +240,8 @@ struct TimeOps {
     static double now(bool _local = false);
     
     /**
-     * greenwichSiderealTime(): convert a "local" time_t to GST. See p 84,  in Meeus
+     * greenwichSiderealTime(): convert a "local" time_t to GST. 
+     *                          See p 84,  in Meeus
      *
      * @param jd - julian day
      *
@@ -257,33 +258,19 @@ struct TimeOps {
     // Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)
     static unsigned long getCurrentSeconds ();
     
-    // to Julian Dates (_milli == 0 means NOW)
-    static double julianDates ( unsigned long _sec = 0.0 );
+    /**
+     * toJC(): convert a seconds to Julian Century
+     *
+     * @param seconds (time stamp since epoch )
+     *
+     * @return Julian Century
+     */
+    static double toJD ( unsigned long _sec );
     
     /*** DATE ******************************************************************/
     
     /**
-     * toJulianCenturies(): convert a JD to Julian Century referenced to epoch
-     *     J2000. This is the number of days since J2000 converted to centuries.
-     *
-     * @param Julian Day Number
-     *
-     * @return centuries since J2000 (12 noon on January 1, 2000)
-     */
-    static double toJulianCenturies ( double _jd );
-    
-    /**
-     * toJulianMillenia(): convert a JD to Julian Millenia referenced to epoch
-     *     J2000. This is the number of days since J2000 converted to millenia.
-     *
-     * @param Julian Day Number
-     *
-     * @return millenia since J2000 (12 noon on January 1, 2000)
-     */
-    static double toJulianMillenia ( double _jd );
-    
-    /**
-     * dmyToDay(): convert a day/month/year to a long Julian Day
+     * toJD(): convert a day/month/year to a long Julian Day
      *
      * @param day - day of the month
      * @param month - month of the year
@@ -292,10 +279,30 @@ struct TimeOps {
      *
      * @return equivalent Julian Day rounded to a long
      */
-    static long DMYtoJD ( int _day, int _month, int _year, CalendarType _calendar = T_GREGORIAN );
+    static long toJD ( int _day, int _month, int _year, CalendarType _calendar = T_GREGORIAN );
 
     /**
-     * dayToDmy(): convert a long Julian Day to day/month/year
+     * toJC(): convert a JD to Julian Century referenced to epoch
+     *     J2000. This is the number of days since J2000 converted to centuries.
+     *
+     * @param Julian Day Number
+     *
+     * @return centuries since J2000 (12 noon on January 1, 2000)
+     */
+    static double toJC ( double _jd );
+    
+    /**
+     * toJM(): convert a JD to Julian Millenia referenced to epoch
+     *     J2000. This is the number of days since J2000 converted to millenia.
+     *
+     * @param Julian Day Number
+     *
+     * @return millenia since J2000 (12 noon on January 1, 2000)
+     */
+    static double toJM ( double _jd );
+
+    /**
+     * toDMY(): convert a long Julian Day to day/month/year
      *
      * @param jd - Julian Day to convert
      * @param day& - where to put the day of the month
@@ -305,8 +312,28 @@ struct TimeOps {
      */
     static void toDMY ( long _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
     static void toDMY ( double _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
+
+     /**
+     * toYMD(): convert a long Julian Day to year/month/day
+     *          See p 63,  in Meeus
+     *
+     * @param jd - Julian Day to convert
+     * @param year& - where to put the year (int)
+     * @param month& - where to put the month of the year (int)
+     * @param day& - where to put the day of the month (double)
+     */
     static void toYMD ( double _jd, int &_year, int &_month, double &_day );
-    //--------------------------------------------------------------------------
+
+    /**
+     * toDOW(): convert a JD to Day Of the Week 
+     *          See p 65,  in Meeus
+     *
+     * @param Julian Day Number
+     *
+     * @return day Of the week (sunday = 0)   
+     */
+    static int toDOW ( double _jd );
+
     /**
      * dstStart(): Determine the Julian Day in the specified year where Daylight
      *             Savings Time starts
@@ -329,12 +356,24 @@ struct TimeOps {
 
     /*** CALENDAR ******************************************************************/
 
-    // Julian Date to Modify Julian Date (http://tycho.usno.navy.mil/mjd.html)
+    /**
+     * toMJD():  Julian Date to Modify Julian Date 
+     *           See p 63,  in Meeus
+     *           (http://tycho.usno.navy.mil/mjd.html)
+     *
+     * @param   The Julian Day value
+     *
+     * @return  Modify Julian Date 
+     */
     static double toMJD ( double _jd );
 
     /*** CALENDAR ******************************************************************/
+    static char* getDOW( int _dow );
+    static char* getDOWAbbreviation( int _dow );
+
     static char* getMonth ( int _month );
     static char* getMonthAbbreviation ( int _month );
+
     static int   getCalendarYear ( long _jd, CalendarType _calendar );
     static void  getJulGregYearData ( int _year, long& _days, MonthDays& _md, bool _julian );
     static int   getCalendarData ( int _year, YearEndDays& _days, MonthDays& _md, CalendarType _calendar );

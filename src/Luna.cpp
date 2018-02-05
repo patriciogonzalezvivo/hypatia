@@ -263,8 +263,8 @@ double getFund( const double* tptr, double _jcentury ) {
 //   t = decimal julian centuries
 //
 void Luna::compute( Observer &_obs ) {
-    if (m_jcentury != _obs.getJulianCentury()) {
-        m_jcentury = _obs.getJulianCentury();
+    if (m_jcentury != _obs.getJC()) {
+        m_jcentury = _obs.getJC();
 
         m_f.Lp = getFund( LunarFundimentals_Lp, m_jcentury );
         m_f.D = getFund( LunarFundimentals_D, m_jcentury );
@@ -425,7 +425,7 @@ void Luna::compute( Observer &_obs ) {
 
         // Compute Sun's coords
         double sun_eclipticLon, sun_eclipticLat, sun_radius;
-        Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJulianCentury(), EARTH);
+        Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJC(), EARTH);
         
         // Get HelioCentric values
         EcPoint toEarth = EcPoint(sun_eclipticLon, sun_eclipticLat, sun_radius, true);

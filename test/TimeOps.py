@@ -16,10 +16,12 @@ import ephem
 def test(jd):
   ymd = TimeOps.toYMD(jd)
   hms = TimeOps.toHMS(jd)
-  datetime = str(ymd[0])+'-'+"{:0>2d}".format(ymd[1])+'-'+"{:0>2d}".format(int(math.floor(ymd[2])))+' '+"{:0>2d}".format(hms[0])+':'+"{:0>2d}".format(hms[1])
+  datetime = str(ymd[0])+'-'+"{:0>2d}".format(ymd[1])+'-'+"{:0>2d}".format(int(math.floor(ymd[2])))
+  datetime += " {:0>2d}".format(hms[0])+':'+"{:0>2d}".format(hms[1])
   datetime = str(datetime)
   return str("{:.1f}".format(jd)), TimeOps.formatDateTime(jd, Y_M_D_HM), datetime
 
+sec = TimeOps.getCurrentSeconds();
 print('Timestamp:\t\t\t\t\t', TimeOps.getCurrentSeconds())
 print('------------------------------------------------------------')
 
@@ -30,7 +32,7 @@ date = datetime.datetime.fromtimestamp(TimeOps.getCurrentSeconds());
 print('Local:\t\t\t\t\t\t\t', date.strftime('%Y-%m-%d %H:%M:%S'))
 
 print('------------------------------------------------------------')
-print('Julian Date:\t\t\t\t', test((TimeOps.julianDates())) )
+print('Julian Date:\t\t\t\t', test((TimeOps.toJD(sec))) )
 print('Julian Date (ephem):', test(ephem.julian_date(e_date)) )
 print('Julian Date UTC:  \t', test(TimeOps.now()) )
 print('Julian Date Local:\t', test(TimeOps.now(True)) )
@@ -43,3 +45,6 @@ print(test(2446822.5))
 print(test(1355866.5))
 print(test(1355671.4))
 print(test(0.0))
+
+print(TimeOps.getDOW(TimeOps.toDOW(TimeOps.toJD(sec)-.5)))
+
