@@ -586,12 +586,21 @@ EcPoint AstroOps::heliocentricToGeocentric( Observer &_obs, const EcPoint &_heli
     return EcPoint(heliocentric - _obs.getHeliocentricVector());
 }
 
-/* compute parallactic angle given latitude, object dec and alt.
- * all angles in rads.
+/**
+ * parallaticAngle() - compute parallactic angle given latitude, object dec and alt.
+ *                      all angles in rads.
+ *                     (Meeus, Ch. 93)
+ *
+ *  https://github.com/brandon-rhodes/pyephem/blob/592ecff661adb9c5cbed7437a23d705555d7ce57/libastro-3.7.7/parallactic.c#L15
  * N.B. always return >= 0, caller must determine sign and degenerate cases at
  *   pole or zenith.
+ *
+ * @param Observer
+ * @param alt - of ecliptic position
+ * @param az - of ecliptic position
+ *
+ * @return parallatic angle
  */
-// https://github.com/brandon-rhodes/pyephem/blob/592ecff661adb9c5cbed7437a23d705555d7ce57/libastro-3.7.7/parallactic.c#L15
 double AstroOps::parallaticAngle(   Observer &_obs,
                                     double _alt, double _dec ) {
     double ca = sin(_obs.getLocation().getLatitudeRadians());

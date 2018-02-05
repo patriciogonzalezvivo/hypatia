@@ -167,7 +167,21 @@ public:
      */
     static void equatorialToHorizontal( Observer &_obs, double _ra, double _dec, double &_alt, double &_az);
 
-    static double parallaticAngle(  Observer &_obs, double _alt, double _dec);
+    /**
+     * parallaticAngle() - compute parallactic angle given latitude, object dec and alt.
+     *                      all angles in rads.
+     *                     (Meeus, Ch. 93)
+     *
+     * N.B. always return >= 0, caller must determine sign and degenerate cases at
+     *   pole or zenith.
+     *
+     * @param Observer
+     * @param alt - of ecliptic position
+     * @param az - of ecliptic position
+     *
+     * @return parallatic angle
+     */
+    static double parallaticAngle(  Observer &_obs, double _alt, double _decv);
     
 };
 
