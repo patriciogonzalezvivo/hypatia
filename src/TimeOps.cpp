@@ -855,7 +855,7 @@ void TimeOps::getIslamicYearData( long year, long& daysInYear, MonthDays& md ) {
         1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
         0, 1, 0, 0, 1, 0, 1, 0, 0, 1 };
     
-    long yearWithinCycle = mod( year, 30L );
+    long yearWithinCycle = TimeOps::mod( year, 30L );
     long thirtyYearCycles = (year - yearWithinCycle) / 30L;
     long rval = E_ISLAMIC +
     thirtyYearCycles * THIRTY_ISLAMIC_YEARS +
@@ -889,7 +889,7 @@ static const int isHebrewLeapYear[19] = { 0, 0, 1, 0, 0, 1,
     0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1 };
 
 long TimeOps::lunationsToTishri1( long year ) {
-    long yearWithinCycle = mod( year - 1, 19L );
+    long yearWithinCycle = TimeOps::mod( year - 1, 19L );
     
     long fullNineteenYearCycles = ( year - 1 - yearWithinCycle ) / 19L;
     
@@ -914,7 +914,7 @@ void TimeOps::lunationsToDaysAndHalakim( long lunations, long& days, long& halak
      glumph,  and the rest is easy.
      *****/
     
-    long lunationWithinGlumph = mod( lunations, 25920L );
+    long lunationWithinGlumph = TimeOps::mod( lunations, 25920L );
     
     long currGlumph = ( lunations - lunationWithinGlumph ) / 25920L;
     
@@ -944,17 +944,17 @@ void TimeOps::getHebrewYearData( long year, YearEndDays& daysInYear, MonthDays& 
         findTishri1( year + i, day, halakim );
         
         /* Check dehiyyah (c): */
-        if( 3 == mod( day, 7L ) &&
+        if( 3 == TimeOps::mod( day, 7L ) &&
            halakim >= 9L * 1080L + 204L &&
-           !isHebrewLeapYear[ mod( year - 1 + i, 19L) ]
+           !isHebrewLeapYear[ TimeOps::mod( year - 1 + i, 19L) ]
            )
         {
             day += 2;
         }
         /* Check dehiyyah (d): */
-        else if( mod( day, 7L) == 2 &&
+        else if( TimeOps::mod( day, 7L) == 2 &&
                 halakim >= 15L * 1080L + 589L &&
-                isHebrewLeapYear[ mod( year - 2 + i, 19L) ]
+                isHebrewLeapYear[ TimeOps::mod( year - 2 + i, 19L) ]
                 )
         {
             day++;
@@ -964,9 +964,9 @@ void TimeOps::getHebrewYearData( long year, YearEndDays& daysInYear, MonthDays& 
             if( halakim > 18L * 1080L )
                 day++;
             
-            if( mod( day, 7L ) == 1 ||
-               mod( day, 7L ) == 4 ||
-               mod( day, 7L ) == 6L
+            if( TimeOps::mod( day, 7L ) == 1 ||
+                TimeOps::mod( day, 7L ) == 4 ||
+                TimeOps::mod( day, 7L ) == 6L
                )
             {
                 day++;
@@ -981,7 +981,7 @@ void TimeOps::getHebrewYearData( long year, YearEndDays& daysInYear, MonthDays& 
         for( int i=0; i<6; i++ )                 /* "normal" lengths */
             md[i] = md[i + 7] = (char)( 30 - (i & 1));
         
-        if( isHebrewLeapYear[ mod( year - 1, 19L) ] ) {
+        if( isHebrewLeapYear[ TimeOps::mod( year - 1, 19L) ] ) {
             md[5] = 30;     /* Adar I is bumped up a day in leap years */
             md[6] = 29;
         }

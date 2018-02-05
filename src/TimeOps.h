@@ -5,7 +5,7 @@
 
 // uncomment the following line to include an assortment of non-western
 // calendars:
-// #define CALENDARS_OF_THE_WORLD
+#define CALENDARS_OF_THE_WORLD
 
 typedef int MonthDays[13];
 typedef long YearEndDays[2];
@@ -398,24 +398,24 @@ private:
         UPPER_PERSIAN_YEAR = 2327
     };
     
-    static int mod ( int x, int y );
+    static long mod ( long x, long y );
     
     // Islamic calendar
-    static void getIslamicYearData ( int year, int& days, MonthDays& md );
+    static void getIslamicYearData ( long year, long& days, MonthDays& md );
     
     // Hebrew calendar
-    static int lunationsToTishri1 ( int year );
-    static void lunationsToDaysAndHalakim ( int lunations, int& days, int& halakim);
-    static void findTishri1 ( int year, int& days, int& halakim );
-    static void getHebrewYearData ( int year, YearEndDays& days, MonthDays& md );
+    static long lunationsToTishri1 ( long year );
+    static void lunationsToDaysAndHalakim ( long lunations, long& days, long& halakim);
+    static void findTishri1 ( long year, long& days, long& halakim );
+    static void getHebrewYearData ( long year, YearEndDays& days, MonthDays& md );
     
     // French Revolutionary calendar
-    static int jdOfFrenchRevYear ( int year );
-    static void getRevolutionaryYearData ( int year, YearEndDays& days, MonthDays& md );
+    static long jdOfFrenchRevYear ( long year );
+    static void getRevolutionaryYearData ( long year, YearEndDays& days, MonthDays& md );
     
     // Persian (Jalaali) calendar
-    static int jalaliJd0 ( int jalaliYear );
-    static void getJalaliYearData ( const int year, YearEndDays& days, MonthDays& md );
+    static long jalaliJd0 ( long jalaliYear );
+    static void getJalaliYearData ( const long year, YearEndDays& days, MonthDays& md );
     
 #endif  /* #if defined( CALENDARS_OF_THE_WORLD ) */
     
