@@ -500,22 +500,33 @@ EqPoint AstroOps::eclipticToEquatorial ( Observer &_obs, const EcPoint &_eclipti
 }
 
 void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec, double &_alt, double &_az ) {
-    // compute hour angle in degrees
-    double ha = (MathOps::PI*_obs.getLST()/12.) - _ra;
-    double sd = sin(_dec);
-    double sl = sin(_obs.getLocation().getLatitudeRadians());
-    double cl = cos(_obs.getLocation().getLatitudeRadians());
+//    // compute hour angle in degrees
+//    double ha = (MathOps::PI*_obs.getLST()/12.) - _ra;
+//    double sd = sin(_dec);
+//    double sl = sin(_obs.getLocation().getLatitudeRadians());
+//    double cl = cos(_obs.getLocation().getLatitudeRadians());
+//
+//    // compute altitude in radians
+//    _alt = asin(sd*sl + cos(_dec)*cl*cos(ha));
+//
+//    // compute azimuth in radians
+//    // divide by zero error at poles or if alt = 90 deg (so we should've already limited to 89.9999)
+//    _az = acos((sd - sin(_alt)*sl)/(cos(_alt)*cl));
+//
+//    // choose hemisphere
+//    if (sin(ha) > 0.0)
+//        _az = 2.*MathOps::PI - _az;
+    double localSiderealTime = TimeOps::toGreenwichSiderealTime(_obs.getJD()) + _obs.getLocation().getLongitudeRadians();
     
-    // compute altitude in radians
-    _alt = asin(sd*sl + cos(_dec)*cl*cos(ha));
+    EqPoint eq = EqPoint(_ra, _dec);
+    Vector eq_v = eq.getEquatorialVector();
+    eq_v.rotate(-localSiderealTime, 2);
     
-    // compute azimuth in radians
-    // divide by zero error at poles or if alt = 90 deg (so we should've already limited to 89.9999)
-    _az = acos((sd - sin(_alt)*sl)/(cos(_alt)*cl));
+    double ha = atan2(eq_v[1], eq_v[0]);
     
-    // choose hemisphere
-    if (sin(ha) > 0.0)
-        _az = 2.*MathOps::PI - _az;
+    eq_v.rotate(_obs.getLocation().getLatitudeRadians() - MathOps::PI_OVER_TWO, 1);
+    _alt = eq_v[0];
+    _az = eq_v[1];
 }
 
 EcPoint AstroOps::heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric ) {

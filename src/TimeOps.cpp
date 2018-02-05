@@ -567,6 +567,7 @@ double TimeOps::toGreenwichSiderealHour (double jd) {
 }
 
 double TimeOps::toLST (double _jd, double _lng_deg) {
+//    return TimeOps::toGreenwichSiderealTime(_jd) + MathOps::toRadians(_lng_deg);
     double gst24 = toGreenwichSiderealHour(_jd);
     double d = (gst24 + _lng_deg/15.0)/24.0;
     d = d - floor(d);
