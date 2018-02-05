@@ -249,10 +249,18 @@ struct TimeOps {
      */
     static double toGreenwichSiderealTime ( double _jd );
     
-    // to Greenwich sidereal time in a range of 0~24hs
-    static double toGreenwichSiderealHour ( double _jd );
-
-    // To Local Sidereal Time http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
+    /**
+     * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
+     *          See p 84,  in Meeus
+     *
+     *          http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
+     *
+     * @param jd - julian day
+     * @param lng - observer's geographical longitud
+     * @param _radians - is observer's geographical longitud in radians
+     *
+     * @return Local Sidereal Time
+     */
     static double toLST ( double _jd, double _lng, bool _radians = false);
 
     // Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)

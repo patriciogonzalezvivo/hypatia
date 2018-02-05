@@ -19,6 +19,7 @@ EqPoint::~EqPoint() {
 }
 
 void EqPoint::compute( Observer &_obs ) {
+    m_hourAngle = _obs.getLST() - m_ra;
     AstroOps::equatorialToHorizontal( _obs, m_ra, m_dec, m_alt, m_az );
 }
 

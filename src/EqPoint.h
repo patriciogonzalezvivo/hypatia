@@ -20,11 +20,15 @@ public:
     virtual double  getRightAscensionRadians() const { return m_ra; }
     
     virtual Vector  getEquatorialVector() const;
+    
+    virtual double  getHourAngle() const { return MathOps::toDegrees( m_hourAngle ); }
+    virtual double  getHourAngleRadians() const { return m_hourAngle; }
 
     virtual void    compute( Observer &_obs );
 
 protected:
     virtual void    setEquatorialAngles( double _ra, double _dec, bool _radians = false );
 
-    double  m_ra,   m_dec;
+    double  m_ra, m_dec;
+    double  m_hourAngle;
 };

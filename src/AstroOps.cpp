@@ -562,8 +562,7 @@ EqPoint AstroOps::eclipticToEquatorial ( Observer &_obs, const EcPoint &_eclipti
  *
  */
 void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec, double &_alt, double &_az ) {
-    // compute hour angle in degrees
-//    double ha = (MathOps::PI*_obs.getLST()/12.) - _ra;
+    // compute hour angle in radians
     double ha = _obs.getLST() - _ra;
     
     double sd = sin(_dec);
@@ -576,7 +575,6 @@ void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec,
     // compute azimuth in radians
     // divide by zero error at poles or if alt = 90 deg (so we should've already limited to 89.9999)
     _az = acos((sd - sin(_alt)*sl)/(cos(_alt)*cl));
-//    _az = atan2(sin(ha), cos(ha) * sl - tan(_dec) * cl);
 
     // choose hemisphere
     if (sin(ha) > 0.0)

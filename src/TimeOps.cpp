@@ -557,26 +557,23 @@ double mod (double _x, double _r) {
     return _r * fract(_x/_r);
 }
 
-double TimeOps::toGreenwichSiderealHour (double jd) {
-    jd -= J2000;      /* set relative to 2000.0 */
-    double jdm = jd / DAYS_PER_CENTURY;  /* convert jd to julian centuries */
-    double intPart = floor( jd );
-    jd -= intPart;
-    double rval = 280.46061837 + 360.98564736629 * jd + .98564736629 * intPart + jdm * jdm * ( 3.87933e-4 - jdm / 38710000. );
-    return (fmod(rval,360.)/360.)*24.;
-}
-
+/**
+ * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
+ *          See p 84,  in Meeus
+ *
+ *          http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
+ *
+ * @param jd - julian day
+ * @param lng - observer's geographical longitud
+ * @param _radians - is observer's geographical longitud in radians
+ *
+ * @return Local Sidereal Time
+ */
 double TimeOps::toLST (double _jd, double _lng, bool _radians) {
     if (!_radians) {
         _lng = MathOps::toRadians(_lng);
     }
     return TimeOps::toGreenwichSiderealTime(_jd) + _lng;
-//    double gst24 = toGreenwichSiderealHour(_jd);
-//    double d = (gst24 + _lng_deg/15.0)/24.0;
-//    d = d - floor(d);
-//    if (d < 0.0)
-//        d += 1.;
-//    return 24.0*d;
 }
 
 /**

@@ -88,6 +88,8 @@ void Body::compute( Observer& _obs ) {
 
 void Body::computeElipcticAngles( Observer& _obs ) {
     AstroOps::eclipticToEquatorial( _obs, m_geocentric.getLongitudeRadians(), m_geocentric.getLatitudeRadians(), m_ra, m_dec );
+    
+    m_hourAngle = _obs.getLST() - m_ra;
     AstroOps::equatorialToHorizontal( _obs, m_ra, m_dec, m_alt, m_az );
 }
 
