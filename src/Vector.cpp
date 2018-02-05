@@ -12,6 +12,19 @@ Vector::Vector(const double _x, const double _y, const double _z): x(_x), y(_y),
 Vector::~Vector() {
 }
 
+void Vector::setPolar(double _lng, double _lat, bool _radians ){
+    if (!_radians) {
+        _lng = MathOps::toRadians(_lng);
+        _lat = MathOps::toRadians(_lat);
+    }
+    
+    const double cosLat = cos( _lat );
+    
+    getPtr()[0] = cos( _lng ) * cosLat;
+    getPtr()[1] = sin( _lng ) * cosLat;
+    getPtr()[2] = sin( _lat );
+}
+
 Vector Vector::operator+ (const Vector& _vec) const {
     Vector rta;
     rta.x = x + _vec.x;

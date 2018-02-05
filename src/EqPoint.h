@@ -9,6 +9,7 @@
 class EqPoint : public HorPoint {
 public:
     EqPoint();
+    EqPoint(const Vector& _parent);
     EqPoint( double _ra, double _dec, bool _radians = false );
     virtual ~EqPoint();
 

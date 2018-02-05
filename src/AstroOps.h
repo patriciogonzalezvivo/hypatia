@@ -120,23 +120,54 @@ public:
     static void   nutation( double _jd, double* _pDPhi, double* _pDEpsilon );
     
     // Transform celestial coordinates ( https://en.wikipedia.org/wiki/Celestial_coordinate_system )
+    // ********************************
 
-    // HelioCentric (Ecliptic)
+    // -------------------------------------------------- HelioCentric (Ecliptic)
+    
     static EcPoint heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric );
 
-    // GeoCentric
-    static EqPoint eclipticToEquatorial ( Observer &_obs, const EcPoint &_ecliptic );
-    static void eclipticToEquatorial( Observer &_obs,
-                                        double _lng, double _lat,       // IN
-                                        double &_ra, double &_dec);     // OUT
+    // -------------------------------------------------- GeoCentric
     
-    // TopoCentric
-    static void equatorialToHorizontal( Observer &_obs,
-                                          double _ra, double _dec,      // IN
-                                          double &_alt, double &_az);   // OUT
+    /**
+     * eclipticToEquatorial() - ecliptic to equatorial coordinates
+     *                          (Meeus, Ch. 93)
+     *
+     * @param Observer
+     * @param Ecliptic position
+     *
+     * @return Equatorial position
+     */
+    static EqPoint eclipticToEquatorial ( Observer &_obs, const EcPoint &_ecliptic );
+    
+    /**
+     * eclipticToEquatorial() - ecliptic to equatorial coordinates
+     *                          (Meeus, Ch. 93)
+     *
+     * @param Observer
+     * @param lng - of ecliptic position (IN)
+     * @param lat - of ecliptic position (IN)
+     * @param ra - of equatorial position (OUT)
+     * @param dec - of equatorial position (OUT)
+     *
+     */
+    static void eclipticToEquatorial( Observer &_obs, double _lng, double _lat, double &_ra, double &_dec);
+    
+    // -------------------------------------------------- TopoCentric
+    
+    /**
+     * eclipticToEquatorial() - equatorial to horizontal coordinates
+     *                          (Meeus, Ch. 93)
+     *
+     * @param Observer
+     * @param ra - of equatorial position (IN)
+     * @param ra - of equatorial position (IN)
+     * @param alt - of ecliptic position (OUT)
+     * @param az - of ecliptic position (OUT)
+     *
+     */
+    static void equatorialToHorizontal( Observer &_obs, double _ra, double _dec, double &_alt, double &_az);
 
-    static double parallaticAngle(  Observer &_obs,
-                                    double _alt, double _dec);
+    static double parallaticAngle(  Observer &_obs, double _alt, double _dec);
     
 };
 

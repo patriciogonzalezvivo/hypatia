@@ -253,7 +253,7 @@ struct TimeOps {
     static double toGreenwichSiderealHour ( double _jd );
 
     // To Local Sidereal Time http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
-    static double toLST ( double _jd, double _lng_deg );
+    static double toLST ( double _jd, double _lng, bool _radians = false);
 
     // Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)
     static unsigned long getCurrentSeconds ();

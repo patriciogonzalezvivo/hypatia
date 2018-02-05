@@ -566,14 +566,17 @@ double TimeOps::toGreenwichSiderealHour (double jd) {
     return (fmod(rval,360.)/360.)*24.;
 }
 
-double TimeOps::toLST (double _jd, double _lng_deg) {
-//    return TimeOps::toGreenwichSiderealTime(_jd) + MathOps::toRadians(_lng_deg);
-    double gst24 = toGreenwichSiderealHour(_jd);
-    double d = (gst24 + _lng_deg/15.0)/24.0;
-    d = d - floor(d);
-    if (d < 0.0)
-        d += 1.;
-    return 24.0*d;
+double TimeOps::toLST (double _jd, double _lng, bool _radians) {
+    if (!_radians) {
+        _lng = MathOps::toRadians(_lng);
+    }
+    return TimeOps::toGreenwichSiderealTime(_jd) + _lng;
+//    double gst24 = toGreenwichSiderealHour(_jd);
+//    double d = (gst24 + _lng_deg/15.0)/24.0;
+//    d = d - floor(d);
+//    if (d < 0.0)
+//        d += 1.;
+//    return 24.0*d;
 }
 
 /**

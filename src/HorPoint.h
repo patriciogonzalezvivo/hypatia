@@ -9,6 +9,7 @@
 class HorPoint {
 public:
     HorPoint();
+    HorPoint(const Vector& _parent);
     HorPoint( double _alt, double _az, bool _radians = false );
     virtual ~HorPoint();
     

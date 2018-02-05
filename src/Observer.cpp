@@ -42,7 +42,7 @@ void Observer::setJD( double _jd ) {
     m_jd = _jd;
     m_jcentury = TimeOps::toJC(m_jd);
     m_obliquity = AstroOps::meanObliquity(m_jcentury);
-    m_lst = TimeOps::toLST(m_jd, m_location.getLongitude());
+    m_lst = TimeOps::toLST(m_jd, m_location.getLongitudeRadians(), true);
     
     double pLng, pLat, pRad = 0.0;
     Vsop::calcAllLocs(pLng, pLat, pRad, m_jcentury, m_location.getBody());

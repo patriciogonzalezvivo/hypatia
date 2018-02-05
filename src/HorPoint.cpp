@@ -5,6 +5,11 @@
 HorPoint::HorPoint() :  m_alt(0.0), m_az(0.0) {
 }
 
+HorPoint::HorPoint(const Vector& _parent) {
+    m_alt = atan2(_parent.y, _parent.x);
+    m_az = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
+}
+
 HorPoint::HorPoint( double _alt, double _az, bool _radians ) {
      setHorizontalAngles(_alt, _az, _radians);
 }
