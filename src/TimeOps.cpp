@@ -50,6 +50,52 @@ static char* DOW3[] = {
     (char*)"Sun", (char*)"Mon", (char*)"Tue", (char*)"Wed", (char*)"Thu", (char*)"Fri",(char*)"Sat"
 };
 
+double fract (double _x) {
+    return _x-floor(_x);
+}
+
+double mod (double _x, double _r) {
+    return _r * fract(_x/_r);
+}
+
+long mod( long x, long y ) {
+    long rval = x % y;
+    
+    if( rval < 0L )
+        rval += y;
+    
+    return rval;
+}
+
+/**
+ * private
+ * roundToNearestMinute(): round a time to the nearest minute
+ *
+ * if h:m wraps to zero, we roll back to 23:59 to preserve "today"
+ *
+ * @param h - hour
+ * @param m - minute
+ * @param s - second
+ *
+ * @return 1 if rounding wrapped to 00:00, else 0.
+ */
+int roundToNearestMinute(int &h, int& m, int& s) {
+    
+    int rv = 0;
+    if ( s >= TimeOps::ISECONDS_PER_MINUTE/2 ) { // round to nearest minute
+        m++;
+        if ( m >= TimeOps::IMINUTES_PER_HOUR ) {
+            m = 0;
+            h++;
+            if ( h >= TimeOps::IHOURS_PER_DAY ) {
+                h = 0;
+                rv = 1;
+            }
+        }
+    }
+    return rv;
+}
+
 char* TimeOps::getMonth( int _month ) {
     return MONTH[_month];
 }
@@ -109,7 +155,6 @@ double TimeOps::toGreenwichSiderealTime( double jd ) {
     return MathOps::toRadians( rval );
 }
 
-//----------------------------------------------------------------------------
 /**
  * formatTime(): format a time into an HH:MM or HH:MM:SS string
  *
@@ -117,12 +162,12 @@ double TimeOps::toGreenwichSiderealTime( double jd ) {
  * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
  * @param doSecs - true to include seconds
  */
-int TimeOps::formatTime( char* buf, double dayFrac, bool doSecs ) {
+int formatHMS( char* buf, double dayFrac, bool doSecs ) {
     if (!buf)
         return 0;
     
     int h, m, s, rv = 0;
-    toHMS(dayFrac, h, m, s);
+    TimeOps::toHMS(dayFrac, h, m, s);
     
     if ( doSecs )
         sprintf( buf, "%02d:%02d:%02d", h, m, int(s) );
@@ -133,26 +178,32 @@ int TimeOps::formatTime( char* buf, double dayFrac, bool doSecs ) {
     return rv;
 }
 
+
+/**
+ * formatTime(): format a time into an HH:MM string
+ *
+ * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
+ * @param doSecs - true to include seconds (HH:MM:SS)
+ *
+ * @return formated string
+ */
 char* TimeOps::formatTime ( double dayFrac, bool doSecs ) {
     char *buf = new char[8];
-    formatTime( buf, dayFrac, doSecs );
+    formatHMS( buf, dayFrac, doSecs );
     return buf;
 }
+
 
 /**
  * formatMS(): format a fractional minute into a text string (MM:SS.S)
  *
- * @param buf - where to put the formatted string
  * @param m  - the value (in minutes) to format
+ *
+ * @return ormatted string
  */
-void TimeOps::formatMS( char* buf, double min ) {
-    sprintf( buf, "%02d:%02.1f\n",
-            int(min), (min - int(min)) * TimeOps::SECONDS_PER_MINUTE );
-}
-
 char* TimeOps::formatMS( double _min ) {
-    char *buf = new char[5];
-    formatMS( buf, _min );
+    char *buf = new char[6];
+    sprintf( buf, "%02d:%02.1f\n", int(_min), (_min - int(_min)) * TimeOps::SECONDS_PER_MINUTE );
     return buf;
 }
 
@@ -182,25 +233,27 @@ double TimeOps::timeToUDay( time_t time ) {
 /**
  * formatDateTime(): format a JD into a text string
  *
- * @param buf - where to put the fomatted string, must be > 12 chars long
- * @param jd
- * @param format type (DateOps::DATE_FMT)
+ * @param jd  - the day to format
+ * @param fmt - format type (see DateOps::DATE_FMT)
+ *
+ * @return formatted string
  */
-void TimeOps::formatDateTime( char* clientBuf, double jd, DATE_FMT fmt ) {
-    if ( !clientBuf ) return;
+char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
+    char *clientBuf = new char[32];
     
     int d, m, y;
     char tbuf[16] = { 0 };
     
-    if ( fmt >= Y_MON_D_HM )
-        jd += formatTime(tbuf, jd);
+    if ( _fmt >= Y_MON_D_HM ) {
+        _jd += formatHMS(tbuf, _jd, false);
+    }
     
-    TimeOps::toDMY( jd, d, m, y );
+    TimeOps::toDMY( _jd, d, m, y );
     // double day;
     // TimeOps::toYMD( jd, y, m, day );
     // d = floor(day);
     
-    switch (fmt) {
+    switch (_fmt) {
             // date only
         case Y_MON_D:
             sprintf ( clientBuf, "%04d %s %02d", y, MONTH3[m], d );
@@ -243,12 +296,8 @@ void TimeOps::formatDateTime( char* clientBuf, double jd, DATE_FMT fmt ) {
         default:
             *clientBuf = 0;
     };
-}
 
-char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
-    char *buf = new char[32];
-    formatDateTime( buf, _jd, _fmt );
-    return buf;
+    return clientBuf;
 }
 
 //----------------------------------------------------------------------------
@@ -549,14 +598,6 @@ double TimeOps::toMJD(double _jd) {
     return _jd - 2400000.5;
 }
 
-double fract (double _x) {
-    return _x-floor(_x);
-}
-
-double mod (double _x, double _r) {
-    return _r * fract(_x/_r);
-}
-
 /**
  * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
  *          See p 84,  in Meeus
@@ -631,36 +672,6 @@ void TimeOps::toYMD(double _jd, int &_year, int &_month, double &_day) {
  */
 int TimeOps::toDOW ( double _jd ) {
     return int(_jd + 1.5) % 7;
-}
-
-//----------------------------------------------------------------------------
-/**
- * private
- * roundToNearestMinute(): round a time to the nearest minute
- *
- * if h:m wraps to zero, we roll back to 23:59 to preserve "today"
- *
- * @param h - hour
- * @param m - minute
- * @param s - second
- *
- * @return 1 if rounding wrapped to 00:00, else 0.
- */
-int TimeOps::roundToNearestMinute(int &h, int& m, int& s) {
-    
-    int rv = 0;
-    if ( s >= TimeOps::ISECONDS_PER_MINUTE/2 ) { // round to nearest minute
-        m++;
-        if ( m >= TimeOps::IMINUTES_PER_HOUR ) {
-            m = 0;
-            h++;
-            if ( h >= TimeOps::IHOURS_PER_DAY ) {
-                h = 0;
-                rv = 1;
-            }
-        }
-    }
-    return rv;
 }
 
 
@@ -835,19 +846,6 @@ int TimeOps::getCalendarData( int year, YearEndDays& days, MonthDays& md, Calend
 
 #if defined( CALENDARS_OF_THE_WORLD )
 
-/* The following mod( ) function returns the _positive_ remainder after */
-/* a division.  Annoyingly,  if x < 0,  then x % y <= 0;  thus,  this   */
-/* function is needed for things such as determining a day of the week. */
-
-long TimeOps::mod( long x, long y ) {
-    long rval = x % y;
-    
-    if( rval < 0L )
-        rval += y;
-    
-    return rval;
-}
-
 void TimeOps::getIslamicYearData( long year, long& daysInYear, MonthDays& md ) {
     static const long THIRTY_ISLAMIC_YEARS = 10631L;
     
@@ -856,7 +854,7 @@ void TimeOps::getIslamicYearData( long year, long& daysInYear, MonthDays& md ) {
         1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
         0, 1, 0, 0, 1, 0, 1, 0, 0, 1 };
     
-    long yearWithinCycle = TimeOps::mod( year, 30L );
+    long yearWithinCycle = mod( year, 30L );
     long thirtyYearCycles = (year - yearWithinCycle) / 30L;
     long rval = E_ISLAMIC +
     thirtyYearCycles * THIRTY_ISLAMIC_YEARS +
@@ -890,7 +888,7 @@ static const int isHebrewLeapYear[19] = { 0, 0, 1, 0, 0, 1,
     0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1 };
 
 long TimeOps::lunationsToTishri1( long year ) {
-    long yearWithinCycle = TimeOps::mod( year - 1, 19L );
+    long yearWithinCycle = mod( year - 1, 19L );
     
     long fullNineteenYearCycles = ( year - 1 - yearWithinCycle ) / 19L;
     
@@ -915,7 +913,7 @@ void TimeOps::lunationsToDaysAndHalakim( long lunations, long& days, long& halak
      glumph,  and the rest is easy.
      *****/
     
-    long lunationWithinGlumph = TimeOps::mod( lunations, 25920L );
+    long lunationWithinGlumph = mod( lunations, 25920L );
     
     long currGlumph = ( lunations - lunationWithinGlumph ) / 25920L;
     
@@ -945,17 +943,17 @@ void TimeOps::getHebrewYearData( long year, YearEndDays& daysInYear, MonthDays& 
         findTishri1( year + i, day, halakim );
         
         /* Check dehiyyah (c): */
-        if( 3 == TimeOps::mod( day, 7L ) &&
+        if( 3 == mod( day, 7L ) &&
            halakim >= 9L * 1080L + 204L &&
-           !isHebrewLeapYear[ TimeOps::mod( year - 1 + i, 19L) ]
+           !isHebrewLeapYear[ mod( year - 1 + i, 19L) ]
            )
         {
             day += 2;
         }
         /* Check dehiyyah (d): */
-        else if( TimeOps::mod( day, 7L) == 2 &&
+        else if( mod( day, 7L) == 2 &&
                 halakim >= 15L * 1080L + 589L &&
-                isHebrewLeapYear[ TimeOps::mod( year - 2 + i, 19L) ]
+                isHebrewLeapYear[ mod( year - 2 + i, 19L) ]
                 )
         {
             day++;
@@ -965,9 +963,9 @@ void TimeOps::getHebrewYearData( long year, YearEndDays& daysInYear, MonthDays& 
             if( halakim > 18L * 1080L )
                 day++;
             
-            if( TimeOps::mod( day, 7L ) == 1 ||
-                TimeOps::mod( day, 7L ) == 4 ||
-                TimeOps::mod( day, 7L ) == 6L
+            if( mod( day, 7L ) == 1 ||
+                mod( day, 7L ) == 4 ||
+                mod( day, 7L ) == 6L
                )
             {
                 day++;
@@ -982,7 +980,7 @@ void TimeOps::getHebrewYearData( long year, YearEndDays& daysInYear, MonthDays& 
         for( int i=0; i<6; i++ )                 /* "normal" lengths */
             md[i] = md[i + 7] = (char)( 30 - (i & 1));
         
-        if( isHebrewLeapYear[ TimeOps::mod( year - 1, 19L) ] ) {
+        if( isHebrewLeapYear[ mod( year - 1, 19L) ] ) {
             md[5] = 30;     /* Adar I is bumped up a day in leap years */
             md[6] = 29;
         }

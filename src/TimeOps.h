@@ -128,17 +128,6 @@ struct TimeOps {
     /**
      * formatTime(): format a time into an HH:MM string
      *
-     * @param buf - where to put the string
-     * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
-     * @param doSecs - true to include seconds (HH:MM:SS)
-     *
-     * @return 1 if rounding wrapped to 00:00[:00], else 0
-     */
-    static int formatTime ( char* _buf, double _dayFrac, bool _doSecs = false );
-
-    /**
-     * formatTime(): format a time into an HH:MM string
-     *
      * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
      * @param doSecs - true to include seconds (HH:MM:SS)
      *
@@ -166,15 +155,6 @@ struct TimeOps {
      * @return day fraction
      */
     static double hourToDay ( int _hrs );
-    
-    /**
-     * formatDateTime(): format a JD into a text string
-     *
-     * @param buf - where to put the formatted string
-     * @param jd  - the day to format
-     * @param fmt - format type (see DateOps::DATE_FMT)
-     */
-    static void  formatDateTime ( char* buf, double _jd, DATE_FMT _fmt );
 
     /**
      * formatDateTime(): format a JD into a text string
@@ -185,14 +165,6 @@ struct TimeOps {
      * @return formatted string
      */
     static char* formatDateTime ( double _jd, DATE_FMT _fmt );
-    
-    /**
-     * formatMS(): format a fractional minute into a text string (MM:SS.S)
-     *
-     * @param buf - where to put the formatted string
-     * @param m  - the value (in minutes) to format
-     */
-    static void formatMS( char* _buf, double _min );
 
     /**
      * formatMS(): format a fractional minute into a text string (MM:SS.S)
@@ -406,7 +378,7 @@ private:
         UPPER_PERSIAN_YEAR = 2327
     };
     
-    static long mod ( long x, long y );
+    // static long mod ( long x, long y );
     
     // Islamic calendar
     static void getIslamicYearData ( long year, long& days, MonthDays& md );
@@ -428,20 +400,6 @@ private:
 #endif  /* #if defined( CALENDARS_OF_THE_WORLD ) */
     
     // ---------------------------------------------------------------------------
-
-    /**
-     * roundToNearestMinute(): round a time to the nearest minute
-     *
-     * if h:m wraps to zero, we roll back to 23:59 to preserve "today"
-     *
-     * @param h - hour
-     * @param m - minute
-     * @param s - second
-     *
-     * @return 1 if rounding wrapped to 00:00, else 0.
-     *
-     */
-    static int roundToNearestMinute( int &_hrs, int &_min, int &_sec );
     
     static double timeToDay( struct tm* pt );
 };
