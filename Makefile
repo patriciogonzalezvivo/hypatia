@@ -1,3 +1,5 @@
+scripts=$(wildcard test/*.py)
+
 all:
 	swig -c++ -python astro.i
 	python setup.py build_ext --inplace  
@@ -9,3 +11,8 @@ clean:
 
 install:
 	python setup.py install
+
+test: $(scripts)
+
+$(scripts): astro.py
+	@python $@
