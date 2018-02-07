@@ -24,13 +24,7 @@ GeoPoint::~GeoPoint(){
 }
 
 Vector GeoPoint::getGeoVector() const {
-    const double cosLat = cos(m_lat);
-    const double radius = m_alt;
-    
     Vector v;
-    v.x = cos(m_lng) * cosLat * radius;
-    v.y = sin(m_lng) * cosLat * radius;
-    v.z = sin(m_lat) * radius;
-    
-    return v;
+    v.setPolar(m_lng, m_lat);
+    return v * m_alt;
 }

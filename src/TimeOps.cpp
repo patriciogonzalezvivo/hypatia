@@ -736,11 +736,15 @@ int TimeOps::getCalendarYear(long jd, CalendarType calendar) {
             year = (jd - E_REVOLUTIONARY) / 365L;
             break;
         case T_PERSIAN:
+        case T_PERSINA_MODERN:
             year = (jd - JALALI_ZERO) / 365L;
             if( year < LOWER_PERSIAN_YEAR)
                 year = LOWER_PERSIAN_YEAR;
             if( year > UPPER_PERSIAN_YEAR)
                 year = UPPER_PERSIAN_YEAR;
+            break;
+        case T_CHINESE:
+            year = (jd - E_CHINESE) / 365L;
             break;
 #endif
         default:       /* undefined calendar */
@@ -773,7 +777,7 @@ void TimeOps::getJulGregYearData( int year, long& daysInYear, MonthDays& md, boo
     static const MonthDays months =
     { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 0 };
     
-    if( year >= 0L ) {
+    if ( year >= 0L ) {
         daysInYear = year * 365L + year / 4L;
         if( !julian )
             daysInYear += -year / 100L + year / 400L;
@@ -784,8 +788,9 @@ void TimeOps::getJulGregYearData( int year, long& daysInYear, MonthDays& md, boo
             daysInYear += -(year - 99L) / 100L + (year - 399L) / 400L;
     }
     
-    if( julian )
+    if ( julian ) {
         daysInYear -= 2L;
+    }
     
     memcpy( &md, months, sizeof(MonthDays) );
     
@@ -825,6 +830,15 @@ int TimeOps::getCalendarData( int year, YearEndDays& days, MonthDays& md, Calend
             else
                 rval = -1;
             break;
+        case T_PERSINA_MODERN:
+            if( year >= LOWER_PERSIAN_YEAR && year <= UPPER_PERSIAN_YEAR)
+                getPersianModernYearData( year, days, md );
+            else
+                rval = -1;
+            break;
+        case T_CHINESE:
+            getChineseYearData( year, days[0], md );
+            break;
 #endif
         default:
             rval = -1;
@@ -857,13 +871,14 @@ void TimeOps::getIslamicYearData( long year, long& daysInYear, MonthDays& md ) {
     long yearWithinCycle = mod( year, 30L );
     long thirtyYearCycles = (year - yearWithinCycle) / 30L;
     long rval = E_ISLAMIC +
-    thirtyYearCycles * THIRTY_ISLAMIC_YEARS +
-    yearWithinCycle * 354L;
+                thirtyYearCycles * THIRTY_ISLAMIC_YEARS +
+                yearWithinCycle * 354L;
     
     md[12] = 0;
-    md[11] = 29 + isIslamicLeapYear[yearWithinCycle];
-    while( yearWithinCycle-- )
+    md[11] = (char)(29 + isIslamicLeapYear[yearWithinCycle]);
+    while( yearWithinCycle-- ) {
         rval += long( isIslamicLeapYear[yearWithinCycle] );
+    }
     
     daysInYear = rval;
     
@@ -871,8 +886,9 @@ void TimeOps::getIslamicYearData( long year, long& daysInYear, MonthDays& md ) {
     /* months for the first eleven months;  the twelfth is 30    */
     /* days in a leap year,  29 otherwise (see above).           */
     
-    for( int i=0; i<11; i++ )
+    for ( int i=0; i < 11; i++ ) {
         md[i] = 30 - (i % 2);
+    }
 }
 
 /* End:  Islamic calendar */
@@ -894,8 +910,9 @@ long TimeOps::lunationsToTishri1( long year ) {
     
     long rval = fullNineteenYearCycles * 235L + yearWithinCycle * 12L;
     
-    for( int y=0; y<yearWithinCycle; y++ )
+    for( int y=0; y<yearWithinCycle; y++ ) {
         rval += isHebrewLeapYear[y];
+    }
     
     return rval;
 }
@@ -1103,8 +1120,8 @@ void TimeOps::getJalaliYearData( long year, YearEndDays& daysInYear, MonthDays& 
     if( year < LOWER_PERSIAN_YEAR || year > UPPER_PERSIAN_YEAR)
         return;
     
-    daysInYear[0] = jalaliJd0( year) + 1L;
-    daysInYear[1] = jalaliJd0( year + 1L ) + 1L;
+    daysInYear[0] = jalaliJd0( (int)year ) + 1L;
+    daysInYear[1] = jalaliJd0( (int)year + 1L ) + 1L;
     
     /* The first six months have 31 days.
      * The next five have 30 days.
@@ -1116,10 +1133,137 @@ void TimeOps::getJalaliYearData( long year, YearEndDays& daysInYear, MonthDays& 
     for( int i=6; i<11; i++ )
         md[i] = 30;
     
-    md[11] = ( daysInYear[1] - daysInYear[0] - 336L );
+    md[11] = (char)( daysInYear[1] - daysInYear[0] - 336L );
+    md[12] = 0;      /* always a twelve-month/year calendar */
 }
 
 /* End:  Persian (Jalali) calendar */
+
+/* Begin:  Persian Modenr calendar */
+
+/* 7 April 2004:  added the 'modern Persian calendar',  which follows the  */
+/* pattern of the astronomically-based Persian (Jalaali) calendar closely, */
+/* but not exactly.  The 'modern' (algorithmic) flavor has a pattern of    */
+/* 683 leap years over a 2820-year cycle,  in a manner that collapses      */
+/* nicely into a few lines of code.                                        */
+
+long TimeOps::persianModernJd0 ( const long year) {
+   const long epbase = year - 474L;
+   const long epyear = 474L + (epbase + 282000000) % 2820L;
+
+   return( (epyear * 31 - 5) / 128 + (epyear - 1) * 365
+               + ((year - epyear) / 2820) * 1029983 + E_PERSIAN);
+}
+
+/* 7 April 2004:  modified 'get_jalali_year_data()' so that it can use   */
+/* either the traditional astronomical Jalaali-based start of the year,  */
+/* or the 'modern' (algorithmic) Persian calendar.  If we're outside the */
+/* range covered by the Jalaali algorithm in this code,  we fall back on */
+/* use of the algorithmic rule.                                          */
+
+void TimeOps::getPersianModernYearData ( const long year, YearEndDays& daysInYear, MonthDays& md ) {
+    if( year < LOWER_PERSIAN_YEAR || year > UPPER_PERSIAN_YEAR) {
+        return;
+    }
+    
+    daysInYear[0] = persianModernJd0( (int)year ) + 1L;
+    daysInYear[1] = persianModernJd0( (int)year + 1L ) + 1L;
+    
+    /* The first six months have 31 days.
+     * The next five have 30 days.
+     * The last month has 29 days in ordinary years,  30 in leap years.
+     */
+    for( int i=0; i<6; i++ )
+        md[i] = 31;
+    
+    for( int i=6; i<11; i++ )
+        md[i] = 30;
+    
+    md[11] = (char)( daysInYear[1] - daysInYear[0] - 336L );
+    md[12] = 0;      /* always a twelve-month/year calendar */
+}
+/* End:  Persian Modenr calendar */
+
+/* Begin:  Chinese calendar */
+
+
+/* The Chinese calendar poses some particularly sticky problems,  and is
+a real mess to compute.  Therefore,  I wrote a separate program to
+"pre-compile" a calendar and store it in a file,  CHINESE.DAT.  To handle
+the Chinese calendar,  one must load that file into a buffer,
+chinese_calendar_data.  The following code then simply "un-crunches" the
+data.
+
+   NOTE:  The odd arrangement of intercalary months in the Chinese calendar
+means that one must be careful about month numbering.  The solution I've
+used in this code is to return a twelve or thirteen-month calendar,  much
+as with the Chinese calendar;  the external int chinese_intercalary_month
+is used to indicate which of the 13 is intercalary (it's left at zero if
+there is no intercalary month.)  See JD.CPP for an example of its use.
+
+   NOTE:  There is no 'official' numbering scheme for the Chinese calendar.
+Traditionally,  it just ran on a sixty-year cycle.  There are three
+different schemes in use.  I've used one in which the Gregorian year 2000
+corresponds to a Chinese year 4637.  Some people think the Chinese
+calendar was created sixty years earlier,  and that therefore 2000 (Greg.)
+= 4397 (Chinese).  Just to make things still more confusing,  some people
+add another year to this: 2000 (Greg.) = 4398 (Chinese).  So you may see
+Chinese "year" numbers that are 60 or 61 greater than those used in this
+code.
+
+   NOTE:  Some parts of the following code extract integer data without
+proper regard to byte-order.  If you compile this on "wrong-endian"
+machines,  this will have to be fixed!  (Not a big deal;  three lines,
+marked below,  need changes.)
+
+   The "packing" works as follows.  The data for each year is stored in
+24 bits.  The 13 least significant bits are set (or unset) to indicate
+30-day (or 29-day) months.  Shifting the "packed value" down by 13 thus
+leaves an 11-bit quantity.
+
+   That value,  modulo 14,  tells you which month in that year is the
+intercalary one.  (If it's zero,  there is no intercalary month,  and
+this is a twelve-month year.)  Dividing the value by 14 gives you an
+"offset",  and the JD of the Chinese New Year is then given as
+
+jd = 365 * year + year / 4 + E_CHINESE + offset
+
+Thus,  the offset can be a value from 0 to (2^11 / 14) = 186. */
+
+static char *chinese_calendar_data = NULL;
+static int chinese_intercalary_month = 0;
+
+void TimeOps::getChineseYearData ( const long year, long& daysInYear, MonthDays& md ) {
+   int32_t packed_val = 0;
+
+   if( !chinese_calendar_data )
+      return;
+
+   int index = (int)year - *(int16_t *)( chinese_calendar_data + 2);
+   int n_years = *(const int16_t *)chinese_calendar_data;
+         /* Above lines should involve byte-swapping */
+
+   if( index < 0 || index >= n_years) {
+      return;
+   }
+
+   memcpy( &packed_val, chinese_calendar_data + 4 + 3 * index, 3);
+         /* Swap 'packed_val' on non-Intel byte order machines */
+   for( int i = 0; i < 13; i++) {
+      md[i] = (char)(((packed_val >> i) & 1L) ? 30 : 29);
+   }
+   chinese_intercalary_month = (int)( (packed_val >> 13) % 14L);
+
+   if( chinese_intercalary_month) {
+      chinese_intercalary_month++;
+   }
+   else {             /* if there's no intercalary month... */
+      md[12] = 0;     /* ...then the '13th month' has zero days */
+    }
+
+   daysInYear = year * 365L + year / 4L + E_CHINESE + (packed_val >> 13) / 14L;
+}
+/* End:  Chinese calendar */
 
 #endif  /* #if defined( CALENDARS_OF_THE_WORLD ) */
 

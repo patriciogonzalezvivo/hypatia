@@ -24,13 +24,8 @@ void EqPoint::compute( Observer &_obs ) {
 }
 
 Vector EqPoint::getEquatorialVector() const {
-    const double cosLat = cos(m_dec);
-    
     Vector v;
-    v.x = cos(m_ra) * cosLat;
-    v.y = sin(m_ra) * cosLat;
-    v.z = sin(m_dec);
-    
+    v.setPolar(m_ra, m_dec);
     return v;
 }
 

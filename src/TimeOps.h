@@ -7,7 +7,7 @@
 // calendars:
 #define CALENDARS_OF_THE_WORLD
 
-typedef int MonthDays[13];
+typedef char MonthDays[13];
 typedef long YearEndDays[2];
 
 enum CalendarType {
@@ -17,7 +17,9 @@ enum CalendarType {
     ,T_HEBREW = 2,
     T_ISLAMIC = 3,
     T_REVOLUTIONARY = 4,
-    T_PERSIAN = 5
+    T_PERSIAN = 5,
+    T_PERSINA_MODERN = 6,
+    T_CHINESE = 7
 #endif
 };
 
@@ -281,6 +283,17 @@ struct TimeOps {
      */
     static double toJM ( double _jd );
 
+        /**
+     * toMJD():  Julian Date to Modify Julian Date 
+     *           See p 63,  in Meeus
+     *           (http://tycho.usno.navy.mil/mjd.html)
+     *
+     * @param   The Julian Day value
+     *
+     * @return  Modify Julian Date 
+     */
+    static double toMJD ( double _jd );
+
     /**
      * toDMY(): convert a long Julian Day to day/month/year
      *
@@ -335,19 +348,6 @@ struct TimeOps {
     static long dstEnd ( int _year );
 
     /*** CALENDAR ******************************************************************/
-
-    /**
-     * toMJD():  Julian Date to Modify Julian Date 
-     *           See p 63,  in Meeus
-     *           (http://tycho.usno.navy.mil/mjd.html)
-     *
-     * @param   The Julian Day value
-     *
-     * @return  Modify Julian Date 
-     */
-    static double toMJD ( double _jd );
-
-    /*** CALENDAR ******************************************************************/
     static char* getDOW( int _dow );
     static char* getDOWAbbreviation( int _dow );
 
@@ -360,11 +360,13 @@ struct TimeOps {
     
 private:
     enum CalendarEpoch {
-        E_JULIAN_GREGORIAN = 1721060L
+        E_JULIAN_GREGORIAN  = 1721060L
 #if defined(CALENDARS_OF_THE_WORLD)
-        ,E_ISLAMIC = 1948086L,
-        E_HEBREW = 347996L,
-        E_REVOLUTIONARY = 2375475L
+        ,E_ISLAMIC          = 1948086L,
+        E_HEBREW            = 347996L,
+        E_REVOLUTIONARY     = 2375475L,
+        E_PERSIAN           = 1948320L,
+        E_CHINESE           = 757862L
 #endif
     };
     
@@ -396,6 +398,12 @@ private:
     // Persian (Jalaali) calendar
     static long jalaliJd0 ( long jalaliYear );
     static void getJalaliYearData ( const long year, YearEndDays& days, MonthDays& md );
+
+    static long persianModernJd0 ( long jalaliYear );
+    static void getPersianModernYearData ( const long year, YearEndDays& days, MonthDays& md );
+
+    // Chinese
+    static void getChineseYearData ( const long year, long& days, MonthDays& md );
     
 #endif  /* #if defined( CALENDARS_OF_THE_WORLD ) */
     

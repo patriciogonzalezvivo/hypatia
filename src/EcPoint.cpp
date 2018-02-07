@@ -51,12 +51,7 @@ void EcPoint::setRadius( double _radius ) {
 }
 
 Vector EcPoint::getEclipticVector() const {
-    const double cosLat = cos(m_lat);
-    
     Vector v;
-    v.x = cos(m_lng) * cosLat * m_radius;
-    v.y = sin(m_lng) * cosLat * m_radius;
-    v.z = sin(m_lat) * m_radius;
-    
-    return v;
+    v.setPolar(m_lng, m_lat);
+    return v * m_radius;
 }
