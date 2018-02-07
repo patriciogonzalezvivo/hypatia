@@ -25,7 +25,7 @@ void EqPoint::compute( Observer &_obs ) {
 
 Vector EqPoint::getEquatorialVector() const {
     Vector v;
-    v.setPolar(m_ra, m_dec);
+    v.setPolar(m_ra, m_dec, true);
     return v;
 }
 
