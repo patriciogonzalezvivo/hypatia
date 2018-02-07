@@ -274,59 +274,42 @@ double AstroOps::equinoxSolstice( int year, SolExType type, bool local ) {
  *
  * return value is mean obliquity (epsilon sub 0) in radians.
  *
- * https://github.com/Bill-Gray/lunar/blob/master/obliquit.cpp
  */
 double AstroOps::meanObliquity( double _jcentury ){
-//    double u, u0;
-//    unsigned i;
-//    const double obliquit_minus_100_cen = 24.232841111 * MathOps::DEGS_TO_RADS;
-//    const double obliquit_plus_100_cen =  22.611485556 * MathOps::DEGS_TO_RADS;
-//    static double j2000_obliquit = 23. * 3600. + 26. * 60. + 21.448;
-//    static double t0 = 30000., rval;
-//    static long coeffs[10] = { -468093L, -155L, 199925L, -5138L,
-//        -24967L, -3905L, 712L, 2787L, 579L, 245L };
 //
-//    if( _jcentury == 0.)      /* common J2000 case;  don't do any math */
-//        return( j2000_obliquit * MathOps::ARCS_TO_RADS );
-//#ifndef CLIP_OBLIQUITY
-//    else if( _jcentury > 100.)      /* Diverges outside +/- 10 millennia,  */
-//        return( obliquit_plus_100_cen );
-//    else if( _jcentury < -100.)  /* so we might as well clip to that  */
-//        return( obliquit_minus_100_cen );
-//#endif
+//    https://github.com/Bill-Gray/lunar/blob/master/obliquit.cpp
 //
-//    if( t0 == _jcentury )    /* return previous answer */
-//        return( rval );
-//
-//    rval = j2000_obliquit;
-//    t0 = _jcentury;
-//    u = u0 = _jcentury / 100.;     /* u is in julian 10000's of years */
-//    for( i = 0; i < 10; i++, u *= u0) {
-//        rval += u * (double)coeffs[i] / 100.;
-//    }
-//    rval *= MathOps::ARCS_TO_RADS;
-//    return( rval );
     double u, u0;
     double t  = _jcentury;
     double t0 = 30000.;
     double rval = 0.;
-    static const double rvalStart = 23. * MathOps::SECONDS_PER_DEGREE +
-    26. * MathOps::MINUTES_PER_DEGREE +
-    21.448;
+    
+    const double obliquit_minus_100_cen = MathOps::toRadians(24.232841111);
+    const double obliquit_plus_100_cen = MathOps::toRadians(22.611485556);
+    
+    static const double j2000_obliquit = 23. * MathOps::SECONDS_PER_DEGREE +
+                                         26. * MathOps::MINUTES_PER_DEGREE +
+                                         21.448;
     static const int OBLIQ_COEFFS = 10;
     static const double coeffs[ OBLIQ_COEFFS ] = {
         -468093.,  -155.,  199925.,  -5138.,  -24967.,
         -3905.,    712.,   2787.,    579.,    245.
     };
     
-    if( t0 != t ) {
+    if( _jcentury == 0.)      /* common J2000 case;  don't do any math */
+        return MathOps::toRadians( j2000_obliquit / MathOps::SECONDS_PER_DEGREE );
+#ifndef CLIP_OBLIQUITY
+    else if( _jcentury > 100.)      /* Diverges outside +/- 10 millennia,  */
+        return( obliquit_plus_100_cen);
+    else if( _jcentury < -100.)  /* so we might as well clip to that  */
+        return( obliquit_minus_100_cen);
+#endif
+    else if ( _jcentury != t0) {
+        t0 = _jcentury;
+        u = u0 = _jcentury / 100.;     // u is in julian 10000's of years
+        rval = j2000_obliquit;
         
-        t0 = t;
-        u = u0 = t / 100.;     // u is in julian 10000's of years
-        rval = rvalStart;
-        
-        for( int i=0; i<OBLIQ_COEFFS; i++ )
-        {
+        for ( int i=0; i<OBLIQ_COEFFS; i++ ) {
             rval += u * coeffs[i] / 100.;
             u *= u0;
         }

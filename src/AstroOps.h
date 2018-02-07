@@ -96,8 +96,6 @@ public:
      *
      * @return Mean obliquity (epsilon sub 0) in radians.
      *
-     * The obliquity formula (and all the magic numbers below) come from Meeus,
-     * Astro Algorithms.
      *
      */
     static double meanObliquity( double _jcentury );
@@ -124,6 +122,14 @@ public:
 
     // -------------------------------------------------- HelioCentric (Ecliptic)
     
+    /**
+     * heliocentricToGeocentric() - ecliptic transformation from heliocentric to geocentric
+     *
+     * @param Observer
+     * @param Ecliptic heliocentric
+     *
+     * @return Ecliptic geocentric
+     */
     static EcPoint heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric );
 
     // -------------------------------------------------- GeoCentric
