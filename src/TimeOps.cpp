@@ -2,11 +2,12 @@
 #include "MathOps.h"
 
 #include <math.h>
+#include <string.h>
+
 #include <ctime>
 #include <chrono>
-
-#include <string.h>
 #include <iostream>
+
 
 const double TimeOps::HOURS_PER_DAY         = 24.;
 const double TimeOps::DAYS_PER_HOUR         = 1./HOURS_PER_DAY;
@@ -353,8 +354,7 @@ long TimeOps::toJD( int day, int month, int year, CalendarType calendar ) {
 /**
  * timeToDay() - convert a struct tm to Julian Day
  */
-double TimeOps::timeToDay( struct tm* pt )
-{
+double TimeOps::timeToDay( struct tm* pt ) {
     int secs = pt->tm_hour * TimeOps::ISECONDS_PER_HOUR +
     pt->tm_min * TimeOps::ISECONDS_PER_MINUTE +
     pt->tm_sec;

@@ -1,5 +1,7 @@
 #include "MathOps.h"
+
 #include <math.h>
+#include <stdio.h>
 
 // In-class constants cannot be initialized in the class declaration. Sigh.
 //
@@ -195,4 +197,58 @@ void MathOps::toHMS ( double degrees, int &_hrs, int &_min, double &_sec ) {
         _min = 0;
         _hrs ++;
     }
+}
+
+/**
+ * formatDegrees(): format degrees into a string
+ *
+ * @param degrees in
+ * @param format type
+ *
+ * @return formated string
+ *
+ */
+char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
+    char *buf = new char[32];
+    
+    if (_fmt == DEGRESS) {
+        sprintf ( buf, "%.4f°", _deg);
+        return buf;
+    }
+    
+    int first, m;
+    double s;
+    
+    char sign = ' ';
+    if (_deg < 0) {
+        sign = '-';
+    }
+    
+    switch (_fmt) {
+        case D_M_S:
+            MathOps::toDMS(_deg, first, m, s);
+            sprintf ( buf, "%c %02d° %02d' %.2f\"", sign, (int)fabs(first), (int)fabs(m), fabs(s) );
+            break;
+        case H_M_S:
+            MathOps::toHMS(_deg, first, m, s);
+            sprintf ( buf, "%c %02dhs %02dm %.2fs", sign, (int)fabs(first), (int)fabs(m), fabs(s) );
+            break;
+        case DEGRESS:
+            break;
+    }
+    
+    return buf;
+}
+
+/**
+ * formatRadians(): format degrees into a string
+ *
+ * @param radians in
+ * @param format type
+ *
+ * @return formated string
+ *
+ */
+char* MathOps::formatRadians ( double _rad, ANGLE_FMT _fmt ) {
+    return formatDegrees(MathOps::toDegrees(_rad), _fmt);
 }

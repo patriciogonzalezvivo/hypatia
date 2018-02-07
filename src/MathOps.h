@@ -9,6 +9,12 @@
 #pragma once
 #undef PI
 
+enum ANGLE_FMT {
+    DEGRESS,    // 16.294°
+    D_M_S,      // 12° 36' 59.1"
+    H_M_S       // 15h 15m 32.9s
+};
+
 struct MathOps {
     static const double PI;
     static const double TAU;
@@ -60,6 +66,61 @@ struct MathOps {
      */
     static double secToRadians( double _sec );
     
+    /**
+     * toHrs(): convert arcseconds to radians
+     *
+     * @param degrees
+     *
+     * @return hours double
+     */
+    static double toHrs( double _deg ) { return _deg * DEGS_TO_HRS; };
+    
+    /**
+     * toDMS(): convert degress to degrees, minutes and seconds
+     *
+     * @param degrees in
+     *
+     * @param degrees out
+     * @param minutes out
+     * @param seconds out
+     *
+     */
+    static void toDMS ( double deg, int &_deg, int &_min, double &_sec );
+    
+    /**
+     * toHMS(): convert degress to degrees, minutes and seconds
+     *
+     * @param degrees in
+     *
+     * @param hours out
+     * @param minutes out
+     * @param seconds out
+     *
+     */
+    static void toHMS ( double deg, int &_hrs, int &_min, double &_sec );
+    
+    /**
+     * formatDegrees(): format degrees into a string
+     *
+     * @param degrees in
+     * @param format type
+     *
+     * @return formated string
+     *
+     */
+    static char* formatDegrees ( double _deg, ANGLE_FMT _format );
+    
+    /**
+     * formatRadians(): format radiants into a string
+     *
+     * @param radians in
+     * @param format type
+     *
+     * @return formated string
+     *
+     */
+    static char* formatRadians ( double _rad, ANGLE_FMT _format );
+      
     /**
      * normalizeDegrees(): reduce an angle in degrees to the range (0 <= d < 360)
      *
@@ -116,9 +177,4 @@ struct MathOps {
      * @return asin (PI/2 ... -PI/2)
      */
     static double asine( double _rad );
-    
-    static double toHrs( double _deg ) { return _deg * DEGS_TO_HRS; };
-    
-    static void toDMS ( double deg, int &_deg, int &_min, double &_sec );
-    static void toHMS ( double deg, int &_hrs, int &_min, double &_sec );
 };
