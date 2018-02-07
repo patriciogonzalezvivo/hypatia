@@ -6,6 +6,8 @@
 #include "MathOps.h"
 #include "Vector.h"
 
+#include <string>
+
 class EcPoint {
 public:
     EcPoint();
@@ -28,6 +30,8 @@ public:
     virtual double  getRadius() const { return m_radius; };
     
     virtual Vector  getEclipticVector() const;
+    
+    virtual std::string getString() const;
     
 protected:
     double m_lng, m_lat, m_radius;

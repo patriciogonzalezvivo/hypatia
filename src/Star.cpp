@@ -1,5 +1,8 @@
 #include "Star.h"
 
+#include <sstream>
+#include <iomanip>
+
 #define N_STARS 2828
 const int Star::TOTAL = N_STARS;
 
@@ -586,5 +589,14 @@ Star::Star( int _id ) : m_mag(0.0), m_id(-1) {
 
 Star::Star( double _ra, double _dec, double _mag ) : m_mag(_mag), m_id(-1) {
     setEquatorialAngles(_ra, _dec);
+}
+
+std::string Star::getString() const {
+    std::stringstream ss;
+    ss << std::right << std::fixed << std::setprecision(3);
+    ss << getId();
+    ss << EqPoint::getString();
+    ss << ", mag:" << std::setw(8) << m_mag;
+    return ss.str();
 }
 

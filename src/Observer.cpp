@@ -9,6 +9,8 @@
 
 #include <string.h>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 Observer::Observer() : m_sec(0.0), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0), m_change(true) {
 }
@@ -92,4 +94,16 @@ void Observer::update() {
     if (m_change) {
         setSeconds(m_sec);
     }
+}
+
+std::string Observer::getString() const {
+    std::stringstream ss;
+    ss << std::right << std::fixed << std::setprecision(3);
+    ss << "Observer, ";
+    ss << m_location.getString();
+    ss << ", jd:" << std::setw(8) << m_jd;
+    ss << ", time:" << std::setw(8) << TimeOps::formatDateTime(m_jd, Y_M_D_HM);
+    ss << ", obliq:" << std::setw(8) << MathOps::formatRadians(m_obliquity, DEGREES);
+    ss << ", lst:" << std::setw(8) << MathOps::formatDegrees(m_lst, DEGREES);
+    return ss.str();
 }

@@ -10,7 +10,7 @@
 #undef PI
 
 enum ANGLE_FMT {
-    DEGRESS,    // 16.294°
+    DEGREES,    // 16.294°
     D_M_S,      // 12° 36' 59.1"
     H_M_S       // 15h 15m 32.9s
 };

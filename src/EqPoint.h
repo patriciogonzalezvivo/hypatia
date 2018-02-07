@@ -26,6 +26,8 @@ public:
 
     virtual void    compute( Observer &_obs );
 
+    virtual std::string getString() const;
+    
 protected:
     virtual void    setEquatorialAngles( double _ra, double _dec, bool _radians = false );
 

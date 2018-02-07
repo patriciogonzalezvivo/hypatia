@@ -16,6 +16,9 @@
 #include "Pluto.h"
 #include "Vsop.h"
 
+#include <sstream>
+#include <iomanip>
+
 static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"Earth", (char*)"Mar", (char*)"Jup", (char*)"Sat", (char*)"Ur", (char*)"Nep", (char*)"Pl", (char*)"Moon" };
 
 static char* zodiacSigns[] = { (char*)"Ari", (char*)"Tau", (char*)"Gem", (char*)"Cnc", (char*)"Leo", (char*)"Vir", (char*)"Lib", (char*)"Sco", (char*)"Sgr", (char*)"Cap", (char*)"Aqr", (char*)"Psc" };
@@ -99,4 +102,12 @@ char*  Body::getBodyName() const {
 
 char * Body::getZodiacSign() const {
     return zodiacSigns[ int((m_geocentric.getLongitudeRadians()/MathOps::TAU)*12.)%12 ];
+}
+
+std::string Body::getString() const {
+    std::stringstream ss;
+    ss << std::right << std::fixed << std::setprecision(3);
+    ss << getBodyName();
+    ss << EqPoint::getString();
+    return ss.str();
 }

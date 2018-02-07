@@ -19,11 +19,13 @@ public:
     void setId( int _id );
     int getId() const { return m_id; };
 
-    char * getName();
-    char * getAbbreviation();
+    char * getName() const;
+    char * getAbbreviation() const;
 
     std::vector<int> getStarIndices() const { return m_sIndices; };
     std::vector<EqPoint> getBoundary() const { return m_boundary; };
+    
+    virtual std::string getString() const;
 
 protected:
     std::vector<int>        m_sIndices;

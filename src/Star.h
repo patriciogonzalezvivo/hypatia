@@ -13,6 +13,8 @@ public:
 
     virtual int getId() const { return m_id; };
     virtual double getMagnitud() const { return m_mag; };
+    
+    virtual std::string getString() const;
 
 protected:
     double m_mag;

@@ -7,6 +7,9 @@
 #include <ctype.h>
 #include <math.h>
 
+#include <sstream>
+#include <iomanip>
+
 /*
 ======================================================================
 Ernie Wright  2 Mar 94
@@ -957,7 +960,7 @@ void Constellation::setId( int _id ) {
  * return "???: ????" if id is invalid.
  */
 
-char* Constellation::getName() {
+char* Constellation::getName() const {
     if ( m_id < 0 ) {
         return ((char*)"????");
     }
@@ -967,11 +970,20 @@ char* Constellation::getName() {
     return cstr;
 }
 
-char* Constellation::getAbbreviation() {
+char* Constellation::getAbbreviation() const {
     if ( m_id < 0 ) {
         return ((char*)"???");
     }
     char *cstr = new char[3];
     strncpy(cstr, cns_namemap[m_id], 3);
     return cstr;
+}
+
+std::string Constellation::getString() const {
+    std::stringstream ss;
+    ss << std::right << std::fixed << std::setprecision(3);
+    ss << getAbbreviation();
+    ss << ", id: " << getId();
+    ss << EqPoint::getString();
+    return ss.str();
 }

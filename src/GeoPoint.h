@@ -3,6 +3,8 @@
 #include "MathOps.h"
 #include "Vector.h"
 
+#include <string>
+
 enum BodyId {
     NAB=-1, // NotABody
     SUN=0,
@@ -27,6 +29,8 @@ public:
     virtual BodyId  getBody() const { return m_body; };
     
     virtual Vector  getGeoVector() const;
+    
+    virtual std::string getString() const;
     
 protected:
     double  m_lng, m_lat, m_alt;

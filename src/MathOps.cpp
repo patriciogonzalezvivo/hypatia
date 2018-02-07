@@ -211,7 +211,7 @@ void MathOps::toHMS ( double degrees, int &_hrs, int &_min, double &_sec ) {
 char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
     char *buf = new char[32];
     
-    if (_fmt == DEGRESS) {
+    if (_fmt == DEGREES) {
         sprintf ( buf, "%.4f°", _deg);
         return buf;
     }
@@ -233,7 +233,7 @@ char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
             MathOps::toHMS(_deg, first, m, s);
             sprintf ( buf, "%c %02dhs %02dm %.2fs", sign, (int)fabs(first), (int)fabs(m), fabs(s) );
             break;
-        case DEGRESS:
+        case DEGREES:
             break;
     }
     

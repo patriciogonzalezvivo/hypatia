@@ -1,7 +1,10 @@
 #include "EqPoint.h"
 
-#include <math.h>
 #include "AstroOps.h"
+
+#include <math.h>
+#include <sstream>
+#include <iomanip>
 
 EqPoint::EqPoint() : m_ra(0.0), m_dec(0.0) {
 }
@@ -40,5 +43,14 @@ void EqPoint::setEquatorialAngles( double _ra, double _dec, bool _radians ) {
     }
     
     m_az = m_alt = 0.0;
+}
+
+std::string EqPoint::getString() const {
+    std::stringstream ss;
+    ss << std::right << std::fixed << std::setprecision(3);
+    ss << HorPoint::getString();
+    ss << ", RA: " << std::setw(8) << MathOps::formatDegrees(getRightAscension(), H_M_S);
+    ss << ", Dec: " << std::setw(8) << MathOps::formatDegrees(getDeclination(), D_M_S);
+    return ss.str();
 }
 

@@ -6,6 +6,8 @@
 #include "Vector.h"
 #include "MathOps.h"
 
+#include <string>
+
 class HorPoint {
 public:
     HorPoint();
@@ -20,6 +22,8 @@ public:
     virtual double  getAltitudRadians() const { return m_alt; }
     
     virtual Vector  getHorizontalVector() const;
+    
+    virtual std::string getString() const;
     
 protected:
     virtual void    setHorizontalAngles( double _alt, double _az, bool _radians = false );

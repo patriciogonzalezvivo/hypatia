@@ -34,6 +34,8 @@ public:
     
     Vector  getHeliocentricVector();
     
+    virtual std::string getString() const;
+    
     void    update();
     
 private:

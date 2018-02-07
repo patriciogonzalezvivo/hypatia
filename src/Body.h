@@ -40,6 +40,8 @@ public:
     //
     virtual void    compute( Observer& _obs );
     
+    virtual std::string getString() const;
+    
 protected:
     virtual void computeElipcticAngles( Observer& _obs );
 
