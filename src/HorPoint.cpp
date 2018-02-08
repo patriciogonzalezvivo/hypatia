@@ -32,7 +32,7 @@ void HorPoint::setHorizontalAngles( double _alt, double _az, bool _radians ) {
 
 Vector HorPoint::getHorizontalVector() const {
     Vector v;
-    v.setPolar(m_alt, m_az, true);
+    v.setPolar(m_alt, -m_az, true);
     return v;
 }
 

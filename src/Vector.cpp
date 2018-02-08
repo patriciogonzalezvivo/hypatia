@@ -12,7 +12,7 @@ Vector::Vector(const double _x, const double _y, const double _z): x(_x), y(_y),
 Vector::~Vector() {
 }
 
-void Vector::setPolar(double _lng, double _lat, bool _radians ){
+Vector& Vector::setPolar(double _lng, double _lat, bool _radians ){
     if (!_radians) {
         _lng = MathOps::toRadians(_lng);
         _lat = MathOps::toRadians(_lat);
@@ -23,6 +23,8 @@ void Vector::setPolar(double _lng, double _lat, bool _radians ){
     x = cos( _lng ) * cosLat;
     y = sin( _lng ) * cosLat;
     z = sin( _lat );
+    
+    return *this;
 }
 
 
@@ -195,16 +197,17 @@ double Vector::dot(const Vector& _vec) const {
     (z * _vec.z);
 }
 
-void Vector::normalize() {
+Vector& Vector::normalize() {
     double length = getMagnitud();
     if ( length > 0 ) {
         x /= length;
         y /= length;
         z /= length;
     }
+    return *this;
 }
 
-void Vector::rotate ( double _angle, int _axis, bool _radians ) {
+Vector& Vector::rotate ( double _angle, int _axis, bool _radians ) {
     if (!_radians) {
         _angle = MathOps::toRadians(_angle);
     }
@@ -216,9 +219,11 @@ void Vector::rotate ( double _angle, int _axis, bool _radians ) {
     double temp = getPtr()[a] * cosAng - getPtr()[b] * sinAng;
     getPtr()[b] = getPtr()[b] * cosAng + getPtr()[a] * sinAng;
     getPtr()[a] = temp;
+    
+    return *this;
 }
 
-void Vector::rotate ( double _lng, double _lat, bool _radians ) {
+Vector& Vector::rotate ( double _lng, double _lat, bool _radians ) {
     if (!_radians) {
         _lng = MathOps::toRadians(_lng);
         _lat = MathOps::toRadians(_lat);
@@ -234,9 +239,11 @@ void Vector::rotate ( double _lng, double _lat, bool _radians ) {
     z = -sinLat * x + cosLat * z;
     y = y_tmp;
     x = x_tmp;
+    
+    return *this;
 }
 
-void  Vector::rotate(double _angle, const Vector& _axis, bool _radians ) {
+Vector& Vector::rotate(double _angle, const Vector& _axis, bool _radians ) {
     if (!_radians) {
         _angle = MathOps::toRadians(_angle);
     }
@@ -258,4 +265,6 @@ void  Vector::rotate(double _angle, const Vector& _axis, bool _radians ) {
     z = x * (ax.z*ax.x*cosb - ax.y*sina)
         + y * (ax.z*ax.y*cosb + ax.x*sina)
         + z * (ax.z*ax.z*cosb + cosa);
+    
+    return *this;
 }
