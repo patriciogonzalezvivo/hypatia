@@ -983,7 +983,7 @@ std::string Constellation::getString() const {
     std::stringstream ss;
     ss << std::right << std::fixed << std::setprecision(3);
     ss << getAbbreviation();
-    ss << ", id: " << getId();
+    ss << ", id: " << getId() << ", ";
     ss << EqPoint::getString();
     return ss.str();
 }

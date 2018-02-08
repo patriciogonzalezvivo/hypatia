@@ -107,7 +107,7 @@ char * Body::getZodiacSign() const {
 std::string Body::getString() const {
     std::stringstream ss;
     ss << std::right << std::fixed << std::setprecision(3);
-    ss << getBodyName();
+    ss << getBodyName() << ", ";
     ss << EqPoint::getString();
     return ss.str();
 }

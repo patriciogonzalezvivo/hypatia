@@ -39,7 +39,7 @@ Vector HorPoint::getHorizontalVector() const {
 std::string HorPoint::getString() const {
     std::stringstream ss;
     ss << std::right << std::fixed << std::setprecision(3);
-    ss << ", Alt: " << std::setw(8) << MathOps::formatDegrees(getAltitud(), DEGREES);
+    ss << "Alt: " << std::setw(8) << MathOps::formatDegrees(getAltitud(), DEGREES);
     ss << ", Az: " << std::setw(8) << MathOps::formatDegrees(getAzimuth(), DEGREES);
     return ss.str();
 }

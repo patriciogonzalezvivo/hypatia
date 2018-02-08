@@ -594,7 +594,7 @@ Star::Star( double _ra, double _dec, double _mag ) : m_mag(_mag), m_id(-1) {
 std::string Star::getString() const {
     std::stringstream ss;
     ss << std::right << std::fixed << std::setprecision(3);
-    ss << getId();
+    ss << getId() << ", ";
     ss << EqPoint::getString();
     ss << ", mag:" << std::setw(8) << m_mag;
     return ss.str();
