@@ -394,7 +394,7 @@ time_t TimeOps::toTime( double jd ) {
  * @return The Julian Day value
  */
 double TimeOps::now(bool _local) {
-    return _local ? timeToLDay( time(0) ) : timeToUDay( time(0) );
+    return (_local ? timeToLDay( time(0) ) : timeToUDay( time(0) )) - TimeOps::JD_DIFF;
 }
 
 //----------------------------------------------------------------------------
