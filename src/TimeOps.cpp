@@ -128,9 +128,6 @@ unsigned long TimeOps::getCurrentSeconds() {
  * @return Julian Century
  */
 double TimeOps::toJD (unsigned long _sec) {
-    if (_sec == 0.0)
-        _sec = getCurrentSeconds();
-    
     return _sec / SECONDS_PER_DAY + JULIAN_EPOCH;
 }
 
@@ -394,7 +391,7 @@ time_t TimeOps::toTime( double jd ) {
  * @return The Julian Day value
  */
 double TimeOps::now(bool _local) {
-    return (_local ? timeToLDay( time(0) ) : timeToUDay( time(0) )) - TimeOps::JD_DIFF;
+    return (_local ? timeToLDay( time(0) ) : timeToUDay( time(0) ));
 }
 
 //----------------------------------------------------------------------------
