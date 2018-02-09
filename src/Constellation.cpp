@@ -941,6 +941,7 @@ void Constellation::setId( int _id ) {
     }
 
     m_id = _id;
+    m_centroid = EqPoint(cns_centroid[_id][0], cns_centroid[_id][1]);
 
     m_sIndices.clear();
     for (int i = 1; i <= cns_stars[_id][0]; i++) {

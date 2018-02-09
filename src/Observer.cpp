@@ -14,7 +14,8 @@ Observer::Observer() : m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0) 
 
 Observer::Observer(const GeoPoint& _location, double _jd) : m_location(_location), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0) {
     if ( _jd == 0 ) {
-        setJD( TimeOps::toJD( TimeOps::getCurrentSeconds() ) );
+//        setJD( TimeOps::toJD( TimeOps::getCurrentSeconds() ) );
+        setJD( TimeOps::now() );
     }
     else {
         setJD( _jd );
@@ -23,7 +24,8 @@ Observer::Observer(const GeoPoint& _location, double _jd) : m_location(_location
 
 Observer::Observer( double _lng_deg, double _lat_deg, double _jd) : m_location(_lng_deg, _lat_deg), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0){
     if ( _jd == 0 ) {
-        setJD( TimeOps::toJD( TimeOps::getCurrentSeconds() ) );
+//        setJD( TimeOps::toJD( TimeOps::getCurrentSeconds() ) );
+        setJD( TimeOps::now() );
     }
     else {
         setJD( _jd );

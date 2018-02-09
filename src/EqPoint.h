@@ -29,4 +29,5 @@ inline std::ostream& operator<<(std::ostream& strm, const EqPoint& p) {
     strm << std::setprecision(3);
     strm << "ra: " << std::setw(12) << MathOps::formatDegrees(p.getRightAscension(), H_M_Ss);
     strm << ", dec: " << std::setw(12) << MathOps::formatDegrees(p.getDeclination(), D_M_Ss);
+    return strm;
 }

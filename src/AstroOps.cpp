@@ -280,7 +280,6 @@ double AstroOps::meanObliquity( double _jcentury ){
 //    https://github.com/Bill-Gray/lunar/blob/master/obliquit.cpp
 //
     double u, u0;
-    double t  = _jcentury;
     double t0 = 30000.;
     double rval = 0.;
     

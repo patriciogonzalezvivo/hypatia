@@ -242,14 +242,15 @@ char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
     int d, m, y;
     char tbuf[16] = { 0 };
     
+    double day;
+    TimeOps::toYMD( _jd, y, m, day );
+    d = floor(day);
+
     if ( _fmt >= Y_MON_D_HM ) {
-        _jd += formatHMS(tbuf, _jd, false);
+        _jd += formatHMS(tbuf, _jd + TimeOps::JD_DIFF, false);
     }
     
-    TimeOps::toDMY( _jd, d, m, y );
-    // double day;
-    // TimeOps::toYMD( jd, y, m, day );
-    // d = floor(day);
+    // TimeOps::toDMY( _jd, d, m, y );
     
     switch (_fmt) {
             // date only
@@ -391,7 +392,7 @@ time_t TimeOps::toTime( double jd ) {
  * @return The Julian Day value
  */
 double TimeOps::now(bool _local) {
-    return (_local ? timeToLDay( time(0) ) : timeToUDay( time(0) ));
+    return (_local ? timeToLDay( time(0) ) : timeToUDay( time(0) )) - TimeOps::JD_DIFF;
 }
 
 //----------------------------------------------------------------------------

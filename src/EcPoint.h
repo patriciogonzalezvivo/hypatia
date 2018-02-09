@@ -40,5 +40,6 @@ inline std::ostream& operator<<(std::ostream& strm, const EcPoint& p) {
     strm << "lng: " << std::setw(12) << MathOps::formatDegrees(p.getLongitude(), D_M_Ss);
     strm << ", lat: " << std::setw(12) << MathOps::formatDegrees(p.getLatitude(), D_M_Ss);
     strm << ", rad: " << std::setw(8) << p.getRadius();
+    return strm;
 }
 

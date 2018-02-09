@@ -68,4 +68,6 @@ inline std::ostream& operator<<(std::ostream& strm, const Body& b) {
     strm << b.getEclipticHeliocentric() << ", ";
     strm << b.getEquatorial() << ", ";
     strm << b.getHorizontal();
+
+    return strm;
 }

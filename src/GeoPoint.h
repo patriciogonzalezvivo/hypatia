@@ -28,5 +28,6 @@ inline std::ostream& operator<<(std::ostream& strm, const GeoPoint& p) {
     strm << "lng: " << std::setw(12) << MathOps::formatDegrees(p.getLongitude(), D_M_Ss);
     strm << ", lat: " << std::setw(12) << MathOps::formatDegrees(p.getLatitude(), D_M_Ss);
     strm << ", alt: " << std::setw(8) << p.getAltitude();
-}
 
+    return strm;
+}

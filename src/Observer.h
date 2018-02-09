@@ -48,5 +48,5 @@ inline std::ostream& operator<<(std::ostream& strm, const Observer& o) {
     strm << ", time:" << std::setw(8) << TimeOps::formatDateTime(o.getJD(), Y_M_D_HM);
     strm << ", obliq:" << std::setw(8) << MathOps::formatRadians(o.getObliquity(), Dd);
     strm << ", lst:" << std::setw(8) << MathOps::formatDegrees(o.getLST(), Dd);
+    return strm;
 }
-

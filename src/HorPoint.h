@@ -29,4 +29,5 @@ inline std::ostream& operator<<(std::ostream& strm, const HorPoint& p) {
     strm << std::setprecision(3);
     strm << "alt: " << std::setw(8) << MathOps::formatDegrees(p.getAltitud(), Dd);
     strm << ", az: " << std::setw(8) << MathOps::formatDegrees(p.getAzimuth(), Dd);
+    return strm;
 }

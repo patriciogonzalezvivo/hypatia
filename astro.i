@@ -5,6 +5,7 @@
 
 %ignore *::operator[];
 %ignore *::operator=;
+%ignore operator<<;
 
 %apply double &OUTPUT { double &_alt, double &_az };
 %apply double &OUTPUT { double &_ra, double &_dec };

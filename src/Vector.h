@@ -53,6 +53,8 @@ public:
     virtual Vector& operator-= (double _d);
     virtual Vector& operator*= (double _d);
     virtual Vector& operator/= (double _d);
+
+    // friend std::ostream& operator << (std::ostream& os, const Vector& v);
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Vector& v) {
@@ -60,4 +62,6 @@ inline std::ostream& operator<<(std::ostream& strm, const Vector& v) {
     strm << "x: " << std::setw(8) << v.x;
     strm << ", y: " << std::setw(8) << v.y;
     strm << ", z: " << std::setw(8) << v.z;
+
+    return strm;
 }

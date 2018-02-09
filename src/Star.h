@@ -13,6 +13,7 @@ public:
     Star();
     Star( int _id );
     Star( double _ra, double _dec, double _mag );
+    virtual ~Star();
 
     virtual int     getId() const { return m_id; };
     virtual double  getMagnitud() const { return m_mag; };
@@ -36,4 +37,5 @@ inline std::ostream& operator<<(std::ostream& strm, const Star& s) {
     strm << ", mag: " << std::setw(8) << s.getMagnitud() << ", ";
     strm << s.getEquatorial() << ", ";
     strm << s.getHorizontal();
+    return strm;
 }

@@ -589,6 +589,9 @@ Star::Star( int _id ) : m_mag(0.0), m_id(-1) {
 Star::Star( double _ra, double _dec, double _mag ) : m_equatorial(_ra, _dec), m_mag(_mag), m_id(-1) {
 }
 
+Star::~Star() {
+}
+
 void Star::compute( Observer& _obs ) {
     m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
 }
