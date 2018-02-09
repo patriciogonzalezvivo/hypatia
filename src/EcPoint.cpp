@@ -1,8 +1,6 @@
 #include "EcPoint.h"
 
 #include <math.h>
-#include <sstream>
-#include <iomanip>
 
 EcPoint::EcPoint() : m_lng(0.0), m_lat(0.0), m_radius(0.0) {
 }
@@ -30,6 +28,13 @@ EcPoint& EcPoint::operator= (const Vector& _vec) {
     return *this;
 }
 
+EcPoint& EcPoint::invert() {
+    m_lng += MathOps::PI;
+    m_lat *= -1.;
+    
+    return *this;
+}
+
 void EcPoint::setLongitude( double _lng, bool _radians ) {
     if (_radians) {
         m_lng = _lng;
@@ -52,17 +57,8 @@ void EcPoint::setRadius( double _radius ) {
     m_radius = _radius;
 }
 
-Vector EcPoint::getEclipticVector() const {
+Vector EcPoint::getVector() const {
     Vector v;
     v.setPolar(m_lng, m_lat, true);
     return v * m_radius;
-}
-
-std::string EcPoint::getString() const {
-    std::stringstream ss;
-    ss << std::right << std::fixed << std::setprecision(3);
-    ss << "Lng: " << std::setw(8) << MathOps::formatDegrees(getLongitude(), D_M_S);
-    ss << ", Lat: " << std::setw(8) << MathOps::formatDegrees(getLongitude(), D_M_S);
-    ss << ", Radius: " << std::setw(8) << getRadius() << "AU";
-    return ss.str();
 }

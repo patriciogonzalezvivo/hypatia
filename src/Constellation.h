@@ -1,11 +1,10 @@
 #pragma once
 
-#include <vector>
-
-#include "TimeOps.h"
 #include "EqPoint.h"
 
-class Constellation : public EqPoint {
+#include <vector>
+
+class Constellation {
 public:
 
     static const int TOTAL;
@@ -24,11 +23,13 @@ public:
 
     std::vector<int> getStarIndices() const { return m_sIndices; };
     std::vector<EqPoint> getBoundary() const { return m_boundary; };
-    
-    virtual std::string getString() const;
 
 protected:
+    int                     m_id;
     std::vector<int>        m_sIndices;
     std::vector<EqPoint>    m_boundary;
-    int m_id;
 };
+
+inline std::ostream& operator<<(std::ostream& strm, const Constellation& c) {
+    strm << c.getName() << " (" << c.getAbbreviation() << ") ";
+}

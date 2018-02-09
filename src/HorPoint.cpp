@@ -13,13 +13,6 @@ HorPoint::HorPoint(const Vector& _parent) {
 }
 
 HorPoint::HorPoint( double _alt, double _az, bool _radians ) {
-     setHorizontalAngles(_alt, _az, _radians);
-}
-
-HorPoint::~HorPoint() {
-}
-
-void HorPoint::setHorizontalAngles( double _alt, double _az, bool _radians ) {
     if (_radians) {
         m_alt = _alt;
         m_az = _az;
@@ -30,16 +23,11 @@ void HorPoint::setHorizontalAngles( double _alt, double _az, bool _radians ) {
     }
 }
 
-Vector HorPoint::getHorizontalVector() const {
+HorPoint::~HorPoint() {
+}
+
+Vector HorPoint::getVector() const {
     Vector v;
     v.setPolar(m_alt, -m_az, true);
     return v;
-}
-
-std::string HorPoint::getString() const {
-    std::stringstream ss;
-    ss << std::right << std::fixed << std::setprecision(3);
-    ss << "Alt: " << std::setw(8) << MathOps::formatDegrees(getAltitud(), DEGREES);
-    ss << ", Az: " << std::setw(8) << MathOps::formatDegrees(getAzimuth(), DEGREES);
-    return ss.str();
 }

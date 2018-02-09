@@ -1,14 +1,13 @@
 #include "Constellation.h"
 
 #include "AstroOps.h"
+#include "TimeOps.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
-
-#include <sstream>
-#include <iomanip>
 
 /*
 ======================================================================
@@ -942,7 +941,6 @@ void Constellation::setId( int _id ) {
     }
 
     m_id = _id;
-    setEquatorialAngles(cns_centroid[_id][0], cns_centroid[_id][1]);
 
     m_sIndices.clear();
     for (int i = 1; i <= cns_stars[_id][0]; i++) {
@@ -977,13 +975,4 @@ char* Constellation::getAbbreviation() const {
     char *cstr = new char[3];
     strncpy(cstr, cns_namemap[m_id], 3);
     return cstr;
-}
-
-std::string Constellation::getString() const {
-    std::stringstream ss;
-    ss << std::right << std::fixed << std::setprecision(3);
-    ss << getAbbreviation();
-    ss << ", id: " << getId() << ", ";
-    ss << EqPoint::getString();
-    return ss.str();
 }

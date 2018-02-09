@@ -8,8 +8,11 @@
 
 #pragma once
 
+#include "Observer.h"
+
 #include "EcPoint.h"
 #include "EqPoint.h"
+#include "HorPoint.h"
 
 class AstroOps {
 public:
@@ -130,9 +133,22 @@ public:
      *
      * @return Ecliptic geocentric
      */
-    static EcPoint heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric );
+    static EcPoint toGeocentric( Observer &_obs, const EcPoint &_heliocentric );
 
     // -------------------------------------------------- GeoCentric
+    
+    /**
+     * eclipticToEquatorial() - ecliptic to equatorial coordinates
+     *                          (Meeus, Ch. 93)
+     *
+     * @param mean obliquity angle (radians)
+     * @param lng - of ecliptic position (radians) (IN)
+     * @param lat - of ecliptic position (radians) (IN)
+     * @param ra - of equatorial position (radians) (OUT)
+     * @param dec - of equatorial position (radians) (OUT)
+     *
+     */
+    static void eclipticToEquatorial( double _obliq, double _lng, double _lat, double &_ra, double &_dec);
     
     /**
      * eclipticToEquatorial() - ecliptic to equatorial coordinates
@@ -143,20 +159,8 @@ public:
      *
      * @return Equatorial position
      */
-    static EqPoint eclipticToEquatorial ( Observer &_obs, const EcPoint &_ecliptic );
-    
-    /**
-     * eclipticToEquatorial() - ecliptic to equatorial coordinates
-     *                          (Meeus, Ch. 93)
-     *
-     * @param Observer
-     * @param lng - of ecliptic position (IN)
-     * @param lat - of ecliptic position (IN)
-     * @param ra - of equatorial position (OUT)
-     * @param dec - of equatorial position (OUT)
-     *
-     */
-    static void eclipticToEquatorial( Observer &_obs, double _lng, double _lat, double &_ra, double &_dec);
+    static EqPoint toEquatorial ( Observer &_obs, const EcPoint &_ecliptic );
+
     
     // -------------------------------------------------- TopoCentric
     
@@ -164,14 +168,26 @@ public:
      * eclipticToEquatorial() - equatorial to horizontal coordinates
      *                          (Meeus, Ch. 93)
      *
-     * @param Observer
-     * @param ra - of equatorial position (IN)
-     * @param ra - of equatorial position (IN)
-     * @param alt - of ecliptic position (OUT)
-     * @param az - of ecliptic position (OUT)
+     * @param lst, LST (radians)
+     * @param lat, Observer's latitud (radians)
+     * @param ra - of equatorial position (radians) (IN)
+     * @param dec - of equatorial position (radians) (IN)
+     * @param alt - of ecliptic position (radians) (OUT)
+     * @param az - of ecliptic position (radians) (OUT)
      *
      */
-    static void equatorialToHorizontal( Observer &_obs, double _ra, double _dec, double &_alt, double &_az);
+    static void equatorialToHorizontal( double _lst, double _lat, double _ra, double _dec, double &_alt, double &_az);
+    
+    /**
+     * eclipticToEquatorial() - equatorial to horizontal coordinates
+     *                          (Meeus, Ch. 93)
+     *
+     * @param Observer
+     * @param equatorial coordinate
+     *
+     * @return horizontal position
+     */
+    static HorPoint toHorizontal( Observer &_obs, const EqPoint &_equatorial);
 
     /**
      * parallaticAngle() - compute parallactic angle given latitude, object dec and alt.
@@ -181,13 +197,13 @@ public:
      * N.B. always return >= 0, caller must determine sign and degenerate cases at
      *   pole or zenith.
      *
-     * @param Observer
-     * @param alt - of ecliptic position
-     * @param az - of ecliptic position
+     * @param lat - Observer latitud (radians)
+     * @param alt - of ecliptic position (radians)
+     * @param az - of ecliptic position (radians)
      *
      * @return parallatic angle
      */
-    static double parallaticAngle(  Observer &_obs, double _alt, double _decv);
+    static double parallaticAngle( double _lat, double _alt, double _dec);
     
 };
 

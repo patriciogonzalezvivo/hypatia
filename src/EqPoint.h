@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "HorPoint.h"
-#include "Observer.h"
+#include "Vector.h"
+#include "MathOps.h"
 
-class EqPoint : public HorPoint {
+class EqPoint {
 public:
     EqPoint();
     EqPoint(const Vector& _parent);
@@ -19,18 +19,14 @@ public:
     virtual double  getRightAscension() const { return MathOps::toDegrees( m_ra ); }
     virtual double  getRightAscensionRadians() const { return m_ra; }
     
-    virtual Vector  getEquatorialVector() const;
-    
-    virtual double  getHourAngle() const { return MathOps::toDegrees( m_hourAngle ); }
-    virtual double  getHourAngleRadians() const { return m_hourAngle; }
+    virtual Vector  getVector() const;
 
-    virtual void    compute( Observer &_obs );
-
-    virtual std::string getString() const;
-    
 protected:
-    virtual void    setEquatorialAngles( double _ra, double _dec, bool _radians = false );
-
     double  m_ra, m_dec;
-    double  m_hourAngle;
 };
+
+inline std::ostream& operator<<(std::ostream& strm, const EqPoint& p) {
+    strm << std::setprecision(3);
+    strm << "ra: " << std::setw(12) << MathOps::formatDegrees(p.getRightAscension(), H_M_Ss);
+    strm << ", dec: " << std::setw(12) << MathOps::formatDegrees(p.getDeclination(), D_M_Ss);
+}

@@ -211,8 +211,12 @@ void MathOps::toHMS ( double degrees, int &_hrs, int &_min, double &_sec ) {
 char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
     char *buf = new char[32];
     
-    if (_fmt == DEGREES) {
+    if (_fmt == Dd) {
         sprintf ( buf, "%.4f°", _deg);
+        return buf;
+    }
+    else if (_fmt == Hs) {
+        sprintf ( buf, "%.4f°", toHrs(_deg));
         return buf;
     }
     
@@ -225,15 +229,24 @@ char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
     }
     
     switch (_fmt) {
-        case D_M_S:
+        case D_M_Ss:
             MathOps::toDMS(_deg, first, m, s);
             sprintf ( buf, "%c %02d° %02d' %.2f\"", sign, (int)fabs(first), (int)fabs(m), fabs(s) );
             break;
-        case H_M_S:
+        case D_Mm:
+            MathOps::toDMS(_deg, first, m, s);
+            sprintf ( buf, "%c %02d° %.2f'", sign, (int)fabs(first), fabs(m + s/60.0));
+            break;
+        case H_M_Ss:
             MathOps::toHMS(_deg, first, m, s);
             sprintf ( buf, "%c %02dhs %02dm %.2fs", sign, (int)fabs(first), (int)fabs(m), fabs(s) );
             break;
-        case DEGREES:
+        case H_Mm:
+            MathOps::toHMS(_deg, first, m, s);
+            sprintf ( buf, "%c %02dhs %.2fm", sign, (int)fabs(first), fabs(m + s/60.0));
+            break;
+        case Dd:
+        case Hs:
             break;
     }
     

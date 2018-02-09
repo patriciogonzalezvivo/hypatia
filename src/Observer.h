@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "TimeOps.h"
 #include "GeoPoint.h"
 
 // * * * * * Observer's Location Info * * * * *
@@ -15,38 +16,37 @@ class Observer {
 public:
     // c'tor: lon & lat are passed in DEGREES
     Observer();
-    Observer(const GeoPoint& _location, unsigned long _sec = 0);
-    Observer(double _lng_deg, double _lat_deg, unsigned long _sec = 0);
+    Observer(const GeoPoint& _location, double _jd = 0);
+    Observer(double _lng_deg, double _lat_deg, double _jd = 0);
     virtual ~Observer();
     
-    void    setLocation(const GeoPoint& _location);
-    
-    void    setSeconds(unsigned long _sec = 0);
     void    setJD(double _jd);
     
-    GeoPoint getLocation() const { return m_location; };
-    
-    unsigned long  getSeconds();
-    double  getJD();
-    double  getJC();
-    double  getObliquity();
-    double  getLST();
+    double  getJD() const { return m_jd; }
+    double  getJC() const { return m_jcentury; }
+    double  getLST() const { return m_lst; }
+    double  getObliquity() const { return m_obliquity; }
+    GeoPoint getLocation() const { return m_location; }
     
     Vector  getHeliocentricVector();
-    
-    virtual std::string getString() const;
-    
-    void    update();
-    
+
 private:
     Vector      m_heliocentricLoc;
     GeoPoint    m_location;
     
-    unsigned long m_sec;
-    double m_jd;
-    double m_jcentury;
-    double m_obliquity;
-    double m_lst;
+    double      m_jd;
+    double      m_jcentury;
+    double      m_obliquity;
+    double      m_lst;
     
-    bool m_change;
+    bool        m_changed;
 };
+
+inline std::ostream& operator<<(std::ostream& strm, const Observer& o) {
+    strm << "Observer, " << o.getLocation();
+    strm << ", jd:" << std::setw(8) << o.getJD();
+    strm << ", time:" << std::setw(8) << TimeOps::formatDateTime(o.getJD(), Y_M_D_HM);
+    strm << ", obliq:" << std::setw(8) << MathOps::formatRadians(o.getObliquity(), Dd);
+    strm << ", lst:" << std::setw(8) << MathOps::formatDegrees(o.getLST(), Dd);
+}
+

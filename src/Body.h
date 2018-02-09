@@ -12,8 +12,18 @@
 
 #include "EcPoint.h"
 #include "EqPoint.h"
+#include "HorPoint.h"
 
-class Body : public EqPoint {
+#include "Observer.h"
+
+enum BodyId {
+    NAB=-1, // NotABody
+    SUN=0,
+    MERCURY=1, VENUS=2, EARTH=3, MARS=4, JUPITER=5, SATURN=6, URANUS=7, NEPTUNE=8, PLUTO=9,
+    LUNA=10
+};
+
+class Body {
 public:
     Body();
     Body( BodyId _body );
@@ -24,15 +34,16 @@ public:
     virtual char*   getZodiacSign() const;
 
     // Heliocentric
-    virtual EcPoint getHeliocentricEcliptic() const { return m_heliocentric; }
-    virtual Vector  getHeliocentricVector() const { return m_heliocentric.getEclipticVector(); }
+    virtual EcPoint getEclipticHeliocentric() const { return m_heliocentric; }
 
     // Geocentric
-    virtual EcPoint getGeocentricEcliptic() const { return m_geocentric; }
-    virtual Vector  getGeocentricVector() const { return m_geocentric.getEclipticVector(); }
+    virtual EcPoint getEclipticGeocentric() const { return m_geocentric; }
     
-    virtual Vector  getEquatorialVector() const { return EqPoint::getEquatorialVector() * m_geocentric.getRadius(); }
-    virtual Vector  getHorizontalVector() const { return HorPoint::getHorizontalVector() * m_geocentric.getRadius(); };
+    virtual EqPoint getEquatorial() const { return m_equatorial; }
+    virtual Vector  getEquatorialVector() const { return m_equatorial.getVector() * m_geocentric.getRadius(); }
+    
+    virtual HorPoint getHorizontal() const { return m_horizontal; }
+    virtual Vector  getHorizontalVector() const { return m_horizontal.getVector() * m_geocentric.getRadius(); };
     
     // Calculate the data for a given planet, jd, and location
     // This function must be called (directly or via c'tor) before calling
@@ -40,14 +51,21 @@ public:
     //
     virtual void    compute( Observer& _obs );
     
-    virtual std::string getString() const;
-    
 protected:
-    virtual void computeElipcticAngles( Observer& _obs );
 
     double  m_jcentury;
     EcPoint m_heliocentric;
     EcPoint m_geocentric;
     
+    EqPoint m_equatorial;
+    HorPoint m_horizontal;
+    
     BodyId  m_bodyId;
 };
+
+inline std::ostream& operator<<(std::ostream& strm, const Body& b) {
+    strm << b.getBodyName() << ", ";
+    strm << b.getEclipticHeliocentric() << ", ";
+    strm << b.getEquatorial() << ", ";
+    strm << b.getHorizontal();
+}

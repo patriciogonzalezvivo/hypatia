@@ -16,9 +16,6 @@
 #include "Pluto.h"
 #include "Vsop.h"
 
-#include <sstream>
-#include <iomanip>
-
 static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"Earth", (char*)"Mar", (char*)"Jup", (char*)"Sat", (char*)"Ur", (char*)"Nep", (char*)"Pl", (char*)"Moon" };
 
 static char* zodiacSigns[] = { (char*)"Ari", (char*)"Tau", (char*)"Gem", (char*)"Cnc", (char*)"Leo", (char*)"Vir", (char*)"Lib", (char*)"Sco", (char*)"Sgr", (char*)"Cap", (char*)"Aqr", (char*)"Psc" };
@@ -50,15 +47,15 @@ void Body::compute( Observer& _obs ) {
         if (LUNA == m_bodyId) {       /* not VSOP */   
             static Luna luna;
             luna.compute(_obs);
-            m_geocentric = luna.getGeocentricEcliptic();
-            m_heliocentric = luna.getHeliocentricEcliptic();
+            m_geocentric = luna.getEclipticGeocentric();
+            m_heliocentric = luna.getEclipticHeliocentric();
             
         }
         else if (PLUTO == m_bodyId) {    /* not VSOP */
             double hLng, hLat, rad = 0.0;
             Pluto::calcAllLocs(hLng, hLat, rad, m_jcentury);
             m_heliocentric = EcPoint(hLng, hLat, rad, true);
-            m_geocentric = AstroOps::heliocentricToGeocentric(_obs, m_heliocentric);
+            m_geocentric = AstroOps::toGeocentric(_obs, m_heliocentric);
         }
         else if (SUN == m_bodyId) {
             double hLng, hLat, rad = 0.0;
@@ -78,22 +75,16 @@ void Body::compute( Observer& _obs ) {
             double hLng, hLat, rad = 0.0;
             Vsop::calcAllLocs(hLng, hLat, rad, m_jcentury, m_bodyId);
             m_heliocentric = EcPoint(hLng, hLat, rad, true);
-            m_geocentric = AstroOps::heliocentricToGeocentric(_obs, m_heliocentric);
+            m_geocentric = AstroOps::toGeocentric(_obs, m_heliocentric);
         }
         
         if (m_bodyId == EARTH) {
             m_geocentric = EcPoint(0., 0., 0.);
         }
         
-        computeElipcticAngles( _obs );
+        m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );
+        m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
     }
-}
-
-void Body::computeElipcticAngles( Observer& _obs ) {
-    AstroOps::eclipticToEquatorial( _obs, m_geocentric.getLongitudeRadians(), m_geocentric.getLatitudeRadians(), m_ra, m_dec );
-    
-    m_hourAngle = _obs.getLST() - m_ra;
-    AstroOps::equatorialToHorizontal( _obs, m_ra, m_dec, m_alt, m_az );
 }
 
 char*  Body::getBodyName() const {
@@ -104,10 +95,4 @@ char * Body::getZodiacSign() const {
     return zodiacSigns[ int((m_geocentric.getLongitudeRadians()/MathOps::TAU)*12.)%12 ];
 }
 
-std::string Body::getString() const {
-    std::stringstream ss;
-    ss << std::right << std::fixed << std::setprecision(3);
-    ss << getBodyName() << ", ";
-    ss << EqPoint::getString();
-    return ss.str();
-}
+

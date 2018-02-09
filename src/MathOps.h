@@ -10,9 +10,12 @@
 #undef PI
 
 enum ANGLE_FMT {
-    DEGREES,    // 16.294°
-    D_M_S,      // 12° 36' 59.1"
-    H_M_S       // 15h 15m 32.9s
+    Dd,        // 16.294°
+    D_Mm,      // 12° 36.1'
+    D_M_Ss,    // 12° 36' 59.1"
+    Hs,        // 15.1h
+    H_Mm,      // 15h 15,3m
+    H_M_Ss     // 15h 15m 32.9s
 };
 
 struct MathOps {

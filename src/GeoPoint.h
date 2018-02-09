@@ -3,19 +3,10 @@
 #include "MathOps.h"
 #include "Vector.h"
 
-#include <string>
-
-enum BodyId {
-    NAB=-1, // NotABody
-    SUN=0,
-    MERCURY=1, VENUS=2, EARTH=3, MARS=4, JUPITER=5, SATURN=6, URANUS=7, NEPTUNE=8, PLUTO=9,
-    LUNA=10
-};
-
 class GeoPoint {
 public:
     GeoPoint();
-    GeoPoint( double _lng, double _lat, double _alt = 0.0, bool _radians = false, BodyId _body = EARTH );
+    GeoPoint( double _lng, double _lat, double _alt = 0.0, bool _radians = false);
     virtual ~GeoPoint();
     
     virtual double  getLongitude() const { return MathOps::toDegrees( m_lng ); };
@@ -26,13 +17,16 @@ public:
     
     virtual double  getAltitude() const { return m_alt; };
     
-    virtual BodyId  getBody() const { return m_body; };
-    
-    virtual Vector  getGeoVector() const;
-    
-    virtual std::string getString() const;
+    virtual Vector  getVector() const;
     
 protected:
     double  m_lng, m_lat, m_alt;
-    BodyId  m_body;
 };
+
+inline std::ostream& operator<<(std::ostream& strm, const GeoPoint& p) {
+    strm << std::setprecision(3);
+    strm << "lng: " << std::setw(12) << MathOps::formatDegrees(p.getLongitude(), D_M_Ss);
+    strm << ", lat: " << std::setw(12) << MathOps::formatDegrees(p.getLatitude(), D_M_Ss);
+    strm << ", alt: " << std::setw(8) << p.getAltitude();
+}
+

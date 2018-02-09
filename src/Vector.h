@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iomanip>
+
 class Vector {
 public:
     Vector();
@@ -52,3 +54,10 @@ public:
     virtual Vector& operator*= (double _d);
     virtual Vector& operator/= (double _d);
 };
+
+inline std::ostream& operator<<(std::ostream& strm, const Vector& v) {
+    strm << std::setprecision(3);
+    strm << "x: " << std::setw(8) << v.x;
+    strm << ", y: " << std::setw(8) << v.y;
+    strm << ", z: " << std::setw(8) << v.z;
+}

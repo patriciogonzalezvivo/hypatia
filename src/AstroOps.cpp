@@ -493,10 +493,9 @@ void AstroOps::nutation( double jd, double* pDPhi, double* pDEpsilon ) {
  * @param dec - of equatorial position (OUT)
  *
  */
-void AstroOps::eclipticToEquatorial ( Observer &_obs, double _lng, double _lat, double &_ra, double &_dec ) {
-    double obliq = _obs.getObliquity();
-    double sin_obliq = sin(obliq);
-    double cos_obliq = cos(obliq);
+void AstroOps::eclipticToEquatorial ( double _obliq, double _lng, double _lat, double &_ra, double &_dec ) {
+    double sin_obliq = sin(_obliq);
+    double cos_obliq = cos(_obliq);
 
     double sl = sin(_lng);
     double cl = cos(_lng);
@@ -521,14 +520,12 @@ void AstroOps::eclipticToEquatorial ( Observer &_obs, double _lng, double _lat, 
  *
  * @return Equatorial position
  */
-EqPoint AstroOps::eclipticToEquatorial ( Observer &_obs, const EcPoint &_ecliptic ) {
+EqPoint AstroOps::toEquatorial ( Observer &_obs, const EcPoint &_ecliptic ) {
     double lng = _ecliptic.getLongitudeRadians();
     double lat = _ecliptic.getLatitudeRadians();
     double ra, dec;
-    eclipticToEquatorial(_obs, lng, lat, ra, dec);
-    EqPoint rta = EqPoint(ra, dec, true);
-    rta.compute(_obs);
-    return rta;
+    AstroOps::eclipticToEquatorial(_obs.getObliquity(), lng, lat, ra, dec);
+    return EqPoint(ra, dec, true);
 }
 
 /**
@@ -544,13 +541,13 @@ EqPoint AstroOps::eclipticToEquatorial ( Observer &_obs, const EcPoint &_eclipti
  * @param az - of ecliptic position (OUT)
  *
  */
-void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec, double &_alt, double &_az ) {
+void AstroOps::equatorialToHorizontal ( double _lst, double _lat, double _ra, double _dec, double &_alt, double &_az ) {
     // compute hour angle in radians
-    double ha = _obs.getLST() - _ra;
+    double ha = _lst - _ra;
     
     double sd = sin(_dec);
-    double sl = sin(_obs.getLocation().getLatitudeRadians());
-    double cl = cos(_obs.getLocation().getLatitudeRadians());
+    double sl = sin(_lat);
+    double cl = cos(_lat);
 
     // compute altitude in radians
     _alt = asin(sd*sl + cos(_dec)*cl*cos(ha));
@@ -564,8 +561,33 @@ void AstroOps::equatorialToHorizontal ( Observer &_obs, double _ra, double _dec,
         _az = 2.*MathOps::PI - _az;
 }
 
-EcPoint AstroOps::heliocentricToGeocentric( Observer &_obs, const EcPoint &_heliocentric ) {
-    Vector heliocentric = _heliocentric.getEclipticVector();
+/**
+ * eclipticToEquatorial() - equatorial to horizontal coordinates
+ *                          (Meeus, Ch. 93)
+ *
+ * @param Observer
+ * @param equatorial coordinate
+ *
+ * @return horizontal position
+ */
+HorPoint AstroOps::toHorizontal( Observer &_obs, const EqPoint &_equatorial) {
+    double ra = _equatorial.getRightAscensionRadians();
+    double dec = _equatorial.getDeclinationRadians();
+    double alt, az;
+    AstroOps::equatorialToHorizontal(_obs.getLST(), _obs.getLocation().getLatitudeRadians(), ra, dec, alt, az);
+    return HorPoint(alt, az, true);
+}
+
+/**
+ * heliocentricToGeocentric() - ecliptic transformation from heliocentric to geocentric
+ *
+ * @param Observer
+ * @param Ecliptic heliocentric
+ *
+ * @return Ecliptic geocentric
+ */
+EcPoint AstroOps::toGeocentric( Observer &_obs, const EcPoint &_heliocentric ) {
+    Vector heliocentric = _heliocentric.getVector();
     return EcPoint(heliocentric - _obs.getHeliocentricVector());
 }
 
@@ -584,9 +606,8 @@ EcPoint AstroOps::heliocentricToGeocentric( Observer &_obs, const EcPoint &_heli
  *
  * @return parallatic angle
  */
-double AstroOps::parallaticAngle(   Observer &_obs,
-                                    double _alt, double _dec ) {
-    double ca = sin(_obs.getLocation().getLatitudeRadians());
+double AstroOps::parallaticAngle( double _lat, double _alt, double _dec ) {
+    double ca = sin(_lat);
     double cb = sin(_dec);
     double sb = cos(_dec);
     double cc = sin(_alt);
