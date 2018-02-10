@@ -49,7 +49,18 @@ struct MathOps {
      *
      * @return an angle in degrees
      */
-    static double toDegrees( double _rad ) { return _rad * RADS_TO_DEGS; };
+    static double toDegrees( double _rad );
+
+    /**
+     * toDegrees(): convert radians to degrees
+     *
+     * @param an degrees
+     * @param an minutes
+     * @param an seconds
+     *
+     * @return an angle in degrees
+     */
+    static double toDegrees( int _deg, int _min, double _sec );
     
     /**
      * toRadians(): convert degrees to radians
@@ -58,7 +69,7 @@ struct MathOps {
      *
      * @return an angle in radians
      */
-    static double toRadians( double _deg ) { return _deg * DEGS_TO_RADS; };
+    static double toRadians( double _deg );
     
     /**
      * secToRadians(): convert arcseconds to radians
@@ -180,4 +191,23 @@ struct MathOps {
      * @return asin (PI/2 ... -PI/2)
      */
     static double asine( double _rad );
+
+    /**
+     * fract(): gives the fractional part of a number
+     *
+     * @param number
+     *
+     * @return fractional part of it 
+ */
+    static double fract (double _x);
+
+    /**
+     * mod(): calculates x modulus y
+     *
+     * @param base
+     *
+     * @return modulus of
+     */
+    static long mod ( long x, long y );
+    static double mod ( double _x, double _y );
 };

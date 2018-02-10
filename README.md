@@ -1,4 +1,4 @@
-Astronomy library mostly based on [Jean Meeus](https://en.wikipedia.org/wiki/Jean_Meeus), [Mark Huss](http://mhuss.com/AstroLib), [Bill Gray](https://github.com/Bill-Gray ), [Stuart Lowe](http://mhuss.com/AstroLib) and [Brandon Rhodes](https://github.com/brandon-rhodes/pyephem) code. Each of this authors have very deep and technical knowladege and their project are substantially more ambitious. They are profesional astronomers doing cientific research. This project takes some artistic licenses.
+Astronomy library mostly based on [Jean Meeus](https://en.wikipedia.org/wiki/Jean_Meeus), [Mark Huss](http://mhuss.com/AstroLib), [Bill Gray](https://github.com/Bill-Gray ), [Stuart Lowe](http://mhuss.com/AstroLib), [Brandon Rhodes](https://github.com/brandon-rhodes/pyephem) , [Oliver Montenbruck and Thomas Peleger](https://www.amazon.com/gp/product/3540672214/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1) code. Each of this authors have very deep and technical knowladege and their project are substantially more ambitious. They are profesional astronomers doing cientific research. This project takes some artistic licenses.
 
 Goals:
 
@@ -9,7 +9,8 @@ Goals:
 - Use the Python for unit testing
 
 References:
- - Jean Meeus: https://www.amazon.com/Astronomical-Algorithms-Jean-Meeus/dp/0943396611 
+ - Jean Meeus: https://www.amazon.com/Astronomical-Algorithms-Jean-Meeus/dp/0943396611
+ - Oliver Montenbruck and Thomas Peleger: https://www.amazon.com/gp/product/3540672214/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1
  - Bill Gray: https://github.com/Bill-Gray 
  - Mark Huss: http://mhuss.com/AstroLib
  - Stuart Lowe: https://github.com/slowe/VirtualSky

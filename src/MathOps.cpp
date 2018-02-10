@@ -32,6 +32,45 @@ const double MathOps::ROUND   = 0.5;
 const double MathOps::INVALID = -1.0;
 
 /**
+ * toDegrees(): convert radians to degrees
+ *
+ * @param an angle in radians
+ *
+ * @return an angle in degrees
+ */
+double MathOps::toDegrees( double _rad ) { 
+    return _rad * RADS_TO_DEGS; 
+};
+
+/**
+ * toDegrees(): convert radians to degrees
+ *
+ * @param an degrees
+ * @param an minutes
+ * @param an seconds
+ *
+ * @return an angle in degrees
+ */
+double MathOps::toDegrees( int _deg, int _min, double _sec ) {
+    double sign = 1.0;
+    if ( (_deg < 0) || (_min < 0) || (_sec < 0) ) {
+        sign = -1.0;
+    }
+    return sign * (fabs(_deg) + fabs(_min)/MINUTES_PER_DEGREE + fabs(_sec)/SECONDS_PER_DEGREE);
+}
+
+/**
+ * toRadians(): convert degrees to radians
+ *
+ * @param an angle in degrees
+ *
+ * @return an angle in radians
+ */
+double MathOps::toRadians( double _deg ) { 
+    return _deg * DEGS_TO_RADS; 
+};
+
+/**
  * secToRadians(): convert arcseconds to radians
  *
  * @param an angle in arcseconds
@@ -49,7 +88,7 @@ double MathOps::normalizeDegrees ( double d ) {
     if (d >= 0.0 && d < MathOps::DEG_PER_CIRCLE)
         return d;
 
-//     d = fmod( d, MathOps::DEG_PER_CIRCLE);
+//     d = MathOps::mod( d, MathOps::DEG_PER_CIRCLE);
 //     if ( d < 0.)
 //         d += MathOps::DEG_PER_CIRCLE;
 //     return d;
@@ -68,7 +107,7 @@ double MathOps::normalizeRadians ( double r ) {
     if (r >= 0.0 && r < MathOps::TAU)
         return r;
 
-    // r = fmod( r, MathOps::TAU );
+    // r = MathOps::mod( r, MathOps::TAU );
     // if ( r < 0. )
     //     r += MathOps::TAU;
     // return r;
@@ -104,38 +143,6 @@ double MathOps::normalizeDeg2Rad( double _deg ) {
 
 int MathOps::quadrant( double _angle ) {
     return (int)( normalizeRadians( _angle ) * MathOps::TWO_OVER_PI );
-}
-
-/**
- * acose(): "safe" acos which prevents overflow errors
- *
- * @param angle
- *
- * @return acos (0 ... PI)
- */
-double MathOps::acose( double _angle ) {
-    if( _angle >= 1. )
-        return( 0. );
-    else if( _angle <= -1. )
-        return( MathOps::PI );
-    else
-        return( acos( _angle ) );
-}
-
-/**
- * asine(): "safe" asine which prevents overflow errors
- *
- * @param angle
- *
- * @return asin (PI/2 ... -PI/2)
- */
-double MathOps::asine( double _angle ) {
-    if( _angle >= 1. )
-        return( MathOps::PI_OVER_TWO );
-    else if( _angle <= -1. )
-        return( -MathOps::PI_OVER_TWO );
-    else
-        return( asin( _angle ) );
 }
 
 void MathOps::toDMS ( double degrees, int &_deg, int &_min, double &_sec ) {
@@ -264,4 +271,67 @@ char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
  */
 char* MathOps::formatRadians ( double _rad, ANGLE_FMT _fmt ) {
     return formatDegrees(MathOps::toDegrees(_rad), _fmt);
+}
+
+/**
+ * acose(): "safe" acos which prevents overflow errors
+ *
+ * @param angle
+ *
+ * @return acos (0 ... PI)
+ */
+double MathOps::acose( double _angle ) {
+    if( _angle >= 1. )
+        return( 0. );
+    else if( _angle <= -1. )
+        return( MathOps::PI );
+    else
+        return( acos( _angle ) );
+}
+
+/**
+ * asine(): "safe" asine which prevents overflow errors
+ *
+ * @param angle
+ *
+ * @return asin (PI/2 ... -PI/2)
+ */
+double MathOps::asine( double _angle ) {
+    if( _angle >= 1. )
+        return( MathOps::PI_OVER_TWO );
+    else if( _angle <= -1. )
+        return( -MathOps::PI_OVER_TWO );
+    else
+        return( asin( _angle ) );
+}
+
+/**
+ * fract(): gives the fractional part of a number
+ *
+ * @param number
+ *
+ * @return fractional part of it 
+ */
+double MathOps::fract ( double _x ) {
+    return _x - floor(_x);
+}
+
+/**
+ * mod(): calculates x modulus y
+ *
+ * @param base
+ *
+ * @return modulus of
+ */
+double MathOps::mod ( double _x, double _y ) {
+    return _y * MathOps::fract( _x / _y);
+}
+
+long MathOps::mod ( long x, long y ) {
+    long rval = x % y;
+    
+    if( rval < 0L )
+        rval += y;
+    
+    return rval;
 }

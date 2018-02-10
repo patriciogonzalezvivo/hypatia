@@ -51,23 +51,6 @@ static char* DOW3[] = {
     (char*)"Sun", (char*)"Mon", (char*)"Tue", (char*)"Wed", (char*)"Thu", (char*)"Fri",(char*)"Sat"
 };
 
-double fract (double _x) {
-    return _x-floor(_x);
-}
-
-double mod (double _x, double _r) {
-    return _r * fract(_x/_r);
-}
-
-long mod( long x, long y ) {
-    long rval = x % y;
-    
-    if( rval < 0L )
-        rval += y;
-    
-    return rval;
-}
-
 /**
  * private
  * roundToNearestMinute(): round a time to the nearest minute
@@ -333,7 +316,7 @@ double TimeOps::toJM ( double _jd ) {
  * Day for that year.  After that, add up the days in intervening months,
  * plus the day of the month:
  */
-long TimeOps::toJD( int day, int month, int year, CalendarType calendar ) {
+long TimeOps::toJD( int year, int month, int day, CalendarType calendar ) {
   long jd = 0;
   MonthDays md;
   YearEndDays yed;
@@ -348,6 +331,32 @@ long TimeOps::toJD( int day, int month, int year, CalendarType calendar ) {
   return jd;
 }
 
+/**
+ * toJD(): convert a day/month/year/hour/minute/second to a double Julian Day
+ *
+ * @param year - year
+ * @param month - month of the year
+ * @param day - day of the month
+ * @param hours - hours of the day
+ * @param minutes - minutes of the hour
+ * @param seconds - seconds of the minute
+ * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
+ *
+ * @return equivalent Julian Day rounded to a long
+ */
+double TimeOps::toJD (int _year,  int _month, int _day, int _hrs, int _min, int _sec, CalendarType _calendar) {
+    double jd = (double)toJD(_year, _month, _day, _calendar);
+    if (_hrs < 12) {
+        jd -= MathOps::toDegrees(_hrs, _min, _sec) / 24.0;
+    }
+    else {
+        jd = jd -1. + MathOps::toDegrees(_hrs, _min, _sec) / 24.0;
+    }
+    
+    
+    return jd;
+}
+
 //----------------------------------------------------------------------------
 /**
  * timeToDay() - convert a struct tm to Julian Day
@@ -357,9 +366,9 @@ double TimeOps::timeToDay( struct tm* pt ) {
     pt->tm_min * TimeOps::ISECONDS_PER_MINUTE +
     pt->tm_sec;
     return double(secs)/TimeOps::SECONDS_PER_DAY +
-    toJD( pt->tm_mday,
-             pt->tm_mon + 1,        // months are zero-based
-             pt->tm_year + 1900 );  // years from 1900
+    toJD(   pt->tm_year + 1900, // years from 1900
+            pt->tm_mon + 1,     // months are zero-based
+            pt->tm_mday);  
 }
 
 
@@ -447,7 +456,7 @@ void TimeOps::toDMY( long jd, int& day, int& month, int& year, CalendarType cale
 // Determine U.S. DST start JD (second Sunday in March as of 2007)
 //
 long TimeOps::dstStart(int year) {
-    long jdStart = toJD( 7+1, 3, year, T_GREGORIAN );
+    long jdStart = toJD( year, 3, 7+1, T_GREGORIAN );
     while ( 6 != (jdStart % 7 ) ) // Sunday
         jdStart++;
     
@@ -458,7 +467,7 @@ long TimeOps::dstStart(int year) {
 // Determine U.S. DST end JD (first Sunday in November as of 2007)
 //
 long TimeOps::dstEnd(int year) {
-    long jdEnd = toJD( 1, 11, year, T_GREGORIAN );
+    long jdEnd = toJD( year, 11, 1, T_GREGORIAN );
     while ( 6 != (jdEnd % 7 ) ) // Sunday
         jdEnd++;
     
@@ -866,7 +875,7 @@ void TimeOps::getIslamicYearData( long year, long& daysInYear, MonthDays& md ) {
         1, 0, 0, 1, 0, 0, 1, 0, 1, 0,
         0, 1, 0, 0, 1, 0, 1, 0, 0, 1 };
     
-    long yearWithinCycle = mod( year, 30L );
+    long yearWithinCycle = MathOps::mod( year, 30L );
     long thirtyYearCycles = (year - yearWithinCycle) / 30L;
     long rval = E_ISLAMIC +
                 thirtyYearCycles * THIRTY_ISLAMIC_YEARS +
@@ -902,7 +911,7 @@ static const int isHebrewLeapYear[19] = { 0, 0, 1, 0, 0, 1,
     0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1 };
 
 long TimeOps::lunationsToTishri1( long year ) {
-    long yearWithinCycle = mod( year - 1, 19L );
+    long yearWithinCycle = MathOps::mod( year - 1, 19L );
     
     long fullNineteenYearCycles = ( year - 1 - yearWithinCycle ) / 19L;
     
@@ -928,7 +937,7 @@ void TimeOps::lunationsToDaysAndHalakim( long lunations, long& days, long& halak
      glumph,  and the rest is easy.
      *****/
     
-    long lunationWithinGlumph = mod( lunations, 25920L );
+    long lunationWithinGlumph = MathOps::mod( lunations, 25920L );
     
     long currGlumph = ( lunations - lunationWithinGlumph ) / 25920L;
     
@@ -958,17 +967,17 @@ void TimeOps::getHebrewYearData( long year, YearEndDays& daysInYear, MonthDays& 
         findTishri1( year + i, day, halakim );
         
         /* Check dehiyyah (c): */
-        if( 3 == mod( day, 7L ) &&
+        if( 3 == MathOps::mod( day, 7L ) &&
            halakim >= 9L * 1080L + 204L &&
-           !isHebrewLeapYear[ mod( year - 1 + i, 19L) ]
+           !isHebrewLeapYear[ MathOps::mod( year - 1 + i, 19L) ]
            )
         {
             day += 2;
         }
         /* Check dehiyyah (d): */
-        else if( mod( day, 7L) == 2 &&
+        else if( MathOps::mod( day, 7L) == 2 &&
                 halakim >= 15L * 1080L + 589L &&
-                isHebrewLeapYear[ mod( year - 2 + i, 19L) ]
+                isHebrewLeapYear[ MathOps::mod( year - 2 + i, 19L) ]
                 )
         {
             day++;
@@ -978,9 +987,9 @@ void TimeOps::getHebrewYearData( long year, YearEndDays& daysInYear, MonthDays& 
             if( halakim > 18L * 1080L )
                 day++;
             
-            if( mod( day, 7L ) == 1 ||
-                mod( day, 7L ) == 4 ||
-                mod( day, 7L ) == 6L
+            if( MathOps::mod( day, 7L ) == 1 ||
+                MathOps::mod( day, 7L ) == 4 ||
+                MathOps::mod( day, 7L ) == 6L
                )
             {
                 day++;
@@ -995,7 +1004,7 @@ void TimeOps::getHebrewYearData( long year, YearEndDays& daysInYear, MonthDays& 
         for( int i=0; i<6; i++ )                 /* "normal" lengths */
             md[i] = md[i + 7] = (char)( 30 - (i & 1));
         
-        if( isHebrewLeapYear[ mod( year - 1, 19L) ] ) {
+        if( isHebrewLeapYear[ MathOps::mod( year - 1, 19L) ] ) {
             md[5] = 30;     /* Adar I is bumped up a day in leap years */
             md[6] = 29;
         }

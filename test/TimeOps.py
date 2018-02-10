@@ -12,6 +12,16 @@ import math
 from astro import *
 import ephem
 
+def testJDtoDatetimetoJD(jd):
+  ymd = TimeOps.toYMD(jd)
+  hms = TimeOps.toHMS(jd)
+  expected = TimeOps.toJD(int(ymd[0]),int(ymd[1]),int(math.floor(ymd[2])), int(hms[0]), int(hms[1]), int(hms[2]))
+  check = jd == expected
+  if not check:
+    print( "[FAIL]", str("{:.1f}".format(jd)), "is not",  expected )
+
+  return check
+
 def testJDtoDatetime(jd, expected):
   dt = TimeOps.formatDateTime(jd, Y_M_D_HM)
   check = dt[0:len(dt)-2] == expected[0:len(expected)-2]
@@ -63,8 +73,26 @@ tests = [
   testJDtoYMD(1355866.5, '-1000-02-29.0'),
   testJDtoYMD(1355671.4, '-1001-08-17.9'),
   testJDtoYMD(0.0, '-4712-01-1.5'),
-  testDOW(2434923.5, 3)
+  testDOW(2434923.5, 3),
+  testJDtoDatetimetoJD(2451545.0),
+  testJDtoDatetimetoJD(2451179.5),
+  testJDtoDatetimetoJD(2446822.5),
+  testJDtoDatetimetoJD(2446966.0),
+  testJDtoDatetimetoJD(2415020.5),
+  testJDtoDatetimetoJD(2305447.5),
+  testJDtoDatetimetoJD(2305812.5),
+  testJDtoDatetimetoJD(2026871.8),
+  testJDtoDatetimetoJD(1676496.5),
+  testJDtoDatetimetoJD(1676497.5),
+  testJDtoDatetimetoJD(1356001.0),
+  testJDtoDatetimetoJD(1355866.5),
+  testJDtoDatetimetoJD(1355671.4),
 ]
+
+print(TimeOps.toYMD(2026871.8))
+print(TimeOps.toHMS(2026871.8))
+print(TimeOps.toJD(1999,01,1))
+print(MathOps.toDegrees(12, 0, 0) / 24.0)
 
 check = True
 for i in range(0, len(tests)):

@@ -254,14 +254,30 @@ struct TimeOps {
     /**
      * toJD(): convert a day/month/year to a long Julian Day
      *
-     * @param day - day of the month
-     * @param month - month of the year
      * @param year - year
+     * @param month - month of the year
+     * @param day - day of the month
      * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
      *
      * @return equivalent Julian Day rounded to a long
      */
-    static long toJD ( int _day, int _month, int _year, CalendarType _calendar = T_GREGORIAN );
+    static long toJD ( int _year,  int _month, int _day, CalendarType _calendar = T_GREGORIAN );
+
+    /**
+     * toJD(): convert a day/month/year/hour/minute/second to a double Julian Day
+     *
+     * @param year - year
+     * @param month - month of the year
+     * @param day - day of the month
+     * @param hours - hours of the day
+     * @param minutes - minutes of the hour
+     * @param seconds - seconds of the minute
+     * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
+     *
+     * @return equivalent Julian Day rounded to a long
+     */
+    static double toJD (int _year,  int _month, int _day, 
+                        int _hrs, int _min, int _sec, CalendarType _calendar = T_GREGORIAN );
 
     /**
      * toJC(): convert a JD to Julian Century referenced to epoch
