@@ -7,14 +7,11 @@
 
 #include "Vsop.h"
 
-#include "EcPoint.h"
-
 Observer::Observer() : m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0) {
 }
 
-Observer::Observer(const GeoPoint& _location, double _jd) : m_location(_location), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0) {
+Observer::Observer(const Geodetic& _location, double _jd) : m_location(_location), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0) {
     if ( _jd == 0 ) {
-//        setJD( TimeOps::toJD( TimeOps::getCurrentSeconds() ) );
         setJD( TimeOps::now() );
     }
     else {
@@ -24,7 +21,6 @@ Observer::Observer(const GeoPoint& _location, double _jd) : m_location(_location
 
 Observer::Observer( double _lng_deg, double _lat_deg, double _jd) : m_location(_lng_deg, _lat_deg), m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0){
     if ( _jd == 0 ) {
-//        setJD( TimeOps::toJD( TimeOps::getCurrentSeconds() ) );
         setJD( TimeOps::now() );
     }
     else {
@@ -50,7 +46,7 @@ Vector Observer::getHeliocentricVector() {
     if (m_changed) {
         double pLng, pLat, pRad = 0.0;
         Vsop::calcAllLocs(pLng, pLat, pRad, m_jcentury, EARTH);
-        m_heliocentricLoc = EcPoint(pLng, pLat, pRad, true).getVector();
+        m_heliocentricLoc = Geodetic(pLng, pLat, pRad, true).getVector();
         m_changed = false;
     }
     

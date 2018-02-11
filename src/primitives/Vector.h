@@ -51,7 +51,7 @@ public:
     virtual Vector& operator*= (double _d);
     virtual Vector& operator/= (double _d);
     
-private:
+protected:
     virtual double * getPtr();
     virtual const double * getPtr() const;
 };

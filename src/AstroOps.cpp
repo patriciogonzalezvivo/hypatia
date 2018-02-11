@@ -519,12 +519,12 @@ void AstroOps::eclipticToEquatorial ( double _obliq, double _lng, double _lat, d
  *
  * @return Equatorial position
  */
-EqPoint AstroOps::toEquatorial ( Observer &_obs, const EcPoint &_ecliptic ) {
+Equatorial AstroOps::toEquatorial ( Observer &_obs, const Ecliptic &_ecliptic ) {
     double lng = _ecliptic.getLongitudeRadians();
     double lat = _ecliptic.getLatitudeRadians();
     double ra, dec;
     AstroOps::eclipticToEquatorial(_obs.getObliquity(), lng, lat, ra, dec);
-    return EqPoint(ra, dec, true);
+    return Equatorial(ra, dec, true);
 }
 
 /**
@@ -569,12 +569,12 @@ void AstroOps::equatorialToHorizontal ( double _lst, double _lat, double _ra, do
  *
  * @return horizontal position
  */
-HorPoint AstroOps::toHorizontal( Observer &_obs, const EqPoint &_equatorial) {
+Horizontal AstroOps::toHorizontal( Observer &_obs, const Equatorial &_equatorial) {
     double ra = _equatorial.getRightAscensionRadians();
     double dec = _equatorial.getDeclinationRadians();
     double alt, az;
     AstroOps::equatorialToHorizontal(_obs.getLST(), _obs.getLocation().getLatitudeRadians(), ra, dec, alt, az);
-    return HorPoint(alt, az, true);
+    return Horizontal(alt, az, true);
 }
 
 /**
@@ -585,9 +585,9 @@ HorPoint AstroOps::toHorizontal( Observer &_obs, const EqPoint &_equatorial) {
  *
  * @return Ecliptic geocentric
  */
-EcPoint AstroOps::toGeocentric( Observer &_obs, const EcPoint &_heliocentric ) {
+Ecliptic AstroOps::toGeocentric( Observer &_obs, const Ecliptic &_heliocentric ) {
     Vector heliocentric = _heliocentric.getVector();
-    return EcPoint(heliocentric - _obs.getHeliocentricVector());
+    return Ecliptic(heliocentric - _obs.getHeliocentricVector());
 }
 
 /**

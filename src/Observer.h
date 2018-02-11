@@ -9,14 +9,14 @@
 #pragma once
 
 #include "TimeOps.h"
-#include "GeoPoint.h"
+#include "coordinates/Geodetic.h"
 
 // * * * * * Observer's Location Info * * * * *
 class Observer {
 public:
     // c'tor: lon & lat are passed in DEGREES
     Observer();
-    Observer(const GeoPoint& _location, double _jd = 0);
+    Observer(const Geodetic& _location, double _jd = 0);
     Observer(double _lng_deg, double _lat_deg, double _jd = 0);
     virtual ~Observer();
     
@@ -26,13 +26,13 @@ public:
     double  getJC() const { return m_jcentury; }
     double  getLST() const { return m_lst; }
     double  getObliquity() const { return m_obliquity; }
-    GeoPoint getLocation() const { return m_location; }
+    Geodetic getLocation() const { return m_location; }
     
     Vector  getHeliocentricVector();
 
 private:
     Vector      m_heliocentricLoc;
-    GeoPoint    m_location;
+    Geodetic    m_location;
     
     double      m_jd;
     double      m_jcentury;

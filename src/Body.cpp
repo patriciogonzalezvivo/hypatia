@@ -54,13 +54,13 @@ void Body::compute( Observer& _obs ) {
         else if (PLUTO == m_bodyId) {    /* not VSOP */
             double hLng, hLat, rad = 0.0;
             Pluto::calcAllLocs(hLng, hLat, rad, m_jcentury);
-            m_heliocentric = EcPoint(hLng, hLat, rad, true);
+            m_heliocentric = Ecliptic(hLng, hLat, rad, true);
             m_geocentric = AstroOps::toGeocentric(_obs, m_heliocentric);
         }
         else if (SUN == m_bodyId) {
             double hLng, hLat, rad = 0.0;
             Vsop::calcAllLocs(hLng, hLat, rad, m_jcentury, EARTH);
-            m_heliocentric = EcPoint(hLng, hLat, rad, true);
+            m_heliocentric = Ecliptic(hLng, hLat, rad, true);
             
             /*
              * What we _really_ want is the location of the sun as seen from
@@ -69,17 +69,17 @@ void Body::compute( Observer& _obs ) {
              * To work around this, we add PI to the longitude (rotate 180 degrees)
              * and negate the latitude.
              */
-            m_geocentric = EcPoint(hLng + MathOps::PI, hLat * -1., rad, true);
+            m_geocentric = Ecliptic(hLng + MathOps::PI, hLat * -1., rad, true);
         }
         else {
             double hLng, hLat, rad = 0.0;
             Vsop::calcAllLocs(hLng, hLat, rad, m_jcentury, m_bodyId);
-            m_heliocentric = EcPoint(hLng, hLat, rad, true);
+            m_heliocentric = Ecliptic(hLng, hLat, rad, true);
             m_geocentric = AstroOps::toGeocentric(_obs, m_heliocentric);
         }
         
         if (m_bodyId == EARTH) {
-            m_geocentric = EcPoint(0., 0., 0.);
+            m_geocentric = Ecliptic(0., 0., 0.);
         }
         
         m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );

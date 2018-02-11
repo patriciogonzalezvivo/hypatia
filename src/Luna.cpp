@@ -419,7 +419,7 @@ void Luna::compute( Observer &_obs ) {
         }
     
         m_distance = rad;
-        m_geocentric = EcPoint(lng, lat, rad * AstroOps::KM_TO_AU , true);
+        m_geocentric = Ecliptic(lng, lat, rad * AstroOps::KM_TO_AU , true);
         
         m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );
         m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
@@ -429,7 +429,7 @@ void Luna::compute( Observer &_obs ) {
         Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJC(), EARTH);
         
         // Get HelioCentric values
-        EcPoint toEarth = EcPoint(sun_eclipticLon, sun_eclipticLat, sun_radius, true);
+        Ecliptic toEarth = Ecliptic(sun_eclipticLon, sun_eclipticLat, sun_radius, true);
         Vector Sun2Earth = toEarth.getVector();
         Vector Earth2Moon = m_geocentric.getVector();
         Vector Sun2Moon = Sun2Earth + Earth2Moon;
@@ -440,8 +440,8 @@ void Luna::compute( Observer &_obs ) {
         sun_eclipticLon += MathOps::PI;
         sun_eclipticLat *= -1.;
         toEarth.invert();
-        EqPoint sunEq = AstroOps::toEquatorial( _obs, toEarth);
-        HorPoint sunHor = AstroOps::toHorizontal( _obs, sunEq);
+        Equatorial sunEq = AstroOps::toEquatorial( _obs, toEarth);
+        Horizontal sunHor = AstroOps::toHorizontal( _obs, sunEq);
         
         // Compute moon age
         double moonAge = MathOps::normalizeRadians( MathOps::TAU - (sun_eclipticLon - m_geocentric.getLongitudeRadians()) );

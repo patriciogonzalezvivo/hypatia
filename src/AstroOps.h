@@ -10,9 +10,9 @@
 
 #include "Observer.h"
 
-#include "EcPoint.h"
-#include "EqPoint.h"
-#include "HorPoint.h"
+#include "coordinates/Ecliptic.h"
+#include "coordinates/Equatorial.h"
+#include "coordinates/Horizontal.h"
 
 class AstroOps {
 public:
@@ -133,7 +133,7 @@ public:
      *
      * @return Ecliptic geocentric
      */
-    static EcPoint toGeocentric( Observer &_obs, const EcPoint &_heliocentric );
+    static Ecliptic toGeocentric( Observer &_obs, const Ecliptic &_heliocentric );
 
     // -------------------------------------------------- GeoCentric
     
@@ -159,7 +159,7 @@ public:
      *
      * @return Equatorial position
      */
-    static EqPoint toEquatorial ( Observer &_obs, const EcPoint &_ecliptic );
+    static Equatorial toEquatorial ( Observer &_obs, const Ecliptic &_ecliptic );
 
     
     // -------------------------------------------------- TopoCentric
@@ -187,7 +187,7 @@ public:
      *
      * @return horizontal position
      */
-    static HorPoint toHorizontal( Observer &_obs, const EqPoint &_equatorial);
+    static Horizontal toHorizontal( Observer &_obs, const Equatorial &_equatorial);
 
     /**
      * parallaticAngle() - compute parallactic angle given latitude, object dec and alt.

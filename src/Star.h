@@ -1,7 +1,7 @@
 #pragma once
 
-#include "EqPoint.h"
-#include "HorPoint.h"
+#include "coordinates/Equatorial.h"
+#include "coordinates/Horizontal.h"
 
 #include "Observer.h"
 
@@ -18,17 +18,17 @@ public:
     virtual int     getId() const { return m_id; };
     virtual double  getMagnitud() const { return m_mag; };
     
-    virtual EqPoint getEquatorial() const { return m_equatorial; }
-    virtual HorPoint getHorizontal() const { return m_horizontal; }
+    virtual Equatorial getEquatorial() const { return m_equatorial; }
+    virtual Horizontal getHorizontal() const { return m_horizontal; }
 
     virtual void    compute( Observer& _obs );
     
 protected:
-    EqPoint m_equatorial;
-    HorPoint m_horizontal;
+    Equatorial  m_equatorial;
+    Horizontal  m_horizontal;
     
-    double m_mag;
-    int m_id;
+    double      m_mag;
+    int         m_id;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Star& s) {

@@ -27,6 +27,13 @@ Polar::Polar(const double _phi, const double _theta, bool _radians) {
 Polar::~Polar() {
 }
 
+Polar& Polar::invert() {
+    m_phi += MathOps::PI;
+    m_theta *= -1.;
+    
+    return *this;
+}
+
 double& Polar::operator[]( int _n ) {
     return getPtr()[_n];
 }

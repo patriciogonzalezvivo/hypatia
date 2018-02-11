@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "EcPoint.h"
-#include "EqPoint.h"
-#include "HorPoint.h"
+#include "coordinates/Ecliptic.h"
+#include "coordinates/Equatorial.h"
+#include "coordinates/Horizontal.h"
 
 #include "Observer.h"
 
@@ -34,16 +34,16 @@ public:
     virtual char*   getZodiacSign() const;
 
     // Heliocentric
-    virtual EcPoint getEclipticHeliocentric() const { return m_heliocentric; }
+    virtual Ecliptic    getEclipticHeliocentric() const { return m_heliocentric; }
 
     // Geocentric
-    virtual EcPoint getEclipticGeocentric() const { return m_geocentric; }
+    virtual Ecliptic    getEclipticGeocentric() const { return m_geocentric; }
     
-    virtual EqPoint getEquatorial() const { return m_equatorial; }
-    virtual Vector  getEquatorialVector() const { return m_equatorial.getVector() * m_geocentric.getRadius(); }
+    virtual Equatorial  getEquatorial() const { return m_equatorial; }
+    virtual Vector      getEquatorialVector() const { return m_equatorial.getVector() * m_geocentric.getRadius(); }
     
-    virtual HorPoint getHorizontal() const { return m_horizontal; }
-    virtual Vector  getHorizontalVector() const { return m_horizontal.getVector() * m_geocentric.getRadius(); };
+    virtual Horizontal  getHorizontal() const { return m_horizontal; }
+    virtual Vector      getHorizontalVector() const { return m_horizontal.getVector() * m_geocentric.getRadius(); };
     
     // Calculate the data for a given planet, jd, and location
     // This function must be called (directly or via c'tor) before calling
@@ -53,14 +53,14 @@ public:
     
 protected:
 
-    double  m_jcentury;
-    EcPoint m_heliocentric;
-    EcPoint m_geocentric;
+    double      m_jcentury;
+    Ecliptic    m_heliocentric;
+    Ecliptic    m_geocentric;
     
-    EqPoint m_equatorial;
-    HorPoint m_horizontal;
+    Equatorial  m_equatorial;
+    Horizontal  m_horizontal;
     
-    BodyId  m_bodyId;
+    BodyId      m_bodyId;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Body& b) {

@@ -8,10 +8,12 @@ public:
     Polar(const double _phi, const double _theta, bool _radians = false);
     virtual ~Polar();
     
+    virtual Polar& invert();
+    
     virtual double& operator[]( int _n );
     virtual double  operator[]( int _n ) const;
     
-private:
+protected:
     virtual double * getPtr();
     virtual const double * getPtr() const;
     
