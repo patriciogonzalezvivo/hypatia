@@ -27,7 +27,5 @@ HorPoint::~HorPoint() {
 }
 
 Vector HorPoint::getVector() const {
-    Vector v;
-    v.setPolar(m_alt, -m_az, true);
-    return v;
+    return Vector(Polar(m_alt, -m_az, true));
 }

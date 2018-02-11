@@ -1,9 +1,16 @@
 #include "Vector.h"
 
-#include "MathOps.h"
+#include "../MathOps.h"
 #include <math.h>
 
 Vector::Vector() : x(0.0), y(0.0), z(0.0) {
+}
+
+Vector::Vector(const Polar& _polar) {
+    const double cosLat = cos( _polar[1] );
+    x = cos( _polar[0] ) * cosLat;
+    y = sin( _polar[0] ) * cosLat;
+    z = sin( _polar[1] );
 }
 
 Vector::Vector(const double _x, const double _y, const double _z): x(_x), y(_y), z(_z) {
@@ -11,22 +18,6 @@ Vector::Vector(const double _x, const double _y, const double _z): x(_x), y(_y),
 
 Vector::~Vector() {
 }
-
-Vector& Vector::setPolar(double _lng, double _lat, bool _radians ){
-    if (!_radians) {
-        _lng = MathOps::toRadians(_lng);
-        _lat = MathOps::toRadians(_lat);
-    }
-    
-    const double cosLat = cos( _lat );
-    
-    x = cos( _lng ) * cosLat;
-    y = sin( _lng ) * cosLat;
-    z = sin( _lat );
-    
-    return *this;
-}
-
 
 Vector Vector::getNormalized() const {
     double length = getMagnitud();

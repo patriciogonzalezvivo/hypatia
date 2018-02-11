@@ -1,19 +1,16 @@
 #pragma once
 
-#include <iomanip>
+#include "Polar.h"
 
 class Vector {
 public:
     Vector();
+    Vector(const Polar& _polar);
     Vector(const double _x, const double _y, const double _z);
+    
     virtual ~Vector();
     
     double x, y, z;
-
-    virtual Vector& setPolar(double _lng, double _lat, bool _radians = false);
-    
-    virtual double * getPtr();
-    virtual const double * getPtr() const;
 
     virtual double  getMagnitud() const;
     virtual Vector  getNormalized() const;
@@ -31,8 +28,8 @@ public:
     virtual Vector& rotate(double _angle, int _axis, bool _radians = false);
     virtual Vector& rotate(double _angle, const Vector& _axis, bool _radians = false);
     
-    virtual double& operator[]( int n );
-    virtual double  operator[]( int n ) const;
+    virtual double& operator[]( int _n );
+    virtual double  operator[]( int _n ) const;
     
     virtual Vector operator+ (const Vector& _vec) const;
     virtual Vector operator- (const Vector& _vec) const;
@@ -53,8 +50,10 @@ public:
     virtual Vector& operator-= (double _d);
     virtual Vector& operator*= (double _d);
     virtual Vector& operator/= (double _d);
-
-    // friend std::ostream& operator << (std::ostream& os, const Vector& v);
+    
+private:
+    virtual double * getPtr();
+    virtual const double * getPtr() const;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Vector& v) {

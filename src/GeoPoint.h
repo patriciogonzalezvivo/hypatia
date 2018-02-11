@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MathOps.h"
-#include "Vector.h"
+#include "primitives/Vector.h"
 
 class GeoPoint {
 public:

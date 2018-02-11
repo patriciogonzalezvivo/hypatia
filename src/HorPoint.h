@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "Vector.h"
 #include "MathOps.h"
+#include "primitives/Vector.h"
 
 class HorPoint {
 public:

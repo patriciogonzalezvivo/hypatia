@@ -25,8 +25,9 @@ namespace std {
 %{
     #define SWIG_FILE_WITH_INIT
     #include "src/MathOps.h"
+    #include "src/primitives/Polar.h"
+    #include "src/primitives/Vector.h"
     #include "src/TimeOps.h"
-    #include "src/Vector.h"
     #include "src/GeoPoint.h"
     #include "src/Observer.h"
     #include "src/AstroOps.h"
@@ -41,8 +42,9 @@ namespace std {
 %}
 
 %include "src/MathOps.h"
+%include "src/primitives/Polar.h"
+%include "src/primitives/Vector.h"
 %include "src/TimeOps.h"
-%include "src/Vector.h"
 %include "src/GeoPoint.h"
 %include "src/Observer.h"
 %include "src/AstroOps.h"

@@ -14,9 +14,10 @@ astro_module = Extension(
   '_astro',
   sources= [ 
     'astro_wrap.cxx', 
-    'src/MathOps.cpp', 
-    'src/TimeOps.cpp', 
-    'src/Vector.cpp',
+    'src/MathOps.cpp',
+    'src/primitives/Polar.cpp',
+    'src/primitives/Vector.cpp',
+    'src/TimeOps.cpp',
     'src/GeoPoint.cpp',
     'src/Observer.cpp', 
     'src/AstroOps.cpp',

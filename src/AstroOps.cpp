@@ -12,7 +12,7 @@
 #include "MathOps.h"
 #include "TimeOps.h"
 
-#include "Vector.h"
+#include "primitives/Vector.h"
 
 #include "Vsop.h"
 

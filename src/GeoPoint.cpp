@@ -23,9 +23,7 @@ GeoPoint::~GeoPoint(){
 }
 
 Vector GeoPoint::getVector() const {
-    Vector v;
-    v.setPolar(m_lng, m_lat, true);
-    return v * m_alt;
+    return Vector(Polar(m_lng, m_lat, true)) * m_alt;
 }
 
 

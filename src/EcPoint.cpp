@@ -58,7 +58,5 @@ void EcPoint::setRadius( double _radius ) {
 }
 
 Vector EcPoint::getVector() const {
-    Vector v;
-    v.setPolar(m_lng, m_lat, true);
-    return v * m_radius;
+    return Vector(Polar(m_lng, m_lat, true)) * m_radius;
 }

@@ -29,7 +29,5 @@ EqPoint::~EqPoint() {
 }
 
 Vector EqPoint::getVector() const {
-    Vector v;
-    v.setPolar(m_ra, m_dec, true);
-    return v;
+    return Vector(Polar(m_ra, m_dec, true));
 }
