@@ -7,14 +7,13 @@
 
 #include "Polar.h"
 
-#include "../MathOps.h"
 #include <math.h>
 
 Polar::Polar() : m_phi(0.0),  m_theta(0.0) {
 }
 
-Polar::Polar(const double _phi, const double _theta, bool _radians) {
-    if (_radians) {
+Polar::Polar(const double _phi, const double _theta, ANGLE_TYPE _type) {
+    if (_type == RADS) {
         m_phi = _phi;
         m_theta = _theta;
     }

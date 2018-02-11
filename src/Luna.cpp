@@ -419,7 +419,7 @@ void Luna::compute( Observer &_obs ) {
         }
     
         m_distance = rad;
-        m_geocentric = Ecliptic(lng, lat, rad * AstroOps::KM_TO_AU , true);
+        m_geocentric = Ecliptic(lng, lat, rad * AstroOps::KM_TO_AU , RADS);
         
         m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );
         m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
@@ -429,7 +429,7 @@ void Luna::compute( Observer &_obs ) {
         Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJC(), EARTH);
         
         // Get HelioCentric values
-        Ecliptic toEarth = Ecliptic(sun_eclipticLon, sun_eclipticLat, sun_radius, true);
+        Ecliptic toEarth = Ecliptic(sun_eclipticLon, sun_eclipticLat, sun_radius, RADS);
         Vector Sun2Earth = toEarth.getVector();
         Vector Earth2Moon = m_geocentric.getVector();
         Vector Sun2Moon = Sun2Earth + Earth2Moon;
@@ -444,15 +444,15 @@ void Luna::compute( Observer &_obs ) {
         Horizontal sunHor = AstroOps::toHorizontal( _obs, sunEq);
         
         // Compute moon age
-        double moonAge = MathOps::normalizeRadians( MathOps::TAU - (sun_eclipticLon - m_geocentric.getLongitudeRadians()) );
+        double moonAge = MathOps::normalizeRadians( MathOps::TAU - (sun_eclipticLon - m_geocentric.getLongitude(RADS)) );
 
         // convert radians to Synodic day
         m_age = SYNODIC_MONTH * (moonAge / MathOps::TAU);
 
         // Position Angle
-        double delta_az = m_horizontal.getAzimuthRadians() - sunHor.getAzimuthRadians();
-        m_posAngle = atan2( cos(sunHor.getAltitudRadians()) * sin(delta_az),
-                            sin(sunHor.getAltitudRadians()) * cos(m_horizontal.getAzimuthRadians()) - cos(sunHor.getAltitudRadians()) * sin(m_horizontal.getAzimuthRadians()) * cos(delta_az));
+        double delta_az = m_horizontal.getAzimuth(RADS) - sunHor.getAzimuth(RADS);
+        m_posAngle = atan2( cos(sunHor.getAltitud(RADS)) * sin(delta_az),
+                            sin(sunHor.getAltitud(RADS)) * cos(m_horizontal.getAzimuth(RADS)) - cos(sunHor.getAltitud(RADS)) * sin(m_horizontal.getAzimuth(RADS)) * cos(delta_az));
 
         // double hour_angle = MathOps::toRadians(localSiderealTime(obs.getJulianDay(), obs.getLongitud())) - m_ra;
     }

@@ -20,7 +20,7 @@ void ProjOps::toXY( ProjId _id, double _alt, double _az, double _width, double _
 }
 
 void ProjOps::toXY( ProjId _id, const Horizontal &_eq, double _width, double _height, double &_x, double &_y ) {
-    ProjOps::toXY(_id, _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y);
+    ProjOps::toXY(_id, _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y);
 }
 
 //  https://github.com/slowe/VirtualSky/blob/gh-pages/virtualsky.js
@@ -33,7 +33,7 @@ void ProjOps::toPolar( double _alt, double _az, double _width, double _height, d
 }
 
 void ProjOps::toPolar( const Horizontal &_eq, double _width, double _height, double &_x, double &_y) {
-    ProjOps::toPolar( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
+    ProjOps::toPolar( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toFisheye(double _alt, double _az, double _width, double _height, double &_x, double &_y) {
@@ -45,7 +45,7 @@ void ProjOps::toFisheye(double _alt, double _az, double _width, double _height, 
 }
 
 void ProjOps::toFisheye(const Horizontal &_eq, double _width, double _height, double &_x, double &_y) {
-    ProjOps::toFisheye( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
+    ProjOps::toFisheye( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toOrtho( double _alt, double _az, double _width, double _height, double &_x, double &_y) {
@@ -57,7 +57,7 @@ void ProjOps::toOrtho( double _alt, double _az, double _width, double _height, d
 }
 
 void ProjOps::toOrtho( const Horizontal &_eq, double _width, double _height, double &_x, double &_y) {
-    ProjOps::toOrtho( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
+    ProjOps::toOrtho( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -75,7 +75,7 @@ void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, 
 }
 
 void ProjOps::toStereo( const Horizontal &_eq, double _width ,double _height, double &_x, double &_y ) {
-    ProjOps::toStereo( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
+    ProjOps::toStereo( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toLambert( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -89,7 +89,7 @@ void ProjOps::toLambert( double _alt, double _az, double _width ,double _height,
     _y = _height - 0.6 * _height * k * sinel;
 }
 void ProjOps::toLambert( const Horizontal &_eq, double _width ,double _height, double &_x, double &_y ) {
-    ProjOps::toLambert( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
+    ProjOps::toLambert( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toEquirectangular( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -103,5 +103,5 @@ void ProjOps::toEquirectangular( double _alt, double _az, double _width ,double 
 }
 
 void ProjOps::toEquirectangular( const Horizontal &_eq,  double _width ,double _height, double &_x, double &_y ) {
-    ProjOps::toEquirectangular( _eq.getAltitudRadians(), _eq.getAzimuthRadians(), _width, _height, _x, _y );
+    ProjOps::toEquirectangular( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
 }

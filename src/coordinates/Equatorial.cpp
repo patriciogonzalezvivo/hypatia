@@ -10,8 +10,8 @@ Equatorial::Equatorial(const Vector& _parent) {
     m_theta = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
 }
 
-Equatorial::Equatorial(const double _ra, const double _dec, bool _radians) {
-    if (_radians) {
+Equatorial::Equatorial(const double _ra, const double _dec, ANGLE_TYPE _type) {
+    if ( _type == RADS ) {
         m_phi = _ra;
         m_theta = _dec;
     }
@@ -22,6 +22,24 @@ Equatorial::Equatorial(const double _ra, const double _dec, bool _radians) {
 }
 
 Equatorial::~Equatorial() {
+}
+
+double Equatorial::getRightAscension(ANGLE_TYPE _type) const {
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( m_phi );
+    }
+    else {
+        return m_phi;
+    }
+}
+
+double Equatorial::getDeclination(ANGLE_TYPE _type) const {
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( m_theta );
+    }
+    else {
+        return m_theta;
+    }
 }
 
 Vector Equatorial::getVector() const {

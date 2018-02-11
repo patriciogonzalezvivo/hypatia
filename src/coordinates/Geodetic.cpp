@@ -5,8 +5,8 @@
 Geodetic::Geodetic() : m_alt(0.0) {
 }
 
-Geodetic::Geodetic( double _lng, double _lat, double _alt, bool _radians) {
-    if (_radians) {
+Geodetic::Geodetic( double _lng, double _lat, double _alt, ANGLE_TYPE _type) {
+    if ( _type == RADS ) {
         m_phi = _lng;
         m_theta = _lat;
     }
@@ -18,6 +18,24 @@ Geodetic::Geodetic( double _lng, double _lat, double _alt, bool _radians) {
 }
 
 Geodetic::~Geodetic(){
+}
+
+double Geodetic::getLongitude(ANGLE_TYPE _type) const {
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( m_phi );
+    }
+    else {
+        return m_phi;
+    }
+}
+
+double Geodetic::getLatitude(ANGLE_TYPE _type) const {
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( m_theta );
+    }
+    else {
+        return m_theta;
+    }
 }
 
 double Geodetic::getRadius() const {

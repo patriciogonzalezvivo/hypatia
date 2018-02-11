@@ -520,11 +520,11 @@ void AstroOps::eclipticToEquatorial ( double _obliq, double _lng, double _lat, d
  * @return Equatorial position
  */
 Equatorial AstroOps::toEquatorial ( Observer &_obs, const Ecliptic &_ecliptic ) {
-    double lng = _ecliptic.getLongitudeRadians();
-    double lat = _ecliptic.getLatitudeRadians();
+    double lng = _ecliptic.getLongitude(RADS);
+    double lat = _ecliptic.getLatitude(RADS);
     double ra, dec;
     AstroOps::eclipticToEquatorial(_obs.getObliquity(), lng, lat, ra, dec);
-    return Equatorial(ra, dec, true);
+    return Equatorial(ra, dec, RADS);
 }
 
 /**
@@ -570,11 +570,11 @@ void AstroOps::equatorialToHorizontal ( double _lst, double _lat, double _ra, do
  * @return horizontal position
  */
 Horizontal AstroOps::toHorizontal( Observer &_obs, const Equatorial &_equatorial) {
-    double ra = _equatorial.getRightAscensionRadians();
-    double dec = _equatorial.getDeclinationRadians();
+    double ra = _equatorial.getRightAscension(RADS);
+    double dec = _equatorial.getDeclination(RADS);
     double alt, az;
-    AstroOps::equatorialToHorizontal(_obs.getLST(), _obs.getLocation().getLatitudeRadians(), ra, dec, alt, az);
-    return Horizontal(alt, az, true);
+    AstroOps::equatorialToHorizontal(_obs.getLST(), _obs.getLocation().getLatitude(RADS), ra, dec, alt, az);
+    return Horizontal(alt, az, RADS);
 }
 
 /**

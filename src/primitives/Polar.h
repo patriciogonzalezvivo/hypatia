@@ -1,11 +1,12 @@
 #pragma once
 
+#include "../MathOps.h"
 #include <iomanip>
 
 class Polar {
 public:
     Polar();
-    Polar(const double _phi, const double _theta, bool _radians = false);
+    Polar(const double _phi, const double _theta, ANGLE_TYPE _type);
     virtual ~Polar();
     
     virtual Polar& invert();

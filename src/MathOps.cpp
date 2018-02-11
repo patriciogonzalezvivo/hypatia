@@ -81,6 +81,20 @@ double MathOps::secToRadians( double _sec ) {
     return (_sec/MathOps::SECONDS_PER_DEGREE) * MathOps::RADS_PER_DEGREE;
 }
 
+/**
+ * toHrs(): convert arcseconds to radians
+ *
+ * @param degrees
+ *
+ * @return hours double
+ */
+double MathOps::toHrs( double _angle, ANGLE_TYPE _type ) {
+    if ( _type == RADS ) {
+        _angle = MathOps::toDegrees(_angle);
+    }
+    return _angle * DEGS_TO_HRS;
+};
+
 //----------------------------------------------------------------------------
 // reduce an angle in degrees to (0 <= d < 360)
 //
@@ -223,7 +237,7 @@ char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
         return buf;
     }
     else if (_fmt == Hs) {
-        sprintf ( buf, "%.4f°", toHrs(_deg));
+        sprintf ( buf, "%.4f°", toHrs(_deg, DEGS));
         return buf;
     }
     

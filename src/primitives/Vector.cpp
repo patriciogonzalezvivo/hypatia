@@ -33,19 +33,24 @@ double Vector::getMagnitud() const {
     return sqrt(x*x + y*y + z*z);
 }
 
-double Vector::getLongitude() const { 
-    return MathOps::toDegrees( getLongitudeRadians() ); 
+double Vector::getLongitude(ANGLE_TYPE _type) const {
+    double lng = atan2(y, x);
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( lng );
+    }
+    else {
+        return lng;
+    }
+    
 };
-double Vector::getLongitudeRadians() const { 
-    return atan2(y, x); 
-};
-
-double Vector::getLatitude() const { 
-    return MathOps::toDegrees( Vector::getLatitudeRadians() ); 
-};
-
-double Vector::getLatitudeRadians() const { 
-    return asin(z);
+double Vector::getLatitude(ANGLE_TYPE _type) const {
+    double lat = asin(z);
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( lat );
+    }
+    else {
+        return lat;
+    }
 };
 
 double Vector::dot(const Vector& _vec) const {

@@ -583,10 +583,10 @@ Star::Star( int _id ) : m_mag(0.0), m_id(-1) {
 
     m_id = _id;
     m_mag = sts_data[_id][0];
-    m_equatorial = Equatorial(sts_data[_id][1], sts_data[_id][2]);
+    m_equatorial = Equatorial(sts_data[_id][1], sts_data[_id][2], DEGS);
 }
 
-Star::Star( double _ra, double _dec, double _mag ) : m_equatorial(_ra, _dec), m_mag(_mag), m_id(-1) {
+Star::Star( double _ra, double _dec, double _mag ) : m_equatorial(_ra, _dec, DEGS), m_mag(_mag), m_id(-1) {
 }
 
 Star::~Star() {

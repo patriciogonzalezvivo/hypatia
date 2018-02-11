@@ -11,8 +11,8 @@ Ecliptic::Ecliptic(const Vector& _parent) {
     m_radius = _parent.getMagnitud();
 }
 
-Ecliptic::Ecliptic(double _lng, double _lat, double _radius, bool _radians) {
-    if (_radians) {
+Ecliptic::Ecliptic(double _lng, double _lat, double _radius, ANGLE_TYPE _type) {
+    if ( _type == RADS ) {
         m_phi = _lng;
         m_theta = _lat;
     }
@@ -20,11 +20,28 @@ Ecliptic::Ecliptic(double _lng, double _lat, double _radius, bool _radians) {
         m_phi = MathOps::toRadians( _lng );
         m_theta = MathOps::toRadians( _lat );
     }
-
     m_radius = _radius;
 }
 
 Ecliptic::~Ecliptic() {
+}
+
+double Ecliptic::getLongitude(ANGLE_TYPE _type) const {
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( m_phi );
+    }
+    else {
+        return m_phi;
+    }
+}
+
+double Ecliptic::getLatitude(ANGLE_TYPE _type) const {
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( m_theta );
+    }
+    else {
+        return m_theta;
+    }
 }
 
 Ecliptic& Ecliptic::operator= (const Vector& _vec) {
@@ -34,28 +51,6 @@ Ecliptic& Ecliptic::operator= (const Vector& _vec) {
     
     return *this;
 }
-
-//void EcPoint::setLongitude( double _lng, bool _radians ) {
-//    if (_radians) {
-//        m_lng = _lng;
-//    }
-//    else {
-//        m_lng = MathOps::toRadians( _lng );
-//    }
-//}
-//
-//void EcPoint::setLatitude( double _lat, bool _radians ) {
-//    if (_radians) {
-//        m_lat = _lat;
-//    }
-//    else {
-//        m_lat = MathOps::toRadians( _lat );
-//    }
-//}
-//
-//void EcPoint::setRadius( double _radius ) {
-//    m_radius = _radius;
-//}
 
 Vector Ecliptic::getVector() const {
     return Vector(*this) * m_radius;

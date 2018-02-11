@@ -18,6 +18,10 @@ enum ANGLE_FMT {
     H_M_Ss     // 15h 15m 32.9s
 };
 
+enum ANGLE_TYPE {
+    DEGS, RADS
+};
+
 struct MathOps {
     static const double PI;
     static const double TAU;
@@ -87,7 +91,7 @@ struct MathOps {
      *
      * @return hours double
      */
-    static double toHrs( double _deg ) { return _deg * DEGS_TO_HRS; };
+    static double toHrs( double _angle, ANGLE_TYPE _type );
     
     /**
      * toDMS(): convert degress to degrees, minutes and seconds

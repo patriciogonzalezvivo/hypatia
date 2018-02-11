@@ -921,8 +921,8 @@ Constellation::Constellation( double _ra, double _dec ) : m_id(-1) {
 }
 
 Constellation::Constellation( const Equatorial &_point ) : m_id(-1) {
-    double ra = _point.getRightAscension();
-    double dec = _point.getDeclination();
+    double ra = _point.getRightAscension(DEGS);
+    double dec = _point.getDeclination(DEGS);
     setId( getConstellationId( ra, dec ) );
 }
 
@@ -941,7 +941,7 @@ void Constellation::setId( int _id ) {
     }
 
     m_id = _id;
-    m_centroid = Equatorial(cns_centroid[_id][0], cns_centroid[_id][1]);
+    m_centroid = Equatorial(cns_centroid[_id][0], cns_centroid[_id][1], DEGS);
 
     m_sIndices.clear();
     for (int i = 1; i <= cns_stars[_id][0]; i++) {
@@ -950,7 +950,7 @@ void Constellation::setId( int _id ) {
     
     m_boundary.clear();
     for (int i = 1; i <= cns_boundaries[_id][0]; i+=2) {
-        m_boundary.push_back(Equatorial(cns_boundaries[_id][i], cns_boundaries[_id][i+1]));
+        m_boundary.push_back(Equatorial(cns_boundaries[_id][i], cns_boundaries[_id][i+1], DEGS));
     }
 }
 
