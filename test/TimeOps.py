@@ -86,7 +86,7 @@ tests = [
   testJDtoDatetimetoJD(1676497.5),
   testJDtoDatetimetoJD(1356001.0),
   testJDtoDatetimetoJD(1355866.5),
-  testJDtoDatetimetoJD(1355671.4),
+  testJDtoDatetimetoJD(1355671.4)
 ]
 
 print(TimeOps.toYMD(2026871.8))
