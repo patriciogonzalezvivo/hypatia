@@ -45,6 +45,7 @@ double Vector::getLongitude(ANGLE_TYPE _type) const {
 };
 double Vector::getLatitude(ANGLE_TYPE _type) const {
     double lat = asin(z);
+//    double lat = atan2(z, sqrt(x * x + y * y));
     if ( _type == DEGS ) {
         return MathOps::toDegrees( lat );
     }

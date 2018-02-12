@@ -53,7 +53,6 @@ Ecliptic& Ecliptic::operator= (const Vector& _vec) {
     m_phi = atan2(_vec.y, _vec.x);
     m_theta = atan2(_vec.z, sqrt(_vec.x * _vec.x + _vec.y * _vec.y));
     m_radius = _vec.getMagnitud();
-    
     return *this;
 }
 
