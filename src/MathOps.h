@@ -9,6 +9,10 @@
 #pragma once
 #undef PI
 
+enum ANGLE_TYPE {
+    DEGS, RADS
+};
+
 enum ANGLE_FMT {
     Dd,        // 16.294°
     D_Mm,      // 12° 36.1'
@@ -16,10 +20,6 @@ enum ANGLE_FMT {
     Hs,        // 15.1h
     H_Mm,      // 15h 15,3m
     H_M_Ss     // 15h 15m 32.9s
-};
-
-enum ANGLE_TYPE {
-    DEGS, RADS
 };
 
 struct MathOps {

@@ -1,11 +1,12 @@
 #include "Geodetic.h"
 
+#include "../AstroOps.h"
 #include <math.h>
 
-Geodetic::Geodetic() : m_alt(0.0) {
+Geodetic::Geodetic () : m_alt(0.0) {
 }
 
-Geodetic::Geodetic( double _lng, double _lat, double _alt, ANGLE_TYPE _type) {
+Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_TYPE _type) {
     if ( _type == RADS ) {
         m_phi = _lng;
         m_theta = _lat;
@@ -17,10 +18,10 @@ Geodetic::Geodetic( double _lng, double _lat, double _alt, ANGLE_TYPE _type) {
     m_alt = _alt;
 }
 
-Geodetic::~Geodetic(){
+Geodetic::~Geodetic () {
 }
 
-double Geodetic::getLongitude(ANGLE_TYPE _type) const {
+double Geodetic::getLongitude ( ANGLE_TYPE _type ) const {
     if ( _type == DEGS ) {
         return MathOps::toDegrees( m_phi );
     }
@@ -29,7 +30,7 @@ double Geodetic::getLongitude(ANGLE_TYPE _type) const {
     }
 }
 
-double Geodetic::getLatitude(ANGLE_TYPE _type) const {
+double Geodetic::getLatitude ( ANGLE_TYPE _type ) const {
     if ( _type == DEGS ) {
         return MathOps::toDegrees( m_theta );
     }
@@ -38,13 +39,14 @@ double Geodetic::getLatitude(ANGLE_TYPE _type) const {
     }
 }
 
-double Geodetic::getRadius() const {
-    // TODO:
-    //      - interpolate between polar and equatorial earth radius
-    return m_alt;
+double Geodetic::getRadius () const {
+    double pct = abs(sin(m_theta));
+    double rad = AstroOps::EARTH_EQUATORIAL_RADIUS_KM * (1.-pct) + AstroOps::EARTH_POLAR_RADIUS_KM * pct;
+    rad += m_alt * 0.001; // radious is in KM
+    return rad;
 }
 
-Vector Geodetic::getVector() const {
+Vector Geodetic::getVector () const {
     return Vector(*this) * getRadius();
 }
 

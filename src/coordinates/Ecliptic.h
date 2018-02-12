@@ -17,7 +17,8 @@ public:
     virtual double  getLongitude(ANGLE_TYPE _type) const;
     virtual double  getLatitude(ANGLE_TYPE _type) const;
     
-    virtual double  getRadius() const { return m_radius; };
+    // AU
+    virtual double  getRadius() const;
     
     virtual Vector  getVector() const;
     

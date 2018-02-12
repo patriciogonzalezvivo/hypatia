@@ -6,7 +6,7 @@
 class Geodetic : public Polar {
 public:
     Geodetic();
-    Geodetic(double _lng, double _lat, double _alt, ANGLE_TYPE _type);
+    Geodetic(double _lng, double _lat, double _alt_m, ANGLE_TYPE _type);
     virtual ~Geodetic();
     
     virtual double  getLongitude(ANGLE_TYPE _type) const;
@@ -14,6 +14,7 @@ public:
     
     virtual double  getAltitude() const { return m_alt; };
     
+    // KM
     virtual double  getRadius() const;
     
     virtual Vector  getVector() const;
