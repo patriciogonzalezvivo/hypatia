@@ -58,7 +58,7 @@ Vector Observer::getHeliocentricVector() {
     if (m_changed) {
         double pLng, pLat, pRad = 0.0;
         Vsop::calcAllLocs(pLng, pLat, pRad, m_jcentury, EARTH);
-        m_heliocentricLoc = Geodetic(pLng, pLat, pRad, RADS).getVector();
+        m_heliocentricLoc = Ecliptic(pLng, pLat, pRad, RADS).getVector();
         m_changed = false;
     }
     

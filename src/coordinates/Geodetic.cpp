@@ -47,5 +47,5 @@ double Geodetic::getRadius () const {
 }
 
 Vector Geodetic::getVector () const {
-    return Vector(*this) * getRadius();
+    return Vector(*this);
 }
