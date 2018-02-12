@@ -99,16 +99,24 @@ double MathOps::toHrs( double _angle, ANGLE_TYPE _type ) {
 // reduce an angle in degrees to (0 <= d < 360) or (0 <= d << 2PI )
 //
 double MathOps::normalize ( double _angle, ANGLE_TYPE _type ) {
+    
     if ( _type == DEGS ) {
         if (_angle >= 0.0 &&
             _angle < MathOps::DEG_PER_CIRCLE ) {
             return _angle;
         }
         
-         _angle = MathOps::mod( _angle, MathOps::DEG_PER_CIRCLE);
-         if ( _angle < 0.)
-             _angle += MathOps::DEG_PER_CIRCLE;
-         return _angle;
+        //         _angle = MathOps::mod( _angle, MathOps::DEG_PER_CIRCLE);
+        //         if ( _angle < 0.)
+        //             _angle += MathOps::DEG_PER_CIRCLE;
+        //         return _angle;
+        
+        double temp = (int)(_angle / MathOps::DEG_PER_CIRCLE);
+        if ( _angle < 0.0 ) {
+            temp --;
+        }
+        temp *= MathOps::DEG_PER_CIRCLE;
+        return _angle - temp;
     }
     else {
         if (_angle >= 0.0 &&
@@ -116,10 +124,18 @@ double MathOps::normalize ( double _angle, ANGLE_TYPE _type ) {
             return _angle;
         }
         
-         _angle = MathOps::mod( _angle, MathOps::TAU );
-         if ( _angle < 0. )
-             _angle += MathOps::TAU;
-         return _angle;
+        //         _angle = MathOps::mod( _angle, MathOps::TAU );
+        //         if ( _angle < 0. )
+        //             _angle += MathOps::TAU;
+        //         return _angle;
+        
+        double temp = (int)(_angle / MathOps::TAU);
+        if ( _angle < 0.0 ) {
+            temp --;
+        }
+        
+        temp *= MathOps::TAU;
+        return _angle - temp;
     }
 }
 

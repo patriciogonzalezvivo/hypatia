@@ -1,6 +1,5 @@
 #include "Ecliptic.h"
 
-#include "../AstroOps.h"
 #include <math.h>
 
 Ecliptic::Ecliptic() : m_radius(1.0) {
@@ -44,10 +43,6 @@ double Ecliptic::getLatitude(ANGLE_TYPE _type) const {
         return m_theta;
     }
 }
-
-double Ecliptic::getRadius() const {
-    return m_radius;
-};
 
 Ecliptic& Ecliptic::operator= (const Vector& _vec) {
     m_phi = atan2(_vec.y, _vec.x);
