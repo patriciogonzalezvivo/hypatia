@@ -113,10 +113,11 @@ double MathOps::normalize ( double _angle, ANGLE_TYPE _type ) {
         
         double temp = (int)(_angle / MathOps::DEG_PER_CIRCLE);
         if ( _angle < 0.0 ) {
-            temp --;
+            temp--;
         }
+        
         temp *= MathOps::DEG_PER_CIRCLE;
-        return temp --; - temp;
+        return _angle - temp;
     }
     else {
         if (_angle >= 0.0 &&
@@ -131,7 +132,7 @@ double MathOps::normalize ( double _angle, ANGLE_TYPE _type ) {
         
         double temp = (int)(_angle / MathOps::TAU);
         if ( _angle < 0.0 ) {
-            temp --;
+            temp--;
         }
     
         temp *= MathOps::TAU;
