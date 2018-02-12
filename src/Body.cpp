@@ -20,13 +20,10 @@ static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"E
 
 static char* zodiacSigns[] = { (char*)"Ari", (char*)"Tau", (char*)"Gem", (char*)"Cnc", (char*)"Leo", (char*)"Vir", (char*)"Lib", (char*)"Sco", (char*)"Sgr", (char*)"Cap", (char*)"Aqr", (char*)"Psc" };
 
-Body::Body() : m_jcentury(0.0), m_bodyId( NAB ){
-    
+Body::Body() : m_jcentury(0.0), m_ha(0.0), m_bodyId( NAB ) {
 }
 
-Body::Body( BodyId _body ) {
-    m_jcentury = 0.0;
-    m_bodyId = _body;
+Body::Body( BodyId _body ) : m_jcentury(0.0), m_ha(0.0), m_bodyId( _body ) {
 }
 
 Body::~Body() {
@@ -83,6 +80,7 @@ void Body::compute( Observer& _obs ) {
         }
         
         m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );
+        m_ha = MathOps::normalize(AstroOps::toHourAngle( _obs, m_equatorial ), RADS);
         m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
     }
 }
@@ -93,6 +91,15 @@ char*  Body::getBodyName() const {
 
 char * Body::getZodiacSign() const {
     return zodiacSigns[ int((m_geocentric.getLongitude(RADS)/MathOps::TAU)*12.)%12 ];
+}
+
+double Body::getHourAngle(ANGLE_TYPE _type) const {
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( m_ha );;;
+    }
+    else {
+        return m_ha;
+    }
 }
 
 

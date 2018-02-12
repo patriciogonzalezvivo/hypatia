@@ -519,7 +519,7 @@ void AstroOps::eclipticToEquatorial ( double _obliq, double _lng, double _lat, d
  *
  * @return Equatorial position
  */
-Equatorial AstroOps::toEquatorial ( Observer &_obs, const Ecliptic &_ecliptic ) {
+Equatorial AstroOps::toEquatorial ( const Observer &_obs, const Ecliptic &_ecliptic ) {
     double lng = _ecliptic.getLongitude(RADS);
     double lat = _ecliptic.getLatitude(RADS);
     double ra, dec;
@@ -533,31 +533,50 @@ Equatorial AstroOps::toEquatorial ( Observer &_obs, const Ecliptic &_ecliptic ) 
  *
  *   https://github.com/slowe/VirtualSky/blob/gh-pages/0.7.0/virtualsky.js#L1736
  *
- * @param Observer
- * @param ra - of equatorial position (IN)
- * @param ra - of equatorial position (IN)
+ * @param Observer's latitud
+ * @param hour angle (IN)
+ * @param dec - of equatorial position (IN)
  * @param alt - of ecliptic position (OUT)
  * @param az - of ecliptic position (OUT)
  *
  */
-void AstroOps::equatorialToHorizontal ( double _lst, double _lat, double _ra, double _dec, double &_alt, double &_az ) {
-    // compute hour angle in radians
-    double ha = _lst - _ra;
-    
+void AstroOps::equatorialToHorizontal ( double _lat, double _ha, double _dec, double &_alt, double &_az ) {
     double sd = sin(_dec);
     double sl = sin(_lat);
     double cl = cos(_lat);
 
     // compute altitude in radians
-    _alt = asin(sd*sl + cos(_dec)*cl*cos(ha));
+    _alt = asin(sd*sl + cos(_dec)*cl*cos(_ha));
 
     // compute azimuth in radians
     // divide by zero error at poles or if alt = 90 deg (so we should've already limited to 89.9999)
     _az = acos((sd - sin(_alt)*sl)/(cos(_alt)*cl));
 
     // choose hemisphere
-    if (sin(ha) > 0.0)
+    if (sin(_ha) > 0.0)
         _az = 2.*MathOps::PI - _az;
+}
+
+/**
+ * eclipticToEquatorial() - calcuate hour angle
+ *                          (Meeus, Ch. 92)
+ *
+ * @param lst - observer's local sideral time
+ * @param ra - right acention position (radians)
+ * @param dec - of equatorial position (radians)
+ *
+ * @return hour angle
+ */
+double AstroOps::toHourAngle( double _lst, double _ra ) {
+    return _lst - _ra;
+}
+
+double AstroOps::toHourAngle( const Observer &_obs, double _ra ) {
+    return _obs.getLST() - _ra;
+}
+
+double AstroOps::toHourAngle( const Observer &_obs, const Equatorial &_equatorial ) {
+    return _obs.getLST() - _equatorial.getRightAscension(RADS);
 }
 
 /**
@@ -570,10 +589,11 @@ void AstroOps::equatorialToHorizontal ( double _lst, double _lat, double _ra, do
  * @return horizontal position
  */
 Horizontal AstroOps::toHorizontal( Observer &_obs, const Equatorial &_equatorial) {
-    double ra = _equatorial.getRightAscension(RADS);
+//    double ra = _equatorial.getRightAscension(RADS);
     double dec = _equatorial.getDeclination(RADS);
+    double ha = toHourAngle(_obs, _equatorial);
     double alt, az;
-    AstroOps::equatorialToHorizontal(_obs.getLST(), _obs.getLocation().getLatitude(RADS), ra, dec, alt, az);
+    AstroOps::equatorialToHorizontal(_obs.getLocation().getLatitude(RADS), ha, dec, alt, az);
     return Horizontal(alt, az, RADS);
 }
 

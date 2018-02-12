@@ -133,7 +133,7 @@ public:
      *
      * @return Ecliptic geocentric
      */
-    static Ecliptic toGeocentric( Observer &_obs, const Ecliptic &_heliocentric );
+    static Ecliptic toGeocentric(Observer &_obs, const Ecliptic &_heliocentric );
 
     // -------------------------------------------------- GeoCentric
     
@@ -159,24 +159,36 @@ public:
      *
      * @return Equatorial position
      */
-    static Equatorial toEquatorial ( Observer &_obs, const Ecliptic &_ecliptic );
+    static Equatorial toEquatorial (const Observer &_obs, const Ecliptic &_ecliptic );
 
     
     // -------------------------------------------------- TopoCentric
+    /**
+     * eclipticToEquatorial() - calcuate hour angle
+     *                          (Meeus, Ch. 92)
+     *
+     * @param lst - observer's local sideral time
+     * @param ra - right acention position (radians)
+     * @param dec - of equatorial position (radians)
+     *
+     * @return hour angle
+     */
+    static double toHourAngle( double _lst, double _ra );
+    static double toHourAngle( const Observer &_obs, double _ra );
+    static double toHourAngle( const Observer &_obs, const Equatorial &_equatorial );    
     
     /**
      * eclipticToEquatorial() - equatorial to horizontal coordinates
      *                          (Meeus, Ch. 93)
      *
-     * @param lst, LST (radians)
-     * @param lat, Observer's latitud (radians)
-     * @param ra - of equatorial position (radians) (IN)
+     * @param lat - Observer's latitud (radians)
+     * @param ha - hour angle (radians) (IN)
      * @param dec - of equatorial position (radians) (IN)
      * @param alt - of ecliptic position (radians) (OUT)
      * @param az - of ecliptic position (radians) (OUT)
      *
      */
-    static void equatorialToHorizontal( double _lst, double _lat, double _ra, double _dec, double &_alt, double &_az);
+    static void equatorialToHorizontal( double _lat, double _ha, double _dec, double &_alt, double &_az);
     
     /**
      * eclipticToEquatorial() - equatorial to horizontal coordinates

@@ -32,6 +32,7 @@ public:
     virtual BodyId  getBodyId() const { return m_bodyId; }
     virtual char*   getBodyName() const;
     virtual char*   getZodiacSign() const;
+    virtual double  getHourAngle(ANGLE_TYPE _type) const;
 
     // Heliocentric
     virtual Ecliptic    getEclipticHeliocentric() const { return m_heliocentric; }
@@ -52,14 +53,14 @@ public:
     virtual void    compute( Observer& _obs );
     
 protected:
-
-    double      m_jcentury;
     Ecliptic    m_heliocentric;
     Ecliptic    m_geocentric;
     
     Equatorial  m_equatorial;
     Horizontal  m_horizontal;
     
+    double      m_jcentury;
+    double      m_ha;
     BodyId      m_bodyId;
 };
 
