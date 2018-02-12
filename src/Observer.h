@@ -21,6 +21,7 @@ public:
     virtual ~Observer();
     
     void    setJD(double _jd);
+    void    setLocation(const Geodetic& _location);
     
     double  getJD() const { return m_jd; }
     double  getJC() const { return m_jcentury; }
@@ -29,6 +30,8 @@ public:
     Geodetic getLocation() const { return m_location; }
     
     Vector  getHeliocentricVector();
+    
+    void    update();
 
 private:
     Vector      m_heliocentricLoc;

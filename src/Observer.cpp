@@ -34,12 +34,24 @@ Observer::~Observer() {
 void Observer::setJD(double _jd) {
     if ( m_jd != _jd ) {
         m_jd = _jd;
-        m_jcentury = TimeOps::toJC(m_jd);
-        m_obliquity = AstroOps::meanObliquity(m_jcentury);
-        m_lst = TimeOps::toLST(m_jd, m_location.getLongitude(RADS), RADS);
-        
-        m_changed = true;
+        update();
     }
+}
+
+void Observer::setLocation(const Geodetic &_location) {
+    if (m_location.getLongitude(RADS) != _location.getLongitude(RADS) ||
+        m_location.getLatitude(RADS) != _location.getLatitude(RADS) ) {
+        m_location = _location;
+        update();
+    }
+}
+
+void Observer::update() {
+    m_jcentury = TimeOps::toJC(m_jd);
+    m_obliquity = AstroOps::meanObliquity(m_jcentury);
+    m_lst = TimeOps::toLST(m_jd, m_location.getLongitude(RADS), RADS);
+    
+    m_changed = true;
 }
 
 Vector Observer::getHeliocentricVector() {
