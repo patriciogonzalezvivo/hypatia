@@ -21,7 +21,7 @@ public:
 
 inline std::ostream& operator<<(std::ostream& strm, const Equatorial& p) {
     strm << std::setprecision(3);
-    strm << "ra: " << std::setw(12) << MathOps::formatDegrees(p.getRightAscension(DEGS), H_M_Ss);
-    strm << ", dec: " << std::setw(12) << MathOps::formatDegrees(p.getDeclination(DEGS), D_M_Ss);
+    strm << "ra: " << std::setw(12) << MathOps::formatAngle(p.getRightAscension(DEGS), DEGS, H_M_Ss);
+    strm << ", dec: " << std::setw(12) << MathOps::formatAngle(p.getDeclination(DEGS), DEGS, D_M_Ss);
     return strm;
 }

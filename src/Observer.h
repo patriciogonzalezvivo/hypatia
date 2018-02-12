@@ -46,7 +46,7 @@ inline std::ostream& operator<<(std::ostream& strm, const Observer& o) {
     strm << "Observer, " << o.getLocation();
     strm << ", jd:" << std::setw(8) << o.getJD();
     strm << ", time:" << std::setw(8) << TimeOps::formatDateTime(o.getJD(), Y_M_D_HM);
-    strm << ", obliq:" << std::setw(8) << MathOps::formatRadians(o.getObliquity(), Dd);
-    strm << ", lst:" << std::setw(8) << MathOps::formatDegrees(o.getLST(), Dd);
+    strm << ", obliq:" << std::setw(8) << MathOps::formatAngle(o.getObliquity(), RADS, Dd);
+    strm << ", lst:" << std::setw(8) << MathOps::formatAngle(o.getLST(), DEGS, Dd);
     return strm;
 }

@@ -94,80 +94,53 @@ struct MathOps {
     static double toHrs( double _angle, ANGLE_TYPE _type );
     
     /**
-     * toDMS(): convert degress to degrees, minutes and seconds
+     * toDMS(): convert angle to degrees, minutes and seconds
      *
-     * @param degrees in
+     * @param angle in
+     * @param angle type
      *
      * @param degrees out
      * @param minutes out
      * @param seconds out
      *
      */
-    static void toDMS ( double deg, int &_deg, int &_min, double &_sec );
+    static void toDMS ( double angles, ANGLE_TYPE _type, int &_deg, int &_min, double &_sec );
     
     /**
-     * toHMS(): convert degress to degrees, minutes and seconds
+     * toHMS(): convert angles to degrees, minutes and seconds
      *
-     * @param degrees in
+     * @param angle in
+     * @param angle type
      *
      * @param hours out
      * @param minutes out
      * @param seconds out
      *
      */
-    static void toHMS ( double deg, int &_hrs, int &_min, double &_sec );
+    static void toHMS ( double deg, ANGLE_TYPE _type, int &_hrs, int &_min, double &_sec );
     
     /**
-     * formatDegrees(): format degrees into a string
+     * formatAngle(): format angle into a string
      *
-     * @param degrees in
+     * @param angle value
+     * @param angle type
      * @param format type
      *
      * @return formated string
      *
      */
-    static char* formatDegrees ( double _deg, ANGLE_FMT _format );
-    
-    /**
-     * formatRadians(): format radiants into a string
-     *
-     * @param radians in
-     * @param format type
-     *
-     * @return formated string
-     *
-     */
-    static char* formatRadians ( double _rad, ANGLE_FMT _format );
+    static char* formatAngle ( double _angle, ANGLE_TYPE _type, ANGLE_FMT _format );
       
     /**
-     * normalizeDegrees(): reduce an angle in degrees to the range (0 <= d < 360)
+     * normalize(): reduce an angle to the range (0 <= d < 360 or 0 <= d << TAO)
      *
-     * @param degrees
+     * @param angle
+     * @param angle type
      *
-     * @return degrees
+     *
+     * @return a
      */
-    static double normalizeDegrees( double _deg );
-    
-    /**
-     * normalizeRadians(): reduce an angle in radians to the range (0 <= r < 2PI)
-     *
-     * @param radians
-     *
-     * @return radians
-     */
-    static double normalizeRadians( double _rad );
-    
-    // reduce (0 < d < 360) a positive angle in degreesand convert to radians
-    //
-    /**
-     * normalizeDeg2Rad(): reduce an angle in degrees to the range (0 <= d < 360),
-     *                     then convert to radians
-     *
-     * @param degrees
-     *
-     * @return radians
-     */
-    static double normalizeDeg2Rad( double _deg );
+    static double normalize( double _angle, ANGLE_TYPE _type );
     
     /**
      *  quadrant(): returns the quadrant ( 0, 1, 2, or 3 ) of the spec'd angle

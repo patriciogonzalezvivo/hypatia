@@ -53,7 +53,7 @@ double AstroOps::meanSolarLongitude( double t ) {
         Lm += lTerms[i] * tPower;
         tPower *= t;
     }
-    return MathOps::normalizeDeg2Rad( Lm );
+    return MathOps::toRadians(MathOps::normalize( Lm, DEGS ));
 }
 
 //----------------------------------------------------------------------------

@@ -24,8 +24,8 @@ protected:
 
 inline std::ostream& operator<<(std::ostream& strm, const Geodetic& p) {
     strm << std::setprecision(3);
-    strm << "lng: " << std::setw(12) << MathOps::formatDegrees(p.getLongitude(DEGS), D_M_Ss);
-    strm << ", lat: " << std::setw(12) << MathOps::formatDegrees(p.getLatitude(DEGS), D_M_Ss);
+    strm << "lng: " << std::setw(12) << MathOps::formatAngle(p.getLongitude(DEGS), DEGS, D_M_Ss);
+    strm << ", lat: " << std::setw(12) << MathOps::formatAngle(p.getLatitude(DEGS), DEGS, D_M_Ss);
     strm << ", alt: " << std::setw(8) << p.getAltitude();
 
     return strm;

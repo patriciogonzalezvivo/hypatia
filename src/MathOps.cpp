@@ -96,55 +96,47 @@ double MathOps::toHrs( double _angle, ANGLE_TYPE _type ) {
 };
 
 //----------------------------------------------------------------------------
-// reduce an angle in degrees to (0 <= d < 360)
+// reduce an angle in degrees to (0 <= d < 360) or (0 <= d << 2PI )
 //
-double MathOps::normalizeDegrees ( double d ) {
-    if (d >= 0.0 && d < MathOps::DEG_PER_CIRCLE)
-        return d;
-
-//     d = MathOps::mod( d, MathOps::DEG_PER_CIRCLE);
-//     if ( d < 0.)
-//         d += MathOps::DEG_PER_CIRCLE;
-//     return d;
-
-    double temp = (int)(d / MathOps::DEG_PER_CIRCLE);
-    if (d < 0.0)
-        temp --;
-    temp *= MathOps::DEG_PER_CIRCLE;
-    return d - temp;
-}
-
-//----------------------------------------------------------------------------
-// reduce an angle in radians to (0 <= r < 2PI)
-//
-double MathOps::normalizeRadians ( double r ) {
-    if (r >= 0.0 && r < MathOps::TAU)
-        return r;
-
-    // r = MathOps::mod( r, MathOps::TAU );
-    // if ( r < 0. )
-    //     r += MathOps::TAU;
-    // return r;
-
-    double temp = (int)(r / MathOps::TAU);
-    if (r < 0.0)
-        temp --;
-    temp *= MathOps::TAU;
-    return r - temp;
-}
-
-// reduce (0 < d < 360) a positive angle in degreesand convert to radians
-//
-/**
- * normalizeDeg2Rad(): reduce an angle in degrees to the range (0 <= d < 360),
- *                     then convert to radians
- *
- * @param degrees
- *
- * @return radians
- */
-double MathOps::normalizeDeg2Rad( double _deg ) {
-    return normalizeDegrees( _deg ) * MathOps::RADS_PER_DEGREE;
+double MathOps::normalize ( double _angle, ANGLE_TYPE _type ) {
+    
+    if ( _type == DEGS ) {
+        if (_angle >= 0.0 &&
+            _angle < MathOps::DEG_PER_CIRCLE ) {
+            return _angle;
+        }
+        
+//         _angle = MathOps::mod( _angle, MathOps::DEG_PER_CIRCLE);
+//         if ( _angle < 0.)
+//             _angle += MathOps::DEG_PER_CIRCLE;
+//         return _angle;
+        
+        double temp = (int)(_angle / MathOps::DEG_PER_CIRCLE);
+        if ( _angle < 0.0 ) {
+            temp --;
+        }
+        temp *= MathOps::DEG_PER_CIRCLE;
+        return temp --; - temp;
+    }
+    else {
+        if (_angle >= 0.0 &&
+            _angle < MathOps::TAU ) {
+            return _angle;
+        }
+        
+//         _angle = MathOps::mod( _angle, MathOps::TAU );
+//         if ( _angle < 0. )
+//             _angle += MathOps::TAU;
+//         return _angle;
+        
+        double temp = (int)(_angle / MathOps::TAU);
+        if ( _angle < 0.0 ) {
+            temp --;
+        }
+    
+        temp *= MathOps::TAU;
+        return _angle - temp;
+    }
 }
 
 /**
@@ -155,15 +147,20 @@ double MathOps::normalizeDeg2Rad( double _deg ) {
  * @return quadrant of angle
  */
 
-int MathOps::quadrant( double _angle ) {
-    return (int)( normalizeRadians( _angle ) * MathOps::TWO_OVER_PI );
+int MathOps::quadrant( double _rad ) {
+    return (int)( normalize( _rad, RADS ) * MathOps::TWO_OVER_PI );
 }
 
-void MathOps::toDMS ( double degrees, int &_deg, int &_min, double &_sec ) {
+void MathOps::toDMS ( double _angle, ANGLE_TYPE _type, int &_deg, int &_min, double &_sec ) {
     // int totalSeconds = (int)round( rangeDegrees(_rad) * SECONDS_PER_DEGREE);
     // _sec = totalSeconds % 60;
     // _min = (totalSeconds / 60) % 60;
     // _deg = totalSeconds / (360);
+    
+    double degrees = _angle;
+    if ( _type == RADS) {
+        degrees = MathOps::toDegrees(_angle);
+    }
     
     double dtemp;
     int sign = 1;
@@ -194,9 +191,14 @@ void MathOps::toDMS ( double degrees, int &_deg, int &_min, double &_sec ) {
     _deg *= sign;
 }
 
-void MathOps::toHMS ( double degrees, int &_hrs, int &_min, double &_sec ) {
+void MathOps::toHMS ( double _angle, ANGLE_TYPE _type, int &_hrs, int &_min, double &_sec ) {
+    double degrees = _angle;
+    if ( _type == RADS) {
+        degrees = MathOps::toDegrees(_angle);
+    }
+    
     double dtemp;
-    degrees = normalizeDegrees(degrees);
+    degrees = normalize(degrees, DEGS);
     
     /* divide degrees by 15 to get the hours */
     dtemp = degrees * DEGS_TO_HRS;
@@ -221,23 +223,29 @@ void MathOps::toHMS ( double degrees, int &_hrs, int &_min, double &_sec ) {
 }
 
 /**
- * formatDegrees(): format degrees into a string
+ * formatAngle(): format angle into a string
  *
- * @param degrees in
+ * @param angle value
+ * @param angle type
  * @param format type
  *
  * @return formated string
  *
  */
-char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
+char* MathOps::formatAngle ( double _angle, ANGLE_TYPE _type, ANGLE_FMT _fmt ) {
+    double degrees = _angle;
+    if ( _type == RADS) {
+        degrees = MathOps::toDegrees(_angle);
+    }
+    
     char *buf = new char[32];
     
     if (_fmt == Dd) {
-        sprintf ( buf, "%.4f°", _deg);
+        sprintf ( buf, "%.4f°", degrees);
         return buf;
     }
     else if (_fmt == Hs) {
-        sprintf ( buf, "%.4f°", toHrs(_deg, DEGS));
+        sprintf ( buf, "%.4f°", toHrs(degrees, DEGS));
         return buf;
     }
     
@@ -245,25 +253,25 @@ char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
     double s;
     
     char sign = ' ';
-    if (_deg < 0) {
+    if (degrees < 0) {
         sign = '-';
     }
     
     switch (_fmt) {
         case D_M_Ss:
-            MathOps::toDMS(_deg, first, m, s);
+            MathOps::toDMS(degrees, DEGS, first, m, s);
             sprintf ( buf, "%c %02d° %02d' %.2f\"", sign, (int)fabs(first), (int)fabs(m), fabs(s) );
             break;
         case D_Mm:
-            MathOps::toDMS(_deg, first, m, s);
+            MathOps::toDMS(degrees, DEGS, first, m, s);
             sprintf ( buf, "%c %02d° %.2f'", sign, (int)fabs(first), fabs(m + s/60.0));
             break;
         case H_M_Ss:
-            MathOps::toHMS(_deg, first, m, s);
+            MathOps::toHMS(degrees, DEGS, first, m, s);
             sprintf ( buf, "%c %02dhs %02dm %.2fs", sign, (int)fabs(first), (int)fabs(m), fabs(s) );
             break;
         case H_Mm:
-            MathOps::toHMS(_deg, first, m, s);
+            MathOps::toHMS(degrees, DEGS, first, m, s);
             sprintf ( buf, "%c %02dhs %.2fm", sign, (int)fabs(first), fabs(m + s/60.0));
             break;
         case Dd:
@@ -275,26 +283,13 @@ char* MathOps::formatDegrees ( double _deg, ANGLE_FMT _fmt ) {
 }
 
 /**
- * formatRadians(): format degrees into a string
- *
- * @param radians in
- * @param format type
- *
- * @return formated string
- *
- */
-char* MathOps::formatRadians ( double _rad, ANGLE_FMT _fmt ) {
-    return formatDegrees(MathOps::toDegrees(_rad), _fmt);
-}
-
-/**
  * acose(): "safe" acos which prevents overflow errors
  *
  * @param angle
  *
  * @return acos (0 ... PI)
  */
-double MathOps::acose( double _angle ) {
+double MathOps::acose ( double _angle ) {
     if( _angle >= 1. )
         return( 0. );
     else if( _angle <= -1. )
@@ -310,7 +305,7 @@ double MathOps::acose( double _angle ) {
  *
  * @return asin (PI/2 ... -PI/2)
  */
-double MathOps::asine( double _angle ) {
+double MathOps::asine ( double _angle ) {
     if( _angle >= 1. )
         return( MathOps::PI_OVER_TWO );
     else if( _angle <= -1. )

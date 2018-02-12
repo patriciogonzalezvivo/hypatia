@@ -21,7 +21,7 @@ public:
 
 inline std::ostream& operator<<(std::ostream& strm, const Horizontal& p) {
     strm << std::setprecision(3);
-    strm << "alt: " << std::setw(8) << MathOps::formatDegrees(p.getAltitud(DEGS), Dd);
-    strm << ", az: " << std::setw(8) << MathOps::formatDegrees(p.getAzimuth(DEGS), Dd);
+    strm << "alt: " << std::setw(8) << MathOps::formatAngle(p.getAltitud(DEGS), DEGS, Dd);
+    strm << ", az: " << std::setw(8) << MathOps::formatAngle(p.getAzimuth(DEGS), DEGS, Dd);
     return strm;
 }
