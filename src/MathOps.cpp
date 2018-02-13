@@ -241,11 +241,27 @@ char* MathOps::formatAngle ( double _angle, ANGLE_TYPE _type, ANGLE_FMT _fmt ) {
     char *buf = new char[32];
     
     if (_fmt == Dd) {
-        sprintf ( buf, "%.4f°", degrees);
+        sprintf ( buf, "%.1f°", degrees);
+        return buf;
+    }
+    else if (_fmt == Ddd) {
+        sprintf ( buf, "%.2f°", degrees);
+        return buf;
+    }
+    else if (_fmt == Ddd) {
+        sprintf ( buf, "%.3f°", degrees);
         return buf;
     }
     else if (_fmt == Hs) {
-        sprintf ( buf, "%.4f°", toHrs(degrees, DEGS));
+        sprintf ( buf, "%.1f°", toHrs(degrees, DEGS));
+        return buf;
+    }
+    else if (_fmt == Hss) {
+        sprintf ( buf, "%.2f°", toHrs(degrees, DEGS));
+        return buf;
+    }
+    else if (_fmt == Hsss) {
+        sprintf ( buf, "%.3f°", toHrs(degrees, DEGS));
         return buf;
     }
     
@@ -275,7 +291,11 @@ char* MathOps::formatAngle ( double _angle, ANGLE_TYPE _type, ANGLE_FMT _fmt ) {
             sprintf ( buf, "%c %02dhs %.2fm", sign, (int)fabs(first), fabs(m + s/60.0));
             break;
         case Dd:
+        case Ddd:
+        case Dddd:
         case Hs:
+        case Hss:
+        case Hsss:
             break;
     }
     

@@ -14,10 +14,14 @@ enum ANGLE_TYPE {
 };
 
 enum ANGLE_FMT {
-    Dd,        // 16.294°
+    Dd,        // 16.2°
+    Ddd,       // 16.29°
+    Dddd,      // 16.294°
     D_Mm,      // 12° 36.1'
     D_M_Ss,    // 12° 36' 59.1"
     Hs,        // 15.1h
+    Hss,       // 15.12h
+    Hsss,      // 15.123h
     H_Mm,      // 15h 15,3m
     H_M_Ss     // 15h 15m 32.9s
 };
