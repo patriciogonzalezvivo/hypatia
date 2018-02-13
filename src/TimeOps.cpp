@@ -5,7 +5,6 @@
 #include <string.h>
 
 #include <ctime>
-#include <chrono>
 #include <iostream>
 
 
@@ -94,12 +93,6 @@ char* TimeOps::getDOW( int _dow ) {
 
 char* TimeOps::getDOWAbbreviation( int _dow ){
     return DOW3[_dow];
-}
-
-//----------------------------------------------------------------------------
-// Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
-unsigned long TimeOps::getCurrentSeconds() {
-    return std::chrono::system_clock::now().time_since_epoch() / std::chrono::seconds(1);
 }
 
 //----------------------------------------------------------------------------
