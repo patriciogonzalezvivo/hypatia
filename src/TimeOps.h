@@ -236,9 +236,6 @@ struct TimeOps {
      * @return Local Sidereal Time
      */
     static double toLST ( double _jd, double _lng, bool _radians = false);
-
-    // Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)
-    static unsigned long getCurrentSeconds ();
     
     /**
      * toJC(): convert a seconds to Julian Century
