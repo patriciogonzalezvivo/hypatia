@@ -411,7 +411,7 @@ struct TimeOps {
      *
      * @returns whether the year is valid
      */
-    static bool isValidYear(int year);
+    static bool isValidYear ( int _year );
     
     /**
      * isLeapYear(): Find whether a year is a leap year
@@ -420,8 +420,7 @@ struct TimeOps {
      *
      * @returns whether the year is a leap year
      */
-    static bool isLeapYear(int year);
-
+    static bool isLeapYear ( int _year );
     
     /**
      * dstStart(): Determine the Julian Day in the specified year where Daylight

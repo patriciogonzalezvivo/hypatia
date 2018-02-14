@@ -100,6 +100,18 @@ char* TimeOps::getDOWAbbreviation( int _dow ){
 }
 
 //----------------------------------------------------------------------------
+/**
+ * now(): Determine the Julian Day value at the present moment
+ *
+ * @param local - true for local time, false for UTC
+ *
+ * @return The Julian Day value
+ */
+double TimeOps::now( TIME_TYPE _type ) {
+    return toJD( time(0), _type ) - TimeOps::JD_DIFF;
+}
+
+//----------------------------------------------------------------------------
 
 /**
  * toJD(): convert a seconds to Julian Century
@@ -146,7 +158,7 @@ double TimeOps::toJD( struct tm* pt ) {
     return double(secs)/TimeOps::SECONDS_PER_DAY +
     toJD(   pt->tm_year + 1900, // years from 1900
             pt->tm_mon + 1,     // months are zero-based
-            pt->tm_mday);
+            pt->tm_mday );
 }
 
 /**
@@ -204,7 +216,6 @@ double TimeOps::toJD (int _year,  int _month, int _day, int _hrs, int _min, int 
     else {
         jd = jd -1. + MathOps::toDegrees(_hrs, _min, _sec) / 24.0;
     }
-    
     
     return jd;
 }
@@ -343,18 +354,6 @@ time_t TimeOps::toTime( double jd ) {
     
     toHMS(jd, t.tm_hour, t.tm_min, t.tm_sec);
     return mktime( &t );
-}
-
-//----------------------------------------------------------------------------
-/**
- * now(): Determine the Julian Day value at the present moment
- *
- * @param local - true for local time, false for UTC
- *
- * @return The Julian Day value
- */
-double TimeOps::now( TIME_TYPE _type ) {
-    return toJD( time(0), _type ) - TimeOps::JD_DIFF;
 }
 
 //----------------------------------------------------------------------------
