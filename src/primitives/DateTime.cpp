@@ -281,23 +281,6 @@ TimeSpan DateTime::getTimeOfDay() const {
     return TimeSpan(getTicks() % TimeSpan::TICKS_PER_DAY);
 }
 
-bool DateTime::equals(const DateTime& dt) const {
-    return (m_encoded == dt.m_encoded);
-}
-
-int DateTime::compare(const DateTime& dt) const {
-    int ret = 0;
-    
-    if (m_encoded < dt.m_encoded) {
-        return -1;
-    }
-    else if (m_encoded > dt.m_encoded) {
-        return 1;
-    }
-    
-    return ret;
-}
-
 DateTime DateTime::addYears(const int years) const {
     return addMonths(years * 12);
 }
@@ -332,22 +315,6 @@ DateTime DateTime::addMonths(const int months) const {
  */
 DateTime DateTime::add(const TimeSpan& t) const {
     return addTicks(t.getTicks());
-}
-
-DateTime DateTime::operator+ (const TimeSpan& _ts) const {
-    return DateTime(getTicks() + _ts.getTicks());
-}
-
-DateTime DateTime::operator+ (const DateTime& _dt) const {
-    return DateTime(getTicks() + _dt.getTicks());
-}
-
-DateTime DateTime::operator- (const TimeSpan& _ts) const {
-    return DateTime(getTicks() - _ts.getTicks());
-}
-
-DateTime DateTime::operator- (const DateTime& _dt) const {
-    return DateTime(getTicks() - _dt.getTicks());
 }
 
 DateTime DateTime::addDays(const double days) const {
@@ -431,4 +398,44 @@ int DateTime::getSecond() const {
  */
 int DateTime::getMicrosecond() const {
     return static_cast<int>(m_encoded % TimeSpan::TICKS_PER_SECOND / TimeSpan::TICKS_PER_MICROSECOND);
+}
+
+DateTime DateTime::operator+ (const TimeSpan& _ts) const {
+    return DateTime(getTicks() + _ts.getTicks());
+}
+
+DateTime DateTime::operator+ (const DateTime& _dt) const {
+    return DateTime(getTicks() + _dt.getTicks());
+}
+
+DateTime DateTime::operator- (const TimeSpan& _ts) const {
+    return DateTime(getTicks() - _ts.getTicks());
+}
+
+DateTime DateTime::operator- (const DateTime& _dt) const {
+    return DateTime(getTicks() - _dt.getTicks());
+}
+
+bool DateTime::operator==(const DateTime& _dt) const {
+    return m_encoded == _dt.getTicks();
+}
+
+bool DateTime::operator!=(const DateTime& _dt) const {
+    return m_encoded != _dt.getTicks();
+}
+
+bool DateTime::operator>(const DateTime& _dt) const {
+    return m_encoded > _dt.getTicks();
+}
+
+bool DateTime::operator>=(const DateTime& _dt) const {
+    return m_encoded >= _dt.getTicks();
+}
+
+bool DateTime::operator<(const DateTime& _dt) const {
+    return m_encoded < _dt.getTicks();
+}
+
+bool DateTime::operator<=(const DateTime& _dt) const {
+    return m_encoded <= _dt.getTicks();
 }

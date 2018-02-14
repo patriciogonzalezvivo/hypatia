@@ -18,11 +18,14 @@ public:
     TimeSpan(int days, int hours, int minutes, int seconds, int microseconds);
     virtual ~TimeSpan();
     
-    virtual TimeSpan operator+ (const TimeSpan& ts) const;
-    virtual TimeSpan operator- (const TimeSpan& ts) const;
-    
-    virtual int compare(const TimeSpan& ts) const;
-    virtual bool equals(const TimeSpan& ts) const;
+    virtual TimeSpan operator+ (const TimeSpan& _ts) const;
+    virtual TimeSpan operator- (const TimeSpan& _ts) const;
+    virtual bool operator==(const TimeSpan& _ts) const;
+    virtual bool operator!=(const TimeSpan& _ts) const;
+    virtual bool operator>(const TimeSpan& ts) const;
+    virtual bool operator>=(const TimeSpan& _ts) const;
+    virtual bool operator<(const TimeSpan& _ts) const;
+    virtual bool operator<=(const TimeSpan& _ts) const;
     
     virtual int64_t getTicks() const;
     
@@ -77,28 +80,3 @@ inline std::ostream& operator<<(std::ostream& strm, const TimeSpan& _ts) {
     
     return strm;
 }
-
-inline bool operator==(const TimeSpan& ts1, TimeSpan& ts2) {
-    return ts1.equals(ts2);
-}
-
-inline bool operator>(const TimeSpan& ts1, const TimeSpan& ts2) {
-    return (ts1.compare(ts2) > 0);
-}
-
-inline bool operator>=(const TimeSpan& ts1, const TimeSpan& ts2) {
-    return (ts1.compare(ts2) >= 0);
-}
-
-inline bool operator!=(const TimeSpan& ts1, const TimeSpan& ts2) {
-    return !ts1.equals(ts2);
-}
-
-inline bool operator<(const TimeSpan& ts1, const TimeSpan& ts2) {
-    return (ts1.compare(ts2) < 0);
-}
-
-inline bool operator<=(const TimeSpan& ts1, const TimeSpan& ts2) {
-    return (ts1.compare(ts2) <= 0);
-}
-

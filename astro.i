@@ -5,6 +5,12 @@
 
 %ignore *::operator[];
 %ignore *::operator=;
+%ignore *::operator==;
+%ignore *::operator!=;
+%ignore *::operator<;
+%ignore *::operator<=;
+%ignore *::operator>;
+%ignore *::operator>=;
 %ignore operator<<;
 
 %apply double &OUTPUT { double &_alt, double &_az };

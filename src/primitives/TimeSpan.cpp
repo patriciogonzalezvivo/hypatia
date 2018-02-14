@@ -34,32 +34,39 @@ TimeSpan::TimeSpan(int days, int hours, int minutes, int seconds, int microsecon
     updateTicks(days, hours, minutes, seconds, microseconds);
 }
 
-TimeSpan TimeSpan::operator+ (const TimeSpan& ts) const {
-    return TimeSpan(m_ticks + ts.getTicks());
-}
-
-TimeSpan TimeSpan::operator- (const TimeSpan& ts) const {
-     return TimeSpan(m_ticks - ts.getTicks());
-}
-
 TimeSpan::~TimeSpan() {
 }
 
-int TimeSpan::compare(const TimeSpan& ts) const {
-    int ret = 0;
-    
-    if (m_ticks < ts.m_ticks) {
-        ret = -1;
-    }
-    
-    if (m_ticks > ts.m_ticks) {
-        ret = 1;
-    }
-    return ret;
+TimeSpan TimeSpan::operator+ (const TimeSpan& _ts) const {
+    return TimeSpan(m_ticks + _ts.getTicks());
 }
 
-bool TimeSpan::equals(const TimeSpan& ts) const {
-    return m_ticks == ts.m_ticks;
+TimeSpan TimeSpan::operator- (const TimeSpan& _ts) const {
+    return TimeSpan(m_ticks - _ts.getTicks());
+}
+
+bool TimeSpan::operator==(const TimeSpan& _ts) const {
+    return m_ticks == _ts.getTicks();
+}
+
+bool TimeSpan::operator!=(const TimeSpan& _ts) const {
+    return m_ticks != _ts.getTicks();
+}
+
+bool TimeSpan::operator>(const TimeSpan& _ts) const {
+    return m_ticks > _ts.getTicks();
+}
+
+bool TimeSpan::operator>=(const TimeSpan& _ts) const {
+    return m_ticks >= _ts.getTicks();
+}
+
+bool TimeSpan::operator<(const TimeSpan& _ts) const {
+    return m_ticks < _ts.getTicks();
+}
+
+bool TimeSpan::operator<=(const TimeSpan& _ts) const {
+    return m_ticks <= _ts.getTicks();
 }
 
 int TimeSpan::getDays() const {
