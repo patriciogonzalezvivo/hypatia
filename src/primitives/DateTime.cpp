@@ -2,6 +2,42 @@
 
 #include "../TimeOps.h"
 
+#if defined(_WIN32) || defined(_WIN64)
+
+//#define NOMINMAX
+#include <windows.h>
+
+#define BILLION                             (1E9)
+#define CLOCK_REALTIME						0
+
+static BOOL g_first_time = 1;
+static LARGE_INTEGER g_counts_per_sec;
+
+int clock_gettime(int dummy, struct timespec *ct) {
+	LARGE_INTEGER count;
+
+	if (g_first_time) {
+		g_first_time = 0;
+		if (0 == QueryPerformanceFrequency(&g_counts_per_sec)) {
+			g_counts_per_sec.QuadPart = 0;
+		}
+	}
+
+	if ((NULL == ct) || (g_counts_per_sec.QuadPart <= 0) ||
+		(0 == QueryPerformanceCounter(&count))) {
+		return -1;
+	}
+
+	ct->tv_sec = count.QuadPart / g_counts_per_sec.QuadPart;
+	ct->tv_nsec = ((count.QuadPart % g_counts_per_sec.QuadPart) * BILLION) / g_counts_per_sec.QuadPart;
+
+	return 0;
+}
+#define MIN min
+#else
+#define MIN std::min
+#endif
+
 static int daysInMonth[2][13] = {
     //  1   2   3   4   5   6   7   8   9   10  11  12
     {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
@@ -284,7 +320,7 @@ DateTime DateTime::addMonths(const int months) const {
     }
     
     int maxday = DaysInMonth(year, month);
-    day = std::min(day, maxday);
+    day = MIN(day, maxday);
     
     return DateTime(year, month, day).add(getTimeOfDay());
 }
