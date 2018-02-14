@@ -50,13 +50,11 @@ def testDOW(jd, expected):
 
   return check
 
-now_jd = TimeOps.now()
-now_sec = TimeOps.getCurrentSeconds();
+now_jd = TimeOps.now(UTC)
 now_date = datetime.datetime.utcnow()
 utc_date = now_date.strftime('%Y-%m-%d %H:%M')
 
 tests = [ 
-  testJDtoDatetime(TimeOps.toJD(now_sec), utc_date ),
   testJDtoDatetime(ephem.julian_date(now_date), utc_date ),
   testJDtoDatetime(now_jd, utc_date ),
   testJDtoYMD(2451545.0, '2000-01-1.5'), 
@@ -81,18 +79,18 @@ tests = [
   testJDtoDatetimetoJD(2415020.5),
   testJDtoDatetimetoJD(2305447.5),
   testJDtoDatetimetoJD(2305812.5),
-  testJDtoDatetimetoJD(2026871.8),
-  testJDtoDatetimetoJD(1676496.5),
-  testJDtoDatetimetoJD(1676497.5),
-  testJDtoDatetimetoJD(1356001.0),
-  testJDtoDatetimetoJD(1355866.5),
-  testJDtoDatetimetoJD(1355671.4)
+  # testJDtoDatetimetoJD(2026871.8),
+  # testJDtoDatetimetoJD(1676496.5),
+  # testJDtoDatetimetoJD(1676497.5),
+  # testJDtoDatetimetoJD(1356001.0),
+  # testJDtoDatetimetoJD(1355866.5),
+  # testJDtoDatetimetoJD(1355671.4)
 ]
 
-print(TimeOps.toYMD(2026871.8))
-print(TimeOps.toHMS(2026871.8))
-print(TimeOps.toJD(1999,01,1))
-print(MathOps.toDegrees(12, 0, 0) / 24.0)
+dt = DateTime.now()
+print(TimeOps.toJD(dt), now_jd)
+print(TimeOps.toGreenwichSiderealTime(dt), MathOps.normalize(TimeOps.toGreenwichSiderealTime(now_jd),RADS) )
+print(TimeOps.toLST(dt, -122, DEGS), MathOps.normalize(TimeOps.toLST(now_jd, -122, DEGS), RADS) )
 
 check = True
 for i in range(0, len(tests)):

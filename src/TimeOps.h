@@ -3,6 +3,9 @@
 #include <time.h>
 #include <stdio.h>
 
+#include "MathOps.h"
+#include "primitives/DateTime.h"
+
 // uncomment the following line to include an assortment of non-western
 // calendars:
 #define CALENDARS_OF_THE_WORLD
@@ -10,7 +13,12 @@
 typedef char MonthDays[13];
 typedef long YearEndDays[2];
 
-enum CalendarType {
+enum TIME_TYPE {
+    LOCAL,
+    UTC
+};
+
+enum CALENDAR_TYPE {
     T_GREGORIAN = 0,
     T_JULIAN = 1
 #if defined(CALENDARS_OF_THE_WORLD)
@@ -177,23 +185,6 @@ struct TimeOps {
      */
     static char* formatMS( double _min );
     
-    /**
-     * timeToLDay(): convert a "local" time_t to Julian Day
-     *
-     * @param time - time_t to convert
-     *
-     * @return Julian Day
-     */
-    static double timeToLDay( time_t _time );
-    
-    /**
-     * timeToUDay(): convert UTC time_t to Julian Day
-     *
-     * @param time_t to convert
-     *
-     * @return Julian Day
-     */
-    static double timeToUDay( time_t _time );
     
     /**
      * dayToTime(): convert a JD to "local" time_t (including DST)
@@ -211,7 +202,7 @@ struct TimeOps {
      *
      * @return The Julian Day value
      */
-    static double now(bool _local = false);
+    static double now(TIME_TYPE _type);
     
     /**
      * greenwichSiderealTime(): convert a "local" time_t to GST. 
@@ -224,18 +215,70 @@ struct TimeOps {
     static double toGreenwichSiderealTime ( double _jd );
     
     /**
+     * greenwichSiderealTime(): convert a "local" time_t to GST.
+     *                          See p 84,  in Meeus
+     *
+     * @param _dt - DateTime
+     *
+     * @return apparent Greenwich sidereal time (in Radians) for the given jd
+     */
+    static double toGreenwichSiderealTime ( const DateTime &_dt );
+    
+    /**
      * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
      *          See p 84,  in Meeus
      *
      *          http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
      *
-     * @param jd - julian day
-     * @param lng - observer's geographical longitud
-     * @param _radians - is observer's geographical longitud in radians
+     * @param _jd - julian day
+     * @param _lng - observer's geographical longitud
+     * @param _type - is observer's geographical longitud in RADS or DEGS
      *
      * @return Local Sidereal Time
      */
-    static double toLST ( double _jd, double _lng, bool _radians = false);
+    static double toLST ( double _jd, double _lng, ANGLE_TYPE _type );
+    
+    /**
+     * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
+     *          See p 84,  in Meeus
+     *
+     *          http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
+     *
+     * @param _dt - DateTime
+     * @param _lng - observer's geographical longitud
+     * @param _type - is observer's geographical longitud in RADS or DEGS
+     *
+     * @return Local Sidereal Time
+     */
+    static double toLST ( const DateTime &_dt, double _lng, ANGLE_TYPE _type );
+    
+    /**
+     * toJD(): convert a seconds to Julian Century
+     *
+     * @param seconds (time stamp since epoch )
+     *
+     * @return Julian Century
+     */
+    static double toJD ( unsigned long _sec );
+    
+    /**
+     * toJD() - convert a struct tm to Julian Day
+     *
+     * @param tm struct
+     *
+     * @return Julian Date
+     */
+    static double toJD( struct tm* pt );
+    
+    /**
+     * toJD(): convert UTC time_t to Julian Day
+     *
+     * @param time_t to convert
+     * @param time type (UTC/LOCAL)
+     *
+     * @return Julian Day
+     */
+    static double toJD( time_t _time , TIME_TYPE _type );
     
     /**
      * toJC(): convert a seconds to Julian Century
@@ -244,7 +287,7 @@ struct TimeOps {
      *
      * @return Julian Century
      */
-    static double toJD ( unsigned long _sec );
+    static double toJD ( const DateTime &_dt );
     
     /*** DATE ******************************************************************/
     
@@ -258,7 +301,7 @@ struct TimeOps {
      *
      * @return equivalent Julian Day rounded to a long
      */
-    static long toJD ( int _year,  int _month, int _day, CalendarType _calendar = T_GREGORIAN );
+    static long toJD ( int _year,  int _month, int _day, CALENDAR_TYPE _calendar = T_GREGORIAN );
 
     /**
      * toJD(): convert a day/month/year/hour/minute/second to a double Julian Day
@@ -274,7 +317,7 @@ struct TimeOps {
      * @return equivalent Julian Day rounded to a long
      */
     static double toJD (int _year,  int _month, int _day, 
-                        int _hrs, int _min, int _sec, CalendarType _calendar = T_GREGORIAN );
+                        int _hrs, int _min, int _sec, CALENDAR_TYPE _calendar = T_GREGORIAN );
 
     /**
      * toJC(): convert a JD to Julian Century referenced to epoch
@@ -306,20 +349,28 @@ struct TimeOps {
      * @return  Modify Julian Date 
      */
     static double toMJD ( double _jd );
-
+    
     /**
-     * toDMY(): convert a long Julian Day to day/month/year
+     * toDOW(): convert a JD to Day Of the Week
+     *          See p 65,  in Meeus
      *
-     * @param jd - Julian Day to convert
-     * @param day& - where to put the day of the month
-     * @param month& - where to put the month of the year
-     * @param year& - where to put the year
-     * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
+     * @param Julian Day Number
+     *
+     * @return day Of the week (sunday = 0)
      */
-    static void toDMY ( long _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
-    static void toDMY ( double _jd, int& _day, int& _month, int& _year, CalendarType calendar = T_GREGORIAN );
-
-     /**
+    static int toDOW ( double _jd );
+    
+    /**
+     * toDOW(): convert a DateTime to Day Of the Week
+     *          See p 65,  in Meeus
+     *
+     * @param DateTime
+     *
+     * @return day Of the week (sunday = 0)
+     */
+    static int toDOW ( const DateTime &_dt );
+    
+    /**
      * toYMD(): convert a long Julian Day to year/month/day
      *          See p 63,  in Meeus
      *
@@ -329,17 +380,49 @@ struct TimeOps {
      * @param day& - where to put the day of the month (double)
      */
     static void toYMD ( double _jd, int &_year, int &_month, double &_day );
+    
+    /**
+     * toDMY(): convert a DateTime to day/month/year
+     *
+     * @param jd - Julian Day to convert
+     * @param day& - where to put the day of the month
+     * @param month& - where to put the month of the year
+     * @param year& - where to put the year
+     * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
+     */
+    static void toDMY ( const DateTime &_dt, int& _day, int& _month, int& _year );
 
     /**
-     * toDOW(): convert a JD to Day Of the Week 
-     *          See p 65,  in Meeus
+     * toDMY(): convert a Julian Day to day/month/year
      *
-     * @param Julian Day Number
-     *
-     * @return day Of the week (sunday = 0)   
+     * @param jd[in] - Julian Day to convert
+     * @param day& - where to put the day of the month
+     * @param month& - where to put the month of the year
+     * @param year& - where to put the year
+     * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
      */
-    static int toDOW ( double _jd );
+    static void toDMY ( long _jd, int& _day, int& _month, int& _year, CALENDAR_TYPE calendar = T_GREGORIAN );
+    static void toDMY ( double _jd, int& _day, int& _month, int& _year, CALENDAR_TYPE calendar = T_GREGORIAN );
 
+    /**
+     * isValidYear(): Checks whether the given year is valid
+     *
+     * @param[in] year the year to check
+     *
+     * @returns whether the year is valid
+     */
+    static bool isValidYear(int year);
+    
+    /**
+     * isLeapYear(): Find whether a year is a leap year
+     *
+     * @param[in] year the year to check
+     *
+     * @returns whether the year is a leap year
+     */
+    static bool isLeapYear(int year);
+
+    
     /**
      * dstStart(): Determine the Julian Day in the specified year where Daylight
      *             Savings Time starts
@@ -367,9 +450,9 @@ struct TimeOps {
     static char* getMonth ( int _month );
     static char* getMonthAbbreviation ( int _month );
 
-    static int   getCalendarYear ( long _jd, CalendarType _calendar );
+    static int   getCalendarYear ( long _jd, CALENDAR_TYPE _calendar );
     static void  getJulGregYearData ( int _year, long& _days, MonthDays& _md, bool _julian );
-    static int   getCalendarData ( int _year, YearEndDays& _days, MonthDays& _md, CalendarType _calendar );
+    static int   getCalendarData ( int _year, YearEndDays& _days, MonthDays& _md, CALENDAR_TYPE _calendar );
     
 private:
     enum CalendarEpoch {
@@ -419,8 +502,6 @@ private:
     static void getChineseYearData ( const long year, long& days, MonthDays& md );
     
 #endif  /* #if defined( CALENDARS_OF_THE_WORLD ) */
-    
     // ---------------------------------------------------------------------------
-    
-    static double timeToDay( struct tm* pt );
+
 };

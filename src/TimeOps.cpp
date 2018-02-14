@@ -1,12 +1,10 @@
 #include "TimeOps.h"
-#include "MathOps.h"
 
 #include <math.h>
 #include <string.h>
 
 #include <ctime>
 #include <iostream>
-
 
 const double TimeOps::HOURS_PER_DAY         = 24.;
 const double TimeOps::DAYS_PER_HOUR         = 1./HOURS_PER_DAY;
@@ -48,6 +46,12 @@ static char* DOW[] = {
 
 static char* DOW3[] = { 
     (char*)"Sun", (char*)"Mon", (char*)"Tue", (char*)"Wed", (char*)"Thu", (char*)"Fri",(char*)"Sat"
+};
+
+static int daysInMonth[2][13] = {
+    //  1   2   3   4   5   6   7   8   9   10  11  12
+    {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+    {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 };
 
 /**
@@ -96,15 +100,153 @@ char* TimeOps::getDOWAbbreviation( int _dow ){
 }
 
 //----------------------------------------------------------------------------
+
 /**
- * toJC(): convert a seconds to Julian Century
+ * toJD(): convert a seconds to Julian Century
  *
  * @param seconds (time stamp since epoch )
  *
- * @return Julian Century
+ * @return Julian Date
  */
 double TimeOps::toJD (unsigned long _sec) {
     return _sec / SECONDS_PER_DAY + JULIAN_EPOCH;
+}
+
+//----------------------------------------------------------------------------
+
+/**
+ * toJD(): convert UTC time_t to Julian Day
+ *
+ * @param time_t to convert
+ * @param time type (UTC/LOCAL)
+ *
+ * @return Julian Day
+ */
+double TimeOps::toJD( time_t time, TIME_TYPE _type ) {
+    if ( _type == LOCAL) {
+        return toJD( localtime(&time) );
+    }
+    else {
+        return toJD( gmtime(&time) );
+    }
+    
+}
+
+/**
+ * toJD() - convert a struct tm to Julian Day
+ *
+ * @param tm struct
+ *
+ * @return Julian Date
+ */
+double TimeOps::toJD( struct tm* pt ) {
+    int secs = pt->tm_hour * TimeOps::ISECONDS_PER_HOUR +
+    pt->tm_min * TimeOps::ISECONDS_PER_MINUTE +
+    pt->tm_sec;
+    return double(secs)/TimeOps::SECONDS_PER_DAY +
+    toJD(   pt->tm_year + 1900, // years from 1900
+            pt->tm_mon + 1,     // months are zero-based
+            pt->tm_mday);
+}
+
+/**
+ * toJC(): Convert to a julian date
+ *
+ * @param DateTime
+ *
+ * @returns the julian date
+ */
+double TimeOps::toJD( const DateTime &_dt )  {
+    TimeSpan ts = TimeSpan(_dt.getTicks());
+    return ts.getTotalDays() + 1721425.5;
+}
+
+/*
+ * toJD()
+ *
+ * Get calendar data for the current year,  including the JD of New Years
+ * Day for that year.  After that, add up the days in intervening months,
+ * plus the day of the month:
+ */
+long TimeOps::toJD( int year, int month, int day, CALENDAR_TYPE calendar ) {
+    long jd = 0;
+    MonthDays md;
+    YearEndDays yed;
+    
+    if( 0 == TimeOps::getCalendarData( year, yed, md, calendar ) ) {
+        jd = yed[0];
+        for( int i=0; i<(month-1); i++ ) {
+            jd += md[i];
+        }
+        jd += long(day - 1);
+    }
+    return jd;
+}
+
+/**
+ * toJD(): convert a day/month/year/hour/minute/second to a double Julian Day
+ *
+ * @param year - year
+ * @param month - month of the year
+ * @param day - day of the month
+ * @param hours - hours of the day
+ * @param minutes - minutes of the hour
+ * @param seconds - seconds of the minute
+ * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
+ *
+ * @return equivalent Julian Day rounded to a long
+ */
+double TimeOps::toJD (int _year,  int _month, int _day, int _hrs, int _min, int _sec, CALENDAR_TYPE _calendar) {
+    double jd = (double)toJD(_year, _month, _day, _calendar);
+    if (_hrs < 12) {
+        jd -= MathOps::toDegrees(_hrs, _min, _sec) / 24.0;
+    }
+    else {
+        jd = jd -1. + MathOps::toDegrees(_hrs, _min, _sec) / 24.0;
+    }
+    
+    
+    return jd;
+}
+
+//----------------------------------------------------------------------------
+/**
+ * toMJD():  Julian Date to Modify Julian Date
+ *           See p 63,  in Meeus
+ *           (http://tycho.usno.navy.mil/mjd.html)
+ *
+ * @param   The Julian Day value
+ *
+ * @return  Modify Julian Date
+ */
+double TimeOps::toMJD(double _jd) {
+    return _jd - 2400000.5;
+}
+
+//----------------------------------------------------------------------------
+/**
+ * toJC(): convert a JD to Julian Century referenced to epoch
+ *     J2000. This is the number of days since J2000 converted to centuries.
+ *
+ * @param Julian Day Number
+ *
+ * @return centuries since J2000 (12 noon on January 1, 2000)
+ */
+double TimeOps::toJC ( double _jd ) {
+    return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_CENTURY;
+}
+
+//----------------------------------------------------------------------------
+/**
+ * toJM(): convert a JD to Julian Millenia referenced to epoch
+ *     J2000. This is the number of days since J2000 converted to millenia.
+ *
+ * @param Julian Day Number
+ *
+ * @return millenia since J2000 (12 noon on January 1, 2000)
+ */
+double TimeOps::toJM ( double _jd ) {
+    return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_MILLENIUM;
 }
 
 /*----------------------------------------------------------------------------
@@ -121,249 +263,67 @@ double TimeOps::toGreenwichSiderealTime( double jd ) {
     double jdc = jd / TimeOps::DAYS_PER_CENTURY;      /* convert jd to julian centuries */
     double intPart = floor( jd );
     double fracPart = jd - intPart;
-    double rval = 280.46061837 +
-    360.98564736629 * fracPart +
-    .98564736629 * intPart +
+    double rval =   280.46061837 +
+                    360.98564736629 * fracPart +
+                    .98564736629 * intPart +
     jdc * jdc * ( 3.87933e-4 - jdc / 38710000. );
     
     return MathOps::toRadians( rval );
 }
 
 /**
- * formatTime(): format a time into an HH:MM or HH:MM:SS string
- *
- * @param buf - where to put the string
- * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
- * @param doSecs - true to include seconds
+ * Convert to greenwich sidereal time
+ * @returns the greenwich sidereal time
  */
-int formatHMS( char* buf, double dayFrac, bool doSecs ) {
-    if (!buf)
-        return 0;
+double TimeOps::toGreenwichSiderealTime( const DateTime &_dt )  {
+    // t = Julian centuries from 2000 Jan. 1 12h UT1
+    const double t = (toJD(_dt) - 2451545.0) / 36525.0;
     
-    int h, m, s, rv = 0;
-    TimeOps::toHMS(dayFrac, h, m, s);
+    // Rotation angle in arcseconds
+    double theta =  67310.54841
+                    + (876600.0 * 3600.0 + 8640184.812866) * t
+                    + 0.093104 * t * t
+                    - 0.0000062 * t * t * t;
     
-    if ( doSecs )
-        sprintf( buf, "%02d:%02d:%02d", h, m, int(s) );
-    else {
-        rv = roundToNearestMinute( h, m, s );
-        sprintf( buf, "%02d:%02d", h, m );
+    // 360.0 / 86400.0 = 1.0 / 240.0
+    return MathOps::normalize( MathOps::toRadians(theta / 240.0), RADS);
+}
+
+/**
+ * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
+ *          See p 84,  in Meeus
+ *
+ *          http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
+ *
+ * @param jd - julian day
+ * @param lng - observer's geographical longitud
+ * @param _radians - is observer's geographical longitud in radians
+ *
+ * @return Local Sidereal Time
+ */
+double TimeOps::toLST (double _jd, double _lng, ANGLE_TYPE _type) {
+    if ( _type == DEGS ) {
+        _lng = MathOps::toRadians(_lng);
     }
-    return rv;
-}
-
-
-/**
- * formatTime(): format a time into an HH:MM string
- *
- * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
- * @param doSecs - true to include seconds (HH:MM:SS)
- *
- * @return formated string
- */
-char* TimeOps::formatTime ( double dayFrac, bool doSecs ) {
-    char *buf = new char[8];
-    formatHMS( buf, dayFrac, doSecs );
-    return buf;
-}
-
-
-/**
- * formatMS(): format a fractional minute into a text string (MM:SS.S)
- *
- * @param m  - the value (in minutes) to format
- *
- * @return ormatted string
- */
-char* TimeOps::formatMS( double _min ) {
-    char *buf = new char[6];
-    sprintf( buf, "%02d:%02.1f\n", int(_min), (_min - int(_min)) * TimeOps::SECONDS_PER_MINUTE );
-    return buf;
+    return TimeOps::toGreenwichSiderealTime(_jd) + _lng;
 }
 
 /**
- * timeToLDay(): convert a "local" time_t to Julian Day
+ * toLST(): Convert to local mean sidereal time (GMST plus the observer's longitude)
+ *          See p 84,  in Meeus
  *
- * @param time - time_t to convert
+ * @param _dt - DateTime
+ * @param _lng - observers longitude
+ * @param _lng - observers longitude type (DEGS or RADS)
  *
- * @return Julian Day
+ * @returns the local mean sidereal time
  */
-double TimeOps::timeToLDay( time_t time ) {
-    return timeToDay( localtime(&time) );
-}
-
-/**
- * timeToUDay(): convert UTC time_t to Julian Day
- *
- * @param time_t to convert
- *
- * @return Julian Day
- */
-double TimeOps::timeToUDay( time_t time ) {
-    return timeToDay( gmtime(&time) );
-}
-
-//----------------------------------------------------------------------------
-/**
- * formatDateTime(): format a JD into a text string
- *
- * @param jd  - the day to format
- * @param fmt - format type (see DateOps::DATE_FMT)
- *
- * @return formatted string
- */
-char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
-    char *clientBuf = new char[32];
-    
-    int d, m, y;
-    char tbuf[16] = { 0 };
-    
-    double day;
-    TimeOps::toYMD( _jd, y, m, day );
-    d = floor(day);
-
-    if ( _fmt >= Y_MON_D_HM ) {
-        _jd += formatHMS(tbuf, _jd + TimeOps::JD_DIFF, false);
+double TimeOps::toLST ( const DateTime &_dt, double _lng, ANGLE_TYPE _type  ) {
+    if ( _type == DEGS ) {
+        _lng = MathOps::toRadians(_lng);
     }
-    
-    // TimeOps::toDMY( _jd, d, m, y );
-    
-    switch (_fmt) {
-            // date only
-        case Y_MON_D:
-            sprintf ( clientBuf, "%04d %s %02d", y, MONTH3[m], d );
-            break;
-        case MON_D_Y:
-            sprintf ( clientBuf, "%s %02d %04d", MONTH3[m], d, y );
-            break;
-        case MON_D:
-            sprintf ( clientBuf, "%s %02d", MONTH3[m], d );
-            break;
-        case Y_M_D:
-            sprintf ( clientBuf, "%04d-%02d-%02d", y, m, d );
-            break;
-        case M_D_Y:
-            sprintf ( clientBuf, "%02d/%02d/%04d", m, d, y );
-            break;
-        case M_D:
-            sprintf ( clientBuf, "%02d/%02d", m, d );
-            break;
-            // date + time
-        case Y_MON_D_HM:
-            sprintf ( clientBuf, "%04d %s %02d %s", y, MONTH3[m], d, tbuf );
-            break;
-        case MON_D_Y_HM:
-            sprintf ( clientBuf, "%s %02d %04d %s", MONTH3[m], d, y, tbuf );
-            break;
-        case MON_D_HM:
-            sprintf ( clientBuf, "%s %02d %s", MONTH3[m], d, tbuf );
-            break;
-        case Y_M_D_HM:
-            sprintf ( clientBuf, "%04d-%02d-%02d %s", y, m, d, tbuf );
-            break;
-        case M_D_Y_HM:
-            sprintf ( clientBuf, "%02d/%02d/%04d %s", m, d, y, tbuf );
-            break;
-        case M_D_HM:
-            sprintf ( clientBuf, "%02d/%02d %s", m, d, tbuf );
-            break;
-            
-        default:
-            *clientBuf = 0;
-    };
-
-    return clientBuf;
+    return MathOps::normalize(toGreenwichSiderealTime(_dt) + _lng, RADS);
 }
-
-//----------------------------------------------------------------------------
-/**
- * toJC(): convert a JD to Julian Century referenced to epoch
- *     J2000. This is the number of days since J2000 converted to centuries.
- *
- * @param Julian Day Number
- *
- * @return centuries since J2000 (12 noon on January 1, 2000)
- */
-double TimeOps::toJC ( double _jd ) { 
-    return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_CENTURY; 
-}
-
-//----------------------------------------------------------------------------
-/**
- * toJM(): convert a JD to Julian Millenia referenced to epoch
- *     J2000. This is the number of days since J2000 converted to millenia.
- *
- * @param Julian Day Number
- *
- * @return millenia since J2000 (12 noon on January 1, 2000)
- */
-double TimeOps::toJM ( double _jd ) { 
-    return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_MILLENIUM; 
-}
-
-//----------------------------------------------------------------------------
-/*
- * toJD()
- *
- * Get calendar data for the current year,  including the JD of New Years
- * Day for that year.  After that, add up the days in intervening months,
- * plus the day of the month:
- */
-long TimeOps::toJD( int year, int month, int day, CalendarType calendar ) {
-  long jd = 0;
-  MonthDays md;
-  YearEndDays yed;
-
-  if( 0 == TimeOps::getCalendarData( year, yed, md, calendar ) ) {
-    jd = yed[0];
-    for( int i=0; i<(month-1); i++ ) {
-      jd += md[i];
-    }
-    jd += long(day - 1);
-  }
-  return jd;
-}
-
-/**
- * toJD(): convert a day/month/year/hour/minute/second to a double Julian Day
- *
- * @param year - year
- * @param month - month of the year
- * @param day - day of the month
- * @param hours - hours of the day
- * @param minutes - minutes of the hour
- * @param seconds - seconds of the minute
- * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
- *
- * @return equivalent Julian Day rounded to a long
- */
-double TimeOps::toJD (int _year,  int _month, int _day, int _hrs, int _min, int _sec, CalendarType _calendar) {
-    double jd = (double)toJD(_year, _month, _day, _calendar);
-    if (_hrs < 12) {
-        jd -= MathOps::toDegrees(_hrs, _min, _sec) / 24.0;
-    }
-    else {
-        jd = jd -1. + MathOps::toDegrees(_hrs, _min, _sec) / 24.0;
-    }
-    
-    
-    return jd;
-}
-
-//----------------------------------------------------------------------------
-/**
- * timeToDay() - convert a struct tm to Julian Day
- */
-double TimeOps::timeToDay( struct tm* pt ) {
-    int secs = pt->tm_hour * TimeOps::ISECONDS_PER_HOUR +
-    pt->tm_min * TimeOps::ISECONDS_PER_MINUTE +
-    pt->tm_sec;
-    return double(secs)/TimeOps::SECONDS_PER_DAY +
-    toJD(   pt->tm_year + 1900, // years from 1900
-            pt->tm_mon + 1,     // months are zero-based
-            pt->tm_mday);  
-}
-
 
 //----------------------------------------------------------------------------
 /**
@@ -393,8 +353,8 @@ time_t TimeOps::toTime( double jd ) {
  *
  * @return The Julian Day value
  */
-double TimeOps::now(bool _local) {
-    return (_local ? timeToLDay( time(0) ) : timeToUDay( time(0) )) - TimeOps::JD_DIFF;
+double TimeOps::now( TIME_TYPE _type ) {
+    return toJD( time(0), _type ) - TimeOps::JD_DIFF;
 }
 
 //----------------------------------------------------------------------------
@@ -410,10 +370,10 @@ double TimeOps::now(bool _local) {
  */
 
 // calendar: 0 = gregorian, 1 = julian
-void TimeOps::toDMY( double jd, int& _day, int& _month, int& _year, CalendarType calendar ) {
+void TimeOps::toDMY( double jd, int& _day, int& _month, int& _year, CALENDAR_TYPE calendar ) {
     return toDMY( long(floor(jd)), _day, _month, _year, calendar);
 }
-void TimeOps::toDMY( long jd, int& day, int& month, int& year, CalendarType calendar ) {
+void TimeOps::toDMY( long jd, int& day, int& month, int& year, CALENDAR_TYPE calendar ) {
     day = -1;           /* to signal an error */
     
     YearEndDays yed;
@@ -443,6 +403,217 @@ void TimeOps::toDMY( long jd, int& day, int& month, int& year, CalendarType cale
         currJd += long( md[i] );
     }
     return;
+}
+
+void TimeOps::toDMY( const DateTime &_dt, int& day, int& month, int& year ) {
+    int totalDays = static_cast<int>(_dt.getTicks() / TimeSpan::TICKS_PER_DAY);
+    
+    /*
+     * number of 400 year cycles
+     */
+    int num400 = totalDays / 146097;
+    totalDays -= num400 * 146097;
+    /*
+     * number of 100 year cycles
+     */
+    int num100 = totalDays / 36524;
+    if (num100 == 4)
+    {
+        /*
+         * last day of the last leap century
+         */
+        num100 = 3;
+    }
+    totalDays -= num100 * 36524;
+    /*
+     * number of 4 year cycles
+     */
+    int num4 = totalDays / 1461;
+    totalDays -= num4 * 1461;
+    /*
+     * number of years
+     */
+    int num1 = totalDays / 365;
+    if (num1 == 4) {
+        /*
+         * last day of the last leap olympiad
+         */
+        num1 = 3;
+    }
+    totalDays -= num1 * 365;
+    
+    /*
+     * find year
+     */
+    year = (num400 * 400) + (num100 * 100) + (num4 * 4) + num1 + 1;
+    
+    /*
+     * convert day of year to month/day
+     */
+    const int* daysInMonthPtr;
+    if (isLeapYear(year)) {
+        daysInMonthPtr = daysInMonth[1];
+    }
+    else {
+        daysInMonthPtr = daysInMonth[0];
+    }
+    
+    month = 1;
+    while (totalDays >= daysInMonthPtr[month] && month <= 12) {
+        totalDays -= daysInMonthPtr[month++];
+    }
+    
+    day = totalDays + 1;
+}
+
+
+//----------------------------------------------------------------------------
+/**
+ * ToHMS(): break the fractional part of a Julian day into hours, minutes,
+ * and seconds
+ *
+ * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
+ * @param h - where to put the hour
+ * @param m - where to put the minute
+ * @param s - where to put the second
+ *
+ */
+void TimeOps::toHMS( double jd, int& h, int& m, int& s) {
+    
+    if (jd < 0.)
+        h = m = s = 0;
+    else {
+        double fd = jd - floor(jd);  // get rid of whole days, if any
+        
+        fd *= TimeOps::HOURS_PER_DAY;
+        h  = int(fd);
+        fd -= h;
+        
+        fd *= TimeOps::MINUTES_PER_HOUR;
+        m  = int(fd);
+        fd -= m;
+        
+        s = int( (fd * TimeOps::SECONDS_PER_MINUTE) + MathOps::ROUND );
+    }
+}
+
+//----------------------------------------------------------------------------
+/**
+ * hourToDay(): convert hour to decimal day, e.g., 12h -> .5d
+ *
+ * @param hour
+ *
+ * @return day fraction
+ */
+double TimeOps::hourToDay ( int _hrs ) { 
+    return (double)_hrs / HOURS_PER_DAY; 
+}
+
+/**
+ * toYMD(): convert a long Julian Day to year/month/day
+ *         - See p 63,  in Meeus
+ *
+ * @param jd - Julian Day to convert
+ * @param year& - where to put the year (int)
+ * @param month& - where to put the month of the year (int)
+ * @param day& - where to put the day of the month (double)
+ */
+void TimeOps::toYMD(double _jd, int &_year, int &_month, double &_day) {
+    int A, B, C, D, E, Z;
+    
+    double Q = _jd + 0.5;
+    Z = floor(Q);
+    
+    if (Z < 2299161) {
+        A = Z;
+    }
+    else {
+        int a = floor( (Z - 1867216.25) / 36524.25 );
+        A = Z + 1 + a - floor(a / 4);
+    }
+
+    B = A + 1524;
+    C = floor( (B - 122.1) / 365.25 );
+    D = floor( 365.25 * C );
+    E = floor( (B - D) / 30.6001 );
+
+    _day = B - D - floor(30.6001 * E) + (Q-Z);
+    if (E < 14) {
+        _month = E - 1;
+    }
+    else {
+        _month = E - 13;
+    }
+
+    if (_month > 2) {
+        _year = C - 4716;
+    }
+    else {
+        _year = C - 4715;
+    }
+}
+
+//----------------------------------------------------------------------------
+
+/**
+ * toDOW(): convert a JD to Day Of the Week 
+ *          See p 65,  in Meeus
+ *
+ * @param Julian Day Number
+ *
+ * @return day Of the week (sunday = 0)   
+ */
+int TimeOps::toDOW ( double _jd ) {
+    return int(_jd + 1.5) % 7;
+}
+
+/**
+ * toDOW(): convert a JD to Day Of the Week
+ *          See p 65,  in Meeus
+ *
+ * @param Julian Day Number
+ *
+ * @return day Of the week (sunday = 0)
+ */
+int TimeOps::toDOW ( const DateTime &_dt ) {
+    /*
+     * The fixed day 1 (January 1, 1 Gregorian) is Monday.
+     * 0 Sunday
+     * 1 Monday
+     * 2 Tuesday
+     * 3 Wednesday
+     * 4 Thursday
+     * 5 Friday
+     * 6 Saturday
+     */
+    return static_cast<int>(((_dt.getTicks() / TimeSpan::TICKS_PER_DAY) + 1LL) % 7LL);
+}
+
+//----------------------------------------------------------------------------
+/**
+ * Checks whether the given year is valid
+ * @param[in] year the year to check
+ * @returns whether the year is valid
+ */
+bool TimeOps::isValidYear(int year) {
+    bool valid = true;
+    if (year < 1 || year > 9999) {
+        valid = false;
+    }
+    return valid;
+}
+
+/**
+ * Find whether a year is a leap year
+ * @param[in] year the year to check
+ * @returns whether the year is a leap year
+ */
+bool TimeOps::isLeapYear(int year) {
+    if (!isValidYear(year)) {
+        throw 1;
+    }
+    
+    return (((year % 4) == 0 && (year % 100) != 0) || (year % 400) == 0);
 }
 
 //----------------------------------------------------------------------------
@@ -544,134 +715,127 @@ double TimeOps::dstOffsetInDays() {
 
 //----------------------------------------------------------------------------
 /**
- * ToHMS(): break the fractional part of a Julian day into hours, minutes,
- * and seconds
+ * formatTime(): format a time into an HH:MM or HH:MM:SS string
+ *
+ * @param buf - where to put the string
+ * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
+ * @param doSecs - true to include seconds
+ */
+int formatHMS( char* buf, double dayFrac, bool doSecs ) {
+    if (!buf)
+        return 0;
+    
+    int h, m, s, rv = 0;
+    TimeOps::toHMS(dayFrac, h, m, s);
+    
+    if ( doSecs )
+        sprintf( buf, "%02d:%02d:%02d", h, m, int(s) );
+    else {
+        rv = roundToNearestMinute( h, m, s );
+        sprintf( buf, "%02d:%02d", h, m );
+    }
+    return rv;
+}
+
+
+/**
+ * formatTime(): format a time into an HH:MM string
  *
  * @param dayFrac - a fractional day ( >= 0.0, < 1.0 )
- * @param h - where to put the hour
- * @param m - where to put the minute
- * @param s - where to put the second
+ * @param doSecs - true to include seconds (HH:MM:SS)
  *
+ * @return formated string
  */
-void TimeOps::toHMS( double jd, int& h, int& m, int& s) {
-    
-    if (jd < 0.)
-        h = m = s = 0;
-    else {
-        double fd = jd - floor(jd);  // get rid of whole days, if any
-        
-        fd *= TimeOps::HOURS_PER_DAY;
-        h  = int(fd);
-        fd -= h;
-        
-        fd *= TimeOps::MINUTES_PER_HOUR;
-        m  = int(fd);
-        fd -= m;
-        
-        s = int( (fd * TimeOps::SECONDS_PER_MINUTE) + MathOps::ROUND );
-    }
+char* TimeOps::formatTime ( double dayFrac, bool doSecs ) {
+    char *buf = new char[8];
+    formatHMS( buf, dayFrac, doSecs );
+    return buf;
+}
+
+
+/**
+ * formatMS(): format a fractional minute into a text string (MM:SS.S)
+ *
+ * @param m  - the value (in minutes) to format
+ *
+ * @return ormatted string
+ */
+char* TimeOps::formatMS( double _min ) {
+    char *buf = new char[6];
+    sprintf( buf, "%02d:%02.1f\n", int(_min), (_min - int(_min)) * TimeOps::SECONDS_PER_MINUTE );
+    return buf;
 }
 
 //----------------------------------------------------------------------------
 /**
- * hourToDay(): convert hour to decimal day, e.g., 12h -> .5d
+ * formatDateTime(): format a JD into a text string
  *
- * @param hour
+ * @param jd  - the day to format
+ * @param fmt - format type (see DateOps::DATE_FMT)
  *
- * @return day fraction
+ * @return formatted string
  */
-double TimeOps::hourToDay ( int _hrs ) { 
-    return (double)_hrs / HOURS_PER_DAY; 
-}
-
-//----------------------------------------------------------------------------
-/**
- * toMJD():  Julian Date to Modify Julian Date 
- *           See p 63,  in Meeus
- *           (http://tycho.usno.navy.mil/mjd.html)
- *
- * @param   The Julian Day value
- *
- * @return  Modify Julian Date 
- */
-double TimeOps::toMJD(double _jd) {
-    return _jd - 2400000.5;
-}
-
-/**
- * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
- *          See p 84,  in Meeus
- *
- *          http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
- *
- * @param jd - julian day
- * @param lng - observer's geographical longitud
- * @param _radians - is observer's geographical longitud in radians
- *
- * @return Local Sidereal Time
- */
-double TimeOps::toLST (double _jd, double _lng, bool _radians) {
-    if (!_radians) {
-        _lng = MathOps::toRadians(_lng);
-    }
-    return TimeOps::toGreenwichSiderealTime(_jd) + _lng;
-}
-
-/**
- * toYMD(): convert a long Julian Day to year/month/day
- *         - See p 63,  in Meeus
- *
- * @param jd - Julian Day to convert
- * @param year& - where to put the year (int)
- * @param month& - where to put the month of the year (int)
- * @param day& - where to put the day of the month (double)
- */
-void TimeOps::toYMD(double _jd, int &_year, int &_month, double &_day) {
-    int A, B, C, D, E, Z;
+char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
+    char *clientBuf = new char[32];
     
-    double Q = _jd + 0.5;
-    Z = floor(Q);
+    int d, m, y;
+    char tbuf[16] = { 0 };
     
-    if (Z < 2299161) {
-        A = Z;
+    double day;
+    TimeOps::toYMD( _jd, y, m, day );
+    d = floor(day);
+    
+    if ( _fmt >= Y_MON_D_HM ) {
+        _jd += formatHMS(tbuf, _jd + TimeOps::JD_DIFF, false);
     }
-    else {
-        int a = floor( (Z - 1867216.25) / 36524.25 );
-        A = Z + 1 + a - floor(a / 4);
-    }
-
-    B = A + 1524;
-    C = floor( (B - 122.1) / 365.25 );
-    D = floor( 365.25 * C );
-    E = floor( (B - D) / 30.6001 );
-
-    _day = B - D - floor(30.6001 * E) + (Q-Z);
-    if (E < 14) {
-        _month = E - 1;
-    }
-    else {
-        _month = E - 13;
-    }
-
-    if (_month > 2) {
-        _year = C - 4716;
-    }
-    else {
-        _year = C - 4715;
-    }
-}
-
-//----------------------------------------------------------------------------
-/**
- * toDOW(): convert a JD to Day Of the Week 
- *          See p 65,  in Meeus
- *
- * @param Julian Day Number
- *
- * @return day Of the week (sunday = 0)   
- */
-int TimeOps::toDOW ( double _jd ) {
-    return int(_jd + 1.5) % 7;
+    
+    // TimeOps::toDMY( _jd, d, m, y );
+    
+    switch (_fmt) {
+            // date only
+        case Y_MON_D:
+            sprintf ( clientBuf, "%04d %s %02d", y, MONTH3[m], d );
+            break;
+        case MON_D_Y:
+            sprintf ( clientBuf, "%s %02d %04d", MONTH3[m], d, y );
+            break;
+        case MON_D:
+            sprintf ( clientBuf, "%s %02d", MONTH3[m], d );
+            break;
+        case Y_M_D:
+            sprintf ( clientBuf, "%04d-%02d-%02d", y, m, d );
+            break;
+        case M_D_Y:
+            sprintf ( clientBuf, "%02d/%02d/%04d", m, d, y );
+            break;
+        case M_D:
+            sprintf ( clientBuf, "%02d/%02d", m, d );
+            break;
+            // date + time
+        case Y_MON_D_HM:
+            sprintf ( clientBuf, "%04d %s %02d %s", y, MONTH3[m], d, tbuf );
+            break;
+        case MON_D_Y_HM:
+            sprintf ( clientBuf, "%s %02d %04d %s", MONTH3[m], d, y, tbuf );
+            break;
+        case MON_D_HM:
+            sprintf ( clientBuf, "%s %02d %s", MONTH3[m], d, tbuf );
+            break;
+        case Y_M_D_HM:
+            sprintf ( clientBuf, "%04d-%02d-%02d %s", y, m, d, tbuf );
+            break;
+        case M_D_Y_HM:
+            sprintf ( clientBuf, "%02d/%02d/%04d %s", m, d, y, tbuf );
+            break;
+        case M_D_HM:
+            sprintf ( clientBuf, "%02d/%02d %s", m, d, tbuf );
+            break;
+            
+        default:
+            *clientBuf = 0;
+    };
+    
+    return clientBuf;
 }
 
 
@@ -718,7 +882,7 @@ int TimeOps::toDOW ( double _jd ) {
  to the input JD.
  */
 
-int TimeOps::getCalendarYear(long jd, CalendarType calendar) {
+int TimeOps::getCalendarYear(long jd, CALENDAR_TYPE calendar) {
     int year = -1;
     switch( calendar) {
         case T_GREGORIAN:
@@ -804,7 +968,7 @@ void TimeOps::getJulGregYearData( int year, long& daysInYear, MonthDays& md, boo
 }
 
 //----------------------------------------------------------------------------
-int TimeOps::getCalendarData( int year, YearEndDays& days, MonthDays& md, CalendarType calendar) {
+int TimeOps::getCalendarData( int year, YearEndDays& days, MonthDays& md, CALENDAR_TYPE calendar) {
     int rval = 0;
     
     memset( &md, 0, sizeof(MonthDays) );
