@@ -108,7 +108,7 @@ struct MathOps {
      * @param seconds out
      *
      */
-    static void toDMS ( double angles, ANGLE_TYPE _type, int &_deg, int &_min, double &_sec );
+    static void toDMS ( double _angles, ANGLE_TYPE _type, int &_deg, int &_min, double &_sec );
     
     /**
      * toHMS(): convert angles to degrees, minutes and seconds
@@ -121,7 +121,7 @@ struct MathOps {
      * @param seconds out
      *
      */
-    static void toHMS ( double deg, ANGLE_TYPE _type, int &_hrs, int &_min, double &_sec );
+    static void toHMS ( double _deg, ANGLE_TYPE _type, int &_hrs, int &_min, double &_sec );
     
     /**
      * formatAngle(): format angle into a string

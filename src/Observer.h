@@ -20,18 +20,18 @@ public:
     Observer(double _lng_deg, double _lat_deg, double _jd = 0);
     virtual ~Observer();
     
-    void    setJD(double _jd);
-    void    setLocation(const Geodetic& _location);
+    virtual void    setJD(double _jd);
+    virtual void    setLocation(const Geodetic& _location);
     
-    double  getJD() const { return m_jd; }
-    double  getJC() const { return m_jcentury; }
-    double  getLST() const { return m_lst; }
-    double  getObliquity() const { return m_obliquity; }
-    Geodetic getLocation() const { return m_location; }
+    virtual double  getJD() const { return m_jd; }
+    virtual double  getJC() const { return m_jcentury; }
+    virtual double  getLST() const { return m_lst; }
+    virtual double  getObliquity() const { return m_obliquity; }
+    virtual Geodetic getLocation() const { return m_location; }
     
-    Vector  getHeliocentricVector();
+    virtual Vector  getHeliocentricVector();
     
-    void    update();
+    virtual void    update();
 
 private:
     Vector      m_heliocentricLoc;

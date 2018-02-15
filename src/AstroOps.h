@@ -133,7 +133,7 @@ public:
      *
      * @return Ecliptic geocentric
      */
-    static Ecliptic toGeocentric(Observer &_obs, const Ecliptic &_heliocentric );
+    static Ecliptic toGeocentric(Observer& _obs, const Ecliptic& _heliocentric );
 
     // -------------------------------------------------- GeoCentric
     
@@ -159,7 +159,7 @@ public:
      *
      * @return Equatorial position
      */
-    static Equatorial toEquatorial (const Observer &_obs, const Ecliptic &_ecliptic );
+    static Equatorial toEquatorial (const Observer& _obs, const Ecliptic& _ecliptic );
 
     
     // -------------------------------------------------- TopoCentric
@@ -174,8 +174,8 @@ public:
      * @return hour angle
      */
     static double toHourAngle( double _lst, double _ra );
-    static double toHourAngle( const Observer &_obs, double _ra );
-    static double toHourAngle( const Observer &_obs, const Equatorial &_equatorial );    
+    static double toHourAngle( const Observer& _obs, double _ra );
+    static double toHourAngle( const Observer& _obs, const Equatorial& _equatorial );
     
     /**
      * eclipticToEquatorial() - equatorial to horizontal coordinates
@@ -199,7 +199,7 @@ public:
      *
      * @return horizontal position
      */
-    static Horizontal toHorizontal( Observer &_obs, const Equatorial &_equatorial);
+    static Horizontal toHorizontal( const Observer& _obs, const Equatorial& _equatorial);
 
     /**
      * parallaticAngle() - compute parallactic angle given latitude, object dec and alt.

@@ -12,7 +12,7 @@ public:
     Ecliptic(double _lng, double _lat, double _radius, ANGLE_TYPE _type);
     virtual ~Ecliptic();
     
-    Ecliptic& operator= (const Vector& _vec);
+    virtual Ecliptic& operator= (const Vector& _vec);
     
     virtual double  getLongitude(ANGLE_TYPE _type) const;
     virtual double  getLatitude(ANGLE_TYPE _type) const;

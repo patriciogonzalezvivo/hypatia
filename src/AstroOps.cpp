@@ -519,7 +519,7 @@ void AstroOps::eclipticToEquatorial ( double _obliq, double _lng, double _lat, d
  *
  * @return Equatorial position
  */
-Equatorial AstroOps::toEquatorial ( const Observer &_obs, const Ecliptic &_ecliptic ) {
+Equatorial AstroOps::toEquatorial ( const Observer& _obs, const Ecliptic &_ecliptic ) {
     double lng = _ecliptic.getLongitude(RADS);
     double lat = _ecliptic.getLatitude(RADS);
     double ra, dec;
@@ -571,11 +571,11 @@ double AstroOps::toHourAngle( double _lst, double _ra ) {
     return _lst - _ra;
 }
 
-double AstroOps::toHourAngle( const Observer &_obs, double _ra ) {
+double AstroOps::toHourAngle( const Observer& _obs, double _ra ) {
     return _obs.getLST() - _ra;
 }
 
-double AstroOps::toHourAngle( const Observer &_obs, const Equatorial &_equatorial ) {
+double AstroOps::toHourAngle( const Observer& _obs, const Equatorial &_equatorial ) {
     return _obs.getLST() - _equatorial.getRightAscension(RADS);
 }
 
@@ -588,8 +588,7 @@ double AstroOps::toHourAngle( const Observer &_obs, const Equatorial &_equatoria
  *
  * @return horizontal position
  */
-Horizontal AstroOps::toHorizontal( Observer &_obs, const Equatorial &_equatorial) {
-//    double ra = _equatorial.getRightAscension(RADS);
+Horizontal AstroOps::toHorizontal( const Observer& _obs, const Equatorial& _equatorial) {
     double dec = _equatorial.getDeclination(RADS);
     double ha = toHourAngle(_obs, _equatorial);
     double alt, az;
@@ -605,7 +604,7 @@ Horizontal AstroOps::toHorizontal( Observer &_obs, const Equatorial &_equatorial
  *
  * @return Ecliptic geocentric
  */
-Ecliptic AstroOps::toGeocentric( Observer &_obs, const Ecliptic &_heliocentric ) {
+Ecliptic AstroOps::toGeocentric( Observer& _obs, const Ecliptic& _heliocentric ) {
     Vector heliocentric = _heliocentric.getVector();
     return Ecliptic(heliocentric - _obs.getHeliocentricVector());
 }

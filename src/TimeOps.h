@@ -155,7 +155,7 @@ struct TimeOps {
      * @param s - where to put the second
      *
      */
-    static void toHMS ( double _jd,  int& _hrs, int& _min, int& _sec );
+    static void toHMS ( double _jd, int &_hrs, int &_min, int &_sec );
     
     /**
      * hourToDay(): convert hour to decimal day, e.g., 12h -> .5d
@@ -222,7 +222,7 @@ struct TimeOps {
      *
      * @return apparent Greenwich sidereal time (in Radians) for the given jd
      */
-    static double toGreenwichSiderealTime ( const DateTime &_dt );
+    static double toGreenwichSiderealTime ( const DateTime& _dt );
     
     /**
      * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
@@ -250,7 +250,7 @@ struct TimeOps {
      *
      * @return Local Sidereal Time
      */
-    static double toLST ( const DateTime &_dt, double _lng, ANGLE_TYPE _type );
+    static double toLST ( const DateTime& _dt, double _lng, ANGLE_TYPE _type );
     
     /**
      * toJD(): convert a seconds to Julian Century
@@ -287,7 +287,7 @@ struct TimeOps {
      *
      * @return Julian Century
      */
-    static double toJD ( const DateTime &_dt );
+    static double toJD ( const DateTime& _dt );
     
     /*** DATE ******************************************************************/
     
@@ -368,7 +368,7 @@ struct TimeOps {
      *
      * @return day Of the week (sunday = 0)
      */
-    static int toDOW ( const DateTime &_dt );
+    static int toDOW ( const DateTime& _dt );
     
     /**
      * toYMD(): convert a long Julian Day to year/month/day
@@ -390,7 +390,7 @@ struct TimeOps {
      * @param year& - where to put the year
      * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
      */
-    static void toDMY ( const DateTime &_dt, int& _day, int& _month, int& _year );
+    static void toDMY ( const DateTime& _dt, int& _day, int& _month, int& _year );
 
     /**
      * toDMY(): convert a Julian Day to day/month/year
@@ -401,8 +401,8 @@ struct TimeOps {
      * @param year& - where to put the year
      * @param calendar - (optional) T_GREGORIAN or T_JULIAN, former is the default
      */
-    static void toDMY ( long _jd, int& _day, int& _month, int& _year, CALENDAR_TYPE calendar = T_GREGORIAN );
-    static void toDMY ( double _jd, int& _day, int& _month, int& _year, CALENDAR_TYPE calendar = T_GREGORIAN );
+    static void toDMY ( long _jd, int &_day, int &_month, int &_year, CALENDAR_TYPE calendar = T_GREGORIAN );
+    static void toDMY ( double _jd, int &_day, int &_month, int &_year, CALENDAR_TYPE calendar = T_GREGORIAN );
 
     /**
      * isValidYear(): Checks whether the given year is valid

@@ -66,7 +66,7 @@ static int daysInMonth[2][13] = {
  *
  * @return 1 if rounding wrapped to 00:00, else 0.
  */
-int roundToNearestMinute(int &h, int& m, int& s) {
+int roundToNearestMinute(int& h, int& m, int& s) {
     
     int rv = 0;
     if ( s >= TimeOps::ISECONDS_PER_MINUTE/2 ) { // round to nearest minute
@@ -120,7 +120,7 @@ double TimeOps::now( TIME_TYPE _type ) {
  *
  * @return Julian Date
  */
-double TimeOps::toJD (unsigned long _sec) {
+double TimeOps::toJD( unsigned long _sec ) {
     return _sec / SECONDS_PER_DAY + JULIAN_EPOCH;
 }
 
@@ -168,7 +168,7 @@ double TimeOps::toJD( struct tm* pt ) {
  *
  * @returns the julian date
  */
-double TimeOps::toJD( const DateTime &_dt )  {
+double TimeOps::toJD( const DateTime& _dt )  {
     TimeSpan ts = TimeSpan(_dt.getTicks());
     return ts.getTotalDays() + 1721425.5;
 }
@@ -208,7 +208,7 @@ long TimeOps::toJD( int year, int month, int day, CALENDAR_TYPE calendar ) {
  *
  * @return equivalent Julian Day rounded to a long
  */
-double TimeOps::toJD (int _year,  int _month, int _day, int _hrs, int _min, int _sec, CALENDAR_TYPE _calendar) {
+double TimeOps::toJD( int _year,  int _month, int _day, int _hrs, int _min, int _sec, CALENDAR_TYPE _calendar ) {
     double jd = (double)toJD(_year, _month, _day, _calendar);
     if (_hrs < 12) {
         jd -= MathOps::toDegrees(_hrs, _min, _sec) / 24.0;
@@ -230,7 +230,7 @@ double TimeOps::toJD (int _year,  int _month, int _day, int _hrs, int _min, int 
  *
  * @return  Modify Julian Date
  */
-double TimeOps::toMJD(double _jd) {
+double TimeOps::toMJD( double _jd ) {
     return _jd - 2400000.5;
 }
 
@@ -243,7 +243,7 @@ double TimeOps::toMJD(double _jd) {
  *
  * @return centuries since J2000 (12 noon on January 1, 2000)
  */
-double TimeOps::toJC ( double _jd ) {
+double TimeOps::toJC( double _jd ) {
     return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_CENTURY;
 }
 
@@ -256,7 +256,7 @@ double TimeOps::toJC ( double _jd ) {
  *
  * @return millenia since J2000 (12 noon on January 1, 2000)
  */
-double TimeOps::toJM ( double _jd ) {
+double TimeOps::toJM( double _jd ) {
     return ( _jd - TimeOps::J2000 ) / TimeOps::DAYS_PER_MILLENIUM;
 }
 
@@ -286,7 +286,7 @@ double TimeOps::toGreenwichSiderealTime( double jd ) {
  * Convert to greenwich sidereal time
  * @returns the greenwich sidereal time
  */
-double TimeOps::toGreenwichSiderealTime( const DateTime &_dt )  {
+double TimeOps::toGreenwichSiderealTime( const DateTime& _dt )  {
     // t = Julian centuries from 2000 Jan. 1 12h UT1
     const double t = (toJD(_dt) - 2451545.0) / 36525.0;
     
@@ -329,7 +329,7 @@ double TimeOps::toLST (double _jd, double _lng, ANGLE_TYPE _type) {
  *
  * @returns the local mean sidereal time
  */
-double TimeOps::toLST ( const DateTime &_dt, double _lng, ANGLE_TYPE _type  ) {
+double TimeOps::toLST ( const DateTime& _dt, double _lng, ANGLE_TYPE _type  ) {
     if ( _type == DEGS ) {
         _lng = MathOps::toRadians(_lng);
     }
@@ -404,7 +404,7 @@ void TimeOps::toDMY( long jd, int& day, int& month, int& year, CALENDAR_TYPE cal
     return;
 }
 
-void TimeOps::toDMY( const DateTime &_dt, int& day, int& month, int& year ) {
+void TimeOps::toDMY( const DateTime& _dt, int& day, int& month, int& year ) {
     int totalDays = static_cast<int>(_dt.getTicks() / TimeSpan::TICKS_PER_DAY);
     
     /*
@@ -594,7 +594,7 @@ int TimeOps::toDOW ( const DateTime &_dt ) {
  * @param[in] year the year to check
  * @returns whether the year is valid
  */
-bool TimeOps::isValidYear(int year) {
+bool TimeOps::isValidYear( int year ) {
     bool valid = true;
     if (year < 1 || year > 9999) {
         valid = false;
@@ -607,7 +607,7 @@ bool TimeOps::isValidYear(int year) {
  * @param[in] year the year to check
  * @returns whether the year is a leap year
  */
-bool TimeOps::isLeapYear(int year) {
+bool TimeOps::isLeapYear( int year ) {
     if (!isValidYear(year)) {
         throw 1;
     }
@@ -618,7 +618,7 @@ bool TimeOps::isLeapYear(int year) {
 //----------------------------------------------------------------------------
 // Determine U.S. DST start JD (second Sunday in March as of 2007)
 //
-long TimeOps::dstStart(int year) {
+long TimeOps::dstStart( int year ) {
     long jdStart = toJD( year, 3, 7+1, T_GREGORIAN );
     while ( 6 != (jdStart % 7 ) ) // Sunday
         jdStart++;
@@ -629,7 +629,7 @@ long TimeOps::dstStart(int year) {
 //----------------------------------------------------------------------------
 // Determine U.S. DST end JD (first Sunday in November as of 2007)
 //
-long TimeOps::dstEnd(int year) {
+long TimeOps::dstEnd( int year ) {
     long jdEnd = toJD( year, 11, 1, T_GREGORIAN );
     while ( 6 != (jdEnd % 7 ) ) // Sunday
         jdEnd++;
@@ -644,7 +644,7 @@ long TimeOps::dstEnd(int year) {
  *
  * @return Offset (-0.5 ... +0.5 )
  */
-double TimeOps::tzOffsetInDays(time_t tt) {
+double TimeOps::tzOffsetInDays( time_t tt ) {
     struct tm* pt = localtime(&tt);
     
     int localH = pt->tm_hour;
@@ -665,7 +665,7 @@ double TimeOps::tzOffsetInDays(time_t tt) {
  *
  * @return Offset (-0.5 ... +0.5 )
  */
-double TimeOps::tzOffsetInDays(double jd) {
+double TimeOps::tzOffsetInDays( double jd ) {
     return tzOffsetInDays( toTime(jd) );
 }
 
@@ -686,7 +686,7 @@ double TimeOps::tzOffsetInDays() {
  *
  * @return Offset ( 0 or 1/24 )
  */
-double TimeOps::dstOffsetInDays(time_t tt) {
+double TimeOps::dstOffsetInDays( time_t tt ) {
     struct tm* pt = localtime(&tt);
     return (pt->tm_isdst > 0) ? DST_OFFSET : 0.;
 }
@@ -699,7 +699,7 @@ double TimeOps::dstOffsetInDays(time_t tt) {
  *
  * @return Offset ( 0 or 1/24 )
  */
-double TimeOps::dstOffsetInDays(double jd) {
+double TimeOps::dstOffsetInDays( double jd ) {
     return dstOffsetInDays( toTime(jd) );
 }
 
@@ -745,7 +745,7 @@ int formatHMS( char* buf, double dayFrac, bool doSecs ) {
  *
  * @return formated string
  */
-char* TimeOps::formatTime ( double dayFrac, bool doSecs ) {
+char* TimeOps::formatTime( double dayFrac, bool doSecs ) {
     char *buf = new char[8];
     formatHMS( buf, dayFrac, doSecs );
     return buf;
@@ -967,7 +967,7 @@ void TimeOps::getJulGregYearData( int year, long& daysInYear, MonthDays& md, boo
 }
 
 //----------------------------------------------------------------------------
-int TimeOps::getCalendarData( int year, YearEndDays& days, MonthDays& md, CALENDAR_TYPE calendar) {
+int TimeOps::getCalendarData( int year, YearEndDays& days, MonthDays& md, CALENDAR_TYPE calendar ) {
     int rval = 0;
     
     memset( &md, 0, sizeof(MonthDays) );
