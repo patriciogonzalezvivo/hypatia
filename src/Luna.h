@@ -44,12 +44,10 @@ public:
     virtual double getDistance() const { return m_distance; }; 
     
     // Phase Angle of the Moon's.
-    virtual double getPhaseAngle();
-    virtual double getPhaseAngleRadians();
+    virtual double getPhaseAngle(ANGLE_TYPE _type);
 
     // Position Angle of bright limb
-    virtual double getPositionAngle() const { return MathOps::toDegrees( m_posAngle ); };
-    virtual double getPositionAngleRadians() const { return m_posAngle; };
+    virtual double getPositionAngle(ANGLE_TYPE _type) const;
 
     // calculate all three location elements of the spec'd body at the given time
     virtual void compute( Observer &_obs );

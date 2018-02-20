@@ -645,3 +645,29 @@ double AstroOps::parallaticAngle( double _lat, double _alt, double _dec ) {
     }
     return acos (cpa);
 }
+
+/**
+ * positionAngle() - compute the position angle of direction d w.r.t the position r
+ *                   Astronomy on the Personal Computer p. 134
+ *
+ * @param por - position of observed body
+ * @param dir - direction of which the position angle is to be calculated
+ *
+ * @return position angle in rad: range [0, TAU]
+ *
+ * Note: pos and dir must refer to the same coordinate system and equinox
+ */
+double AstroOps::positionAngle( const Vector& _pos, const Vector& _dir ) {
+    Vector e_1, e_2, e_3;
+    double c, s, phi;
+    
+    e_1 = _pos / _pos.getNormalized();
+    e_2 = Vector(0., 0., 1.) * _pos;
+    e_2 = e_2 / e_2.getNormalized();
+    e_3 = e_1 * e_2;
+    
+    c = _dir.dot(e_3);
+    s = _dir.dot(e_2);
+    phi = atan2(s, c);
+    return MathOps::mod(phi, MathOps::TAU);
+}

@@ -204,7 +204,7 @@ public:
     /**
      * parallaticAngle() - compute parallactic angle given latitude, object dec and alt.
      *                      all angles in rads.
-     *                     (Meeus, Ch. 93)
+     *                     (Meeus, Ch. 98)
      *
      * N.B. always return >= 0, caller must determine sign and degenerate cases at
      *   pole or zenith.
@@ -216,6 +216,19 @@ public:
      * @return parallatic angle
      */
     static double parallaticAngle( double _lat, double _alt, double _dec);
+    
+    /**
+     * positionAngle() - compute the position angle of direction d w.r.t the position r
+     *                   Astronomy on the Personal Computer p. 134
+     *
+     * @param por - position of observed body
+     * @param dir - direction of which the position angle is to be calculated
+     *
+     * @return position angle in rad: range [0, TAU]
+     *
+     * Note: pos and dir must refer to the same coordinate system and equinox
+     */
+    static double positionAngle( const Vector& _pos, const Vector& _dir );
     
 };
 

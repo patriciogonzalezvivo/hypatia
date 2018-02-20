@@ -221,8 +221,8 @@ Luna::Luna(): m_age(0.0), m_posAngle(0.0) {
 /**
  * calculate current phase angle in radians (Meeus' easy lower precision method)
  */
-double Luna::getPhaseAngle() {
-    return MathOps::normalize(
+double Luna::getPhaseAngle(ANGLE_TYPE _type) {
+    double phase = MathOps::normalize(
         180 - MathOps::toDegrees(m_f.D)
           - 6.289 * sin( m_f.Mp )
           + 2.110 * sin( m_f.M )
@@ -231,15 +231,17 @@ double Luna::getPhaseAngle() {
           - 0.214 * sin( 2 * m_f.Mp )
           - 0.110 * sin( m_f.D ),
           DEGS);
-}
-
-double Luna::getPhaseAngleRadians() { 
-    return MathOps::toRadians( getPhaseAngle() ); 
+    if ( _type == DEGS ) {
+        return phase;
+    }
+    else {
+        return MathOps::toRadians( phase );
+    }
 }
 
 //-------------------------------------------------------------------------
 double Luna::getPhase() {
-    return (1. + cos( getPhaseAngleRadians() )) / 2.;
+    return (1. + cos( getPhaseAngle(RADS) )) / 2.;
 }
 
 //----------------------------------------------------------------------------
@@ -455,5 +457,14 @@ void Luna::compute( Observer &_obs ) {
                             sin(sunHor.getAltitud(RADS)) * cos(m_horizontal.getAzimuth(RADS)) - cos(sunHor.getAltitud(RADS)) * sin(m_horizontal.getAzimuth(RADS)) * cos(delta_az));
 
         // double hour_angle = MathOps::toRadians(localSiderealTime(obs.getJulianDay(), obs.getLongitud())) - m_ra;
+    }
+}
+
+double Luna::getPositionAngle(ANGLE_TYPE _type) const {
+    if (_type == DEGS) {
+        return MathOps::toDegrees( m_posAngle );
+    }
+    else {
+        return m_posAngle;
     }
 }
