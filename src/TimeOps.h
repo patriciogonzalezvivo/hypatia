@@ -80,6 +80,9 @@ struct TimeOps {
     
     /*** TIME ******************************************************************/
     
+    // Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)
+    static unsigned long getCurrentSeconds ();
+    
     /**
      * tzOffsetInDays(): calculate time zone offset from Universal Time
      *                   in days for the spec'd time_t (includes DST)
