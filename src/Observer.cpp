@@ -33,7 +33,7 @@ Observer::~Observer() {
 
 void Observer::setSeconds(unsigned long _sec) {
     if ( _sec == 0 ) {
-        _sec = TimeOps::getCurrentSeconds();
+        _sec = TimeOps::nowSeconds();
     }
     setJD( TimeOps::toJD(_sec) );
 }

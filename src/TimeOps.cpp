@@ -101,8 +101,12 @@ char* TimeOps::getDOWAbbreviation( int _dow ){
 }
 
 //----------------------------------------------------------------------------
-// Milliseconds elapsed since epoch (1 January 1970 00:00:00 UTC)
-unsigned long TimeOps::getCurrentSeconds() {
+/**
+ * nowSeconds(): current Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)
+ *
+ * @return current seconds
+ */
+unsigned long TimeOps::nowSeconds() {
     return std::chrono::system_clock::now().time_since_epoch() / std::chrono::seconds(1);
 }
 
