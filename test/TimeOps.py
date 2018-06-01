@@ -51,11 +51,13 @@ def testDOW(jd, expected):
   return check
 
 now_jd = TimeOps.now(UTC)
+now_secs = TimeOps.toJD( TimeOps.nowSeconds() )
 now_date = datetime.datetime.utcnow()
 utc_date = now_date.strftime('%Y-%m-%d %H:%M')
 
 tests = [ 
   testJDtoDatetime(ephem.julian_date(now_date), utc_date ),
+  testJDtoDatetime(now_secs, utc_date ),
   testJDtoDatetime(now_jd, utc_date ),
   testJDtoYMD(2451545.0, '2000-01-1.5'), 
   testJDtoYMD(2451179.5, '1999-01-1.0'),

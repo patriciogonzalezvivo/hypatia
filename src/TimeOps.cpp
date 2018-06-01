@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include <ctime>
+#include <chrono>
 #include <iostream>
 
 const double TimeOps::HOURS_PER_DAY         = 24.;
@@ -97,6 +98,16 @@ char* TimeOps::getDOW( int _dow ) {
 
 char* TimeOps::getDOWAbbreviation( int _dow ){
     return DOW3[_dow];
+}
+
+//----------------------------------------------------------------------------
+/**
+ * nowSeconds(): current Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)
+ *
+ * @return current seconds
+ */
+unsigned long TimeOps::nowSeconds() {
+    return std::chrono::system_clock::now().time_since_epoch() / std::chrono::seconds(1);
 }
 
 //----------------------------------------------------------------------------

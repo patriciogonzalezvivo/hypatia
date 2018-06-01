@@ -79,7 +79,7 @@ struct TimeOps {
     static const double DST_OFFSET;
     
     /*** TIME ******************************************************************/
-    
+
     /**
      * tzOffsetInDays(): calculate time zone offset from Universal Time
      *                   in days for the spec'd time_t (includes DST)
@@ -203,6 +203,13 @@ struct TimeOps {
      * @return The Julian Day value
      */
     static double now(TIME_TYPE _type);
+    
+    /**
+     * nowSeconds(): current Seconds elapsed since epoch (1 January 1970 00:00:00 UTC)
+     *
+     * @return current seconds
+     */
+    static unsigned long nowSeconds();
     
     /**
      * greenwichSiderealTime(): convert a "local" time_t to GST. 

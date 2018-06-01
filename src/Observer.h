@@ -20,6 +20,7 @@ public:
     Observer(double _lng_deg, double _lat_deg, double _jd = 0);
     virtual ~Observer();
     
+    virtual void    setSeconds(unsigned long _sec = 0);
     virtual void    setJD(double _jd);
     virtual void    setLocation(const Geodetic& _location);
     

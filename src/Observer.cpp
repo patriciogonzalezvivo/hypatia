@@ -31,6 +31,13 @@ Observer::Observer( double _lng_deg, double _lat_deg, double _jd) : m_location(_
 Observer::~Observer() {
 }
 
+void Observer::setSeconds(unsigned long _sec) {
+    if ( _sec == 0 ) {
+        _sec = TimeOps::nowSeconds();
+    }
+    setJD( TimeOps::toJD(_sec) );
+}
+
 void Observer::setJD(double _jd) {
     if ( m_jd != _jd ) {
         m_jd = _jd;

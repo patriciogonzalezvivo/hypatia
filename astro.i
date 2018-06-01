@@ -24,10 +24,6 @@
 %apply int &OUTPUT { int &_day, int &_month, int &_year };
 %apply int &OUTPUT { int &_hrs, int &_min, int &_sec };
 
-namespace std {
-    %template(VectorInt) vector<int>;
-};
-
 %{
     #define SWIG_FILE_WITH_INIT
     #include "src/MathOps.h"
@@ -66,3 +62,8 @@ namespace std {
 %include "src/satellites/Luna.h"
 %include "src/Constellation.h"
 %include "src/Star.h"
+
+namespace std {
+    %template(VectorInt) vector<int>;
+    %template(VectorEquatorial) vector<Equatorial>;
+};
