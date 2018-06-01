@@ -31,6 +31,8 @@ const double MathOps::RADIAN = (180.0 / MathOps::PI);
 const double MathOps::ROUND   = 0.5;
 const double MathOps::INVALID = -1.0;
 
+const double MathOps::TWO_THIRD = 2.0 / 3.0;
+
 /**
  * toDegrees(): convert radians to degrees
  *
@@ -333,6 +335,25 @@ double MathOps::asine ( double _angle ) {
         return( -MathOps::PI_OVER_TWO );
     else
         return( asin( _angle ) );
+}
+
+double MathOps::actan(const double sinx, const double cosx) {
+    if (cosx == 0.0) {
+        if (sinx > 0.0) {
+            return MathOps::PI_OVER_TWO;
+        }
+        else {
+            return 3.0 * MathOps::PI_OVER_TWO;
+        }
+    }
+    else {
+        if (cosx > 0.0) {
+            return atan(sinx / cosx);
+        }
+        else {
+            return MathOps::PI + atan(sinx / cosx);
+        }
+    }
 }
 
 /**

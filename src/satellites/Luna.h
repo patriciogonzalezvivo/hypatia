@@ -12,7 +12,7 @@
 #pragma once
 
 // #include "AstroOps.h"
-#include "Body.h"
+#include "../Body.h"
 
 // A struct to hold the fundmental elements
 // The member names should be familiar to Meeus fans ;-)

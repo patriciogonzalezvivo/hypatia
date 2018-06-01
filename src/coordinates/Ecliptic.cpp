@@ -1,18 +1,24 @@
 #include "Ecliptic.h"
 
+#include "../AstroOps.h"
 #include <math.h>
 
 Ecliptic::Ecliptic() : m_radius(1.0) {
 }
 
-Ecliptic::Ecliptic(const Vector& _parent) {
+Ecliptic::Ecliptic(const Vector& _parent, UNIT_TYPE _type) {
     m_phi = atan2(_parent.y, _parent.x);
     m_theta = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
-    m_radius = _parent.getMagnitud();
+    if ( _type == AU ) {
+        m_radius = _parent.getMagnitud();
+    }
+    else {
+        m_radius = _parent.getMagnitud() * AstroOps::KM_TO_AU;
+    }
 }
 
-Ecliptic::Ecliptic(double _lng, double _lat, double _radius, ANGLE_TYPE _type) {
-    if ( _type == RADS ) {
+Ecliptic::Ecliptic(double _lng, double _lat, double _radius, ANGLE_TYPE _a_type, UNIT_TYPE _r_type) {
+    if ( _a_type == RADS ) {
         m_phi = _lng;
         m_theta = _lat;
     }
@@ -20,7 +26,13 @@ Ecliptic::Ecliptic(double _lng, double _lat, double _radius, ANGLE_TYPE _type) {
         m_phi = MathOps::toRadians( _lng );
         m_theta = MathOps::toRadians( _lat );
     }
-    m_radius = _radius;
+    
+    if (_r_type == AU ) {
+        m_radius = _radius;
+    }
+    else {
+        m_radius = _radius * AstroOps::KM_TO_AU;
+    }
 }
 
 Ecliptic::~Ecliptic() {
@@ -51,6 +63,20 @@ Ecliptic& Ecliptic::operator= (const Vector& _vec) {
     return *this;
 }
 
-Vector Ecliptic::getVector() const {
-    return Vector(*this) * m_radius;
+double Ecliptic::getRadius (UNIT_TYPE _type) const {
+    if ( _type == KM ) {
+        return m_radius * AstroOps::AU_TO_KM;
+    }
+    else {
+        return m_radius;
+    }
+}
+
+Vector Ecliptic::getVector (UNIT_TYPE _type) const {
+    if ( _type == KM ) {
+        return Vector(*this) * (m_radius * AstroOps::AU_TO_KM);
+    }
+    else {
+        return Vector(*this) * m_radius;
+    }
 }

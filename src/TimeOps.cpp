@@ -301,6 +301,21 @@ double TimeOps::toGreenwichSiderealTime( const DateTime& _dt )  {
 }
 
 /**
+ * toLMST(): Convert to local mean sidereal time (GMST plus the observer's longitude)
+ *
+ * @param[in] _dt observers DateTime
+ * @param[in] lon observers longitude
+ *
+ * @returns the local mean sidereal time
+ */
+double TimeOps::toLocalMeanSideralTime(const DateTime& _dt, double _lng, ANGLE_TYPE _type) {
+    if ( _type == DEGS ) {
+        _lng = MathOps::toRadians(_lng);
+    }
+    return MathOps::normalize(toGreenwichSiderealTime(_dt) + _lng, RADS);
+}
+
+/**
  * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
  *          See p 84,  in Meeus
  *
@@ -312,7 +327,7 @@ double TimeOps::toGreenwichSiderealTime( const DateTime& _dt )  {
  *
  * @return Local Sidereal Time
  */
-double TimeOps::toLST (double _jd, double _lng, ANGLE_TYPE _type) {
+double TimeOps::toLocalSideralTime (double _jd, double _lng, ANGLE_TYPE _type) {
     if ( _type == DEGS ) {
         _lng = MathOps::toRadians(_lng);
     }
@@ -329,7 +344,7 @@ double TimeOps::toLST (double _jd, double _lng, ANGLE_TYPE _type) {
  *
  * @returns the local mean sidereal time
  */
-double TimeOps::toLST ( const DateTime& _dt, double _lng, ANGLE_TYPE _type  ) {
+double TimeOps::toLocalSideralTime ( const DateTime& _dt, double _lng, ANGLE_TYPE _type  ) {
     if ( _type == DEGS ) {
         _lng = MathOps::toRadians(_lng);
     }
@@ -493,7 +508,32 @@ void TimeOps::toHMS( double jd, int& h, int& m, int& s) {
         fd -= m;
         
         s = int( (fd * TimeOps::SECONDS_PER_MINUTE) + MathOps::ROUND );
+        
+        if (s == 60) {
+            m++;
+            s = 0;
+        }
+        if (m == 60) {
+            h++;
+            m = 0;
+        }
+        
+        if (h == 24) {
+            h = 0;
+        }
     }
+}
+
+DateTime TimeOps::toDateTime ( double _jd ) {
+    double day;
+    int month;
+    int year;
+    int hs;
+    int min;
+    int sec;
+    TimeOps::toYMD(_jd, year, month, day);
+    TimeOps::toHMS(_jd - 0.5, hs, min, sec);
+    return DateTime(year, month, floor(day), hs, min, sec);
 }
 
 //----------------------------------------------------------------------------

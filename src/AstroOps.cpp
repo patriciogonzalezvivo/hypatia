@@ -27,8 +27,10 @@ const double AstroOps::AU_TO_KM = 1.495978707e+8;
 const double AstroOps::AU_TO_M = (AstroOps::AU_TO_KM * 1000.);
 const double AstroOps::AU_PER_DAY = (86400. * AstroOps::SPEED_OF_LIGHT / AstroOps::AU_TO_KM);
 
+const double AstroOps::EARTH_FLATTENING = 1.0 / 298.26;
 const double AstroOps::EARTH_POLAR_RADIUS_KM = 6356.76;
-const double AstroOps::EARTH_EQUATORIAL_RADIUS_KM = 6378.14;
+const double AstroOps::EARTH_EQUATORIAL_RADIUS_KM = 6378.135;
+const double AstroOps::EARHT_ROTATION_PER_SIDERAL_DAY = 1.00273790934;
 
 const double AstroOps::SUN_DIAMETER_KM = 1392000;
 
@@ -605,8 +607,113 @@ Horizontal AstroOps::toHorizontal( const Observer& _obs, const Equatorial& _equa
  * @return Ecliptic geocentric
  */
 Ecliptic AstroOps::toGeocentric( Observer& _obs, const Ecliptic& _heliocentric ) {
-    Vector heliocentric = _heliocentric.getVector();
-    return Ecliptic(heliocentric - _obs.getHeliocentricVector());
+    Vector heliocentric = _heliocentric.getVector(AU);
+    return Ecliptic(heliocentric - _obs.getHeliocentricVector(AU), AU);
+}
+
+
+Geodetic AstroOps::toGeodetic(const Eci& _eci) {
+    const double theta = MathOps::actan(_eci.getPosition(KM).y, _eci.getPosition(KM).x);
+    
+    double lon = theta - TimeOps::toGreenwichSiderealTime(_eci.getDateTime());
+    //WrapNegPosPI
+    lon = MathOps::mod(lon + MathOps::PI, MathOps::TAU) - MathOps::PI;
+    
+    const double r = sqrt((_eci.getPosition(KM).x * _eci.getPosition(KM).x)
+                          + (_eci.getPosition(KM).y * _eci.getPosition(KM).y));
+    
+    static const double e2 = AstroOps::EARTH_FLATTENING * (2.0 - AstroOps::EARTH_FLATTENING);
+    
+    double lat = MathOps::actan(_eci.getPosition(KM).z, r);
+    double phi = 0.0;
+    double c = 0.0;
+    int cnt = 0;
+    
+    do {
+        phi = lat;
+        const double sinphi = sin(phi);
+        c = 1.0 / sqrt(1.0 - e2 * sinphi * sinphi);
+        lat = MathOps::actan(_eci.getPosition(KM).z + AstroOps::EARTH_EQUATORIAL_RADIUS_KM * c * e2 * sinphi, r);
+        cnt++;
+    }
+    while (fabs(lat - phi) >= 1e-10 && cnt < 10);
+    
+    const double alt = r / cos(lat) - AstroOps::EARTH_EQUATORIAL_RADIUS_KM * c;
+    
+    return Geodetic(lat, lon, alt, RADS);
+}
+
+Eci AstroOps::toEci(const DateTime& _dt, const Geodetic& _geod) {
+    static const double mfactor = MathOps::TAU * (AstroOps::EARHT_ROTATION_PER_SIDERAL_DAY / TimeOps::SECONDS_PER_DAY);
+    
+    /*
+     * Calculate Local Mean Sidereal Time for observers longitude
+     */
+    const double theta = TimeOps::toLocalMeanSideralTime(_dt, _geod.getLongitude(RADS), RADS);
+    
+    /*
+     * take into account earth flattening
+     */
+    const double c = 1.0 / sqrt(1.0 + AstroOps::EARTH_FLATTENING * (AstroOps::EARTH_FLATTENING - 2.0) * pow(sin(_geod.getLatitude(RADS)), 2.0));
+    const double s = pow(1.0 - AstroOps::EARTH_FLATTENING, 2.0) * c;
+    const double achcp = (AstroOps::EARTH_EQUATORIAL_RADIUS_KM * c + _geod.getLatitude(RADS)) * cos(_geod.getLatitude(RADS));
+    
+    Vector position;
+    position.x = achcp * cos(theta); // km
+    position.y = achcp * sin(theta); // km
+    position.z = (AstroOps::EARTH_EQUATORIAL_RADIUS_KM * s + _geod.getLatitude(RADS)) * sin(_geod.getLatitude(RADS)); // km
+    
+    Vector velocity; 
+    velocity.x = -mfactor * position.y; // km/s
+    velocity.y = mfactor * position.x;  // km/s
+    velocity.z = 0.0;                   // km/s
+    
+    return Eci(_dt, position, velocity);
+}
+
+Horizontal AstroOps::toHorizontal(const Observer& _obs, const Eci& _eci) {
+    Eci obs = Eci(_eci.getDateTime(), _obs.getLocation());
+    
+    /*
+     * calculate differences
+     */
+    Vector range_rate = _eci.getVelocity(KM) - obs.getVelocity(KM);
+    Vector range = _eci.getPosition(KM) - obs.getPosition(KM);
+    
+    /*
+     * Calculate Local Mean Sidereal Time for observers longitude
+     */
+    double theta = TimeOps::toLocalMeanSideralTime(_eci.getDateTime(), _obs.getLocation().getLongitude(RADS), RADS);
+    
+    double sin_lat = sin(_obs.getLocation().getLatitude(RADS));
+    double cos_lat = cos(_obs.getLocation().getLatitude(RADS));
+    double sin_theta = sin(theta);
+    double cos_theta = cos(theta);
+    
+    double top_s = sin_lat * cos_theta * range.x
+    + sin_lat * sin_theta * range.y - cos_lat * range.z;
+    double top_e = -sin_theta * range.x
+    + cos_theta * range.y;
+    double top_z = cos_lat * cos_theta * range.x
+    + cos_lat * sin_theta * range.y + sin_lat * range.z;
+    double az = atan(-top_e / top_s);
+    
+    if (top_s > 0.0) {
+        az += MathOps::PI;
+    }
+    
+    if (az < 0.0) {
+        az += MathOps::TAU;
+    }
+    
+    // range in km
+    double mag = range.getMagnitud();
+    double el = asin(top_z / mag);
+    
+    // range rate in km/s
+    double rate = range.dot(range_rate) / mag;
+    
+    return Horizontal(az, el, RADS);
 }
 
 /**

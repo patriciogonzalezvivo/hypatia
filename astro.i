@@ -44,7 +44,7 @@ namespace std {
     #include "src/AstroOps.h"
     #include "src/ProjOps.h"
     #include "src/Body.h"
-    #include "src/Luna.h"
+    #include "src/satellites/Luna.h"
     #include "src/Constellation.h"
     #include "src/Star.h"
 %}
@@ -63,6 +63,6 @@ namespace std {
 %include "src/AstroOps.h"
 %include "src/ProjOps.h"
 %include "src/Body.h"
-%include "src/Luna.h"
+%include "src/satellites/Luna.h"
 %include "src/Constellation.h"
 %include "src/Star.h"

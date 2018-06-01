@@ -10,10 +10,10 @@ class DateTime {
 public:
 
     DateTime();
-    DateTime(int64_t ticks);
-    DateTime(unsigned int year, double doy);
-    DateTime(int year, int month, int day);
-    DateTime(int year, int month, int day, int hour, int minute, int second);
+    DateTime(int64_t _ticks);
+    DateTime(unsigned int _year, double _DoY);
+    DateTime(int _year, int _month, int _day);
+    DateTime(int _year, int _month, int _day, int _hour, int _minute, int _second);
     virtual ~DateTime();
     
     virtual TimeSpan getTimeOfDay() const;

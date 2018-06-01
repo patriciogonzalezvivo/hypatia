@@ -18,7 +18,8 @@ protected:
     virtual double * getPtr();
     virtual const double * getPtr() const;
     
-    double m_phi, m_theta;
+    double m_phi;
+    double m_theta;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Polar& p) {

@@ -9,6 +9,10 @@
 #pragma once
 #undef PI
 
+enum UNIT_TYPE {
+    KM, AU
+};
+
 enum ANGLE_TYPE {
     DEGS, RADS
 };
@@ -49,6 +53,8 @@ struct MathOps {
     
     static const double ROUND;
     static const double INVALID;
+    
+    static const double TWO_THIRD;
 
     /**
      * toDegrees(): convert radians to degrees
@@ -174,12 +180,22 @@ struct MathOps {
     static double asine( double _rad );
 
     /**
+     * actan(): 
+     *
+     * @param sinx
+     * @param cosx
+     *
+     * @return actan
+     */
+    static double actan(const double sinx, const double cosx);
+    
+    /**
      * fract(): gives the fractional part of a number
      *
      * @param number
      *
      * @return fractional part of it 
- */
+     */
     static double fract (double _x);
 
     /**

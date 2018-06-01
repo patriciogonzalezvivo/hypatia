@@ -11,10 +11,10 @@
 
 #include "Luna.h"
 
-#include "TimeOps.h"
-#include "AstroOps.h"
-#include "Vsop.h"
-#include "Body.h"
+#include "../TimeOps.h"
+#include "../AstroOps.h"
+#include "../planets/Vsop.h"
+#include "../Body.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -421,7 +421,7 @@ void Luna::compute( Observer &_obs ) {
         }
     
         m_distance = rad;
-        m_geocentric = Ecliptic(lng, lat, rad * AstroOps::KM_TO_AU , RADS);
+        m_geocentric = Ecliptic(lng, lat, rad, RADS, KM);
         
         m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );
         m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
@@ -431,9 +431,9 @@ void Luna::compute( Observer &_obs ) {
         Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJC(), EARTH);
         
         // Get HelioCentric values
-        Ecliptic toEarth = Ecliptic(sun_eclipticLon, sun_eclipticLat, sun_radius, RADS);
-        Vector Sun2Earth = toEarth.getVector();
-        Vector Earth2Moon = m_geocentric.getVector();
+        Ecliptic toEarth = Ecliptic(sun_eclipticLon, sun_eclipticLat, sun_radius, RADS, AU);
+        Vector Sun2Earth = toEarth.getVector(AU);
+        Vector Earth2Moon = m_geocentric.getVector(AU);
         Vector Sun2Moon = Sun2Earth + Earth2Moon;
         
         m_heliocentric = Sun2Moon;

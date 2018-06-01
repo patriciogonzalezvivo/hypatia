@@ -41,10 +41,10 @@ public:
     virtual Ecliptic    getEclipticGeocentric() const { return m_geocentric; }
     
     virtual Equatorial  getEquatorial() const { return m_equatorial; }
-    virtual Vector      getEquatorialVector() const { return m_equatorial.getVector() * m_geocentric.getRadius(); }
+    virtual Vector      getEquatorialVector(UNIT_TYPE _type) const { return m_equatorial.getVector() * m_geocentric.getRadius(_type); }
     
     virtual Horizontal  getHorizontal() const { return m_horizontal; }
-    virtual Vector      getHorizontalVector() const { return m_horizontal.getVector() * m_geocentric.getRadius(); };
+    virtual Vector      getHorizontalVector(UNIT_TYPE _type) const { return m_horizontal.getVector() * m_geocentric.getRadius(_type); };
     
     // Calculate the data for a given planet, jd, and location
     // This function must be called (directly or via c'tor) before calling

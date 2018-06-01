@@ -29,7 +29,7 @@ public:
     virtual double  getObliquity() const { return m_obliquity; }
     virtual Geodetic getLocation() const { return m_location; }
     
-    virtual Vector  getHeliocentricVector();
+    virtual Vector  getHeliocentricVector(UNIT_TYPE _type);
     
     virtual void    update();
 

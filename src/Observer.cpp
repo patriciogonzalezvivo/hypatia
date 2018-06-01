@@ -49,16 +49,16 @@ void Observer::setLocation(const Geodetic &_location) {
 void Observer::update() {
     m_jcentury = TimeOps::toJC(m_jd);
     m_obliquity = AstroOps::meanObliquity(m_jcentury);
-    m_lst = TimeOps::toLST(m_jd, m_location.getLongitude(RADS), RADS);
+    m_lst = TimeOps::toLocalSideralTime(m_jd, m_location.getLongitude(RADS), RADS);
     
     m_changed = true;
 }
 
-Vector Observer::getHeliocentricVector() {
+Vector Observer::getHeliocentricVector(UNIT_TYPE _type) {
     if (m_changed) {
         double pLng, pLat, pRad = 0.0;
         Vsop::calcAllLocs(pLng, pLat, pRad, m_jcentury, EARTH);
-        m_heliocentricLoc = Ecliptic(pLng, pLat, pRad, RADS).getVector();
+        m_heliocentricLoc = Ecliptic(pLng, pLat, pRad, RADS, AU).getVector(_type);
         m_changed = false;
     }
     

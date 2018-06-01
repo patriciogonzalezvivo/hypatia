@@ -11,12 +11,8 @@ public:
     
     virtual double  getLongitude(ANGLE_TYPE _type) const;
     virtual double  getLatitude(ANGLE_TYPE _type) const;
-    
     virtual double  getAltitude() const { return m_alt; };
-    
-    // KM
-    virtual double  getRadius() const;
-    
+    virtual double  getRadius(UNIT_TYPE _type) const;    
     virtual Vector  getVector() const;
     
 protected:
@@ -30,4 +26,4 @@ inline std::ostream& operator<<(std::ostream& strm, const Geodetic& p) {
     strm << ", alt: " << std::setw(8) << p.getAltitude();
 
     return strm;
-}
+};

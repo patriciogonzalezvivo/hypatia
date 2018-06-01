@@ -225,6 +225,16 @@ struct TimeOps {
     static double toGreenwichSiderealTime ( const DateTime& _dt );
     
     /**
+     * toLMST(): Convert to local mean sidereal time (GMST plus the observer's longitude)
+     *
+     * @param[in] _dt observers DateTime
+     * @param[in] lon observers longitude
+     *
+     * @returns the local mean sidereal time
+     */
+    static double toLocalMeanSideralTime(const DateTime& _dt, double _lng, ANGLE_TYPE _type);
+    
+    /**
      * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
      *          See p 84,  in Meeus
      *
@@ -236,7 +246,7 @@ struct TimeOps {
      *
      * @return Local Sidereal Time
      */
-    static double toLST ( double _jd, double _lng, ANGLE_TYPE _type );
+    static double toLocalSideralTime ( double _jd, double _lng, ANGLE_TYPE _type );
     
     /**
      * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
@@ -250,7 +260,7 @@ struct TimeOps {
      *
      * @return Local Sidereal Time
      */
-    static double toLST ( const DateTime& _dt, double _lng, ANGLE_TYPE _type );
+    static double toLocalSideralTime ( const DateTime& _dt, double _lng, ANGLE_TYPE _type );
     
     /**
      * toJD(): convert a seconds to Julian Century
@@ -403,6 +413,8 @@ struct TimeOps {
      */
     static void toDMY ( long _jd, int &_day, int &_month, int &_year, CALENDAR_TYPE calendar = T_GREGORIAN );
     static void toDMY ( double _jd, int &_day, int &_month, int &_year, CALENDAR_TYPE calendar = T_GREGORIAN );
+    
+    static DateTime toDateTime ( double _jd );
 
     /**
      * isValidYear(): Checks whether the given year is valid
