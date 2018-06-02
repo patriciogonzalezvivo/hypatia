@@ -5,7 +5,7 @@
 #include "AstroOps.h"
 #include "TimeOps.h"
 
-#include "VSOP87.h"
+#include "models/VSOP87.h"
 
 Observer::Observer() : m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0) {
 }

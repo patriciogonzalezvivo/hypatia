@@ -14,7 +14,6 @@ astro_module = Extension(
   '_astro',
   sources= [ 
     'astro_wrap.cxx', 
-    'src/MathOps.cpp',
     'src/primitives/Polar.cpp',
     'src/primitives/Vector.cpp',
     'src/primitives/TimeSpan.cpp',
@@ -23,16 +22,21 @@ astro_module = Extension(
     'src/coordinates/Equatorial.cpp',
     'src/coordinates/Horizontal.cpp',
     'src/coordinates/Geodetic.cpp',
+    'src/coordinates/ECI.cpp',
+    'src/MathOps.cpp',
     'src/TimeOps.cpp',
     'src/AstroOps.cpp',
     'src/ProjOps.cpp',
     'src/Observer.cpp', 
     'src/Body.cpp', 
     'src/Luna.cpp', 
-    'src/Star.cpp'
-    'src/models/Pluto.cpp',
+    'src/Star.cpp',
     'src/Constellation.cpp',
-    'src/models/VSOP.cpp', 
+    'src/models/VSOP87.cpp',
+    'src/models/Pluto.cpp',
+    'src/models/TLE.cpp',
+    'src/models/Orbit.cpp',
+    'src/models/SGP4.cpp'
    ],
    swig_opts = ['-c++']
 )

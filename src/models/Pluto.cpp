@@ -8,8 +8,8 @@
  *
 \*****************************************************************************/
 
-#include "MathOps.h"
-#include "AstroOps.h"
+#include "../MathOps.h"
+#include "../AstroOps.h"
 #include "Pluto.h"
 
 #include <math.h>

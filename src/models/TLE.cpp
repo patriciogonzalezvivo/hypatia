@@ -5,6 +5,8 @@
 //
 
 #include "TLE.h"
+
+#include "../MathOps.h"
 #include "../TimeOps.h"
 #include "Exception.h"
 
@@ -22,9 +24,9 @@ static const unsigned int TLE1_COL_INTLDESC_A = 9;
 static const unsigned int TLE1_LEN_INTLDESC_A = 2;
 //  8.      Blank:                              8 Must be a blank space
 //  9-16.   International number:               9-16 No validation performed
-static const unsigned int TLE1_COL_INTLDESC_B = 11;
+// static const unsigned int TLE1_COL_INTLDESC_B = 11;
 static const unsigned int TLE1_LEN_INTLDESC_B = 3;
-static const unsigned int TLE1_COL_INTLDESC_C = 14;
+// static const unsigned int TLE1_COL_INTLDESC_C = 14;
 static const unsigned int TLE1_LEN_INTLDESC_C = 3;
 //  17.     Blank:                              17 Must be a blank space.
 //  18.     Epoch Year:                         18 Must be a digit [0-9].
@@ -57,13 +59,13 @@ static const unsigned int TLE1_COL_BSTAR = 53;
 static const unsigned int TLE1_LEN_BSTAR = 8;
 //  61.     Blank:                              61 Must be a blank space.
 //  62.     Ephemeris:                          62 Must be either a digit [0-9] or a blank space.
-static const unsigned int TLE1_COL_EPHEMTYPE = 62;
-static const unsigned int TLE1_LEN_EPHEMTYPE = 1;
+// static const unsigned int TLE1_COL_EPHEMTYPE = 62;
+// static const unsigned int TLE1_LEN_EPHEMTYPE = 1;
 //  63.     Blank:                              63 Must be a blank space.
 //  64-67.  Element set number:                 64-66 must be either a digit [0-9] or a blank space.
 //                                              67 must be a digit [0-9]
-static const unsigned int TLE1_COL_ELNUM = 64;
-static const unsigned int TLE1_LEN_ELNUM = 4;
+// static const unsigned int TLE1_COL_ELNUM = 64;
+// static const unsigned int TLE1_LEN_ELNUM = 4;
 //  68.     CheckSum Value:                     68 No validation performed.
 
 //  0.      Card number:                        0 Must be 2.
@@ -119,7 +121,7 @@ static const unsigned int TLE2_LEN_REVATEPOCH = 5;
 
 // expected tle line length
 static const unsigned int TLE_LEN_LINE_DATA = 69;
-static const unsigned int TLE_LEN_LINE_NAME = 22;
+// static const unsigned int TLE_LEN_LINE_NAME = 22;
 
 template <typename T>bool FromString(const std::string& str, T& val) {
     std::stringstream ss(str);

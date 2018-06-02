@@ -14,7 +14,7 @@
 
 #include "primitives/Vector.h"
 
-#include "VSOP87.h"
+#include "models/VSOP87.h"
 
 #include <math.h>
 
@@ -709,7 +709,7 @@ Horizontal AstroOps::toHorizontal(const Observer& _obs, const ECI& _eci) {
     double el = asin(top_z / mag);
     
     // range rate in km/s
-    double rate = range.dot(range_rate) / mag;
+    // double rate = range.dot(range_rate) / mag;
     
     return Horizontal(az, el, RADS);
 }

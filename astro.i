@@ -26,7 +26,7 @@
 
 %{
     #define SWIG_FILE_WITH_INIT
-    #include "src/MathOps.h"
+    
     #include "src/primitives/Polar.h"
     #include "src/primitives/Vector.h"
     #include "src/primitives/TimeSpan.h"
@@ -35,17 +35,18 @@
     #include "src/coordinates/Equatorial.h"
     #include "src/coordinates/Horizontal.h"
     #include "src/coordinates/Geodetic.h"
+    #include "src/coordinates/ECI.h"
+    #include "src/MathOps.h"
     #include "src/TimeOps.h"
+    #include "src/AstroOps.h"
     #include "src/ProjOps.h"
     #include "src/Observer.h"
-    #include "src/AstroOps.h"
     #include "src/Body.h"
     #include "src/Luna.h"
     #include "src/Star.h"
     #include "src/Constellation.h"
 %}
 
-%include "src/MathOps.h"
 %include "src/primitives/Polar.h"
 %include "src/primitives/Vector.h"
 %include "src/primitives/TimeSpan.h"
@@ -54,14 +55,16 @@
 %include "src/coordinates/Equatorial.h"
 %include "src/coordinates/Horizontal.h"
 %include "src/coordinates/Geodetic.h"
+%include "src/coordinates/ECI.h"
+%include "src/MathOps.h"
 %include "src/TimeOps.h"
+%include "src/AstroOps.h"
 %include "src/ProjOps.h"
 %include "src/Observer.h"
-%include "src/AstroOps.h"
 %include "src/Body.h"
-%include "src/una.h"
-%include "src/Constellation.h"
+%include "src/Luna.h"
 %include "src/Star.h"
+%include "src/Constellation.h"
 
 namespace std {
     %template(VectorInt) vector<int>;

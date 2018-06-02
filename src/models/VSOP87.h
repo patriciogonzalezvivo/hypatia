@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Body.h"  // for enum Body
+#include "../Body.h"  // for enum Body
 
 // * * * * * simple support structs * * * * *
 

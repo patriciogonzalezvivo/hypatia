@@ -17,7 +17,7 @@
  * @param[in] position the position
  * @param[in] velocity the velocity
  */
-ECI::ECI(double _jd, const Vector &_pos, const Vector &_vel) : m_jd(_jd), m_position(_pos), m_velocity(_vel) {
+ECI::ECI(double _jd, const Vector &_pos, const Vector &_vel): m_position(_pos), m_velocity(_vel), m_jd(_jd) {
 }
 
 ECI::~ECI(){    

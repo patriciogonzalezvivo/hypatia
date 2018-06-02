@@ -6,7 +6,6 @@
 #pragma once
 
 #include "../primitives/Vector.h"
-#include "../primitives/DateTime.h"
 
 /**
  * @brief Stores an Earth-centered inertial position for a particular time.

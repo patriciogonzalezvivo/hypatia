@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../MathOps.h"
 #include "../primitives/Vector.h"
 
 class Geodetic : public Polar {

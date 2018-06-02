@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "../MathOps.h"
 #include "../primitives/Vector.h"
 
 class Equatorial : public Polar {

@@ -9,7 +9,7 @@
 \*****************************************************************************/
 
 #include "VSOP87.h"
-#include "MathOps.h"
+#include "../MathOps.h"
 
 #include <math.h>
 

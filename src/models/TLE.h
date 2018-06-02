@@ -7,7 +7,8 @@
 #pragma once
 
 #include "../MathOps.h"
-#include "../primitives/DateTime.h"
+#include <iomanip>
+#include <string>
 
 /**
  * @brief Processes a two-line element set used to convey OrbitalElements.
