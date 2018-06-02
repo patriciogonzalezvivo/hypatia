@@ -26,7 +26,6 @@
 const double kAE = 1.0;
 const double kQ0 = 120.0;
 const double kS0 = 78.0;
-const double kMU = 398600.8;
 const double kXJ2 = 1.082616e-3;
 const double kXJ3 = -2.53881e-6;
 const double kXJ4 = -1.65597e-6;
@@ -35,11 +34,11 @@ const double kXJ4 = -1.65597e-6;
  * alternative XKE
  * affects final results
  * aiaa-2006-6573
- * const double kXKE = 60.0 / sqrt(kXKMPER * kXKMPER * kXKMPER / kMU);
+ * const double kXKE = 60.0 / sqrt(kXKMPER * kXKMPER * kXKMPER / AstroOps::EARTH_GRAVITATIONAL_CONSTANT);
  * dundee
  * const double kXKE = 7.43669161331734132e-2;
  */
-const double kXKE = 60.0 / sqrt(AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM / kMU);
+const double kXKE = 60.0 / sqrt(AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM / AstroOps::EARTH_GRAVITATIONAL_CONSTANT);
 const double kCK2 = 0.5 * kXJ2 * kAE * kAE;
 const double kCK4 = -0.375 * kXJ4 * kAE * kAE * kAE * kAE;
 
@@ -54,9 +53,6 @@ const double kCK4 = -0.375 * kXJ4 * kAE * kAE * kAE * kAE;
 const double kQOMS2T = pow(((kQ0 - kS0) / AstroOps::EARTH_EQUATORIAL_RADIUS_KM), 4.0);
 const double kS = kAE * (1.0 + kS0 / AstroOps::EARTH_EQUATORIAL_RADIUS_KM);
 const double kTHDT = 4.37526908801129966e-3;
-
-// Jan 1.5 2000 = Jan 1 2000 12h UTC
-const double kEPOCH_JAN1_12H_2000 = 2451545.0;
 
 const SGP4::CommonConstants SGP4::Empty_CommonConstants = SGP4::CommonConstants();
 const SGP4::NearSpaceConstants SGP4::Empty_NearSpaceConstants = SGP4::NearSpaceConstants();
@@ -659,7 +655,7 @@ void SGP4::deepSpaceInitialise(
     /*
      * initialize lunar / solar terms
      */
-    const double jday = TimeOps::toJD( m_elements.getEpoch() ) - kEPOCH_JAN1_12H_2000;
+    const double jday = TimeOps::toJD( m_elements.getEpoch() ) - TimeOps::J2000;
     
     const double xnodce = 4.5236020 - 9.2422029e-4 * jday;
     const double xnodce_temp = fmod(xnodce, MathOps::TAU);

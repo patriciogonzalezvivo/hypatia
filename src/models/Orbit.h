@@ -34,25 +34,27 @@ private:
     //  Shape
     double      m_eccentricity;         // shape of the ellipse, describing how much it is elongated compared to a circle
     double      m_semiMajorAxis;        // the sum of the periapsis and apoapsis distances divided by two. For circular orbits,
-                                        // the semimajor axis is the distance between the centers of the bodies, not the distance
-                                        // of the bodies from the center of mass.
+                                        //  the semimajor axis is the distance between the centers of the bodies, not the distance of the bodies from the center of mass.
     
     //  Plane Orientation
     double      m_inclination;          // vertical tilt of the ellipse with respect to the reference plane, measured at the ascending
-                                        // node (where the orbit passes upward through the reference plane, the green angle i in the diagram). Tilt angle is measured perpendicular to line of intersection between orbital plane and reference plane. Any three points on an ellipse will define the ellipse orbital plane. The plane and the ellipse are both two-dimensional objects defined in three-dimensional space.
-    double      m_ascendingNode;
+                                        //  node (where the orbit passes upward through the reference plane, the green angle i in the diagram). Tilt angle is measured perpendicular to line of intersection between orbital plane and reference plane. Any three points on an ellipse will define the ellipse orbital plane. The plane and the ellipse are both two-dimensional objects defined in three-dimensional space.
+    double      m_ascendingNode;        // horizontally orients the ascending node of the ellipse (where the orbit passes upward through
+                                        //  the reference plane) with respect to the reference frame's vernal point (the green angle Ω in the diagram).
     
-    //
-    double      m_argumentPeriapsis;
+    double      m_argumentPeriapsis;    // defines the orientation of the ellipse in the orbital plane, as an angle measured from the
+                                        //  ascending node to the periapsis (the closest point the satellite object comes to the primary object around which it orbits, the blue angle ω in the diagram).
     double      m_periapsis;
+    double      m_period;
     
     // Optional
-    double      m_meanAnomoly;
     double      m_meanMotion;
     double      m_recoveredMeanMotion;
     double      m_bstar;
-    double      m_period;
-    DateTime    m_epoch;
+    
+    double      m_meanAnomoly;          //  angle used in calculating the position of a body in an elliptical orbit in the classical
+                                        //  two-body problem. It is the angular distance from the pericenter which a fictitious body would have if it moved in a circular orbit, with constant speed, in the same orbital period as the actual body in its elliptical orbit
+    DateTime    m_epoch;                // Epoch of mean anomaly
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Orbit& o) {

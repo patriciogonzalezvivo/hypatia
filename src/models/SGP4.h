@@ -31,8 +31,9 @@ public:
     
     void setTLE(const TLE& tle);
     
-    ECI getECI(double tsince) const;
-    ECI getECI(const DateTime& date) const;
+    Orbit   getOrbit() const { return m_elements; };
+    ECI     getECI(double tsince) const;
+    ECI     getECI(const DateTime& date) const;
     
 private:
     struct CommonConstants {

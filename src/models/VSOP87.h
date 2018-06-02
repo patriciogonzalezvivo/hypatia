@@ -16,28 +16,28 @@
 
 // One VSOP term
 
-struct VsopSet {
+struct VSOP87Set {
     double A;
     double B;
     double C;
 };
 
 // A set of VSOP terms
-struct VsopTerms {
+struct VSOP87Terms {
     unsigned rows;          // number of term sets
-    const VsopSet* pTerms;  // pointer to start of data
+    const VSOP87Set* pTerms;  // pointer to start of data
 
-    VsopTerms() : rows(0), pTerms(0) {}
-    VsopTerms( unsigned r, const VsopSet* p ) : rows(r), pTerms(p) {}
+    VSOP87Terms() : rows(0), pTerms(0) {}
+    VSOP87Terms( unsigned r, const VSOP87Set* p ) : rows(r), pTerms(p) {}
 };
 
 // A complete collection of VSOP terms (6 Lat, 6 Lon, 6 Rad )
 
-typedef const VsopTerms AstroTerms[3*6];
+typedef const VSOP87Terms AstroTerms[3*6];
 
 // The main VSOP support class
 
-class Vsop {
+class VSOP87 {
 public:
     // location elements (longitude, latitide, distance)
     //

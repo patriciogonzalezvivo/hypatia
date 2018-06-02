@@ -20,31 +20,26 @@ public:
     TLE(const std::string& name, const std::string& line_one, const std::string& line_two);
     TLE(const TLE& tle);
     
-    std::string         getName() const { return m_name; }
-    std::string         getLine1() const { return m_line_one; }
-    std::string         getLine2() const { return m_line_two; }
+    std::string     getName() const { return m_name; }
+    std::string     getLine1() const { return m_line_one; }
+    std::string     getLine2() const { return m_line_two; }
 
-    unsigned int        getNoradNumber() const { return m_norad_number; }
-    std::string         getIntDesignator() const { return m_int_designator; }
-    DateTime            getEpoch() const { return m_epoch; }
-    double              getMeanMotionDt2() const { return m_mean_motion_dt2; }
-    double              getMeanMotionDdt6() const { return m_mean_motion_ddt6; }
-    double              getBStar() const { return m_bstar; }
-    double              getInclination(ANGLE_TYPE _type) const;
-    double              getRightAscendingNode(ANGLE_TYPE _type) const;
-    double              getEccentricity() const { return m_eccentricity; }
-    double              getArgumentPerigee(ANGLE_TYPE _type) const;
-    double              getMeanAnomaly(ANGLE_TYPE _type) const ;
-    double              getMeanMotion() const {  return m_mean_motion; }
-    unsigned int        getOrbitNumber() const { return m_orbit_number; }
-    static unsigned int getLineLength() { return TLE_LEN_LINE_DATA; }
+    unsigned int    getNoradNumber() const { return m_norad_number; }
+    std::string     getIntDesignator() const { return m_int_designator; }
+    DateTime        getEpoch() const { return m_epoch; }
+    double          getMeanMotionDt2() const { return m_mean_motion_dt2; }
+    double          getMeanMotionDdt6() const { return m_mean_motion_ddt6; }
+    double          getBStar() const { return m_bstar; }
+    double          getInclination(ANGLE_TYPE _type) const;
+    double          getRightAscendingNode(ANGLE_TYPE _type) const;
+    double          getEccentricity() const { return m_eccentricity; }
+    double          getArgumentPerigee(ANGLE_TYPE _type) const;
+    double          getMeanAnomaly(ANGLE_TYPE _type) const ;
+    double          getMeanMotion() const {  return m_mean_motion; }
+    unsigned int    getOrbitNumber() const { return m_orbit_number; }
 
 private:
-    void        initialize();
-    static bool isValidLineLength(const std::string& str);
-    void        extractInteger(const std::string& str, unsigned int& val);
-    void        extractDouble(const std::string& str, int point_pos, double& val);
-    void        extractExponential(const std::string& str, double& val);
+    void            initialize();
     
 private:
     std::string     m_name;
@@ -64,10 +59,6 @@ private:
     double          m_mean_motion;
     unsigned int    m_norad_number;
     unsigned int    m_orbit_number;
-    
-    // expected tle line length
-    static const unsigned int TLE_LEN_LINE_DATA = 69;
-    static const unsigned int TLE_LEN_LINE_NAME = 22;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const TLE& t) {

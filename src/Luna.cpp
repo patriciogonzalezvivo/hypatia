@@ -15,7 +15,7 @@
 #include "AstroOps.h"
 
 #include "Body.h"
-#include "models/Vsop.h"
+#include "models/VSOP87.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -429,7 +429,7 @@ void Luna::compute( Observer &_obs ) {
 
         // Compute Sun's coords
         double sun_eclipticLon, sun_eclipticLat, sun_radius;
-        Vsop::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJC(), EARTH);
+        VSOP87::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJC(), EARTH);
         
         // Get HelioCentric values
         Ecliptic toEarth = Ecliptic(sun_eclipticLon, sun_eclipticLat, sun_radius, RADS, AU);

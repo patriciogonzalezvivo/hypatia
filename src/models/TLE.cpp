@@ -117,9 +117,191 @@ static const unsigned int TLE2_COL_REVATEPOCH = 63;
 static const unsigned int TLE2_LEN_REVATEPOCH = 5;
 //  68.     CheckSum Value:                     68 No validation performed.
 
+// expected tle line length
+static const unsigned int TLE_LEN_LINE_DATA = 69;
+static const unsigned int TLE_LEN_LINE_NAME = 22;
+
 template <typename T>bool FromString(const std::string& str, T& val) {
     std::stringstream ss(str);
     return !(ss >> val).fail();
+}
+
+/**
+ * Check
+ * @param str The string to check
+ * @returns Whether true of the string has a valid length
+ */
+bool isValidLineLength(const std::string& str) {
+    return str.length() == TLE_LEN_LINE_DATA ? true : false;
+}
+
+/**
+ * Convert a string containing an integer
+ * @param[in] str The string to convert
+ * @param[out] val The result
+ * @exception TleException on conversion error
+ */
+void extractInteger(const std::string& str, unsigned int& val) {
+    bool found_digit = false;
+    unsigned int temp = 0;
+    
+    for (std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
+        if (isdigit(*i)) {
+            found_digit = true;
+            temp = (temp * 10) + static_cast<unsigned int>(*i - '0');
+        }
+        else if (found_digit) {
+            throw Exception("Unexpected non digit");
+        }
+        else if (*i != ' ') {
+            throw Exception("Invalid character");
+        }
+    }
+    
+    if (!found_digit) {
+        val = 0;
+    }
+    else {
+        val = temp;
+    }
+}
+
+/**
+ * Convert a string containing an double
+ * @param[in] str The string to convert
+ * @param[in] point_pos The position of the decimal point. (-1 if none)
+ * @param[out] val The result
+ * @exception TleException on conversion error
+ */
+void extractDouble(const std::string& str, int point_pos, double& val) {
+    std::string temp;
+    bool found_digit = false;
+    
+    for (std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
+        /*
+         * integer part
+         */
+        if (point_pos >= 0 && i < str.begin() + point_pos - 1) {
+            bool done = false;
+            
+            if (i == str.begin()) {
+                if(*i == '-' || *i == '+') {
+                    /*
+                     * first character could be signed
+                     */
+                    temp += *i;
+                    done = true;
+                }
+            }
+            
+            if (!done) {
+                if (isdigit(*i)) {
+                    found_digit = true;
+                    temp += *i;
+                }
+                else if (found_digit) {
+                    throw Exception("Unexpected non digit");
+                }
+                else if (*i != ' ') {
+                    throw Exception("Invalid character");
+                }
+            }
+        }
+        /*
+         * decimal point
+         */
+        else if (point_pos >= 0 && i == str.begin() + point_pos - 1) {
+            if (temp.length() == 0) {
+                /*
+                 * integer part is blank, so add a '0'
+                 */
+                temp += '0';
+            }
+            
+            if (*i == '.') {
+                /*
+                 * decimal point found
+                 */
+                temp += *i;
+            }
+            else {
+                throw Exception("Failed to find decimal point");
+            }
+        }
+        /*
+         * fraction part
+         */
+        else {
+            if (i == str.begin() && point_pos == -1)
+            {
+                /*
+                 * no decimal point expected, add 0. beginning
+                 */
+                temp += '0';
+                temp += '.';
+            }
+            
+            /*
+             * should be a digit
+             */
+            if (isdigit(*i)) {
+                temp += *i;
+            }
+            else {
+                throw Exception("Invalid digit");
+            }
+        }
+    }
+    
+    if (!FromString<double>(temp, val)) {
+        throw Exception("Failed to convert value to double");
+    }
+}
+
+/**
+ * Convert a string containing an exponential
+ * @param[in] str The string to convert
+ * @param[out] val The result
+ * @exception TleException on conversion error
+ */
+void extractExponential(const std::string& str, double& val) {
+    std::string temp;
+    
+    for (std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
+        if (i == str.begin()) {
+            if (*i == '-' || *i == '+' || *i == ' ') {
+                if (*i == '-') {
+                    temp += *i;
+                }
+                temp += '0';
+                temp += '.';
+            }
+            else {
+                throw Exception("Invalid sign");
+            }
+        }
+        else if (i == str.end() - 2) {
+            if (*i == '-' || *i == '+') {
+                temp += 'e';
+                temp += *i;
+            }
+            else {
+                throw Exception("Invalid exponential sign");
+            }
+        }
+        else {
+            if (isdigit(*i)) {
+                temp += *i;
+            }
+            else {
+                throw Exception("Invalid digit");
+            }
+        }
+    }
+    
+    if (!FromString<double>(temp, val)) {
+        throw Exception("Failed to convert value to double");
+    }
 }
 
 /**
@@ -245,184 +427,6 @@ void TLE::initialize() {
         year += 1900;
     
     m_epoch = DateTime(year, day);
-}
-
-/**
- * Check
- * @param str The string to check
- * @returns Whether true of the string has a valid length
- */
-bool TLE::isValidLineLength(const std::string& str) {
-    return str.length() == getLineLength() ? true : false;
-}
-
-/**
- * Convert a string containing an integer
- * @param[in] str The string to convert
- * @param[out] val The result
- * @exception TleException on conversion error
- */
-void TLE::extractInteger(const std::string& str, unsigned int& val) {
-    bool found_digit = false;
-    unsigned int temp = 0;
-    
-    for (std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
-        if (isdigit(*i)) {
-            found_digit = true;
-            temp = (temp * 10) + static_cast<unsigned int>(*i - '0');
-        }
-        else if (found_digit) {
-            throw Exception("Unexpected non digit");
-        }
-        else if (*i != ' ') {
-            throw Exception("Invalid character");
-        }
-    }
-    
-    if (!found_digit) {
-        val = 0;
-    }
-    else {
-        val = temp;
-    }
-}
-
-/**
- * Convert a string containing an double
- * @param[in] str The string to convert
- * @param[in] point_pos The position of the decimal point. (-1 if none)
- * @param[out] val The result
- * @exception TleException on conversion error
- */
-void TLE::extractDouble(const std::string& str, int point_pos, double& val) {
-    std::string temp;
-    bool found_digit = false;
-    
-    for (std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
-        /*
-         * integer part
-         */
-        if (point_pos >= 0 && i < str.begin() + point_pos - 1) {
-            bool done = false;
-            
-            if (i == str.begin()) {
-                if(*i == '-' || *i == '+') {
-                    /*
-                     * first character could be signed
-                     */
-                    temp += *i;
-                    done = true;
-                }
-            }
-            
-            if (!done) {
-                if (isdigit(*i)) {
-                    found_digit = true;
-                    temp += *i;
-                }
-                else if (found_digit) {
-                    throw Exception("Unexpected non digit");
-                }
-                else if (*i != ' ') {
-                    throw Exception("Invalid character");
-                }
-            }
-        }
-        /*
-         * decimal point
-         */
-        else if (point_pos >= 0 && i == str.begin() + point_pos - 1) {
-            if (temp.length() == 0) {
-                /*
-                 * integer part is blank, so add a '0'
-                 */
-                temp += '0';
-            }
-            
-            if (*i == '.') {
-                /*
-                 * decimal point found
-                 */
-                temp += *i;
-            }
-            else {
-                throw Exception("Failed to find decimal point");
-            }
-        }
-        /*
-         * fraction part
-         */
-        else {
-            if (i == str.begin() && point_pos == -1)
-            {
-                /*
-                 * no decimal point expected, add 0. beginning
-                 */
-                temp += '0';
-                temp += '.';
-            }
-            
-            /*
-             * should be a digit
-             */
-            if (isdigit(*i)) {
-                temp += *i;
-            }
-            else {
-                throw Exception("Invalid digit");
-            }
-        }
-    }
-    
-    if (!FromString<double>(temp, val)) {
-        throw Exception("Failed to convert value to double");
-    }
-}
-
-/**
- * Convert a string containing an exponential
- * @param[in] str The string to convert
- * @param[out] val The result
- * @exception TleException on conversion error
- */
-void TLE::extractExponential(const std::string& str, double& val) {
-    std::string temp;
-    
-    for (std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
-        if (i == str.begin()) {
-            if (*i == '-' || *i == '+' || *i == ' ') {
-                if (*i == '-') {
-                    temp += *i;
-                }
-                temp += '0';
-                temp += '.';
-            }
-            else {
-                throw Exception("Invalid sign");
-            }
-        }
-        else if (i == str.end() - 2) {
-            if (*i == '-' || *i == '+') {
-                temp += 'e';
-                temp += *i;
-            }
-            else {
-                throw Exception("Invalid exponential sign");
-            }
-        }
-        else {
-            if (isdigit(*i)) {
-                temp += *i;
-            }
-            else {
-                throw Exception("Invalid digit");
-            }
-        }
-    }
-    
-    if (!FromString<double>(temp, val)) {
-        throw Exception("Failed to convert value to double");
-    }
 }
 
 /**

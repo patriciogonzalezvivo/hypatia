@@ -14,7 +14,7 @@
 
 #include "primitives/Vector.h"
 
-#include "Vsop.h"
+#include "VSOP87.h"
 
 #include <math.h>
 
@@ -30,7 +30,8 @@ const double AstroOps::AU_PER_DAY = (86400. * AstroOps::SPEED_OF_LIGHT / AstroOp
 const double AstroOps::EARTH_FLATTENING = 1.0 / 298.26;
 const double AstroOps::EARTH_POLAR_RADIUS_KM = 6356.76;
 const double AstroOps::EARTH_EQUATORIAL_RADIUS_KM = 6378.135;
-const double AstroOps::EARHT_ROTATION_PER_SIDERAL_DAY = 1.00273790934;
+const double AstroOps::EARTH_ROTATION_PER_SIDERAL_DAY = 1.00273790934;
+const double AstroOps::EARTH_GRAVITATIONAL_CONSTANT = 398600.8;
 
 const double AstroOps::SUN_DIAMETER_KM = 1392000;
 
@@ -70,8 +71,8 @@ double AstroOps::meanSolarLongitude( double t ) {
 double AstroOps::solarLongitude( double jd ) {
     
     double T = TimeOps::toJC(jd);
-    double lon = Vsop::calcLoc( T, SUN, Vsop::ECLIPTIC_LON );
-    double rad = Vsop::calcLoc( T, SUN, Vsop::RADIUS );
+    double lon = VSOP87::calcLoc( T, SUN, VSOP87::ECLIPTIC_LON );
+    double rad = VSOP87::calcLoc( T, SUN, VSOP87::RADIUS );
     
     double dPhiSec;
     nutation( jd, &dPhiSec, 0 );
@@ -612,7 +613,7 @@ Ecliptic AstroOps::toGeocentric( Observer& _obs, const Ecliptic& _heliocentric )
 }
 
 
-Geodetic AstroOps::toGeodetic(const Eci& _eci) {
+Geodetic AstroOps::toGeodetic(const ECI& _eci) {
     const double theta = MathOps::actan(_eci.getPosition(KM).y, _eci.getPosition(KM).x);
     
     double lon = theta - TimeOps::toGreenwichSiderealTime(_eci.getDateTime());
@@ -643,8 +644,8 @@ Geodetic AstroOps::toGeodetic(const Eci& _eci) {
     return Geodetic(lat, lon, alt, RADS);
 }
 
-Eci AstroOps::toEci(const DateTime& _dt, const Geodetic& _geod) {
-    static const double mfactor = MathOps::TAU * (AstroOps::EARHT_ROTATION_PER_SIDERAL_DAY / TimeOps::SECONDS_PER_DAY);
+ECI AstroOps::toECI(const DateTime& _dt, const Geodetic& _geod) {
+    static const double mfactor = MathOps::TAU * (AstroOps::EARTH_ROTATION_PER_SIDERAL_DAY / TimeOps::SECONDS_PER_DAY);
     
     /*
      * Calculate Local Mean Sidereal Time for observers longitude
@@ -668,11 +669,11 @@ Eci AstroOps::toEci(const DateTime& _dt, const Geodetic& _geod) {
     velocity.y = mfactor * position.x;  // km/s
     velocity.z = 0.0;                   // km/s
     
-    return Eci(_dt, position, velocity);
+    return ECI(_dt, position, velocity);
 }
 
-Horizontal AstroOps::toHorizontal(const Observer& _obs, const Eci& _eci) {
-    Eci obs = Eci(_eci.getDateTime(), _obs.getLocation());
+Horizontal AstroOps::toHorizontal(const Observer& _obs, const ECI& _eci) {
+    ECI obs = ECI(_eci.getDateTime(), _obs.getLocation());
     
     /*
      * calculate differences
@@ -690,12 +691,9 @@ Horizontal AstroOps::toHorizontal(const Observer& _obs, const Eci& _eci) {
     double sin_theta = sin(theta);
     double cos_theta = cos(theta);
     
-    double top_s = sin_lat * cos_theta * range.x
-    + sin_lat * sin_theta * range.y - cos_lat * range.z;
-    double top_e = -sin_theta * range.x
-    + cos_theta * range.y;
-    double top_z = cos_lat * cos_theta * range.x
-    + cos_lat * sin_theta * range.y + sin_lat * range.z;
+    double top_s = sin_lat * cos_theta * range.x + sin_lat * sin_theta * range.y - cos_lat * range.z;
+    double top_e = -sin_theta * range.x + cos_theta * range.y;
+    double top_z = cos_lat * cos_theta * range.x + cos_lat * sin_theta * range.y + sin_lat * range.z;
     double az = atan(-top_e / top_s);
     
     if (top_s > 0.0) {

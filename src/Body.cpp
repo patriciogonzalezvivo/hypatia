@@ -14,7 +14,7 @@
 
 #include "Luna.h"
 #include "models/Pluto.h"
-#include "models/Vsop.h"
+#include "models/VSOP87.h"
 
 static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"Earth", (char*)"Mar", (char*)"Jup", (char*)"Sat", (char*)"Ur", (char*)"Nep", (char*)"Pl", (char*)"Moon" };
 
@@ -56,7 +56,7 @@ void Body::compute( Observer& _obs ) {
         }
         else if (SUN == m_bodyId) {
             double hLng, hLat, rad = 0.0;
-            Vsop::calcAllLocs(hLng, hLat, rad, m_jcentury, EARTH);
+            VSOP87::calcAllLocs(hLng, hLat, rad, m_jcentury, EARTH);
             m_heliocentric = Ecliptic(hLng, hLat, rad, RADS, AU);
             
             /*
@@ -70,7 +70,7 @@ void Body::compute( Observer& _obs ) {
         }
         else {
             double hLng, hLat, rad = 0.0;
-            Vsop::calcAllLocs(hLng, hLat, rad, m_jcentury, m_bodyId);
+            VSOP87::calcAllLocs(hLng, hLat, rad, m_jcentury, m_bodyId);
             m_heliocentric = Ecliptic(hLng, hLat, rad, RADS, AU);
             m_geocentric = AstroOps::toGeocentric(_obs, m_heliocentric);
         }

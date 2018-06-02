@@ -13,7 +13,6 @@
 #include "Orbit.h"
 
 const double kAE = 1.0;
-const double kMU = 398600.8;
 const double kXJ2 = 1.082616e-3;
 
 /*
@@ -24,7 +23,7 @@ const double kXJ2 = 1.082616e-3;
  * dundee
  * const double kXKE = 7.43669161331734132e-2;
  */
-const double kXKE = 60.0 / sqrt(AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM / kMU);
+const double kXKE = 60.0 / sqrt(AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM / AstroOps::EARTH_GRAVITATIONAL_CONSTANT);
 const double kCK2 = 0.5 * kXJ2 * kAE * kAE;
 
 Orbit::Orbit() {

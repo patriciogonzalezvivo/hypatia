@@ -299,7 +299,7 @@ double TimeOps::toGreenwichSiderealTime( double jd ) {
  */
 double TimeOps::toGreenwichSiderealTime( const DateTime& _dt )  {
     // t = Julian centuries from 2000 Jan. 1 12h UT1
-    const double t = (toJD(_dt) - 2451545.0) / 36525.0;
+    const double t = (toJD(_dt) - TimeOps::J2000) / TimeOps::DAYS_PER_CENTURY;
     
     // Rotation angle in arcseconds
     double theta =  67310.54841

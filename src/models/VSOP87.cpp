@@ -8,7 +8,7 @@
  *
 \*****************************************************************************/
 
-#include "VSOP.h"
+#include "VSOP87.h"
 #include "MathOps.h"
 
 #include <math.h>
@@ -45,7 +45,7 @@ const unsigned MercuryRadTerms3Rows = 5;
 const unsigned MercuryRadTerms4Rows = 0;
 const unsigned MercuryRadTerms5Rows = 0;
 
-const VsopSet MercuryLonTerms0[MercuryLonTerms0Rows] = {
+const VSOP87Set MercuryLonTerms0[MercuryLonTerms0Rows] = {
     {        440250710.0,              0.0,              0.0  },
     {         40989415.0,       1.48302034,  26087.903141574  },
     {          5046294.0,        4.4778549,  52175.806283148  },
@@ -86,7 +86,7 @@ const VsopSet MercuryLonTerms0[MercuryLonTerms0Rows] = {
     {              106.0,       4.20572116,  19804.827291583  }
 };
 
-const VsopSet MercuryLonTerms1[MercuryLonTerms1Rows] = {
+const VSOP87Set MercuryLonTerms1[MercuryLonTerms1Rows] = {
     {    2608814706223.0,              0.0,              0.0  },
     {          1126008.0,       6.21703971,  26087.903141574  },
     {           303471.0,       3.05565472,  52175.806283148  },
@@ -105,7 +105,7 @@ const VsopSet MercuryLonTerms1[MercuryLonTerms1Rows] = {
     {               27.0,       5.09210139, 234791.128274168  }
 };
 
-const VsopSet MercuryLonTerms2[MercuryLonTerms2Rows] = {
+const VSOP87Set MercuryLonTerms2[MercuryLonTerms2Rows] = {
     {            53050.0,              0.0,              0.0  },
     {            16904.0,       4.69072301,  26087.903141574  },
     {             7397.0,       1.34735625,  52175.806283148  },
@@ -118,7 +118,7 @@ const VsopSet MercuryLonTerms2[MercuryLonTerms2Rows] = {
     {               12.0,      0.791876464, 208703.225132594  }
 };
 
-const VsopSet MercuryLonTerms3[MercuryLonTerms3Rows] = {
+const VSOP87Set MercuryLonTerms3[MercuryLonTerms3Rows] = {
     {              188.0,      0.034668301,  52175.806283148  },
     {              142.0,       3.12505453,  26087.903141574  },
     {               97.0,       3.00378172,  78263.709424723  },
@@ -129,7 +129,7 @@ const VsopSet MercuryLonTerms3[MercuryLonTerms3Rows] = {
     {                3.0,       2.57014364, 182615.321991019  }
 };
 
-const VsopSet MercuryLonTerms4[MercuryLonTerms4Rows] = {
+const VSOP87Set MercuryLonTerms4[MercuryLonTerms4Rows] = {
     {              114.0,       3.14159265,              0.0  },
     {                3.0,       2.02848008,  26087.903141574  },
     {                2.0,       1.41731804,  78263.709424723  },
@@ -138,11 +138,11 @@ const VsopSet MercuryLonTerms4[MercuryLonTerms4Rows] = {
     {                1.0,       1.26591777, 130439.515707871  }
 };
 
-const VsopSet MercuryLonTerms5[MercuryLonTerms5Rows] = {
+const VSOP87Set MercuryLonTerms5[MercuryLonTerms5Rows] = {
     {                1.0,       3.14159265,              0.0  }
 };
 
-const VsopSet MercuryLatTerms0[MercuryLatTerms0Rows] = {
+const VSOP87Set MercuryLatTerms0[MercuryLatTerms0Rows] = {
     {         11737529.0,       1.98357499,  26087.903141574  },
     {          2388077.0,        5.0373896,  52175.806283148  },
     {          1222840.0,       3.14159265,              0.0  },
@@ -159,7 +159,7 @@ const VsopSet MercuryLatTerms0[MercuryLatTerms0Rows] = {
     {              100.0,       5.65684734,  20426.571092422  }
 };
 
-const VsopSet MercuryLatTerms1[MercuryLatTerms1Rows] = {
+const VSOP87Set MercuryLatTerms1[MercuryLatTerms1Rows] = {
     {           429151.0,        3.5016978,  26087.903141574  },
     {           146234.0,       3.14159265,              0.0  },
     {            22675.0,      0.015153669,  52175.806283148  },
@@ -173,7 +173,7 @@ const VsopSet MercuryLatTerms1[MercuryLatTerms1Rows] = {
     {               26.0,       5.97708963, 234791.128274168  }
 };
 
-const VsopSet MercuryLatTerms2[MercuryLatTerms2Rows] = {
+const VSOP87Set MercuryLatTerms2[MercuryLatTerms2Rows] = {
     {            11831.0,       4.79065586,  26087.903141574  },
     {             1914.0,              0.0,              0.0  },
     {             1045.0,        1.2121654,  52175.806283148  },
@@ -185,7 +185,7 @@ const VsopSet MercuryLatTerms2[MercuryLatTerms2Rows] = {
     {                7.0,       1.43404889, 208703.225132594  }
 };
 
-const VsopSet MercuryLatTerms3[MercuryLatTerms3Rows] = {
+const VSOP87Set MercuryLatTerms3[MercuryLatTerms3Rows] = {
     {              235.0,      0.353875246,  26087.903141574  },
     {              161.0,              0.0,              0.0  },
     {               19.0,        4.3627546,  52175.806283148  },
@@ -195,14 +195,14 @@ const VsopSet MercuryLatTerms3[MercuryLatTerms3Rows] = {
     {                2.0,       6.26642412, 156527.418849445  }
 };
 
-const VsopSet MercuryLatTerms4[MercuryLatTerms4Rows] = {
+const VSOP87Set MercuryLatTerms4[MercuryLatTerms4Rows] = {
     {                4.0,       1.74579932,  26087.903141574  },
     {                1.0,       3.14159265,              0.0  }
 };
 
-const VsopSet* MercuryLatTerms5 = 0;
+const VSOP87Set* MercuryLatTerms5 = 0;
 
-const VsopSet MercuryRadTerms0[MercuryRadTerms0Rows] = {
+const VSOP87Set MercuryRadTerms0[MercuryRadTerms0Rows] = {
     {         39528272.0,              0.0,              0.0  },
     {          7834132.0,       6.19233723,  26087.903141574  },
     {           795526.0,        2.9598969,  52175.806283148  },
@@ -218,7 +218,7 @@ const VsopSet MercuryRadTerms0[MercuryRadTerms0Rows] = {
     {              100.0,       3.73435609,  21535.949644515  }
 };
 
-const VsopSet MercuryRadTerms1[MercuryRadTerms1Rows] = {
+const VSOP87Set MercuryRadTerms1[MercuryRadTerms1Rows] = {
     {           217348.0,       4.65617159,  26087.903141574  },
     {            44142.0,       1.42385544,  52175.806283148  },
     {            10094.0,       4.47466326,  78263.709424723  },
@@ -229,7 +229,7 @@ const VsopSet MercuryRadTerms1[MercuryRadTerms1Rows] = {
     {               39.0,       4.11136751, 182615.321991019  }
 };
 
-const VsopSet MercuryRadTerms2[MercuryRadTerms2Rows] = {
+const VSOP87Set MercuryRadTerms2[MercuryRadTerms2Rows] = {
     {             3118.0,        3.0823184,  26087.903141574  },
     {             1245.0,       6.15183317,  52175.806283148  },
     {              425.0,       2.92583353,  78263.709424723  },
@@ -239,7 +239,7 @@ const VsopSet MercuryRadTerms2[MercuryRadTerms2Rows] = {
     {               13.0,       5.80143162, 156527.418849445  }
 };
 
-const VsopSet MercuryRadTerms3[MercuryRadTerms3Rows] = {
+const VSOP87Set MercuryRadTerms3[MercuryRadTerms3Rows] = {
     {               33.0,       1.67971635,  26087.903141574  },
     {               24.0,       4.63403169,  52175.806283148  },
     {               12.0,       1.38983781,  78263.709424723  },
@@ -247,9 +247,9 @@ const VsopSet MercuryRadTerms3[MercuryRadTerms3Rows] = {
     {                2.0,        1.2073388, 130439.515707871  }
 };
 
-const VsopSet* MercuryRadTerms4 = 0;
+const VSOP87Set* MercuryRadTerms4 = 0;
 
-const VsopSet* MercuryRadTerms5 = 0;
+const VSOP87Set* MercuryRadTerms5 = 0;
 
 // Venus Terms
 const unsigned VenusLonTerms0Rows = 24;
@@ -273,7 +273,7 @@ const unsigned VenusRadTerms3Rows = 1;
 const unsigned VenusRadTerms4Rows = 1;
 const unsigned VenusRadTerms5Rows = 0;
 
-const VsopSet VenusLonTerms0[VenusLonTerms0Rows] = {
+const VSOP87Set VenusLonTerms0[VenusLonTerms0Rows] = {
     {        317614667.0,              0.0,              0.0  },
     {          1353968.0,        5.5931332,  10213.285546211  },
     {            89892.0,       5.30650048,  20426.571092422  },
@@ -300,7 +300,7 @@ const VsopSet VenusLonTerms0[VenusLonTerms0Rows] = {
     {              106.0,       1.53721191,    801.820931124  }
 };
 
-const VsopSet VenusLonTerms1[VenusLonTerms1Rows] = {
+const VSOP87Set VenusLonTerms1[VenusLonTerms1Rows] = {
     {    1021352943053.0,              0.0,              0.0  },
     {            95708.0,       2.46424449,  10213.285546211  },
     {            14445.0,      0.516245647,  20426.571092422  },
@@ -315,7 +315,7 @@ const VsopSet VenusLonTerms1[VenusLonTerms1Rows] = {
     {               25.0,       6.10664793,  10404.733812323  }
 };
 
-const VsopSet VenusLonTerms2[VenusLonTerms2Rows] = {
+const VSOP87Set VenusLonTerms2[VenusLonTerms2Rows] = {
     {            54127.0,              0.0,              0.0  },
     {             3891.0,        0.3451436,  10213.285546211  },
     {             1338.0,       2.02011286,  20426.571092422  },
@@ -326,23 +326,23 @@ const VsopSet VenusLonTerms2[VenusLonTerms2Rows] = {
     {                6.0,      0.999267579,    191.448266112  }
 };
 
-const VsopSet VenusLonTerms3[VenusLonTerms3Rows] = {
+const VSOP87Set VenusLonTerms3[VenusLonTerms3Rows] = {
     {              136.0,       4.80389021,  10213.285546211  },
     {               78.0,       3.66876372,  20426.571092422  },
     {               26.0,              0.0,              0.0  }
 };
 
-const VsopSet VenusLonTerms4[VenusLonTerms4Rows] = {
+const VSOP87Set VenusLonTerms4[VenusLonTerms4Rows] = {
     {              114.0,       3.14159265,              0.0  },
     {                3.0,        5.2051417,  20426.571092422  },
     {                2.0,       2.51099592,  10213.285546211  }
 };
 
-const VsopSet VenusLonTerms5[VenusLonTerms5Rows] = {
+const VSOP87Set VenusLonTerms5[VenusLonTerms5Rows] = {
     {                1.0,       3.14159265,              0.0  }
 };
 
-const VsopSet VenusLatTerms0[VenusLatTerms0Rows] = {
+const VSOP87Set VenusLatTerms0[VenusLatTerms0Rows] = {
     {          5923638.0,      0.267027758,  10213.285546211  },
     {            40108.0,       1.14737178,  20426.571092422  },
     {            32815.0,       3.14159265,              0.0  },
@@ -354,34 +354,34 @@ const VsopSet VenusLatTerms0[VenusLatTerms0Rows] = {
     {              108.0,       4.53903678,   22003.91463487  }
 };
 
-const VsopSet VenusLatTerms1[VenusLatTerms1Rows] = {
+const VSOP87Set VenusLatTerms1[VenusLatTerms1Rows] = {
     {           513348.0,       1.80364311,  10213.285546211  },
     {             4380.0,       3.38615712,  20426.571092422  },
     {              199.0,              0.0,              0.0  },
     {              197.0,       2.53001197,  30639.856638633  }
 };
 
-const VsopSet VenusLatTerms2[VenusLatTerms2Rows] = {
+const VSOP87Set VenusLatTerms2[VenusLatTerms2Rows] = {
     {            22378.0,       3.38509144,  10213.285546211  },
     {              282.0,              0.0,              0.0  },
     {              173.0,       5.25563767,  20426.571092422  },
     {               27.0,       3.87040892,  30639.856638633  }
 };
 
-const VsopSet VenusLatTerms3[VenusLatTerms3Rows] = {
+const VSOP87Set VenusLatTerms3[VenusLatTerms3Rows] = {
     {              647.0,       4.99166565,  10213.285546211  },
     {               20.0,       3.14159265,              0.0  },
     {                6.0,       0.77376924,  20426.571092422  },
     {                3.0,       5.44493763,  30639.856638633  }
 };
 
-const VsopSet VenusLatTerms4[VenusLatTerms4Rows] = {
+const VSOP87Set VenusLatTerms4[VenusLatTerms4Rows] = {
     {               14.0,      0.315371902,  10213.285546211  }
 };
 
-const VsopSet* VenusLatTerms5 = 0;
+const VSOP87Set* VenusLatTerms5 = 0;
 
-const VsopSet VenusRadTerms0[VenusRadTerms0Rows] = {
+const VSOP87Set VenusRadTerms0[VenusRadTerms0Rows] = {
     {         72334821.0,              0.0,              0.0  },
     {           489824.0,       4.02151832,  10213.285546211  },
     {             1658.0,       4.90206728,  20426.571092422  },
@@ -396,27 +396,27 @@ const VsopSet VenusRadTerms0[VenusRadTerms0Rows] = {
     {              119.0,       3.01975365,  10404.733812323  }
 };
 
-const VsopSet VenusRadTerms1[VenusRadTerms1Rows] = {
+const VSOP87Set VenusRadTerms1[VenusRadTerms1Rows] = {
     {            34551.0,      0.891987106,  10213.285546211  },
     {              234.0,       1.77224943,  20426.571092422  },
     {              234.0,       3.14159265,              0.0  }
 };
 
-const VsopSet VenusRadTerms2[VenusRadTerms2Rows] = {
+const VSOP87Set VenusRadTerms2[VenusRadTerms2Rows] = {
     {             1407.0,       5.06366395,  10213.285546211  },
     {               16.0,       5.47321688,  20426.571092422  },
     {               13.0,              0.0,              0.0  }
 };
 
-const VsopSet VenusRadTerms3[VenusRadTerms3Rows] = {
+const VSOP87Set VenusRadTerms3[VenusRadTerms3Rows] = {
     {               50.0,       3.22263555,  10213.285546211  }
 };
 
-const VsopSet VenusRadTerms4[VenusRadTerms4Rows] = {
+const VSOP87Set VenusRadTerms4[VenusRadTerms4Rows] = {
     {                1.0,      0.922296978,  10213.285546211  }
 };
 
-const VsopSet* VenusRadTerms5 = 0;
+const VSOP87Set* VenusRadTerms5 = 0;
 
 // Earth Terms
 const unsigned EarthLonTerms0Rows = 64;
@@ -440,7 +440,7 @@ const unsigned EarthRadTerms3Rows = 2;
 const unsigned EarthRadTerms4Rows = 1;
 const unsigned EarthRadTerms5Rows = 0;
 
-const VsopSet EarthLonTerms0[EarthLonTerms0Rows] = {
+const VSOP87Set EarthLonTerms0[EarthLonTerms0Rows] = {
     {        175347046.0,              0.0,              0.0  },
     {          3341656.0,        4.6692568,   6283.075849991  },
     {            34894.0,       4.62610242,  12566.151699983  },
@@ -507,7 +507,7 @@ const VsopSet EarthLonTerms0[EarthLonTerms0Rows] = {
     {               25.0,       3.16470953,   4690.479836359  }
 };
 
-const VsopSet EarthLonTerms1[EarthLonTerms1Rows] = {
+const VSOP87Set EarthLonTerms1[EarthLonTerms1Rows] = {
     {     628331966747.0,              0.0,              0.0  },
     {           206059.0,       2.67823456,   6283.075849991  },
     {             4303.0,        2.6351265,  12566.151699983  },
@@ -544,7 +544,7 @@ const VsopSet EarthLonTerms1[EarthLonTerms1Rows] = {
     {                6.0,       4.66632584,   4690.479836359  }
 };
 
-const VsopSet EarthLonTerms2[EarthLonTerms2Rows] = {
+const VSOP87Set EarthLonTerms2[EarthLonTerms2Rows] = {
     {            52919.0,              0.0,              0.0  },
     {             8720.0,       1.07209665,   6283.075849991  },
     {              309.0,      0.867288188,  12566.151699983  },
@@ -567,7 +567,7 @@ const VsopSet EarthLonTerms2[EarthLonTerms2Rows] = {
     {                2.0,       3.75435331,      0.980321068  }
 };
 
-const VsopSet EarthLonTerms3[EarthLonTerms3Rows] = {
+const VSOP87Set EarthLonTerms3[EarthLonTerms3Rows] = {
     {              289.0,       5.84384199,   6283.075849991  },
     {               35.0,              0.0,              0.0  },
     {               17.0,       5.48766912,  12566.151699983  },
@@ -577,17 +577,17 @@ const VsopSet EarthLonTerms3[EarthLonTerms3Rows] = {
     {                1.0,       5.96925937,    242.728603974  }
 };
 
-const VsopSet EarthLonTerms4[EarthLonTerms4Rows] = {
+const VSOP87Set EarthLonTerms4[EarthLonTerms4Rows] = {
     {              114.0,       3.14159265,              0.0  },
     {                8.0,       4.13446589,   6283.075849991  },
     {                1.0,       3.83803776,  12566.151699983  }
 };
 
-const VsopSet EarthLonTerms5[EarthLonTerms5Rows] = {
+const VSOP87Set EarthLonTerms5[EarthLonTerms5Rows] = {
     {                1.0,       3.14159265,              0.0  }
 };
 
-const VsopSet EarthLatTerms0[EarthLatTerms0Rows] = {
+const VSOP87Set EarthLatTerms0[EarthLatTerms0Rows] = {
     {              280.0,       3.19870156,  84334.661581308  },
     {              102.0,       5.42248619,   5507.553238667  },
     {               80.0,       3.88013204,   5223.693919802  },
@@ -595,20 +595,20 @@ const VsopSet EarthLatTerms0[EarthLatTerms0Rows] = {
     {               32.0,        4.0002637,   1577.343542448  }
 };
 
-const VsopSet EarthLatTerms1[EarthLatTerms1Rows] = {
+const VSOP87Set EarthLatTerms1[EarthLatTerms1Rows] = {
     {                9.0,       3.89729062,   5507.553238667  },
     {                6.0,        1.7303885,   5223.693919802  }
 };
 
-const VsopSet* EarthLatTerms2 = 0;
+const VSOP87Set* EarthLatTerms2 = 0;
 
-const VsopSet* EarthLatTerms3 = 0;
+const VSOP87Set* EarthLatTerms3 = 0;
 
-const VsopSet* EarthLatTerms4 = 0;
+const VSOP87Set* EarthLatTerms4 = 0;
 
-const VsopSet* EarthLatTerms5 = 0;
+const VSOP87Set* EarthLatTerms5 = 0;
 
-const VsopSet EarthRadTerms0[EarthRadTerms0Rows] = {
+const VSOP87Set EarthRadTerms0[EarthRadTerms0Rows] = {
     {        100013989.0,              0.0,              0.0  },
     {          1670700.0,       3.09846351,   6283.075849991  },
     {            13956.0,        3.0552461,  12566.151699983  },
@@ -651,7 +651,7 @@ const VsopSet EarthRadTerms0[EarthRadTerms0Rows] = {
     {               26.0,        4.5889685,  10447.387839604  }
 };
 
-const VsopSet EarthRadTerms1[EarthRadTerms1Rows] = {
+const VSOP87Set EarthRadTerms1[EarthRadTerms1Rows] = {
     {           103019.0,        1.1074897,   6283.075849991  },
     {             1721.0,       1.06442301,  12566.151699983  },
     {              702.0,       3.14159265,              0.0  },
@@ -664,7 +664,7 @@ const VsopSet EarthRadTerms1[EarthRadTerms1Rows] = {
     {                9.0,      0.271461506,   5486.777843175  }
 };
 
-const VsopSet EarthRadTerms2[EarthRadTerms2Rows] = {
+const VSOP87Set EarthRadTerms2[EarthRadTerms2Rows] = {
     {             4359.0,       5.78455134,   6283.075849991  },
     {              124.0,       5.57934722,  12566.151699983  },
     {               12.0,       3.14159265,              0.0  },
@@ -673,16 +673,16 @@ const VsopSet EarthRadTerms2[EarthRadTerms2Rows] = {
     {                3.0,       5.47027913,  18849.227549974  }
 };
 
-const VsopSet EarthRadTerms3[EarthRadTerms3Rows] = {
+const VSOP87Set EarthRadTerms3[EarthRadTerms3Rows] = {
     {              145.0,       4.27319435,   6283.075849991  },
     {                7.0,       3.91697609,  12566.151699983  }
 };
 
-const VsopSet EarthRadTerms4[EarthRadTerms4Rows] = {
+const VSOP87Set EarthRadTerms4[EarthRadTerms4Rows] = {
     {                4.0,       2.56384387,   6283.075849991  }
 };
 
-const VsopSet* EarthRadTerms5 = 0;
+const VSOP87Set* EarthRadTerms5 = 0;
 
 // Mars Terms
 const unsigned MarsLonTerms0Rows = 69;
@@ -706,7 +706,7 @@ const unsigned MarsRadTerms3Rows = 6;
 const unsigned MarsRadTerms4Rows = 4;
 const unsigned MarsRadTerms5Rows = 0;
 
-const VsopSet MarsLonTerms0[MarsLonTerms0Rows] = {
+const VSOP87Set MarsLonTerms0[MarsLonTerms0Rows] = {
     {        620347712.0,              0.0,              0.0  },
     {         18656368.0,         5.050371,     3340.6124267  },
     {          1108217.0,       5.40099837,     6681.2248534  },
@@ -778,7 +778,7 @@ const VsopSet MarsLonTerms0[MarsLonTerms0Rows] = {
     {              100.0,       3.24343741,  11773.376811515  }
 };
 
-const VsopSet MarsLonTerms1[MarsLonTerms1Rows] = {
+const VSOP87Set MarsLonTerms1[MarsLonTerms1Rows] = {
     {     334085627474.0,              0.0,              0.0  },
     {          1458227.0,       3.60426054,     3340.6124267  },
     {           164901.0,       3.92631251,     6681.2248534  },
@@ -827,7 +827,7 @@ const VsopSet MarsLonTerms1[MarsLonTerms1Rows] = {
     {               27.0,       5.11271748,   2700.715140386  }
 };
 
-const VsopSet MarsLonTerms2[MarsLonTerms2Rows] = {
+const VSOP87Set MarsLonTerms2[MarsLonTerms2Rows] = {
     {            58016.0,       2.04979463,     3340.6124267  },
     {            54188.0,              0.0,              0.0  },
     {            13908.0,        2.4574236,     6681.2248534  },
@@ -863,7 +863,7 @@ const VsopSet MarsLonTerms2[MarsLonTerms2Rows] = {
     {                6.0,       2.34104794,   3097.883822726  }
 };
 
-const VsopSet MarsLonTerms3[MarsLonTerms3Rows] = {
+const VSOP87Set MarsLonTerms3[MarsLonTerms3Rows] = {
     {             1482.0,      0.444346949,     3340.6124267  },
     {              662.0,      0.884691787,     6681.2248534  },
     {              188.0,       1.28799983,  10021.837280099  },
@@ -878,7 +878,7 @@ const VsopSet MarsLonTerms3[MarsLonTerms3Rows] = {
     {                3.0,      0.650447143,    553.569402842  }
 };
 
-const VsopSet MarsLonTerms4[MarsLonTerms4Rows] = {
+const VSOP87Set MarsLonTerms4[MarsLonTerms4Rows] = {
     {              114.0,       3.14159265,              0.0  },
     {               29.0,       5.63662412,     6681.2248534  },
     {               24.0,       5.13868482,     3340.6124267  },
@@ -889,12 +889,12 @@ const VsopSet MarsLonTerms4[MarsLonTerms4Rows] = {
     {                1.0,       1.31734532,    242.728603974  }
 };
 
-const VsopSet MarsLonTerms5[MarsLonTerms5Rows] = {
+const VSOP87Set MarsLonTerms5[MarsLonTerms5Rows] = {
     {                1.0,       3.14159265,              0.0  },
     {                1.0,       4.04089997,     6681.2248534  }
 };
 
-const VsopSet MarsLatTerms0[MarsLatTerms0Rows] = {
+const VSOP87Set MarsLatTerms0[MarsLatTerms0Rows] = {
     {          3197135.0,       3.76832042,     3340.6124267  },
     {           298033.0,       4.10616996,     6681.2248534  },
     {           289105.0,              0.0,              0.0  },
@@ -913,7 +913,7 @@ const VsopSet MarsLatTerms0[MarsLatTerms0Rows] = {
     {              139.0,       2.41796344,    8962.45534991  }
 };
 
-const VsopSet MarsLatTerms1[MarsLatTerms1Rows] = {
+const VSOP87Set MarsLatTerms1[MarsLatTerms1Rows] = {
     {           350069.0,       5.36847836,     3340.6124267  },
     {            14116.0,       3.14159265,              0.0  },
     {             9671.0,       5.47877786,     6681.2248534  },
@@ -925,7 +925,7 @@ const VsopSet MarsLatTerms1[MarsLatTerms1Rows] = {
     {               26.0,       2.48293558,   2281.230496511  }
 };
 
-const VsopSet MarsLatTerms2[MarsLatTerms2Rows] = {
+const VSOP87Set MarsLatTerms2[MarsLatTerms2Rows] = {
     {            16727.0,      0.602213924,     3340.6124267  },
     {             4987.0,       3.14159265,              0.0  },
     {              302.0,       5.55871276,     6681.2248534  },
@@ -935,22 +935,22 @@ const VsopSet MarsLatTerms2[MarsLatTerms2Rows] = {
     {                8.0,       2.24892867,  16703.062133499  }
 };
 
-const VsopSet MarsLatTerms3[MarsLatTerms3Rows] = {
+const VSOP87Set MarsLatTerms3[MarsLatTerms3Rows] = {
     {              607.0,       1.98050634,     3340.6124267  },
     {               43.0,              0.0,              0.0  },
     {               14.0,       1.79588229,     6681.2248534  },
     {                3.0,       3.45377082,  10021.837280099  }
 };
 
-const VsopSet MarsLatTerms4[MarsLatTerms4Rows] = {
+const VSOP87Set MarsLatTerms4[MarsLatTerms4Rows] = {
     {               13.0,              0.0,              0.0  },
     {               11.0,       3.45724353,     3340.6124267  },
     {                1.0,      0.504458053,     6681.2248534  }
 };
 
-const VsopSet* MarsLatTerms5 = 0;
+const VSOP87Set* MarsLatTerms5 = 0;
 
-const VsopSet MarsRadTerms0[MarsRadTerms0Rows] = {
+const VSOP87Set MarsRadTerms0[MarsRadTerms0Rows] = {
     {        153033488.0,              0.0,              0.0  },
     {         14184953.0,       3.47971283,     3340.6124267  },
     {           660776.0,       3.81783442,     6681.2248534  },
@@ -998,7 +998,7 @@ const VsopSet MarsRadTerms0[MarsRadTerms0Rows] = {
     {              164.0,       3.79889068,   4136.910433516  }
 };
 
-const VsopSet MarsRadTerms1[MarsRadTerms1Rows] = {
+const VSOP87Set MarsRadTerms1[MarsRadTerms1Rows] = {
     {          1107433.0,       2.03250525,     3340.6124267  },
     {           103176.0,       2.37071846,     6681.2248534  },
     {            12877.0,              0.0,              0.0  },
@@ -1028,7 +1028,7 @@ const VsopSet MarsRadTerms1[MarsRadTerms1Rows] = {
     {               39.0,       2.31900091,   4136.910433516  }
 };
 
-const VsopSet MarsRadTerms2[MarsRadTerms2Rows] = {
+const VSOP87Set MarsRadTerms2[MarsRadTerms2Rows] = {
     {            44242.0,      0.479306039,     3340.6124267  },
     {             8138.0,      0.869983981,     6681.2248534  },
     {             1275.0,       1.22594051,  10021.837280099  },
@@ -1042,7 +1042,7 @@ const VsopSet MarsRadTerms2[MarsRadTerms2Rows] = {
     {               10.0,      0.418705772,    796.298006816  }
 };
 
-const VsopSet MarsRadTerms3[MarsRadTerms3Rows] = {
+const VSOP87Set MarsRadTerms3[MarsRadTerms3Rows] = {
     {             1113.0,        5.1498735,     3340.6124267  },
     {              424.0,       5.61343767,     6681.2248534  },
     {              100.0,       5.99726827,  10021.837280099  },
@@ -1051,14 +1051,14 @@ const VsopSet MarsRadTerms3[MarsRadTerms3Rows] = {
     {                3.0,      0.429519076,  16703.062133499  }
 };
 
-const VsopSet MarsRadTerms4[MarsRadTerms4Rows] = {
+const VSOP87Set MarsRadTerms4[MarsRadTerms4Rows] = {
     {               20.0,       3.58211651,     3340.6124267  },
     {               16.0,       4.05116077,     6681.2248534  },
     {                6.0,       4.46383962,  10021.837280099  },
     {                2.0,       4.84374322,  13362.449706799  }
 };
 
-const VsopSet* MarsRadTerms5 = 0;
+const VSOP87Set* MarsRadTerms5 = 0;
 
 // Jupiter Terms
 const unsigned JupiterLonTerms0Rows = 64;
@@ -1082,7 +1082,7 @@ const unsigned JupiterRadTerms3Rows = 28;
 const unsigned JupiterRadTerms4Rows = 15;
 const unsigned JupiterRadTerms5Rows = 7;
 
-const VsopSet JupiterLonTerms0[JupiterLonTerms0Rows] = {
+const VSOP87Set JupiterLonTerms0[JupiterLonTerms0Rows] = {
     {         59954691.0,              0.0,              0.0  },
     {          9695899.0,       5.06191793,    529.690965095  },
     {           573610.0,       1.44406206,         7.113547  },
@@ -1149,7 +1149,7 @@ const VsopSet JupiterLonTerms0[JupiterLonTerms0Rows] = {
     {              106.0,       4.55439798,    526.509571357  }
 };
 
-const VsopSet JupiterLonTerms1[JupiterLonTerms1Rows] = {
+const VSOP87Set JupiterLonTerms1[JupiterLonTerms1Rows] = {
     {      52993480757.0,              0.0,              0.0  },
     {           489741.0,        4.2206669,    529.690965095  },
     {           228919.0,       6.02647464,         7.113547  },
@@ -1213,7 +1213,7 @@ const VsopSet JupiterLonTerms1[JupiterLonTerms1Rows] = {
     {               25.0,       1.60723063,     831.85574075  }
 };
 
-const VsopSet JupiterLonTerms2[JupiterLonTerms2Rows] = {
+const VSOP87Set JupiterLonTerms2[JupiterLonTerms2Rows] = {
     {            47234.0,       4.32148324,         7.113547  },
     {            38966.0,              0.0,              0.0  },
     {            30629.0,        2.9302144,    529.690965095  },
@@ -1273,7 +1273,7 @@ const VsopSet JupiterLonTerms2[JupiterLonTerms2Rows] = {
     {                6.0,      0.499398635,     949.17560897  }
 };
 
-const VsopSet JupiterLonTerms3[JupiterLonTerms3Rows] = {
+const VSOP87Set JupiterLonTerms3[JupiterLonTerms3Rows] = {
     {             6502.0,       2.59862881,         7.113547  },
     {             1357.0,       1.34635886,    529.690965095  },
     {              471.0,       2.47503978,     14.227094002  },
@@ -1315,7 +1315,7 @@ const VsopSet JupiterLonTerms3[JupiterLonTerms3Rows] = {
     {                2.0,       2.35581871,    942.062061969  }
 };
 
-const VsopSet JupiterLonTerms4[JupiterLonTerms4Rows] = {
+const VSOP87Set JupiterLonTerms4[JupiterLonTerms4Rows] = {
     {              669.0,      0.852824211,         7.113547  },
     {              114.0,       3.14159265,              0.0  },
     {              100.0,      0.742589478,     14.227094002  },
@@ -1337,7 +1337,7 @@ const VsopSet JupiterLonTerms4[JupiterLonTerms4Rows] = {
     {                1.0,       1.28604571,   1589.072895284  }
 };
 
-const VsopSet JupiterLonTerms5[JupiterLonTerms5Rows] = {
+const VSOP87Set JupiterLonTerms5[JupiterLonTerms5Rows] = {
     {               50.0,       5.25658966,         7.113547  },
     {               16.0,       5.25126838,     14.227094002  },
     {                4.0,      0.014618693,    536.804512095  },
@@ -1345,7 +1345,7 @@ const VsopSet JupiterLonTerms5[JupiterLonTerms5Rows] = {
     {                1.0,       3.14159265,              0.0  }
 };
 
-const VsopSet JupiterLatTerms0[JupiterLatTerms0Rows] = {
+const VSOP87Set JupiterLatTerms0[JupiterLatTerms0Rows] = {
     {          2268616.0,       3.55852607,    529.690965095  },
     {           110090.0,              0.0,              0.0  },
     {           109972.0,       3.90809347,   1059.381930189  },
@@ -1374,7 +1374,7 @@ const VsopSet JupiterLatTerms0[JupiterLatTerms0Rows] = {
     {              102.0,       3.15293785,   1581.959348283  }
 };
 
-const VsopSet JupiterLatTerms1[JupiterLatTerms1Rows] = {
+const VSOP87Set JupiterLatTerms1[JupiterLatTerms1Rows] = {
     {           177352.0,       5.70166488,    529.690965095  },
     {             3230.0,       5.77941619,   1059.381930189  },
     {             3081.0,       5.47464297,    522.577418094  },
@@ -1399,7 +1399,7 @@ const VsopSet JupiterLatTerms1[JupiterLatTerms1Rows] = {
     {               32.0,       4.92452715,   1581.959348283  }
 };
 
-const VsopSet JupiterLatTerms2[JupiterLatTerms2Rows] = {
+const VSOP87Set JupiterLatTerms2[JupiterLatTerms2Rows] = {
     {             8094.0,       1.46322844,    529.690965095  },
     {              813.0,       3.14159265,              0.0  },
     {              742.0,       0.95691639,    522.577418094  },
@@ -1416,7 +1416,7 @@ const VsopSet JupiterLatTerms2[JupiterLatTerms2Rows] = {
     {                6.0,       6.21089108,   1045.154836188  }
 };
 
-const VsopSet JupiterLatTerms3[JupiterLatTerms3Rows] = {
+const VSOP87Set JupiterLatTerms3[JupiterLatTerms3Rows] = {
     {              252.0,       3.38087923,    529.690965095  },
     {              122.0,       2.73311837,    522.577418094  },
     {               49.0,       1.03689997,    536.804512095  },
@@ -1428,7 +1428,7 @@ const VsopSet JupiterLatTerms3[JupiterLatTerms3Rows] = {
     {                3.0,       3.14159265,              0.0  }
 };
 
-const VsopSet JupiterLatTerms4[JupiterLatTerms4Rows] = {
+const VSOP87Set JupiterLatTerms4[JupiterLatTerms4Rows] = {
     {               15.0,          4.52957,    522.577418094  },
     {                5.0,       4.47427159,    529.690965095  },
     {                4.0,       5.43908581,    536.804512095  },
@@ -1437,11 +1437,11 @@ const VsopSet JupiterLatTerms4[JupiterLatTerms4Rows] = {
     {                1.0,       4.20117612,   1052.268383188  }
 };
 
-const VsopSet JupiterLatTerms5[JupiterLatTerms5Rows] = {
+const VSOP87Set JupiterLatTerms5[JupiterLatTerms5Rows] = {
     {                1.0,      0.091985541,    522.577418094  }
 };
 
-const VsopSet JupiterRadTerms0[JupiterRadTerms0Rows] = {
+const VSOP87Set JupiterRadTerms0[JupiterRadTerms0Rows] = {
     {        520887429.0,              0.0,              0.0  },
     {         25209327.0,        3.4910864,    529.690965095  },
     {           610600.0,       3.84115366,   1059.381930189  },
@@ -1490,7 +1490,7 @@ const VsopSet JupiterRadTerms0[JupiterRadTerms0Rows] = {
     {              542.0,      0.283602664,    525.758811832  }
 };
 
-const VsopSet JupiterRadTerms1[JupiterRadTerms1Rows] = {
+const VSOP87Set JupiterRadTerms1[JupiterRadTerms1Rows] = {
     {          1271802.0,       2.64937511,    529.690965095  },
     {            61662.0,       3.00076251,   1059.381930189  },
     {            53444.0,       3.89717644,    522.577418094  },
@@ -1536,7 +1536,7 @@ const VsopSet JupiterRadTerms1[JupiterRadTerms1Rows] = {
     {              132.0,       4.51187951,    525.758811832  }
 };
 
-const VsopSet JupiterRadTerms2[JupiterRadTerms2Rows] = {
+const VSOP87Set JupiterRadTerms2[JupiterRadTerms2Rows] = {
     {            79645.0,       1.35865897,    529.690965095  },
     {             8252.0,       5.77773935,    522.577418094  },
     {             7030.0,       3.27476966,    536.804512095  },
@@ -1575,7 +1575,7 @@ const VsopSet JupiterRadTerms2[JupiterRadTerms2Rows] = {
     {               40.0,       5.94566506,     95.979227218  }
 };
 
-const VsopSet JupiterRadTerms3[JupiterRadTerms3Rows] = {
+const VSOP87Set JupiterRadTerms3[JupiterRadTerms3Rows] = {
     {             3519.0,       6.05800634,    529.690965095  },
     {             1073.0,       1.67321346,    536.804512095  },
     {              916.0,       1.41329676,    522.577418094  },
@@ -1606,7 +1606,7 @@ const VsopSet JupiterRadTerms3[JupiterRadTerms3Rows] = {
     {                9.0,       3.45126812,     838.96928775  }
 };
 
-const VsopSet JupiterRadTerms4[JupiterRadTerms4Rows] = {
+const VSOP87Set JupiterRadTerms4[JupiterRadTerms4Rows] = {
     {              129.0,      0.084193096,    536.804512095  },
     {              113.0,       4.24858856,    529.690965095  },
     {               83.0,       3.29754909,    522.577418094  },
@@ -1624,7 +1624,7 @@ const VsopSet JupiterRadTerms4[JupiterRadTerms4Rows] = {
     {                3.0,       2.89802035,    426.598190876  }
 };
 
-const VsopSet JupiterRadTerms5[JupiterRadTerms5Rows] = {
+const VSOP87Set JupiterRadTerms5[JupiterRadTerms5Rows] = {
     {               11.0,         4.752494,    536.804512095  },
     {                4.0,       5.91516229,    522.577418094  },
     {                2.0,       5.56781556,    515.463871093  },
@@ -1656,7 +1656,7 @@ const unsigned SaturnRadTerms3Rows = 28;
 const unsigned SaturnRadTerms4Rows = 23;
 const unsigned SaturnRadTerms5Rows = 18;
 
-const VsopSet SaturnLonTerms0[SaturnLonTerms0Rows] = {
+const VSOP87Set SaturnLonTerms0[SaturnLonTerms0Rows] = {
     {         87401354.0,              0.0,              0.0  },
     {         11107660.0,        3.9620509,    213.299095438  },
     {          1414151.0,       4.58581516,         7.113547  },
@@ -1749,7 +1749,7 @@ const VsopSet SaturnLonTerms0[SaturnLonTerms0Rows] = {
     {              101.0,       4.96513667,    269.921446741  }
 };
 
-const VsopSet SaturnLonTerms1[SaturnLonTerms1Rows] = {
+const VSOP87Set SaturnLonTerms1[SaturnLonTerms1Rows] = {
     {      21354295596.0,              0.0,              0.0  },
     {          1296855.0,       1.82820545,    213.299095438  },
     {           564348.0,       2.88500136,         7.113547  },
@@ -1831,7 +1831,7 @@ const VsopSet SaturnLonTerms1[SaturnLonTerms1Rows] = {
     {               26.0,        4.5121417,    340.770892045  }
 };
 
-const VsopSet SaturnLonTerms2[SaturnLonTerms2Rows] = {
+const VSOP87Set SaturnLonTerms2[SaturnLonTerms2Rows] = {
     {           116441.0,       1.17987851,         7.113547  },
     {            91921.0,      0.074252611,    213.299095438  },
     {            90592.0,              0.0,              0.0  },
@@ -1897,7 +1897,7 @@ const VsopSet SaturnLonTerms2[SaturnLonTerms2Rows] = {
     {                6.0,       5.93416925,    405.257549874  }
 };
 
-const VsopSet SaturnLonTerms3[SaturnLonTerms3Rows] = {
+const VSOP87Set SaturnLonTerms3[SaturnLonTerms3Rows] = {
     {            16039.0,       5.73945377,         7.113547  },
     {             4250.0,       4.58539676,    213.299095438  },
     {             1907.0,        4.7608205,    220.412642439  },
@@ -1948,7 +1948,7 @@ const VsopSet SaturnLonTerms3[SaturnLonTerms3Rows] = {
     {                2.0,        3.0669357,    654.124380316  }
 };
 
-const VsopSet SaturnLonTerms4[SaturnLonTerms4Rows] = {
+const VSOP87Set SaturnLonTerms4[SaturnLonTerms4Rows] = {
     {             1662.0,       3.99826249,         7.113547  },
     {              257.0,       2.98436499,    220.412642439  },
     {              236.0,       3.90241428,     14.227094002  },
@@ -1978,7 +1978,7 @@ const VsopSet SaturnLonTerms4[SaturnLonTerms4Rows] = {
     {                1.0,       1.54685247,    191.958454436  }
 };
 
-const VsopSet SaturnLonTerms5[SaturnLonTerms5Rows] = {
+const VSOP87Set SaturnLonTerms5[SaturnLonTerms5Rows] = {
     {              124.0,       2.25923346,         7.113547  },
     {               34.0,       2.16250653,     14.227094002  },
     {               28.0,        1.1986815,    220.412642439  },
@@ -1993,7 +1993,7 @@ const VsopSet SaturnLonTerms5[SaturnLonTerms5Rows] = {
     {                1.0,       3.14159265,              0.0  }
 };
 
-const VsopSet SaturnLatTerms0[SaturnLatTerms0Rows] = {
+const VSOP87Set SaturnLatTerms0[SaturnLatTerms0Rows] = {
     {          4330678.0,       3.60284428,    213.299095438  },
     {           240348.0,       2.85238489,    426.598190876  },
     {            84746.0,              0.0,              0.0  },
@@ -2030,7 +2030,7 @@ const VsopSet SaturnLatTerms0[SaturnLatTerms0Rows] = {
     {              114.0,      0.962614421,      210.1177017  }
 };
 
-const VsopSet SaturnLatTerms1[SaturnLatTerms1Rows] = {
+const VSOP87Set SaturnLatTerms1[SaturnLatTerms1Rows] = {
     {           397555.0,       5.33289993,    213.299095438  },
     {            49479.0,       3.14159265,              0.0  },
     {            18572.0,       6.09919206,    426.598190876  },
@@ -2065,7 +2065,7 @@ const VsopSet SaturnLatTerms1[SaturnLatTerms1Rows] = {
     {               27.0,       4.44228739,     11.045700264  }
 };
 
-const VsopSet SaturnLatTerms2[SaturnLatTerms2Rows] = {
+const VSOP87Set SaturnLatTerms2[SaturnLatTerms2Rows] = {
     {            20630.0,      0.504824228,    213.299095438  },
     {             3720.0,       3.99833476,    206.185548437  },
     {             1627.0,        6.1818994,    220.412642439  },
@@ -2097,7 +2097,7 @@ const VsopSet SaturnLatTerms2[SaturnLatTerms2Rows] = {
     {                6.0,       3.61231887,    860.309928753  }
 };
 
-const VsopSet SaturnLatTerms3[SaturnLatTerms3Rows] = {
+const VSOP87Set SaturnLatTerms3[SaturnLatTerms3Rows] = {
     {              666.0,        1.9900634,    213.299095438  },
     {              632.0,       5.69778317,    206.185548437  },
     {              398.0,              0.0,              0.0  },
@@ -2121,7 +2121,7 @@ const VsopSet SaturnLatTerms3[SaturnLatTerms3Rows] = {
     {                2.0,       3.71982275,    216.480489176  }
 };
 
-const VsopSet SaturnLatTerms4[SaturnLatTerms4Rows] = {
+const VSOP87Set SaturnLatTerms4[SaturnLatTerms4Rows] = {
     {               80.0,       1.11918415,    206.185548437  },
     {               32.0,       3.12218745,    213.299095438  },
     {               17.0,         2.480732,    220.412642439  },
@@ -2136,12 +2136,12 @@ const VsopSet SaturnLatTerms4[SaturnLatTerms4Rows] = {
     {                1.0,       6.18092274,    639.897286314  }
 };
 
-const VsopSet SaturnLatTerms5[SaturnLatTerms5Rows] = {
+const VSOP87Set SaturnLatTerms5[SaturnLatTerms5Rows] = {
     {                8.0,       2.81927559,    206.185548437  },
     {                1.0,      0.511872103,    220.412642439  }
 };
 
-const VsopSet SaturnRadTerms0[SaturnRadTerms0Rows] = {
+const VSOP87Set SaturnRadTerms0[SaturnRadTerms0Rows] = {
     {        955758136.0,              0.0,              0.0  },
     {         52921382.0,        2.3922622,    213.299095438  },
     {          1873680.0,       5.23549605,    206.185548437  },
@@ -2188,7 +2188,7 @@ const VsopSet SaturnRadTerms0[SaturnRadTerms0Rows] = {
     {             2024.0,       5.05411271,     11.045700264  }
 };
 
-const VsopSet SaturnRadTerms1[SaturnRadTerms1Rows] = {
+const VSOP87Set SaturnRadTerms1[SaturnRadTerms1Rows] = {
     {          6182981.0,       0.25843515,    213.299095438  },
     {           506578.0,      0.711146509,    206.185548437  },
     {           341394.0,       5.79635774,    426.598190876  },
@@ -2229,7 +2229,7 @@ const VsopSet SaturnRadTerms1[SaturnRadTerms1Rows] = {
     {              503.0,        2.1295882,       3.93215326  }
 };
 
-const VsopSet SaturnRadTerms2[SaturnRadTerms2Rows] = {
+const VSOP87Set SaturnRadTerms2[SaturnRadTerms2Rows] = {
     {           436902.0,       4.78671673,    213.299095438  },
     {            71923.0,       2.50069995,    206.185548437  },
     {            49767.0,       4.97168151,    220.412642439  },
@@ -2264,7 +2264,7 @@ const VsopSet SaturnRadTerms2[SaturnRadTerms2Rows] = {
     {              132.0,       5.93293969,    309.278322656  }
 };
 
-const VsopSet SaturnRadTerms3[SaturnRadTerms3Rows] = {
+const VSOP87Set SaturnRadTerms3[SaturnRadTerms3Rows] = {
     {            20315.0,       3.02186626,    213.299095438  },
     {             8924.0,       3.19144206,    220.412642439  },
     {             6909.0,       4.35174889,    206.185548437  },
@@ -2295,7 +2295,7 @@ const VsopSet SaturnRadTerms3[SaturnRadTerms3Rows] = {
     {               32.0,       4.01146349,     21.340641002  }
 };
 
-const VsopSet SaturnRadTerms4[SaturnRadTerms4Rows] = {
+const VSOP87Set SaturnRadTerms4[SaturnRadTerms4Rows] = {
     {             1202.0,       1.41499446,    220.412642439  },
     {              708.0,        1.1615357,    213.299095438  },
     {              516.0,       6.23973568,    206.185548437  },
@@ -2321,7 +2321,7 @@ const VsopSet SaturnRadTerms4[SaturnRadTerms4Rows] = {
     {                8.0,       1.27239489,     234.63973644  }
 };
 
-const VsopSet SaturnRadTerms5[SaturnRadTerms5Rows] = {
+const VSOP87Set SaturnRadTerms5[SaturnRadTerms5Rows] = {
     {              129.0,       5.91282565,    220.412642439  },
     {               32.0,      0.692562286,         7.113547  },
     {               27.0,       5.91428529,     227.52618944  },
@@ -2364,7 +2364,7 @@ const unsigned UranusRadTerms3Rows = 10;
 const unsigned UranusRadTerms4Rows = 2;
 const unsigned UranusRadTerms5Rows = 0;
 
-const VsopSet UranusLonTerms0[UranusLonTerms0Rows] = {
+const VSOP87Set UranusLonTerms0[UranusLonTerms0Rows] = {
     {        548129294.0,              0.0,              0.0  },
     {          9260408.0,      0.891064215,     74.781598567  },
     {          1504248.0,       3.62719262,       1.48447271  },
@@ -2458,7 +2458,7 @@ const VsopSet UranusLonTerms0[UranusLonTerms0Rows] = {
     {              103.0,      0.680953013,     14.977853527  }
 };
 
-const VsopSet UranusLonTerms1[UranusLonTerms1Rows] = {
+const VSOP87Set UranusLonTerms1[UranusLonTerms1Rows] = {
     {       7502543122.0,              0.0,              0.0  },
     {           154458.0,       5.24201658,     74.781598567  },
     {            24456.0,       1.71255705,       1.48447271  },
@@ -2518,7 +2518,7 @@ const VsopSet UranusLonTerms1[UranusLonTerms1Rows] = {
     {               25.0,       5.73584679,     380.12776796  }
 };
 
-const VsopSet UranusLonTerms2[UranusLonTerms2Rows] = {
+const VSOP87Set UranusLonTerms2[UranusLonTerms2Rows] = {
     {            53033.0,              0.0,              0.0  },
     {             2358.0,       2.26014662,     74.781598567  },
     {              769.0,       4.52561042,     11.045700264  },
@@ -2556,7 +2556,7 @@ const VsopSet UranusLonTerms2[UranusLonTerms2Rows] = {
     {                6.0,       5.72500087,    462.022913528  }
 };
 
-const VsopSet UranusLonTerms3[UranusLonTerms3Rows] = {
+const VSOP87Set UranusLonTerms3[UranusLonTerms3Rows] = {
     {              121.0,      0.024187899,     74.781598567  },
     {               68.0,       4.12084268,       3.93215326  },
     {               53.0,       2.38964061,     11.045700264  },
@@ -2577,16 +2577,16 @@ const VsopSet UranusLonTerms3[UranusLonTerms3Rows] = {
     {                2.0,       5.65647821,       9.56122756  }
 };
 
-const VsopSet UranusLonTerms4[UranusLonTerms4Rows] = {
+const VSOP87Set UranusLonTerms4[UranusLonTerms4Rows] = {
     {              114.0,       3.14159265,              0.0  },
     {                6.0,       4.57882424,     74.781598567  },
     {                3.0,      0.346230032,     11.045700264  },
     {                1.0,       3.42199122,     56.622351303  }
 };
 
-const VsopSet* UranusLonTerms5 = 0;
+const VSOP87Set* UranusLonTerms5 = 0;
 
-const VsopSet UranusLatTerms0[UranusLatTerms0Rows] = {
+const VSOP87Set UranusLatTerms0[UranusLatTerms0Rows] = {
     {          1346278.0,       2.61877811,     74.781598567  },
     {            62341.0,       5.08111176,    149.563197135  },
     {            61601.0,       3.14159265,              0.0  },
@@ -2617,7 +2617,7 @@ const VsopSet UranusLatTerms0[UranusLatTerms0Rows] = {
     {              102.0,       2.61876256,      78.71375183  }
 };
 
-const VsopSet UranusLatTerms1[UranusLatTerms1Rows] = {
+const VSOP87Set UranusLatTerms1[UranusLatTerms1Rows] = {
     {           206366.0,       4.12394311,     74.781598567  },
     {             8563.0,      0.338199862,    149.563197135  },
     {             1726.0,        2.1219316,     73.297125859  },
@@ -2640,7 +2640,7 @@ const VsopSet UranusLatTerms1[UranusLatTerms1Rows] = {
     {               26.0,      0.416206284,     380.12776796  }
 };
 
-const VsopSet UranusLatTerms2[UranusLatTerms2Rows] = {
+const VSOP87Set UranusLatTerms2[UranusLatTerms2Rows] = {
     {             9212.0,       5.80044306,     74.781598567  },
     {              557.0,              0.0,              0.0  },
     {              286.0,       2.17729776,    149.563197135  },
@@ -2654,20 +2654,20 @@ const VsopSet UranusLatTerms2[UranusLatTerms2Rows] = {
     {                8.0,       6.26655615,      78.71375183  }
 };
 
-const VsopSet UranusLatTerms3[UranusLatTerms3Rows] = {
+const VSOP87Set UranusLatTerms3[UranusLatTerms3Rows] = {
     {              268.0,       1.25097888,     74.781598567  },
     {               11.0,       3.14159265,              0.0  },
     {                6.0,       4.00663614,    149.563197135  },
     {                3.0,       5.77804695,     73.297125859  }
 };
 
-const VsopSet UranusLatTerms4[UranusLatTerms4Rows] = {
+const VSOP87Set UranusLatTerms4[UranusLatTerms4Rows] = {
     {                6.0,       2.85499529,     74.781598567  }
 };
 
-const VsopSet* UranusLatTerms5 = 0;
+const VSOP87Set* UranusLatTerms5 = 0;
 
-const VsopSet UranusRadTerms0[UranusRadTerms0Rows] = {
+const VSOP87Set UranusRadTerms0[UranusRadTerms0Rows] = {
     {       1921264848.0,              0.0,              0.0  },
     {         88784984.0,       5.60377527,     74.781598567  },
     {          3440836.0,       0.32836099,     73.297125859  },
@@ -2729,7 +2729,7 @@ const VsopSet UranusRadTerms0[UranusRadTerms0Rows] = {
     {             2183.0,       2.94040432,    305.346169393  }
 };
 
-const VsopSet UranusRadTerms1[UranusRadTerms1Rows] = {
+const VSOP87Set UranusRadTerms1[UranusRadTerms1Rows] = {
     {          1479896.0,       3.67205705,     74.781598567  },
     {            71212.0,       6.22601007,     63.735898303  },
     {            68627.0,       6.13411265,    149.563197135  },
@@ -2767,7 +2767,7 @@ const VsopSet UranusRadTerms1[UranusRadTerms1Rows] = {
     {              528.0,       5.15136007,       2.96894542  }
 };
 
-const VsopSet UranusRadTerms2[UranusRadTerms2Rows] = {
+const VSOP87Set UranusRadTerms2[UranusRadTerms2Rows] = {
     {            22440.0,      0.699531188,     74.781598567  },
     {             4727.0,       1.69901642,     63.735898303  },
     {             1682.0,       4.64833552,     70.849445304  },
@@ -2788,7 +2788,7 @@ const VsopSet UranusRadTerms2[UranusRadTerms2Rows] = {
     {              129.0,        2.0814685,       3.18139374  }
 };
 
-const VsopSet UranusRadTerms3[UranusRadTerms3Rows] = {
+const VSOP87Set UranusRadTerms3[UranusRadTerms3Rows] = {
     {             1164.0,       4.73453292,     74.781598567  },
     {              212.0,       3.34255735,     63.735898303  },
     {              196.0,       2.98004616,     70.849445304  },
@@ -2801,12 +2801,12 @@ const VsopSet UranusRadTerms3[UranusRadTerms3Rows] = {
     {               32.0,       3.59825178,     131.40394987  }
 };
 
-const VsopSet UranusRadTerms4[UranusRadTerms4Rows] = {
+const VSOP87Set UranusRadTerms4[UranusRadTerms4Rows] = {
     {               53.0,       3.00838033,     74.781598567  },
     {               10.0,       1.91399084,     56.622351303  }
 };
 
-const VsopSet* UranusRadTerms5 = 0;
+const VSOP87Set* UranusRadTerms5 = 0;
 
 // Neptune Terms
 const unsigned NeptuneLonTerms0Rows = 38;
@@ -2830,7 +2830,7 @@ const unsigned NeptuneRadTerms3Rows = 1;
 const unsigned NeptuneRadTerms4Rows = 0;
 const unsigned NeptuneRadTerms5Rows = 0;
 
-const VsopSet NeptuneLonTerms0[NeptuneLonTerms0Rows] = {
+const VSOP87Set NeptuneLonTerms0[NeptuneLonTerms0Rows] = {
     {        531188633.0,              0.0,              0.0  },
     {          1798476.0,       2.90101273,     38.133035638  },
     {          1019728.0,      0.485809237,       1.48447271  },
@@ -2871,7 +2871,7 @@ const VsopSet NeptuneLonTerms0[NeptuneLonTerms0Rows] = {
     {              102.0,       5.70539237,      0.111874585  }
 };
 
-const VsopSet NeptuneLonTerms1[NeptuneLonTerms1Rows] = {
+const VSOP87Set NeptuneLonTerms1[NeptuneLonTerms1Rows] = {
     {       3837687717.0,              0.0,              0.0  },
     {            16604.0,        4.8631913,       1.48447271  },
     {            15807.0,       2.27923489,     38.133035638  },
@@ -2892,7 +2892,7 @@ const VsopSet NeptuneLonTerms1[NeptuneLonTerms1Rows] = {
     {               26.0,       5.24526282,    168.052512799  }
 };
 
-const VsopSet NeptuneLonTerms2[NeptuneLonTerms2Rows] = {
+const VSOP87Set NeptuneLonTerms2[NeptuneLonTerms2Rows] = {
     {            53893.0,              0.0,              0.0  },
     {              296.0,       1.85520292,       1.48447271  },
     {              281.0,       1.19084539,     38.133035638  },
@@ -2902,20 +2902,20 @@ const VsopSet NeptuneLonTerms2[NeptuneLonTerms2Rows] = {
     {                7.0,      0.540333068,       2.44768055  }
 };
 
-const VsopSet NeptuneLonTerms3[NeptuneLonTerms3Rows] = {
+const VSOP87Set NeptuneLonTerms3[NeptuneLonTerms3Rows] = {
     {               31.0,              0.0,              0.0  },
     {               15.0,       1.35337076,     76.266071276  },
     {               12.0,       6.04431419,       1.48447271  },
     {               12.0,       6.11257808,     38.133035638  }
 };
 
-const VsopSet NeptuneLonTerms4[NeptuneLonTerms4Rows] = {
+const VSOP87Set NeptuneLonTerms4[NeptuneLonTerms4Rows] = {
     {              114.0,       3.14159265,              0.0  }
 };
 
-const VsopSet* NeptuneLonTerms5 = 0;
+const VSOP87Set* NeptuneLonTerms5 = 0;
 
-const VsopSet NeptuneLatTerms0[NeptuneLatTerms0Rows] = {
+const VSOP87Set NeptuneLatTerms0[NeptuneLatTerms0Rows] = {
     {          3088623.0,       1.44104373,     38.133035638  },
     {            27780.0,       5.91271883,     76.266071276  },
     {            27624.0,              0.0,              0.0  },
@@ -2935,7 +2935,7 @@ const VsopSet NeptuneLatTerms0[NeptuneLatTerms0Rows] = {
     {              140.0,       3.52969556,    137.033024162  }
 };
 
-const VsopSet NeptuneLatTerms1[NeptuneLatTerms1Rows] = {
+const VSOP87Set NeptuneLatTerms1[NeptuneLatTerms1Rows] = {
     {           227279.0,        3.8079309,     38.133035638  },
     {             1803.0,       1.97576485,     76.266071276  },
     {             1433.0,       3.14159265,              0.0  },
@@ -2951,7 +2951,7 @@ const VsopSet NeptuneLatTerms1[NeptuneLatTerms1Rows] = {
     {               26.0,       5.21566336,    213.299095438  }
 };
 
-const VsopSet NeptuneLatTerms2[NeptuneLatTerms2Rows] = {
+const VSOP87Set NeptuneLatTerms2[NeptuneLatTerms2Rows] = {
     {             9691.0,        5.5712375,     38.133035638  },
     {               79.0,       3.62705474,     76.266071276  },
     {               72.0,      0.454766886,      36.64856293  },
@@ -2960,20 +2960,20 @@ const VsopSet NeptuneLatTerms2[NeptuneLatTerms2Rows] = {
     {                6.0,       5.60736757,     74.781598567  }
 };
 
-const VsopSet NeptuneLatTerms3[NeptuneLatTerms3Rows] = {
+const VSOP87Set NeptuneLatTerms3[NeptuneLatTerms3Rows] = {
     {              273.0,       1.01688979,     38.133035638  },
     {                2.0,              0.0,              0.0  },
     {                2.0,       2.36805657,      36.64856293  },
     {                2.0,       5.33364321,     76.266071276  }
 };
 
-const VsopSet NeptuneLatTerms4[NeptuneLatTerms4Rows] = {
+const VSOP87Set NeptuneLatTerms4[NeptuneLatTerms4Rows] = {
     {                6.0,       2.66872693,     38.133035638  }
 };
 
-const VsopSet* NeptuneLatTerms5 = 0;
+const VSOP87Set* NeptuneLatTerms5 = 0;
 
-const VsopSet NeptuneRadTerms0[NeptuneRadTerms0Rows] = {
+const VSOP87Set NeptuneRadTerms0[NeptuneRadTerms0Rows] = {
     {       3007013206.0,              0.0,              0.0  },
     {         27062259.0,       1.32999459,     38.133035638  },
     {          1691764.0,       3.25186139,      36.64856293  },
@@ -3008,7 +3008,7 @@ const VsopSet NeptuneRadTerms0[NeptuneRadTerms0Rows] = {
     {             2087.0,      0.618583783,     33.940249944  }
 };
 
-const VsopSet NeptuneRadTerms1[NeptuneRadTerms1Rows] = {
+const VSOP87Set NeptuneRadTerms1[NeptuneRadTerms1Rows] = {
     {           236339.0,      0.704980112,     38.133035638  },
     {            13220.0,         3.320155,       1.48447271  },
     {             8622.0,       6.21628952,     35.164090221  },
@@ -3026,7 +3026,7 @@ const VsopSet NeptuneRadTerms1[NeptuneRadTerms1Rows] = {
     {              561.0,       2.88685816,    498.671476458  }
 };
 
-const VsopSet NeptuneRadTerms2[NeptuneRadTerms2Rows] = {
+const VSOP87Set NeptuneRadTerms2[NeptuneRadTerms2Rows] = {
     {             4247.0,       5.89910679,     38.133035638  },
     {              218.0,      0.345818291,       1.48447271  },
     {              163.0,       2.23872947,    168.052512799  },
@@ -3034,204 +3034,204 @@ const VsopSet NeptuneRadTerms2[NeptuneRadTerms2Rows] = {
     {              127.0,       2.84786298,     35.164090221  }
 };
 
-const VsopSet NeptuneRadTerms3[NeptuneRadTerms3Rows] = {
+const VSOP87Set NeptuneRadTerms3[NeptuneRadTerms3Rows] = {
     {              166.0,       4.55243893,     38.133035638  }
 };
 
-const VsopSet* NeptuneRadTerms4 = 0;
+const VSOP87Set* NeptuneRadTerms4 = 0;
 
-const VsopSet* NeptuneRadTerms5 = 0;
+const VSOP87Set* NeptuneRadTerms5 = 0;
 
 // Mercury TermTable
 const AstroTerms MercuryTerms = {
-    VsopTerms( MercuryLonTerms0Rows, MercuryLonTerms0 ),
-    VsopTerms( MercuryLonTerms1Rows, MercuryLonTerms1 ),
-    VsopTerms( MercuryLonTerms2Rows, MercuryLonTerms2 ),
-    VsopTerms( MercuryLonTerms3Rows, MercuryLonTerms3 ),
-    VsopTerms( MercuryLonTerms4Rows, MercuryLonTerms4 ),
-    VsopTerms( MercuryLonTerms5Rows, MercuryLonTerms5 ),
+    VSOP87Terms( MercuryLonTerms0Rows, MercuryLonTerms0 ),
+    VSOP87Terms( MercuryLonTerms1Rows, MercuryLonTerms1 ),
+    VSOP87Terms( MercuryLonTerms2Rows, MercuryLonTerms2 ),
+    VSOP87Terms( MercuryLonTerms3Rows, MercuryLonTerms3 ),
+    VSOP87Terms( MercuryLonTerms4Rows, MercuryLonTerms4 ),
+    VSOP87Terms( MercuryLonTerms5Rows, MercuryLonTerms5 ),
     
-    VsopTerms( MercuryLatTerms0Rows, MercuryLatTerms0 ),
-    VsopTerms( MercuryLatTerms1Rows, MercuryLatTerms1 ),
-    VsopTerms( MercuryLatTerms2Rows, MercuryLatTerms2 ),
-    VsopTerms( MercuryLatTerms3Rows, MercuryLatTerms3 ),
-    VsopTerms( MercuryLatTerms4Rows, MercuryLatTerms4 ),
-    VsopTerms( MercuryLatTerms5Rows, MercuryLatTerms5 ),
+    VSOP87Terms( MercuryLatTerms0Rows, MercuryLatTerms0 ),
+    VSOP87Terms( MercuryLatTerms1Rows, MercuryLatTerms1 ),
+    VSOP87Terms( MercuryLatTerms2Rows, MercuryLatTerms2 ),
+    VSOP87Terms( MercuryLatTerms3Rows, MercuryLatTerms3 ),
+    VSOP87Terms( MercuryLatTerms4Rows, MercuryLatTerms4 ),
+    VSOP87Terms( MercuryLatTerms5Rows, MercuryLatTerms5 ),
     
-    VsopTerms( MercuryRadTerms0Rows, MercuryRadTerms0 ),
-    VsopTerms( MercuryRadTerms1Rows, MercuryRadTerms1 ),
-    VsopTerms( MercuryRadTerms2Rows, MercuryRadTerms2 ),
-    VsopTerms( MercuryRadTerms3Rows, MercuryRadTerms3 ),
-    VsopTerms( MercuryRadTerms4Rows, MercuryRadTerms4 ),
-    VsopTerms( MercuryRadTerms5Rows, MercuryRadTerms5 ),
+    VSOP87Terms( MercuryRadTerms0Rows, MercuryRadTerms0 ),
+    VSOP87Terms( MercuryRadTerms1Rows, MercuryRadTerms1 ),
+    VSOP87Terms( MercuryRadTerms2Rows, MercuryRadTerms2 ),
+    VSOP87Terms( MercuryRadTerms3Rows, MercuryRadTerms3 ),
+    VSOP87Terms( MercuryRadTerms4Rows, MercuryRadTerms4 ),
+    VSOP87Terms( MercuryRadTerms5Rows, MercuryRadTerms5 ),
 };
 
 // Venus TermTable
 const AstroTerms VenusTerms = {
-    VsopTerms( VenusLonTerms0Rows, VenusLonTerms0 ),
-    VsopTerms( VenusLonTerms1Rows, VenusLonTerms1 ),
-    VsopTerms( VenusLonTerms2Rows, VenusLonTerms2 ),
-    VsopTerms( VenusLonTerms3Rows, VenusLonTerms3 ),
-    VsopTerms( VenusLonTerms4Rows, VenusLonTerms4 ),
-    VsopTerms( VenusLonTerms5Rows, VenusLonTerms5 ),
+    VSOP87Terms( VenusLonTerms0Rows, VenusLonTerms0 ),
+    VSOP87Terms( VenusLonTerms1Rows, VenusLonTerms1 ),
+    VSOP87Terms( VenusLonTerms2Rows, VenusLonTerms2 ),
+    VSOP87Terms( VenusLonTerms3Rows, VenusLonTerms3 ),
+    VSOP87Terms( VenusLonTerms4Rows, VenusLonTerms4 ),
+    VSOP87Terms( VenusLonTerms5Rows, VenusLonTerms5 ),
     
-    VsopTerms( VenusLatTerms0Rows, VenusLatTerms0 ),
-    VsopTerms( VenusLatTerms1Rows, VenusLatTerms1 ),
-    VsopTerms( VenusLatTerms2Rows, VenusLatTerms2 ),
-    VsopTerms( VenusLatTerms3Rows, VenusLatTerms3 ),
-    VsopTerms( VenusLatTerms4Rows, VenusLatTerms4 ),
-    VsopTerms( VenusLatTerms5Rows, VenusLatTerms5 ),
+    VSOP87Terms( VenusLatTerms0Rows, VenusLatTerms0 ),
+    VSOP87Terms( VenusLatTerms1Rows, VenusLatTerms1 ),
+    VSOP87Terms( VenusLatTerms2Rows, VenusLatTerms2 ),
+    VSOP87Terms( VenusLatTerms3Rows, VenusLatTerms3 ),
+    VSOP87Terms( VenusLatTerms4Rows, VenusLatTerms4 ),
+    VSOP87Terms( VenusLatTerms5Rows, VenusLatTerms5 ),
     
-    VsopTerms( VenusRadTerms0Rows, VenusRadTerms0 ),
-    VsopTerms( VenusRadTerms1Rows, VenusRadTerms1 ),
-    VsopTerms( VenusRadTerms2Rows, VenusRadTerms2 ),
-    VsopTerms( VenusRadTerms3Rows, VenusRadTerms3 ),
-    VsopTerms( VenusRadTerms4Rows, VenusRadTerms4 ),
-    VsopTerms( VenusRadTerms5Rows, VenusRadTerms5 ),
+    VSOP87Terms( VenusRadTerms0Rows, VenusRadTerms0 ),
+    VSOP87Terms( VenusRadTerms1Rows, VenusRadTerms1 ),
+    VSOP87Terms( VenusRadTerms2Rows, VenusRadTerms2 ),
+    VSOP87Terms( VenusRadTerms3Rows, VenusRadTerms3 ),
+    VSOP87Terms( VenusRadTerms4Rows, VenusRadTerms4 ),
+    VSOP87Terms( VenusRadTerms5Rows, VenusRadTerms5 ),
 };
 
 // Earth TermTable
 const AstroTerms EarthTerms = {
-    VsopTerms( EarthLonTerms0Rows, EarthLonTerms0 ),
-    VsopTerms( EarthLonTerms1Rows, EarthLonTerms1 ),
-    VsopTerms( EarthLonTerms2Rows, EarthLonTerms2 ),
-    VsopTerms( EarthLonTerms3Rows, EarthLonTerms3 ),
-    VsopTerms( EarthLonTerms4Rows, EarthLonTerms4 ),
-    VsopTerms( EarthLonTerms5Rows, EarthLonTerms5 ),
+    VSOP87Terms( EarthLonTerms0Rows, EarthLonTerms0 ),
+    VSOP87Terms( EarthLonTerms1Rows, EarthLonTerms1 ),
+    VSOP87Terms( EarthLonTerms2Rows, EarthLonTerms2 ),
+    VSOP87Terms( EarthLonTerms3Rows, EarthLonTerms3 ),
+    VSOP87Terms( EarthLonTerms4Rows, EarthLonTerms4 ),
+    VSOP87Terms( EarthLonTerms5Rows, EarthLonTerms5 ),
     
-    VsopTerms( EarthLatTerms0Rows, EarthLatTerms0 ),
-    VsopTerms( EarthLatTerms1Rows, EarthLatTerms1 ),
-    VsopTerms( EarthLatTerms2Rows, EarthLatTerms2 ),
-    VsopTerms( EarthLatTerms3Rows, EarthLatTerms3 ),
-    VsopTerms( EarthLatTerms4Rows, EarthLatTerms4 ),
-    VsopTerms( EarthLatTerms5Rows, EarthLatTerms5 ),
+    VSOP87Terms( EarthLatTerms0Rows, EarthLatTerms0 ),
+    VSOP87Terms( EarthLatTerms1Rows, EarthLatTerms1 ),
+    VSOP87Terms( EarthLatTerms2Rows, EarthLatTerms2 ),
+    VSOP87Terms( EarthLatTerms3Rows, EarthLatTerms3 ),
+    VSOP87Terms( EarthLatTerms4Rows, EarthLatTerms4 ),
+    VSOP87Terms( EarthLatTerms5Rows, EarthLatTerms5 ),
     
-    VsopTerms( EarthRadTerms0Rows, EarthRadTerms0 ),
-    VsopTerms( EarthRadTerms1Rows, EarthRadTerms1 ),
-    VsopTerms( EarthRadTerms2Rows, EarthRadTerms2 ),
-    VsopTerms( EarthRadTerms3Rows, EarthRadTerms3 ),
-    VsopTerms( EarthRadTerms4Rows, EarthRadTerms4 ),
-    VsopTerms( EarthRadTerms5Rows, EarthRadTerms5 ),
+    VSOP87Terms( EarthRadTerms0Rows, EarthRadTerms0 ),
+    VSOP87Terms( EarthRadTerms1Rows, EarthRadTerms1 ),
+    VSOP87Terms( EarthRadTerms2Rows, EarthRadTerms2 ),
+    VSOP87Terms( EarthRadTerms3Rows, EarthRadTerms3 ),
+    VSOP87Terms( EarthRadTerms4Rows, EarthRadTerms4 ),
+    VSOP87Terms( EarthRadTerms5Rows, EarthRadTerms5 ),
 };
 
 // Mars TermTable
 const AstroTerms MarsTerms = {
-    VsopTerms( MarsLonTerms0Rows, MarsLonTerms0 ),
-    VsopTerms( MarsLonTerms1Rows, MarsLonTerms1 ),
-    VsopTerms( MarsLonTerms2Rows, MarsLonTerms2 ),
-    VsopTerms( MarsLonTerms3Rows, MarsLonTerms3 ),
-    VsopTerms( MarsLonTerms4Rows, MarsLonTerms4 ),
-    VsopTerms( MarsLonTerms5Rows, MarsLonTerms5 ),
+    VSOP87Terms( MarsLonTerms0Rows, MarsLonTerms0 ),
+    VSOP87Terms( MarsLonTerms1Rows, MarsLonTerms1 ),
+    VSOP87Terms( MarsLonTerms2Rows, MarsLonTerms2 ),
+    VSOP87Terms( MarsLonTerms3Rows, MarsLonTerms3 ),
+    VSOP87Terms( MarsLonTerms4Rows, MarsLonTerms4 ),
+    VSOP87Terms( MarsLonTerms5Rows, MarsLonTerms5 ),
     
-    VsopTerms( MarsLatTerms0Rows, MarsLatTerms0 ),
-    VsopTerms( MarsLatTerms1Rows, MarsLatTerms1 ),
-    VsopTerms( MarsLatTerms2Rows, MarsLatTerms2 ),
-    VsopTerms( MarsLatTerms3Rows, MarsLatTerms3 ),
-    VsopTerms( MarsLatTerms4Rows, MarsLatTerms4 ),
-    VsopTerms( MarsLatTerms5Rows, MarsLatTerms5 ),
+    VSOP87Terms( MarsLatTerms0Rows, MarsLatTerms0 ),
+    VSOP87Terms( MarsLatTerms1Rows, MarsLatTerms1 ),
+    VSOP87Terms( MarsLatTerms2Rows, MarsLatTerms2 ),
+    VSOP87Terms( MarsLatTerms3Rows, MarsLatTerms3 ),
+    VSOP87Terms( MarsLatTerms4Rows, MarsLatTerms4 ),
+    VSOP87Terms( MarsLatTerms5Rows, MarsLatTerms5 ),
     
-    VsopTerms( MarsRadTerms0Rows, MarsRadTerms0 ),
-    VsopTerms( MarsRadTerms1Rows, MarsRadTerms1 ),
-    VsopTerms( MarsRadTerms2Rows, MarsRadTerms2 ),
-    VsopTerms( MarsRadTerms3Rows, MarsRadTerms3 ),
-    VsopTerms( MarsRadTerms4Rows, MarsRadTerms4 ),
-    VsopTerms( MarsRadTerms5Rows, MarsRadTerms5 ),
+    VSOP87Terms( MarsRadTerms0Rows, MarsRadTerms0 ),
+    VSOP87Terms( MarsRadTerms1Rows, MarsRadTerms1 ),
+    VSOP87Terms( MarsRadTerms2Rows, MarsRadTerms2 ),
+    VSOP87Terms( MarsRadTerms3Rows, MarsRadTerms3 ),
+    VSOP87Terms( MarsRadTerms4Rows, MarsRadTerms4 ),
+    VSOP87Terms( MarsRadTerms5Rows, MarsRadTerms5 ),
 };
 
 // Jupiter TermTable
 const AstroTerms JupiterTerms = {
-    VsopTerms( JupiterLonTerms0Rows, JupiterLonTerms0 ),
-    VsopTerms( JupiterLonTerms1Rows, JupiterLonTerms1 ),
-    VsopTerms( JupiterLonTerms2Rows, JupiterLonTerms2 ),
-    VsopTerms( JupiterLonTerms3Rows, JupiterLonTerms3 ),
-    VsopTerms( JupiterLonTerms4Rows, JupiterLonTerms4 ),
-    VsopTerms( JupiterLonTerms5Rows, JupiterLonTerms5 ),
+    VSOP87Terms( JupiterLonTerms0Rows, JupiterLonTerms0 ),
+    VSOP87Terms( JupiterLonTerms1Rows, JupiterLonTerms1 ),
+    VSOP87Terms( JupiterLonTerms2Rows, JupiterLonTerms2 ),
+    VSOP87Terms( JupiterLonTerms3Rows, JupiterLonTerms3 ),
+    VSOP87Terms( JupiterLonTerms4Rows, JupiterLonTerms4 ),
+    VSOP87Terms( JupiterLonTerms5Rows, JupiterLonTerms5 ),
     
-    VsopTerms( JupiterLatTerms0Rows, JupiterLatTerms0 ),
-    VsopTerms( JupiterLatTerms1Rows, JupiterLatTerms1 ),
-    VsopTerms( JupiterLatTerms2Rows, JupiterLatTerms2 ),
-    VsopTerms( JupiterLatTerms3Rows, JupiterLatTerms3 ),
-    VsopTerms( JupiterLatTerms4Rows, JupiterLatTerms4 ),
-    VsopTerms( JupiterLatTerms5Rows, JupiterLatTerms5 ),
+    VSOP87Terms( JupiterLatTerms0Rows, JupiterLatTerms0 ),
+    VSOP87Terms( JupiterLatTerms1Rows, JupiterLatTerms1 ),
+    VSOP87Terms( JupiterLatTerms2Rows, JupiterLatTerms2 ),
+    VSOP87Terms( JupiterLatTerms3Rows, JupiterLatTerms3 ),
+    VSOP87Terms( JupiterLatTerms4Rows, JupiterLatTerms4 ),
+    VSOP87Terms( JupiterLatTerms5Rows, JupiterLatTerms5 ),
     
-    VsopTerms( JupiterRadTerms0Rows, JupiterRadTerms0 ),
-    VsopTerms( JupiterRadTerms1Rows, JupiterRadTerms1 ),
-    VsopTerms( JupiterRadTerms2Rows, JupiterRadTerms2 ),
-    VsopTerms( JupiterRadTerms3Rows, JupiterRadTerms3 ),
-    VsopTerms( JupiterRadTerms4Rows, JupiterRadTerms4 ),
-    VsopTerms( JupiterRadTerms5Rows, JupiterRadTerms5 ),
+    VSOP87Terms( JupiterRadTerms0Rows, JupiterRadTerms0 ),
+    VSOP87Terms( JupiterRadTerms1Rows, JupiterRadTerms1 ),
+    VSOP87Terms( JupiterRadTerms2Rows, JupiterRadTerms2 ),
+    VSOP87Terms( JupiterRadTerms3Rows, JupiterRadTerms3 ),
+    VSOP87Terms( JupiterRadTerms4Rows, JupiterRadTerms4 ),
+    VSOP87Terms( JupiterRadTerms5Rows, JupiterRadTerms5 ),
 };
 
 // Saturn TermTable
 const AstroTerms SaturnTerms = {
-    VsopTerms( SaturnLonTerms0Rows, SaturnLonTerms0 ),
-    VsopTerms( SaturnLonTerms1Rows, SaturnLonTerms1 ),
-    VsopTerms( SaturnLonTerms2Rows, SaturnLonTerms2 ),
-    VsopTerms( SaturnLonTerms3Rows, SaturnLonTerms3 ),
-    VsopTerms( SaturnLonTerms4Rows, SaturnLonTerms4 ),
-    VsopTerms( SaturnLonTerms5Rows, SaturnLonTerms5 ),
+    VSOP87Terms( SaturnLonTerms0Rows, SaturnLonTerms0 ),
+    VSOP87Terms( SaturnLonTerms1Rows, SaturnLonTerms1 ),
+    VSOP87Terms( SaturnLonTerms2Rows, SaturnLonTerms2 ),
+    VSOP87Terms( SaturnLonTerms3Rows, SaturnLonTerms3 ),
+    VSOP87Terms( SaturnLonTerms4Rows, SaturnLonTerms4 ),
+    VSOP87Terms( SaturnLonTerms5Rows, SaturnLonTerms5 ),
     
-    VsopTerms( SaturnLatTerms0Rows, SaturnLatTerms0 ),
-    VsopTerms( SaturnLatTerms1Rows, SaturnLatTerms1 ),
-    VsopTerms( SaturnLatTerms2Rows, SaturnLatTerms2 ),
-    VsopTerms( SaturnLatTerms3Rows, SaturnLatTerms3 ),
-    VsopTerms( SaturnLatTerms4Rows, SaturnLatTerms4 ),
-    VsopTerms( SaturnLatTerms5Rows, SaturnLatTerms5 ),
+    VSOP87Terms( SaturnLatTerms0Rows, SaturnLatTerms0 ),
+    VSOP87Terms( SaturnLatTerms1Rows, SaturnLatTerms1 ),
+    VSOP87Terms( SaturnLatTerms2Rows, SaturnLatTerms2 ),
+    VSOP87Terms( SaturnLatTerms3Rows, SaturnLatTerms3 ),
+    VSOP87Terms( SaturnLatTerms4Rows, SaturnLatTerms4 ),
+    VSOP87Terms( SaturnLatTerms5Rows, SaturnLatTerms5 ),
     
-    VsopTerms( SaturnRadTerms0Rows, SaturnRadTerms0 ),
-    VsopTerms( SaturnRadTerms1Rows, SaturnRadTerms1 ),
-    VsopTerms( SaturnRadTerms2Rows, SaturnRadTerms2 ),
-    VsopTerms( SaturnRadTerms3Rows, SaturnRadTerms3 ),
-    VsopTerms( SaturnRadTerms4Rows, SaturnRadTerms4 ),
-    VsopTerms( SaturnRadTerms5Rows, SaturnRadTerms5 ),
+    VSOP87Terms( SaturnRadTerms0Rows, SaturnRadTerms0 ),
+    VSOP87Terms( SaturnRadTerms1Rows, SaturnRadTerms1 ),
+    VSOP87Terms( SaturnRadTerms2Rows, SaturnRadTerms2 ),
+    VSOP87Terms( SaturnRadTerms3Rows, SaturnRadTerms3 ),
+    VSOP87Terms( SaturnRadTerms4Rows, SaturnRadTerms4 ),
+    VSOP87Terms( SaturnRadTerms5Rows, SaturnRadTerms5 ),
 };
 
 // Uranus TermTable
 const AstroTerms UranusTerms = {
-    VsopTerms( UranusLonTerms0Rows, UranusLonTerms0 ),
-    VsopTerms( UranusLonTerms1Rows, UranusLonTerms1 ),
-    VsopTerms( UranusLonTerms2Rows, UranusLonTerms2 ),
-    VsopTerms( UranusLonTerms3Rows, UranusLonTerms3 ),
-    VsopTerms( UranusLonTerms4Rows, UranusLonTerms4 ),
-    VsopTerms( UranusLonTerms5Rows, UranusLonTerms5 ),
+    VSOP87Terms( UranusLonTerms0Rows, UranusLonTerms0 ),
+    VSOP87Terms( UranusLonTerms1Rows, UranusLonTerms1 ),
+    VSOP87Terms( UranusLonTerms2Rows, UranusLonTerms2 ),
+    VSOP87Terms( UranusLonTerms3Rows, UranusLonTerms3 ),
+    VSOP87Terms( UranusLonTerms4Rows, UranusLonTerms4 ),
+    VSOP87Terms( UranusLonTerms5Rows, UranusLonTerms5 ),
     
-    VsopTerms( UranusLatTerms0Rows, UranusLatTerms0 ),
-    VsopTerms( UranusLatTerms1Rows, UranusLatTerms1 ),
-    VsopTerms( UranusLatTerms2Rows, UranusLatTerms2 ),
-    VsopTerms( UranusLatTerms3Rows, UranusLatTerms3 ),
-    VsopTerms( UranusLatTerms4Rows, UranusLatTerms4 ),
-    VsopTerms( UranusLatTerms5Rows, UranusLatTerms5 ),
+    VSOP87Terms( UranusLatTerms0Rows, UranusLatTerms0 ),
+    VSOP87Terms( UranusLatTerms1Rows, UranusLatTerms1 ),
+    VSOP87Terms( UranusLatTerms2Rows, UranusLatTerms2 ),
+    VSOP87Terms( UranusLatTerms3Rows, UranusLatTerms3 ),
+    VSOP87Terms( UranusLatTerms4Rows, UranusLatTerms4 ),
+    VSOP87Terms( UranusLatTerms5Rows, UranusLatTerms5 ),
     
-    VsopTerms( UranusRadTerms0Rows, UranusRadTerms0 ),
-    VsopTerms( UranusRadTerms1Rows, UranusRadTerms1 ),
-    VsopTerms( UranusRadTerms2Rows, UranusRadTerms2 ),
-    VsopTerms( UranusRadTerms3Rows, UranusRadTerms3 ),
-    VsopTerms( UranusRadTerms4Rows, UranusRadTerms4 ),
-    VsopTerms( UranusRadTerms5Rows, UranusRadTerms5 ),
+    VSOP87Terms( UranusRadTerms0Rows, UranusRadTerms0 ),
+    VSOP87Terms( UranusRadTerms1Rows, UranusRadTerms1 ),
+    VSOP87Terms( UranusRadTerms2Rows, UranusRadTerms2 ),
+    VSOP87Terms( UranusRadTerms3Rows, UranusRadTerms3 ),
+    VSOP87Terms( UranusRadTerms4Rows, UranusRadTerms4 ),
+    VSOP87Terms( UranusRadTerms5Rows, UranusRadTerms5 ),
 };
 
 // Neptune TermTable
 const AstroTerms NeptuneTerms = {
-    VsopTerms( NeptuneLonTerms0Rows, NeptuneLonTerms0 ),
-    VsopTerms( NeptuneLonTerms1Rows, NeptuneLonTerms1 ),
-    VsopTerms( NeptuneLonTerms2Rows, NeptuneLonTerms2 ),
-    VsopTerms( NeptuneLonTerms3Rows, NeptuneLonTerms3 ),
-    VsopTerms( NeptuneLonTerms4Rows, NeptuneLonTerms4 ),
-    VsopTerms( NeptuneLonTerms5Rows, NeptuneLonTerms5 ),
+    VSOP87Terms( NeptuneLonTerms0Rows, NeptuneLonTerms0 ),
+    VSOP87Terms( NeptuneLonTerms1Rows, NeptuneLonTerms1 ),
+    VSOP87Terms( NeptuneLonTerms2Rows, NeptuneLonTerms2 ),
+    VSOP87Terms( NeptuneLonTerms3Rows, NeptuneLonTerms3 ),
+    VSOP87Terms( NeptuneLonTerms4Rows, NeptuneLonTerms4 ),
+    VSOP87Terms( NeptuneLonTerms5Rows, NeptuneLonTerms5 ),
     
-    VsopTerms( NeptuneLatTerms0Rows, NeptuneLatTerms0 ),
-    VsopTerms( NeptuneLatTerms1Rows, NeptuneLatTerms1 ),
-    VsopTerms( NeptuneLatTerms2Rows, NeptuneLatTerms2 ),
-    VsopTerms( NeptuneLatTerms3Rows, NeptuneLatTerms3 ),
-    VsopTerms( NeptuneLatTerms4Rows, NeptuneLatTerms4 ),
-    VsopTerms( NeptuneLatTerms5Rows, NeptuneLatTerms5 ),
+    VSOP87Terms( NeptuneLatTerms0Rows, NeptuneLatTerms0 ),
+    VSOP87Terms( NeptuneLatTerms1Rows, NeptuneLatTerms1 ),
+    VSOP87Terms( NeptuneLatTerms2Rows, NeptuneLatTerms2 ),
+    VSOP87Terms( NeptuneLatTerms3Rows, NeptuneLatTerms3 ),
+    VSOP87Terms( NeptuneLatTerms4Rows, NeptuneLatTerms4 ),
+    VSOP87Terms( NeptuneLatTerms5Rows, NeptuneLatTerms5 ),
     
-    VsopTerms( NeptuneRadTerms0Rows, NeptuneRadTerms0 ),
-    VsopTerms( NeptuneRadTerms1Rows, NeptuneRadTerms1 ),
-    VsopTerms( NeptuneRadTerms2Rows, NeptuneRadTerms2 ),
-    VsopTerms( NeptuneRadTerms3Rows, NeptuneRadTerms3 ),
-    VsopTerms( NeptuneRadTerms4Rows, NeptuneRadTerms4 ),
-    VsopTerms( NeptuneRadTerms5Rows, NeptuneRadTerms5 ),
+    VSOP87Terms( NeptuneRadTerms0Rows, NeptuneRadTerms0 ),
+    VSOP87Terms( NeptuneRadTerms1Rows, NeptuneRadTerms1 ),
+    VSOP87Terms( NeptuneRadTerms2Rows, NeptuneRadTerms2 ),
+    VSOP87Terms( NeptuneRadTerms3Rows, NeptuneRadTerms3 ),
+    VSOP87Terms( NeptuneRadTerms4Rows, NeptuneRadTerms4 ),
+    VSOP87Terms( NeptuneRadTerms5Rows, NeptuneRadTerms5 ),
 };
 
 /*
@@ -3250,7 +3250,7 @@ const AstroTerms NeptuneTerms = {
  *
  * returns 0. if planet is <1 (mercury) or >8 (neptune)
  */
-double Vsop::calcLoc(double t,         // time in decimal centuries
+double VSOP87::calcLoc(double t,         // time in decimal centuries
                      BodyId planet,
                      LocType ltype) {
     double rval = 0.0;
@@ -3260,7 +3260,7 @@ double Vsop::calcLoc(double t,         // time in decimal centuries
         t /= 10.;          // convert to julian millenia
         double tPower = 1.0;
         
-        const VsopTerms* pT;
+        const VSOP87Terms* pT;
         switch ( planet ) {
             case MERCURY: pT = &(MercuryTerms[ltype*6]); break;
             case VENUS:   pT = &(VenusTerms[ltype*6]);   break;
@@ -3276,7 +3276,7 @@ double Vsop::calcLoc(double t,         // time in decimal centuries
         // Always six series to calculate
         for (int i=0; i<6; i++) {
             double sum = 0.;
-            const VsopSet* pv = pT->pTerms;
+            const VSOP87Set* pv = pT->pTerms;
             
             // sum the term = A x cos( B + C x tc ) for each row
             for (unsigned j=0; j<pT->rows; j++) {

@@ -13,7 +13,7 @@
 #include "coordinates/Ecliptic.h"
 #include "coordinates/Equatorial.h"
 #include "coordinates/Horizontal.h"
-#include "coordinates/Eci.h"
+#include "coordinates/ECI.h"
 #include "coordinates/Geodetic.h"
 
 class AstroOps {
@@ -29,7 +29,8 @@ public:
     static const double EARTH_FLATTENING;
     static const double EARTH_POLAR_RADIUS_KM;
     static const double EARTH_EQUATORIAL_RADIUS_KM;
-    static const double EARHT_ROTATION_PER_SIDERAL_DAY;
+    static const double EARTH_ROTATION_PER_SIDERAL_DAY;
+    static const double EARTH_GRAVITATIONAL_CONSTANT;
     
     static const double SUN_DIAMETER_KM;
     
@@ -205,9 +206,9 @@ public:
     static Horizontal toHorizontal( const Observer& _obs, const Equatorial& _equatorial);
     
     
-    static Geodetic toGeodetic(const Eci& _eci);
-    static Eci toEci(const DateTime& _dt, const Geodetic& _geod);
-    static Horizontal toHorizontal(const Observer& _obs, const Eci& _Eci);
+    static Geodetic toGeodetic(const ECI& _eci);
+    static ECI toECI(const DateTime& _dt, const Geodetic& _geod);
+    static Horizontal toHorizontal(const Observer& _obs, const ECI& _Eci);
 
     /**
      * parallaticAngle() - compute parallactic angle given latitude, object dec and alt.

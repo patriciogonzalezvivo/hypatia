@@ -5,7 +5,7 @@
 #include "AstroOps.h"
 #include "TimeOps.h"
 
-#include "Vsop.h"
+#include "VSOP87.h"
 
 Observer::Observer() : m_jd(0.0), m_jcentury(0.0), m_obliquity(0.0), m_lst(0.0) {
 }
@@ -64,7 +64,7 @@ void Observer::update() {
 Vector Observer::getHeliocentricVector(UNIT_TYPE _type) {
     if (m_changed) {
         double pLng, pLat, pRad = 0.0;
-        Vsop::calcAllLocs(pLng, pLat, pRad, m_jcentury, EARTH);
+        VSOP87::calcAllLocs(pLng, pLat, pRad, m_jcentury, EARTH);
         m_heliocentricLoc = Ecliptic(pLng, pLat, pRad, RADS, AU).getVector(_type);
         m_changed = false;
     }
