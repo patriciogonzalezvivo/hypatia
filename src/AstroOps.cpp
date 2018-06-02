@@ -616,7 +616,7 @@ Ecliptic AstroOps::toGeocentric( Observer& _obs, const Ecliptic& _heliocentric )
 Geodetic AstroOps::toGeodetic(const ECI& _eci) {
     const double theta = MathOps::actan(_eci.getPosition(KM).y, _eci.getPosition(KM).x);
     
-    double lon = theta - TimeOps::toGreenwichSiderealTime(_eci.getDateTime());
+    double lon = theta - TimeOps::toGreenwichSiderealTime(_eci.getJD());
     //WrapNegPosPI
     lon = MathOps::mod(lon + MathOps::PI, MathOps::TAU) - MathOps::PI;
     
@@ -644,13 +644,13 @@ Geodetic AstroOps::toGeodetic(const ECI& _eci) {
     return Geodetic(lat, lon, alt, RADS);
 }
 
-ECI AstroOps::toECI(const DateTime& _dt, const Geodetic& _geod) {
+ECI AstroOps::toECI(double _jd, const Geodetic& _geod) {
     static const double mfactor = MathOps::TAU * (AstroOps::EARTH_ROTATION_PER_SIDERAL_DAY / TimeOps::SECONDS_PER_DAY);
     
     /*
      * Calculate Local Mean Sidereal Time for observers longitude
      */
-    const double theta = TimeOps::toLocalMeanSideralTime(_dt, _geod.getLongitude(RADS), RADS);
+    const double theta = TimeOps::toLocalMeanSideralTime(_jd, _geod.getLongitude(RADS), RADS);
     
     /*
      * take into account earth flattening
@@ -669,11 +669,11 @@ ECI AstroOps::toECI(const DateTime& _dt, const Geodetic& _geod) {
     velocity.y = mfactor * position.x;  // km/s
     velocity.z = 0.0;                   // km/s
     
-    return ECI(_dt, position, velocity);
+    return ECI(_jd, position, velocity);
 }
 
 Horizontal AstroOps::toHorizontal(const Observer& _obs, const ECI& _eci) {
-    ECI obs = ECI(_eci.getDateTime(), _obs.getLocation());
+    ECI obs = ECI(_eci.getJD(), _obs.getLocation());
     
     /*
      * calculate differences
@@ -684,7 +684,7 @@ Horizontal AstroOps::toHorizontal(const Observer& _obs, const ECI& _eci) {
     /*
      * Calculate Local Mean Sidereal Time for observers longitude
      */
-    double theta = TimeOps::toLocalMeanSideralTime(_eci.getDateTime(), _obs.getLocation().getLongitude(RADS), RADS);
+    double theta = TimeOps::toLocalMeanSideralTime(_eci.getJD(), _obs.getLocation().getLongitude(RADS), RADS);
     
     double sin_lat = sin(_obs.getLocation().getLatitude(RADS));
     double cos_lat = cos(_obs.getLocation().getLatitude(RADS));

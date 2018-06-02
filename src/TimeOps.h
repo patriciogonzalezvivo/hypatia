@@ -229,17 +229,17 @@ struct TimeOps {
      *
      * @return apparent Greenwich sidereal time (in Radians) for the given jd
      */
-    static double toGreenwichSiderealTime ( const DateTime& _dt );
+    static double toGreenwichMeanSiderealTime ( double _jd );
     
     /**
      * toLMST(): Convert to local mean sidereal time (GMST plus the observer's longitude)
      *
-     * @param[in] _dt observers DateTime
-     * @param[in] lon observers longitude
+     * @param[in] _jd observers DateTime
+     * @param[in] _lng observers longitude
      *
      * @returns the local mean sidereal time
      */
-    static double toLocalMeanSideralTime(const DateTime& _dt, double _lng, ANGLE_TYPE _type);
+    static double toLocalMeanSideralTime ( double _jd, double _lng, ANGLE_TYPE _type );
     
     /**
      * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
@@ -254,20 +254,6 @@ struct TimeOps {
      * @return Local Sidereal Time
      */
     static double toLocalSideralTime ( double _jd, double _lng, ANGLE_TYPE _type );
-    
-    /**
-     * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
-     *          See p 84,  in Meeus
-     *
-     *          http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
-     *
-     * @param _dt - DateTime
-     * @param _lng - observer's geographical longitud
-     * @param _type - is observer's geographical longitud in RADS or DEGS
-     *
-     * @return Local Sidereal Time
-     */
-    static double toLocalSideralTime ( const DateTime& _dt, double _lng, ANGLE_TYPE _type );
     
     /**
      * toJD(): convert a seconds to Julian Century

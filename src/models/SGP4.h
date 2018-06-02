@@ -19,7 +19,6 @@
 #include "TLE.h"
 #include "Orbit.h"
 #include "../coordinates/ECI.h"
-#include "Exception.h"
 
 /**
  * @brief The simplified perturbations model 4 propagater.
@@ -32,8 +31,7 @@ public:
     void setTLE(const TLE& tle);
     
     Orbit   getOrbit() const { return m_elements; };
-    ECI     getECI(double tsince) const;
-    ECI     getECI(const DateTime& date) const;
+    ECI     getECI(double _jd) const;
     
 private:
     struct CommonConstants {
@@ -172,8 +170,8 @@ private:
     };
     
     void initialise();
-    ECI findPositionSDP4(const double tsince) const;
-    ECI findPositionSGP4(double tsince) const;
+    ECI findPositionSDP4(const double _jd) const;
+    ECI findPositionSGP4(const double _jd) const;
     ECI calculateFinalPositionVelocity(const double tsince,
                                        const double e,
                                        const double a,

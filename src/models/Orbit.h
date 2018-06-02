@@ -28,7 +28,7 @@ public:
     double      getPeriapsis() const { return m_periapsis; }
     double      getPeriod() const { return m_period; }
 
-    DateTime    getEpoch() const { return m_epoch; }
+    double      getEpoch() const { return m_epoch; }
     
 private:
     //  Shape
@@ -54,7 +54,7 @@ private:
     
     double      m_meanAnomoly;          //  angle used in calculating the position of a body in an elliptical orbit in the classical
                                         //  two-body problem. It is the angular distance from the pericenter which a fictitious body would have if it moved in a circular orbit, with constant speed, in the same orbital period as the actual body in its elliptical orbit
-    DateTime    m_epoch;                // Epoch of mean anomaly
+    double      m_epoch;                // Epoch of mean anomaly
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Orbit& o) {

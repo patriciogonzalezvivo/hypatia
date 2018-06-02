@@ -17,6 +17,7 @@
 #include "SGP4.h"
 #include "Exception.h"
 
+#include "../TimeOps.h"
 #include "../AstroOps.h"
 #include "../primitives/Vector.h"
 
@@ -235,20 +236,18 @@ void SGP4::initialise() {
     }
 }
 
-ECI SGP4::getECI(const DateTime& dt) const {
-    return getECI( TimeSpan(dt.getTicks() - m_elements.getEpoch().getTicks()).getTotalMinutes() );
-}
-
-ECI SGP4::getECI(double tsince) const {
+ECI SGP4::getECI(double _jd) const {
     if (m_useDeepSpace) {
-        return findPositionSDP4(tsince);
+        return findPositionSDP4(_jd);
     }
     else {
-        return findPositionSGP4(tsince);
+        return findPositionSGP4(_jd);
     }
 }
 
-ECI SGP4::findPositionSDP4(double tsince) const {
+ECI SGP4::findPositionSDP4(double _jd) const {
+    double tsince = (_jd - m_elements.getEpoch()) * TimeOps::MINUTES_PER_DAY;
+    
     /*
      * the final values
      */
@@ -347,7 +346,8 @@ ECI SGP4::findPositionSDP4(double tsince) const {
     
 }
 
-ECI SGP4::findPositionSGP4(double tsince) const {
+ECI SGP4::findPositionSGP4(const double _jd) const {
+    double tsince = (_jd - m_elements.getEpoch()) * TimeOps::MINUTES_PER_DAY;
     /*
      * the final values
      */
@@ -596,7 +596,8 @@ ECI SGP4::calculateFinalPositionVelocity(
 //                               velocity);
     }
     
-    return ECI(m_elements.getEpoch().addMinutes(tsince), position, velocity);
+    
+    return ECI(m_elements.getEpoch() + tsince / TimeOps::MINUTES_PER_DAY, position, velocity);
 }
 
 static inline double evaluateCubicPolynomial(

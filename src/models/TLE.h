@@ -26,7 +26,7 @@ public:
 
     unsigned int    getNoradNumber() const { return m_norad_number; }
     std::string     getIntDesignator() const { return m_int_designator; }
-    DateTime        getEpoch() const { return m_epoch; }
+    double          getEpoch() const { return m_epoch; }
     double          getMeanMotionDt2() const { return m_mean_motion_dt2; }
     double          getMeanMotionDdt6() const { return m_mean_motion_ddt6; }
     double          getBStar() const { return m_bstar; }
@@ -47,7 +47,7 @@ private:
     std::string     m_line_two;
     
     std::string     m_int_designator;       // International designator
-    DateTime        m_epoch;
+    double          m_epoch;
     double          m_mean_motion_dt2;      //  first time derivative of the mean motion divided by two
     double          m_mean_motion_ddt6;     //  second time derivative of mean motion divided by six
     double          m_bstar;                //  BSTAR drag term

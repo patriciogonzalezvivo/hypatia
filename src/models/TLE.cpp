@@ -5,9 +5,9 @@
 //
 
 #include "TLE.h"
+#include "../TimeOps.h"
 #include "Exception.h"
 
-#include <iostream>
 #include <sstream>
 #include <locale>
 
@@ -426,7 +426,7 @@ void TLE::initialize() {
     else
         year += 1900;
     
-    m_epoch = DateTime(year, day);
+    m_epoch = TimeOps::toJD(DateTime(year, day));
 }
 
 /**

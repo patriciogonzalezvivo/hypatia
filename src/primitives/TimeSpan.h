@@ -54,9 +54,9 @@ public:
     static const int64_t MAX_VALUE_TICKS;
     
 protected:
-    int64_t m_ticks;
+    void updateTicks(int _days, int _hours, int _minutes, int _seconds, int _microseconds);
     
-    void updateTicks(int days, int hours, int minutes, int seconds, int microseconds);
+    int64_t m_ticks;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const TimeSpan& _ts) {

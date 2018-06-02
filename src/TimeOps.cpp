@@ -291,22 +291,23 @@ double TimeOps::toGreenwichSiderealTime( double jd ) {
     jdc * jdc * ( 3.87933e-4 - jdc / 38710000. );
     
     return MathOps::toRadians( rval );
+//    return MathOps::normalize( MathOps::toRadians( rval ), RADS);
 }
 
 /**
  * Convert to greenwich sidereal time
  * @returns the greenwich sidereal time
  */
-double TimeOps::toGreenwichSiderealTime( const DateTime& _dt )  {
+double TimeOps::toGreenwichMeanSiderealTime( double _jd )  {
     // t = Julian centuries from 2000 Jan. 1 12h UT1
-    const double t = (toJD(_dt) - TimeOps::J2000) / TimeOps::DAYS_PER_CENTURY;
-    
+    const double t = (_jd - TimeOps::J2000) / TimeOps::DAYS_PER_CENTURY;
+
     // Rotation angle in arcseconds
     double theta =  67310.54841
                     + (876600.0 * 3600.0 + 8640184.812866) * t
                     + 0.093104 * t * t
                     - 0.0000062 * t * t * t;
-    
+
     // 360.0 / 86400.0 = 1.0 / 240.0
     return MathOps::normalize( MathOps::toRadians(theta / 240.0), RADS);
 }
@@ -314,16 +315,16 @@ double TimeOps::toGreenwichSiderealTime( const DateTime& _dt )  {
 /**
  * toLMST(): Convert to local mean sidereal time (GMST plus the observer's longitude)
  *
- * @param[in] _dt observers DateTime
+ * @param[in] _jd observers julian dates
  * @param[in] lon observers longitude
  *
  * @returns the local mean sidereal time
  */
-double TimeOps::toLocalMeanSideralTime(const DateTime& _dt, double _lng, ANGLE_TYPE _type) {
+double TimeOps::toLocalMeanSideralTime(double _jd, double _lng, ANGLE_TYPE _type) {
     if ( _type == DEGS ) {
         _lng = MathOps::toRadians(_lng);
     }
-    return MathOps::normalize(toGreenwichSiderealTime(_dt) + _lng, RADS);
+    return MathOps::normalize(toGreenwichMeanSiderealTime(_jd) + _lng, RADS);
 }
 
 /**
@@ -343,23 +344,6 @@ double TimeOps::toLocalSideralTime (double _jd, double _lng, ANGLE_TYPE _type) {
         _lng = MathOps::toRadians(_lng);
     }
     return TimeOps::toGreenwichSiderealTime(_jd) + _lng;
-}
-
-/**
- * toLST(): Convert to local mean sidereal time (GMST plus the observer's longitude)
- *          See p 84,  in Meeus
- *
- * @param _dt - DateTime
- * @param _lng - observers longitude
- * @param _lng - observers longitude type (DEGS or RADS)
- *
- * @returns the local mean sidereal time
- */
-double TimeOps::toLocalSideralTime ( const DateTime& _dt, double _lng, ANGLE_TYPE _type  ) {
-    if ( _type == DEGS ) {
-        _lng = MathOps::toRadians(_lng);
-    }
-    return MathOps::normalize(toGreenwichSiderealTime(_dt) + _lng, RADS);
 }
 
 //----------------------------------------------------------------------------

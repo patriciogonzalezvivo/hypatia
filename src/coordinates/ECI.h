@@ -13,27 +13,24 @@
  */
 class ECI {
 public:
-    ECI(const DateTime& _dt, const Vector &_pos, const Vector &_vel = Vector());
+    ECI(double _jd, const Vector &_pos, const Vector &_vel = Vector());
     virtual ~ECI();
 
-    virtual bool operator==(const DateTime& _dt) const;
-    virtual bool operator!=(const DateTime& _dt) const;
-    
+    virtual double      getJD() const { return m_jd; };
     virtual Vector      getPosition(UNIT_TYPE _type) const;
     virtual Vector      getVelocity(UNIT_TYPE _type) const;
-    virtual DateTime    getDateTime() const;
-    
+
 private:
-    DateTime    m_dt;
     Vector      m_position; // km
     Vector      m_velocity; // km/s
+    double      m_jd;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const ECI& e) {
     strm << std::setprecision(3);
-    strm << "Pos: " << e.getPosition(KM);
+    strm << "JD: " << std::setw(12) << e.getJD();
+    strm << ", Pos: " << e.getPosition(KM);
     strm << ", Vel: " << e.getVelocity(KM);
-    strm << ", DT: " << e.getDateTime();
     return strm;
 };
 
