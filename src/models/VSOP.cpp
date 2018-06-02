@@ -8,7 +8,7 @@
  *
 \*****************************************************************************/
 
-#include "Vsop.h"
+#include "VSOP.h"
 #include "MathOps.h"
 
 #include <math.h>

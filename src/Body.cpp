@@ -12,9 +12,9 @@
 
 #include "AstroOps.h"
 
-#include "satellites/Luna.h"
-#include "planets/Pluto.h"
-#include "planets/Vsop.h"
+#include "Luna.h"
+#include "models/Pluto.h"
+#include "models/Vsop.h"
 
 static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"Earth", (char*)"Mar", (char*)"Jup", (char*)"Sat", (char*)"Ur", (char*)"Nep", (char*)"Pl", (char*)"Moon" };
 

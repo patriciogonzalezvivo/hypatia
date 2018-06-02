@@ -11,10 +11,11 @@
 
 #include "Luna.h"
 
-#include "../TimeOps.h"
-#include "../AstroOps.h"
-#include "../planets/Vsop.h"
-#include "../Body.h"
+#include "TimeOps.h"
+#include "AstroOps.h"
+
+#include "Body.h"
+#include "models/Vsop.h"
 
 #include <stdlib.h>
 #include <math.h>

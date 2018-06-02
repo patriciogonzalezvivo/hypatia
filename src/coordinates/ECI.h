@@ -11,10 +11,10 @@
 /**
  * @brief Stores an Earth-centered inertial position for a particular time.
  */
-class Eci {
+class ECI {
 public:
-    Eci(const DateTime& _dt, const Vector &_pos, const Vector &_vel = Vector());
-    virtual ~Eci();
+    ECI(const DateTime& _dt, const Vector &_pos, const Vector &_vel = Vector());
+    virtual ~ECI();
 
     virtual bool operator==(const DateTime& _dt) const;
     virtual bool operator!=(const DateTime& _dt) const;
@@ -29,7 +29,7 @@ private:
     Vector      m_velocity; // km/s
 };
 
-inline std::ostream& operator<<(std::ostream& strm, const Eci& e) {
+inline std::ostream& operator<<(std::ostream& strm, const ECI& e) {
     strm << std::setprecision(3);
     strm << "Pos: " << e.getPosition(KM);
     strm << ", Vel: " << e.getVelocity(KM);

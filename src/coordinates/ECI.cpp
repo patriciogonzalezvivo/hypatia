@@ -1,11 +1,11 @@
 //
-//  Eci.cpp
+//  ECI.cpp
 //  Solar
 //
 //  Created by Patricio González Vivo on 5/31/18.
 //
 
-#include "Eci.h"
+#include "ECI.h"
 
 #include "../TimeOps.h"
 #include "../AstroOps.h"
@@ -17,10 +17,10 @@
  * @param[in] position the position
  * @param[in] velocity the velocity
  */
-Eci::Eci(const DateTime &_dt, const Vector &_pos, const Vector &_vel) : m_dt(_dt), m_position(_pos), m_velocity(_vel) {
+ECI::ECI(const DateTime &_dt, const Vector &_pos, const Vector &_vel) : m_dt(_dt), m_position(_pos), m_velocity(_vel) {
 }
 
-Eci::~Eci(){    
+ECI::~ECI(){    
 }
 
 /**
@@ -28,7 +28,7 @@ Eci::~Eci(){
  * @param dt the date to compare
  * @returns true if the object matches
  */
-bool Eci::operator==(const DateTime& _dt) const {
+bool ECI::operator==(const DateTime& _dt) const {
     return m_dt == _dt;
 }
 
@@ -37,14 +37,14 @@ bool Eci::operator==(const DateTime& _dt) const {
  * @param dt the date to compare
  * @returns true if the object doesn't match
  */
-bool Eci::operator!=(const DateTime& _dt) const {
+bool ECI::operator!=(const DateTime& _dt) const {
     return m_dt != _dt;
 }
 
 /**
  * @returns the position
  */
-Vector Eci::getPosition(UNIT_TYPE _type) const {
+Vector ECI::getPosition(UNIT_TYPE _type) const {
     if (_type == KM) {
         return m_position;
     }
@@ -56,7 +56,7 @@ Vector Eci::getPosition(UNIT_TYPE _type) const {
 /**
  * @returns the velocity
  */
-Vector Eci::getVelocity(UNIT_TYPE _type) const {
+Vector ECI::getVelocity(UNIT_TYPE _type) const {
     if (_type == KM) {
         return m_velocity;
     }
@@ -68,6 +68,6 @@ Vector Eci::getVelocity(UNIT_TYPE _type) const {
 /**
  * @returns the date
  */
-DateTime Eci::getDateTime() const{
+DateTime ECI::getDateTime() const{
     return m_dt;
 }

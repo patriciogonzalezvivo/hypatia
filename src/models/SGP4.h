@@ -18,7 +18,7 @@
 
 #include "TLE.h"
 #include "Orbit.h"
-#include "../coordinates/Eci.h"
+#include "../coordinates/ECI.h"
 #include "Exception.h"
 
 /**
@@ -31,8 +31,8 @@ public:
     
     void setTLE(const TLE& tle);
     
-    Eci getEci(double tsince) const;
-    Eci getEci(const DateTime& date) const;
+    ECI getECI(double tsince) const;
+    ECI getECI(const DateTime& date) const;
     
 private:
     struct CommonConstants {
@@ -171,9 +171,9 @@ private:
     };
     
     void initialise();
-    Eci findPositionSDP4(const double tsince) const;
-    Eci findPositionSGP4(double tsince) const;
-    Eci calculateFinalPositionVelocity(const double tsince,
+    ECI findPositionSDP4(const double tsince) const;
+    ECI findPositionSGP4(double tsince) const;
+    ECI calculateFinalPositionVelocity(const double tsince,
                                        const double e,
                                        const double a,
                                        const double omega,

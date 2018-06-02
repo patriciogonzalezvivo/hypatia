@@ -239,11 +239,11 @@ void SGP4::initialise() {
     }
 }
 
-Eci SGP4::getEci(const DateTime& dt) const {
-    return getEci( TimeSpan(dt.getTicks() - m_elements.getEpoch().getTicks()).getTotalMinutes() );
+ECI SGP4::getECI(const DateTime& dt) const {
+    return getECI( TimeSpan(dt.getTicks() - m_elements.getEpoch().getTicks()).getTotalMinutes() );
 }
 
-Eci SGP4::getEci(double tsince) const {
+ECI SGP4::getECI(double tsince) const {
     if (m_useDeepSpace) {
         return findPositionSDP4(tsince);
     }
@@ -252,7 +252,7 @@ Eci SGP4::getEci(double tsince) const {
     }
 }
 
-Eci SGP4::findPositionSDP4(double tsince) const {
+ECI SGP4::findPositionSDP4(double tsince) const {
     /*
      * the final values
      */
@@ -351,7 +351,7 @@ Eci SGP4::findPositionSDP4(double tsince) const {
     
 }
 
-Eci SGP4::findPositionSGP4(double tsince) const {
+ECI SGP4::findPositionSGP4(double tsince) const {
     /*
      * the final values
      */
@@ -429,7 +429,7 @@ Eci SGP4::findPositionSGP4(double tsince) const {
     
 }
 
-Eci SGP4::calculateFinalPositionVelocity(
+ECI SGP4::calculateFinalPositionVelocity(
                                          const double tsince,
                                          const double e,
                                          const double a,
@@ -600,7 +600,7 @@ Eci SGP4::calculateFinalPositionVelocity(
 //                               velocity);
     }
     
-    return Eci(m_elements.getEpoch().addMinutes(tsince), position, velocity);
+    return ECI(m_elements.getEpoch().addMinutes(tsince), position, velocity);
 }
 
 static inline double evaluateCubicPolynomial(

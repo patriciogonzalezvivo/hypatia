@@ -24,15 +24,15 @@ astro_module = Extension(
     'src/coordinates/Horizontal.cpp',
     'src/coordinates/Geodetic.cpp',
     'src/TimeOps.cpp',
-    'src/Observer.cpp', 
     'src/AstroOps.cpp',
     'src/ProjOps.cpp',
-    'src/planets/Vsop.cpp', 
+    'src/Observer.cpp', 
     'src/Body.cpp', 
-    'src/satellites/Luna.cpp', 
-    'src/planets/Pluto.cpp',
-    'src/Constellation.cpp',
+    'src/Luna.cpp', 
     'src/Star.cpp'
+    'src/models/Pluto.cpp',
+    'src/Constellation.cpp',
+    'src/models/VSOP.cpp', 
    ],
    swig_opts = ['-c++']
 )
