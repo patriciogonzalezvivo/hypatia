@@ -123,7 +123,7 @@ void Pluto::calcAllLocs (double& lon, double& lat, double& rad, const double t) 
             double sinArg = sin(arg) * 1.e-6;
             lon_ += sinArg * (double)(pc->lon_a) + cosArg * (double)(pc->lon_b);
             lat_ += sinArg * (double)(pc->lat_a) + cosArg * (double)(pc->lat_b);
-            rad_   += sinArg * (double)(pc->rad_a) + cosArg * (double)(pc->rad_b);
+            rad_ += sinArg * (double)(pc->rad_a) + cosArg * (double)(pc->rad_b);
         }
         pc++;
     }

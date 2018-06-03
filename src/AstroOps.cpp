@@ -650,7 +650,7 @@ ECI AstroOps::toECI(double _jd, const Geodetic& _geod) {
     /*
      * Calculate Local Mean Sidereal Time for observers longitude
      */
-    const double theta = TimeOps::toLocalMeanSideralTime(_jd, _geod.getLongitude(RADS), RADS);
+    const double theta = TimeOps::toLocalSideralTime(_jd, _geod.getLongitude(RADS), RADS);
     
     /*
      * take into account earth flattening
@@ -684,7 +684,7 @@ Horizontal AstroOps::toHorizontal(const Observer& _obs, const ECI& _eci) {
     /*
      * Calculate Local Mean Sidereal Time for observers longitude
      */
-    double theta = TimeOps::toLocalMeanSideralTime(_eci.getJD(), _obs.getLocation().getLongitude(RADS), RADS);
+    double theta = TimeOps::toLocalSideralTime(_eci.getJD(), _obs.getLocation().getLongitude(RADS), RADS);
     
     double sin_lat = sin(_obs.getLocation().getLatitude(RADS));
     double cos_lat = cos(_obs.getLocation().getLatitude(RADS));

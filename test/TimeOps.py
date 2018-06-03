@@ -12,6 +12,9 @@ import math
 from astro import *
 import ephem
 
+def testEqual(A, B):
+  return A == B
+
 def testJDtoDatetimetoJD(jd):
   ymd = TimeOps.toYMD(jd)
   hms = TimeOps.toHMS(jd)
@@ -56,6 +59,7 @@ now_date = datetime.datetime.utcnow()
 utc_date = now_date.strftime('%Y-%m-%d %H:%M')
 
 tests = [ 
+  testEqual(TimeOps.toJD(DateTime.now()), now_jd),
   testJDtoDatetime(ephem.julian_date(now_date), utc_date ),
   testJDtoDatetime(now_secs, utc_date ),
   testJDtoDatetime(now_jd, utc_date ),
@@ -89,10 +93,12 @@ tests = [
   # testJDtoDatetimetoJD(1355671.4)
 ]
 
-dt = DateTime.now()
-print(TimeOps.toJD(dt), now_jd)
-print(TimeOps.toGreenwichSiderealTime(dt), MathOps.normalize(TimeOps.toGreenwichSiderealTime(now_jd),RADS) )
-print(TimeOps.toLST(dt, -122, DEGS), MathOps.normalize(TimeOps.toLST(now_jd, -122, DEGS), RADS) )
+# dt = DateTime.now()
+# print(TimeOps.toJD(dt), now_jd)
+# print(TimeOps.toGreenwichMeanSiderealTime(dt), MathOps.normalize(TimeOps.toGreenwichMeanSiderealTime(now_jd),RADS) )
+# print(TimeOps.toGreenwichSiderealTime(dt), MathOps.normalize(TimeOps.toGreenwichSiderealTime(now_jd),RADS) )
+# print(TimeOps.toGreenwichSiderealTime(now_jd), TimeOps.toGreenwichMeanSiderealTime(now_jd))
+# print(TimeOps.toLST(dt, -122, DEGS), MathOps.normalize(TimeOps.toLST(now_jd, -122, DEGS), RADS) )
 
 check = True
 for i in range(0, len(tests)):

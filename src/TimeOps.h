@@ -222,26 +222,6 @@ struct TimeOps {
     static double toGreenwichSiderealTime ( double _jd );
     
     /**
-     * greenwichSiderealTime(): convert a "local" time_t to GST.
-     *                          See p 84,  in Meeus
-     *
-     * @param _dt - DateTime
-     *
-     * @return apparent Greenwich sidereal time (in Radians) for the given jd
-     */
-    static double toGreenwichMeanSiderealTime ( double _jd );
-    
-    /**
-     * toLMST(): Convert to local mean sidereal time (GMST plus the observer's longitude)
-     *
-     * @param[in] _jd observers DateTime
-     * @param[in] _lng observers longitude
-     *
-     * @returns the local mean sidereal time
-     */
-    static double toLocalMeanSideralTime ( double _jd, double _lng, ANGLE_TYPE _type );
-    
-    /**
      * toLST(): Convert Julian Day and geographic longitud to Local Sideral Time
      *          See p 84,  in Meeus
      *

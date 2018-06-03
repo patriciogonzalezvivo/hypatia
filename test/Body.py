@@ -25,35 +25,47 @@ e_obs.elevation = 32
 
 def test(a_body, e_body ):
   a_body.compute(a_obs)
-  
+  print( "[ " + a_body.getBodyName() + " ]")
+  ok = True
+
+  # a_hlat = a_body.getEclipticHeliocentric().getLatitude(DEGS)
+  # a_hlng = a_body.getEclipticHeliocentric().getLongitude(DEGS)
+  # e_hlat = MathOps.toDegrees(float(repr(e_body.hlat)))
+  # e_hlng = MathOps.toDegrees(float(repr(e_body.hlon)))
+  # d_hlat = abs(a_hlat - e_hlat)
+  # d_hlng = abs(a_hlng - e_hlng)
+  # if (d_hlat > TOLERANCE_DEG or d_hlng > TOLERANCE_DEG):
+  #   # print('Astro Lat: %s°      Lng: %s°' % (a_hlat, a_hlng))
+  #   # print('Ephem Lat: %s°      Lng: %s°' % (e_hlat, e_hlng))
+  #   print('DELTA Lat: %s°      Lng: %s°' % (d_hlat, d_hlng))
+  #   ok = False
+
   a_ra = a_body.getEquatorial().getRightAscension(DEGS)
   a_dec = a_body.getEquatorial().getDeclination(DEGS)
-  a_alt = a_body.getHorizontal().getAltitud(DEGS)
-  a_az = a_body.getHorizontal().getAzimuth(DEGS)
-
-  e_ra = MathOps.toDegrees(float(repr(e_body.a_ra)))
-  e_dec = MathOps.toDegrees(float(repr(e_body.a_dec)))
-  e_alt = MathOps.toDegrees(float(repr(e_body.alt)))
-  e_az = MathOps.toDegrees(float(repr(e_body.az)))
-
+  e_ra = MathOps.toDegrees(float(repr(e_body.g_ra)))
+  e_dec = MathOps.toDegrees(float(repr(e_body.g_dec)))
   d_ra = abs(a_ra - e_ra)
   d_dec = abs(a_dec - e_dec)
-  d_alt = abs(a_alt - e_alt)
-  d_az = abs(a_az - e_az)
-
-  if (d_ra < TOLERANCE_DEG and d_dec < TOLERANCE_DEG and d_alt < TOLERANCE_DEG and d_az < TOLERANCE_DEG):
-    return True
-  else:
-
-    print('---------------------------------------- ' + a_body.getBodyName())
+  if (d_ra > TOLERANCE_DEG or d_dec > TOLERANCE_DEG):
     # print('Astro Ra: %s°      Dec: %s°' % (a_ra, a_dec))
     # print('Ephem Ra: %s°      Dec: %s°' % (e_ra, e_dec))
     print('DELTA Ra: %s°      Dec: %s°' % (d_ra, d_dec))
-    # print('Astro Alt: %s°     Az: %s°' % (a_alt, a_az))
-    # print('Ephem Alt: %s°     Az: %s°' % (e_alt, e_az))
-    print('DELTA Alt: %s°     Az: %s°' % (d_alt, d_az))
+    ok = False
 
-  return False
+  a_alt = a_body.getHorizontal().getAltitud(DEGS)
+  a_az = a_body.getHorizontal().getAzimuth(DEGS)
+  e_alt = MathOps.toDegrees(float(repr(e_body.alt)))
+  e_az = MathOps.toDegrees(float(repr(e_body.az)))
+  d_alt = abs(a_alt - e_alt)
+  d_az = abs(a_az - e_az)
+
+  if (d_alt > TOLERANCE_DEG or d_az > TOLERANCE_DEG):
+    # print('Astro Alt: %s°     Az: %s°' % (a_alt, a_az))
+    # print('Ephem Alt: %s°     Az: %s°' % (e_alt, e_az)) 
+    print('DELTA Alt: %s°     Az: %s°' % (d_alt, d_az))
+    ok = False
+    
+  return ok
 
 tests = [ 
   test(Body(SUN), ephem.Sun(e_obs)),

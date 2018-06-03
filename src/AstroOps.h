@@ -206,7 +206,6 @@ public:
     static Horizontal toHorizontal( const Observer& _obs, const Equatorial& _equatorial);
     
     static ECI toECI(double _jd, const Geodetic& _geod);
-    static ECI toECI(const DateTime& _dt, const Geodetic& _geod);
     
     static Geodetic toGeodetic(const ECI& _eci);
     static Horizontal toHorizontal(const Observer& _obs, const ECI& _Eci);
