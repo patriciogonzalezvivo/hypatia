@@ -8,7 +8,7 @@
 
 #include "AstroOps.h"
 
-Satellite::Satellite(): m_name(NULL) {
+Satellite::Satellite(): m_name("NAN") {
     m_bodyId = SATELLITE;
 }
 
@@ -18,21 +18,16 @@ Satellite::Satellite(const TLE& _tle) {
 }
 
 Satellite::~Satellite() {
-    if (m_name != NULL) {
-        delete [] m_name;
-    }
 }
 
 void Satellite::setTLE(const TLE& _tle) {
-    std::string name = _tle.getName();
-    m_name = new char[name.length() + 1];
-    strcpy(m_name, name.c_str());
-
     m_sgp4.setTLE(_tle);
+    
+    m_name = _tle.getName();
 }
 
 char* Satellite::getName() const {
-    return m_name;
+    return (char *)m_name.c_str();
 }
 
 void Satellite::compute(Observer &_obs) {

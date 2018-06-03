@@ -27,6 +27,6 @@ protected:
     ECI         m_eci;
     Geodetic    m_geodetic;
     
-    char*       m_name;
+    std::string m_name;
 };
 

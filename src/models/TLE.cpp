@@ -322,6 +322,7 @@ TLE::TLE(const std::string& _line_one, const std::string& _line_two):m_line_one(
  * @param[in] line_two Tle line two
  */
 TLE::TLE(const std::string& _name, const std::string& _line_one, const std::string& _line_two):m_name(_name), m_line_one(_line_one), m_line_two(_line_two) {
+    m_name = _name;
     initialize();
 }
 
