@@ -600,7 +600,7 @@ Horizontal AstroOps::toHorizontal( const Observer& _obs, const Equatorial& _equa
 }
 
 /**
- * heliocentricToGeocentric() - ecliptic transformation from heliocentric to geocentric
+ * toGeocentric() - ecliptic transformation from heliocentric to geocentric
  *
  * @param Observer
  * @param Ecliptic heliocentric
@@ -612,6 +612,28 @@ Ecliptic AstroOps::toGeocentric( Observer& _obs, const Ecliptic& _heliocentric )
     return Ecliptic(heliocentric - _obs.getHeliocentricVector(AU), AU);
 }
 
+/**
+ * toHeliocentric() - ecliptic transformation from geocentric to heliocentric
+ *
+ * @param Observer
+ * @param Ecliptic geocentric
+ *
+ * @return Ecliptic heliocentric
+ */
+Ecliptic AstroOps::toHeliocentric(Observer& _obs, const Ecliptic& _geocentric ){
+    
+    // Compute Sun's coords
+    double sun_eclipticLon, sun_eclipticLat, sun_radius;
+    VSOP87::calcAllLocs( sun_eclipticLon, sun_eclipticLat, sun_radius, _obs.getJC(), EARTH);
+    
+    // Get HelioCentric values
+    Ecliptic toEarth = Ecliptic(sun_eclipticLon, sun_eclipticLat, sun_radius, RADS, AU);
+    Vector Sun2Earth = toEarth.getVector(AU);
+    Vector Earth2Moon = _geocentric.getVector(AU);
+    Vector Sun2Moon = Sun2Earth + Earth2Moon;
+    
+    return Ecliptic(Sun2Moon, AU);
+}
 
 Geodetic AstroOps::toGeodetic(const ECI& _eci) {
     const double theta = MathOps::actan(_eci.getPosition(KM).y, _eci.getPosition(KM).x);
@@ -641,7 +663,7 @@ Geodetic AstroOps::toGeodetic(const ECI& _eci) {
     
     const double alt = r / cos(lat) - AstroOps::EARTH_EQUATORIAL_RADIUS_KM * c;
     
-    return Geodetic(lat, lon, alt, RADS);
+    return Geodetic(lat, lon, alt, RADS, KM);
 }
 
 ECI AstroOps::toECI(double _jd, const Geodetic& _geod) {

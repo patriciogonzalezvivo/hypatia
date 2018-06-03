@@ -45,6 +45,7 @@
     #include "src/Luna.h"
     #include "src/Star.h"
     #include "src/Constellation.h"
+    #include "src/Satellite.h"
 %}
 
 %include "src/primitives/Polar.h"
@@ -65,6 +66,7 @@
 %include "src/Luna.h"
 %include "src/Star.h"
 %include "src/Constellation.h"
+%include "src/Satellite.h"
 
 namespace std {
     %template(VectorInt) vector<int>;

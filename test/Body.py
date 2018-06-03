@@ -25,7 +25,7 @@ e_obs.elevation = 32
 
 def test(a_body, e_body ):
   a_body.compute(a_obs)
-  print( "[ " + a_body.getBodyName() + " ]")
+  print( "[ " + a_body.getName() + " ]")
   ok = True
 
   # a_hlat = a_body.getEclipticHeliocentric().getLatitude(DEGS)

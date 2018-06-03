@@ -32,6 +32,7 @@ astro_module = Extension(
     'src/Luna.cpp', 
     'src/Star.cpp',
     'src/Constellation.cpp',
+    'src/Satellite.cpp',
     'src/models/VSOP87.cpp',
     'src/models/Pluto.cpp',
     'src/models/TLE.cpp',

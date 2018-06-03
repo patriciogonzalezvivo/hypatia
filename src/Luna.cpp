@@ -437,7 +437,7 @@ void Luna::compute( Observer &_obs ) {
         Vector Earth2Moon = m_geocentric.getVector(AU);
         Vector Sun2Moon = Sun2Earth + Earth2Moon;
         
-        m_heliocentric = Sun2Moon;
+        m_heliocentric = AstroOps::toHeliocentric(_obs, m_geocentric);
         
         // Distance toSun from the Earth
         sun_eclipticLon += MathOps::PI;

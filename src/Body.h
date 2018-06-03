@@ -20,7 +20,8 @@ enum BodyId {
     NAB=-1, // NotABody
     SUN=0,
     MERCURY=1, VENUS=2, EARTH=3, MARS=4, JUPITER=5, SATURN=6, URANUS=7, NEPTUNE=8, PLUTO=9,
-    LUNA=10
+    LUNA=10,
+    SATELLITE=11
 };
 
 class Body {
@@ -29,10 +30,10 @@ public:
     Body( BodyId _body );
     virtual ~Body();
     
-    virtual BodyId  getBodyId() const { return m_bodyId; }
-    virtual char*   getBodyName() const;
-    virtual char*   getZodiacSign() const;
-    virtual double  getHourAngle(ANGLE_TYPE _type) const;
+    virtual BodyId      getId() const { return m_bodyId; }
+    virtual char*       getName() const;
+    virtual char*       getZodiacSign() const;
+    virtual double      getHourAngle(ANGLE_TYPE _type) const;
 
     // Heliocentric
     virtual Ecliptic    getEclipticHeliocentric() const { return m_heliocentric; }
@@ -50,7 +51,7 @@ public:
     // This function must be called (directly or via c'tor) before calling
     // any of the other fns!
     //
-    virtual void    compute( Observer& _obs );
+    virtual void        compute( Observer& _obs );
     
 protected:
     Ecliptic    m_heliocentric;
@@ -65,7 +66,7 @@ protected:
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Body& b) {
-    strm << b.getBodyName() << ", ";
+    strm << b.getName() << ", ";
     strm << b.getEclipticHeliocentric() << ", ";
     strm << b.getEquatorial() << ", ";
     strm << b.getHorizontal();

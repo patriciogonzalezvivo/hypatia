@@ -131,7 +131,7 @@ public:
     // -------------------------------------------------- HelioCentric (Ecliptic)
     
     /**
-     * heliocentricToGeocentric() - ecliptic transformation from heliocentric to geocentric
+     * toGeocentric() - ecliptic transformation from heliocentric to geocentric
      *
      * @param Observer
      * @param Ecliptic heliocentric
@@ -139,6 +139,16 @@ public:
      * @return Ecliptic geocentric
      */
     static Ecliptic toGeocentric(Observer& _obs, const Ecliptic& _heliocentric );
+    
+    /**
+     * toHeliocentric() - ecliptic transformation from geocentric to heliocentric
+     *
+     * @param Observer
+     * @param Ecliptic geocentric
+     *
+     * @return Ecliptic heliocentric
+     */
+    static Ecliptic toHeliocentric(Observer& _obs, const Ecliptic& _geocentric );
 
     // -------------------------------------------------- GeoCentric
     

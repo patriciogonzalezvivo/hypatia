@@ -26,12 +26,11 @@
 class SGP4 {
 public:
     SGP4();
-    SGP4(const TLE& tle);
+    virtual ~SGP4();
+    virtual void    setTLE(const TLE& _tle);
     
-    void setTLE(const TLE& tle);
-    
-    Orbit   getOrbit() const { return m_elements; };
-    ECI     getECI(double _jd) const;
+    virtual Orbit   getOrbit() const { return m_elements; };
+    virtual ECI     getECI(double _jd) const;
     
 private:
     struct CommonConstants {
@@ -169,7 +168,6 @@ private:
         struct IntegratorValues values_t;
     };
     
-    void initialise();
     ECI findPositionSDP4(const double _jd) const;
     ECI findPositionSGP4(const double _jd) const;
     ECI calculateFinalPositionVelocity(const double tsince,

@@ -64,8 +64,8 @@ const SGP4::IntegratorParams SGP4::Empty_IntegratorParams = SGP4::IntegratorPara
 SGP4::SGP4() {
 }
 
-SGP4::SGP4(const TLE& _tle): m_elements(_tle) {
-    initialise();
+SGP4::~SGP4() {
+    
 }
 
 void SGP4::setTLE(const TLE& tle) {
@@ -74,10 +74,6 @@ void SGP4::setTLE(const TLE& tle) {
      */
     m_elements = Orbit(tle);
     
-    initialise();
-}
-
-void SGP4::initialise() {
     /*
      * reset all constants etc
      */

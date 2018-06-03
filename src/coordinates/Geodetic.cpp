@@ -6,8 +6,8 @@
 Geodetic::Geodetic () : m_alt(0.0) {
 }
 
-Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_TYPE _type ) {
-    if ( _type == RADS ) {
+Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_TYPE _a_type, UNIT_TYPE _r_type) {
+    if ( _a_type == RADS ) {
         m_phi = _lng;
         m_theta = _lat;
     }
@@ -15,7 +15,13 @@ Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_TYPE _type ) {
         m_phi = MathOps::toRadians( _lng );
         m_theta = MathOps::toRadians( _lat );
     }
-    m_alt = _alt;
+    
+    if ( _r_type == KM ) {
+        m_alt = _alt;
+    }
+    else {
+        m_alt = _alt * AstroOps::AU_TO_KM;
+    }
 }
 
 Geodetic::~Geodetic () {
@@ -50,9 +56,22 @@ double Geodetic::getRadius ( UNIT_TYPE _type ) const {
     else {
         return rad * AstroOps::KM_TO_AU;
     }
-    
 }
 
-Vector Geodetic::getVector () const {
-    return Vector(*this);
+double Geodetic::getAltitude (UNIT_TYPE _type) const {
+    if (_type == KM) {
+        return m_alt;
+    }
+    else {
+        return m_alt * AstroOps::KM_TO_AU;
+    }
+};
+
+Vector Geodetic::getVector (UNIT_TYPE _type) const {
+    if (_type == KM) {
+        return Vector(*this);
+    }
+    else {
+        return Vector(*this) * AstroOps::KM_TO_AU;
+    }
 }

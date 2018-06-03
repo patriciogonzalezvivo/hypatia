@@ -12,7 +12,8 @@
  */
 class ECI {
 public:
-    ECI(double _jd, const Vector &_pos, const Vector &_vel = Vector());
+    ECI();
+    ECI(double _jd, const Vector &_pos, const Vector &_vel = Vector(), UNIT_TYPE _type = KM);
     virtual ~ECI();
 
     virtual double      getJD() const { return m_jd; };
