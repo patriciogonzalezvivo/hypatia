@@ -781,7 +781,7 @@ int formatHMS( char* buf, double dayFrac, bool doSecs ) {
  * @return formated string
  */
 char* TimeOps::formatTime( double dayFrac, bool doSecs ) {
-    char *buf = new char[8];
+    char *buf = new char[9];
     formatHMS( buf, dayFrac, doSecs );
     return buf;
 }
