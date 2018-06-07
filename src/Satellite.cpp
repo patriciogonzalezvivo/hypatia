@@ -35,9 +35,14 @@ void Satellite::compute(Observer &_obs) {
         m_jcentury = _obs.getJC();
         
         m_eci = m_sgp4.getECI(_obs.getJD());
-        m_geocentric = m_eci.getPosition(AU);
-        m_heliocentric = AstroOps::toHeliocentric(_obs, m_geocentric);
-        m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );
+        
+        // TODO:
+        //   - ECI to GEOCENTRIC
+        //
+//        m_geocentric = m_eci.getPosition(AU);
+//        m_heliocentric = AstroOps::toHeliocentric(_obs, m_geocentric);
+//        m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );
+        m_equatorial = Equatorial(m_eci.getPosition(AU));
         m_ha = MathOps::normalize(AstroOps::toHourAngle( _obs, m_equatorial ), RADS);
         m_geodetic = AstroOps::toGeodetic( m_eci );
         m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
