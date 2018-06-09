@@ -8,7 +8,7 @@
 #include "ECI.h"
 
 #include "../TimeOps.h"
-#include "../AstroOps.h"
+#include "../CoordOps.h"
 
 #include <math.h>
 
@@ -27,8 +27,8 @@ ECI::ECI(double _jd, const Vector &_pos, const Vector &_vel, UNIT_TYPE _type) {
         m_velocity = _vel;
     }
     else {
-        m_position = _pos * AstroOps::AU_TO_KM;
-        m_velocity = _vel * AstroOps::AU_TO_KM;;
+        m_position = _pos * CoordOps::AU_TO_KM;
+        m_velocity = _vel * CoordOps::AU_TO_KM;;
     }
 }
 
@@ -43,7 +43,7 @@ Vector ECI::getPosition(UNIT_TYPE _type) const {
         return m_position;
     }
     else {
-        return m_position * AstroOps::KM_TO_AU;
+        return m_position * CoordOps::KM_TO_AU;
     }
 }
 
@@ -55,6 +55,6 @@ Vector ECI::getVelocity(UNIT_TYPE _type) const {
         return m_velocity;
     }
     else {
-        return m_velocity * AstroOps::KM_TO_AU;
+        return m_velocity * CoordOps::KM_TO_AU;
     }
 }

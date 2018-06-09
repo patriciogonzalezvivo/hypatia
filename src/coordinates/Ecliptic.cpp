@@ -1,6 +1,6 @@
 #include "Ecliptic.h"
 
-#include "../AstroOps.h"
+#include "../CoordOps.h"
 #include <math.h>
 
 Ecliptic::Ecliptic() : m_radius(1.0) {
@@ -13,7 +13,7 @@ Ecliptic::Ecliptic(const Vector& _parent, UNIT_TYPE _type) {
         m_radius = _parent.getMagnitud();
     }
     else {
-        m_radius = _parent.getMagnitud() * AstroOps::KM_TO_AU;
+        m_radius = _parent.getMagnitud() * CoordOps::KM_TO_AU;
     }
 }
 
@@ -31,7 +31,7 @@ Ecliptic::Ecliptic(double _lng, double _lat, double _radius, ANGLE_TYPE _a_type,
         m_radius = _radius;
     }
     else {
-        m_radius = _radius * AstroOps::KM_TO_AU;
+        m_radius = _radius * CoordOps::KM_TO_AU;
     }
 }
 
@@ -65,7 +65,7 @@ Ecliptic& Ecliptic::operator= (const Vector& _vec) {
 
 double Ecliptic::getRadius (UNIT_TYPE _type) const {
     if ( _type == KM ) {
-        return m_radius * AstroOps::AU_TO_KM;
+        return m_radius * CoordOps::AU_TO_KM;
     }
     else {
         return m_radius;
@@ -74,7 +74,7 @@ double Ecliptic::getRadius (UNIT_TYPE _type) const {
 
 Vector Ecliptic::getVector (UNIT_TYPE _type) const {
     if ( _type == KM ) {
-        return Vector(*this) * (m_radius * AstroOps::AU_TO_KM);
+        return Vector(*this) * (m_radius * CoordOps::AU_TO_KM);
     }
     else {
         return Vector(*this) * m_radius;

@@ -18,7 +18,7 @@
 #include "Exception.h"
 
 #include "../TimeOps.h"
-#include "../AstroOps.h"
+#include "../CoordOps.h"
 #include "../primitives/Vector.h"
 
 #include <cmath>
@@ -35,11 +35,11 @@ const double kXJ4 = -1.65597e-6;
  * alternative XKE
  * affects final results
  * aiaa-2006-6573
- * const double kXKE = 60.0 / sqrt(kXKMPER * kXKMPER * kXKMPER / AstroOps::EARTH_GRAVITATIONAL_CONSTANT);
+ * const double kXKE = 60.0 / sqrt(kXKMPER * kXKMPER * kXKMPER / CoordOps::EARTH_GRAVITATIONAL_CONSTANT);
  * dundee
  * const double kXKE = 7.43669161331734132e-2;
  */
-const double kXKE = 60.0 / sqrt(AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM * AstroOps::EARTH_EQUATORIAL_RADIUS_KM / AstroOps::EARTH_GRAVITATIONAL_CONSTANT);
+const double kXKE = 60.0 / sqrt(CoordOps::EARTH_EQUATORIAL_RADIUS_KM * CoordOps::EARTH_EQUATORIAL_RADIUS_KM * CoordOps::EARTH_EQUATORIAL_RADIUS_KM / CoordOps::EARTH_GRAVITATIONAL_CONSTANT);
 const double kCK2 = 0.5 * kXJ2 * kAE * kAE;
 const double kCK4 = -0.375 * kXJ4 * kAE * kAE * kAE * kAE;
 
@@ -51,8 +51,8 @@ const double kCK4 = -0.375 * kXJ4 * kAE * kAE * kAE * kAE;
  * dundee
  * #define QOMS2T   (1.880279159015270643865e-9)
  */
-const double kQOMS2T = pow(((kQ0 - kS0) / AstroOps::EARTH_EQUATORIAL_RADIUS_KM), 4.0);
-const double kS = kAE * (1.0 + kS0 / AstroOps::EARTH_EQUATORIAL_RADIUS_KM);
+const double kQOMS2T = pow(((kQ0 - kS0) / CoordOps::EARTH_EQUATORIAL_RADIUS_KM), 4.0);
+const double kS = kAE * (1.0 + kS0 / CoordOps::EARTH_EQUATORIAL_RADIUS_KM);
 const double kTHDT = 4.37526908801129966e-3;
 
 const SGP4::CommonConstants SGP4::Empty_CommonConstants = SGP4::CommonConstants();
@@ -126,8 +126,8 @@ void SGP4::setTLE(const TLE& tle) {
         if (m_elements.getPeriapsis() < 98.0) {
             s4 = 20.0;
         }
-        qoms24 = pow((120.0 - s4) * kAE / AstroOps::EARTH_EQUATORIAL_RADIUS_KM, 4.0);
-        s4 = s4 / AstroOps::EARTH_EQUATORIAL_RADIUS_KM + kAE;
+        qoms24 = pow((120.0 - s4) * kAE / CoordOps::EARTH_EQUATORIAL_RADIUS_KM, 4.0);
+        s4 = s4 / CoordOps::EARTH_EQUATORIAL_RADIUS_KM + kAE;
     }
     
     /*
@@ -575,13 +575,13 @@ ECI SGP4::calculateFinalPositionVelocity(
     /*
      * position and velocity
      */
-    const double x = rk * ux * AstroOps::EARTH_EQUATORIAL_RADIUS_KM;
-    const double y = rk * uy * AstroOps::EARTH_EQUATORIAL_RADIUS_KM;
-    const double z = rk * uz * AstroOps::EARTH_EQUATORIAL_RADIUS_KM;
+    const double x = rk * ux * CoordOps::EARTH_EQUATORIAL_RADIUS_KM;
+    const double y = rk * uy * CoordOps::EARTH_EQUATORIAL_RADIUS_KM;
+    const double z = rk * uz * CoordOps::EARTH_EQUATORIAL_RADIUS_KM;
     Vector position(x, y, z);
-    const double xdot = (rdotk * ux + rfdotk * vx) * AstroOps::EARTH_EQUATORIAL_RADIUS_KM / 60.0;
-    const double ydot = (rdotk * uy + rfdotk * vy) * AstroOps::EARTH_EQUATORIAL_RADIUS_KM / 60.0;
-    const double zdot = (rdotk * uz + rfdotk * vz) * AstroOps::EARTH_EQUATORIAL_RADIUS_KM / 60.0;
+    const double xdot = (rdotk * ux + rfdotk * vx) * CoordOps::EARTH_EQUATORIAL_RADIUS_KM / 60.0;
+    const double ydot = (rdotk * uy + rfdotk * vy) * CoordOps::EARTH_EQUATORIAL_RADIUS_KM / 60.0;
+    const double zdot = (rdotk * uz + rfdotk * vz) * CoordOps::EARTH_EQUATORIAL_RADIUS_KM / 60.0;
     Vector velocity(xdot, ydot, zdot);
     
     if (rk < 1.0)

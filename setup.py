@@ -25,7 +25,7 @@ astro_module = Extension(
     'src/coordinates/ECI.cpp',
     'src/MathOps.cpp',
     'src/TimeOps.cpp',
-    'src/AstroOps.cpp',
+    'src/CoordOps.cpp',
     'src/ProjOps.cpp',
     'src/Observer.cpp', 
     'src/Body.cpp', 

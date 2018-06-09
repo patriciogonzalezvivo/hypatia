@@ -75,8 +75,32 @@ struct TimeOps {
     static const double J2000;
     static const double JD_DIFF;
     
+    enum SolExType { SPRING, SUMMER, AUTUMN, WINTER };
+    
     // These are initialized in DateOps.cpp
     static const double DST_OFFSET;
+    
+    
+    /**
+     * equationOfTime() - calculate the equation of time on the given JD
+     *                   (Meeus, Ch. 28)
+     *
+     * @param jd - day to use
+     *
+     * @return - the time in minutes between apparent time and mean time
+     */
+    static double equationOfTime( double _jd );
+    
+    /**
+     * equinoxSolstice() - calculate the time of the Equinoxes and Solstices
+     *
+     * @param _year - year to calculate quarter for
+     * @param _season - which solar quarter (SPRING, etc.)
+     * @param _time - LOCAL or UTC
+     *
+     * @return - the relatively exact jd time of the spec'd event
+     */
+    static double equinoxSolstice( int _year, SolExType _season, TIME_TYPE _time = LOCAL);
     
     /*** TIME ******************************************************************/
 

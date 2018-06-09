@@ -1,6 +1,6 @@
 #include "Geodetic.h"
 
-#include "../AstroOps.h"
+#include "../CoordOps.h"
 #include <math.h>
 
 Geodetic::Geodetic () : m_alt(0.0) {
@@ -20,7 +20,7 @@ Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_TYPE _a_type, 
         m_alt = _alt;
     }
     else {
-        m_alt = _alt * AstroOps::AU_TO_KM;
+        m_alt = _alt * CoordOps::AU_TO_KM;
     }
 }
 
@@ -47,14 +47,14 @@ double Geodetic::getLatitude ( ANGLE_TYPE _type ) const {
 
 double Geodetic::getRadius ( UNIT_TYPE _type ) const {
     double pct = abs(sin(m_theta));
-    double rad = AstroOps::EARTH_EQUATORIAL_RADIUS_KM * (1.-pct) + AstroOps::EARTH_POLAR_RADIUS_KM * pct;
+    double rad = CoordOps::EARTH_EQUATORIAL_RADIUS_KM * (1.-pct) + CoordOps::EARTH_POLAR_RADIUS_KM * pct;
     rad += m_alt * 0.001; // radious is in KM
     
     if ( _type == KM ) {
         return rad;
     }
     else {
-        return rad * AstroOps::KM_TO_AU;
+        return rad * CoordOps::KM_TO_AU;
     }
 }
 
@@ -63,7 +63,7 @@ double Geodetic::getAltitude (UNIT_TYPE _type) const {
         return m_alt;
     }
     else {
-        return m_alt * AstroOps::KM_TO_AU;
+        return m_alt * CoordOps::KM_TO_AU;
     }
 };
 
@@ -72,6 +72,6 @@ Vector Geodetic::getVector (UNIT_TYPE _type) const {
         return Vector(*this);
     }
     else {
-        return Vector(*this) * AstroOps::KM_TO_AU;
+        return Vector(*this) * CoordOps::KM_TO_AU;
     }
 }

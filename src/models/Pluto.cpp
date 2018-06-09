@@ -9,7 +9,7 @@
 \*****************************************************************************/
 
 #include "../MathOps.h"
-#include "../AstroOps.h"
+#include "../CoordOps.h"
 #include "Pluto.h"
 
 #include <math.h>

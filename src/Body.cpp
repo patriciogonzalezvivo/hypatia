@@ -10,7 +10,7 @@
 
 #include "Body.h"
 
-#include "AstroOps.h"
+#include "CoordOps.h"
 
 #include "Luna.h"
 #include "models/Pluto.h"
@@ -52,7 +52,7 @@ void Body::compute( Observer& _obs ) {
             double hLng, hLat, rad = 0.0;
             Pluto::calcAllLocs(hLng, hLat, rad, m_jcentury);
             m_heliocentric = Ecliptic(hLng, hLat, rad, RADS, AU);
-            m_geocentric = AstroOps::toGeocentric(_obs, m_heliocentric);
+            m_geocentric = CoordOps::toGeocentric(_obs, m_heliocentric);
         }
         else if (SUN == m_bodyId) {
             double hLng, hLat, rad = 0.0;
@@ -72,16 +72,16 @@ void Body::compute( Observer& _obs ) {
             double hLng, hLat, rad = 0.0;
             VSOP87::calcAllLocs(hLng, hLat, rad, m_jcentury, m_bodyId);
             m_heliocentric = Ecliptic(hLng, hLat, rad, RADS, AU);
-            m_geocentric = AstroOps::toGeocentric(_obs, m_heliocentric);
+            m_geocentric = CoordOps::toGeocentric(_obs, m_heliocentric);
         }
         
         if (m_bodyId == EARTH) {
             m_geocentric = Ecliptic(0., 0., 0., RADS, AU);
         }
         
-        m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );
-        m_ha = MathOps::normalize(AstroOps::toHourAngle( _obs, m_equatorial ), RADS);
-        m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
+        m_equatorial = CoordOps::toEquatorial( _obs, m_geocentric );
+        m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, m_equatorial ), RADS);
+        m_horizontal = CoordOps::toHorizontal( _obs, m_equatorial );
     }
 }
 

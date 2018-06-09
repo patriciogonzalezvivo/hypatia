@@ -1,6 +1,6 @@
 #include "Star.h"
 
-#include "AstroOps.h"
+#include "CoordOps.h"
 
 #define N_STARS 2828
 const int Star::TOTAL = N_STARS;
@@ -593,7 +593,7 @@ Star::~Star() {
 }
 
 void Star::compute( Observer& _obs ) {
-    m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
+    m_horizontal = CoordOps::toHorizontal( _obs, m_equatorial );
 }
 
 

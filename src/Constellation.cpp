@@ -1,6 +1,6 @@
 #include "Constellation.h"
 
-#include "AstroOps.h"
+#include "CoordOps.h"
 #include "TimeOps.h"
 
 #include <stdio.h>

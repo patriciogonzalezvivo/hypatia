@@ -2,7 +2,7 @@
 #include "Observer.h"
 
 #include "MathOps.h"
-#include "AstroOps.h"
+#include "CoordOps.h"
 #include "TimeOps.h"
 
 #include "models/VSOP87.h"
@@ -55,7 +55,7 @@ void Observer::setLocation(const Geodetic &_location) {
 
 void Observer::update() {
     m_jcentury = TimeOps::toJC(m_jd);
-    m_obliquity = AstroOps::meanObliquity(m_jcentury);
+    m_obliquity = CoordOps::meanObliquity(m_jcentury);
     m_lst = TimeOps::toLocalSideralTime(m_jd, m_location.getLongitude(RADS), RADS);
     
     m_changed = true;

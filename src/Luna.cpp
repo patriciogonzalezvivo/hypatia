@@ -12,7 +12,7 @@
 #include "Luna.h"
 
 #include "TimeOps.h"
-#include "AstroOps.h"
+#include "CoordOps.h"
 
 #include "Body.h"
 #include "models/VSOP87.h"
@@ -424,8 +424,8 @@ void Luna::compute( Observer &_obs ) {
         m_distance = rad;
         m_geocentric = Ecliptic(lng, lat, rad, RADS, KM);
         
-        m_equatorial = AstroOps::toEquatorial( _obs, m_geocentric );
-        m_horizontal = AstroOps::toHorizontal( _obs, m_equatorial );
+        m_equatorial = CoordOps::toEquatorial( _obs, m_geocentric );
+        m_horizontal = CoordOps::toHorizontal( _obs, m_equatorial );
 
         // Compute Sun's coords
         double sun_eclipticLon, sun_eclipticLat, sun_radius;
@@ -437,14 +437,14 @@ void Luna::compute( Observer &_obs ) {
         Vector Earth2Moon = m_geocentric.getVector(AU);
         Vector Sun2Moon = Sun2Earth + Earth2Moon;
         
-        m_heliocentric = AstroOps::toHeliocentric(_obs, m_geocentric);
+        m_heliocentric = CoordOps::toHeliocentric(_obs, m_geocentric);
         
         // Distance toSun from the Earth
         sun_eclipticLon += MathOps::PI;
         sun_eclipticLat *= -1.;
         toEarth.invert();
-        Equatorial sunEq = AstroOps::toEquatorial( _obs, toEarth);
-        Horizontal sunHor = AstroOps::toHorizontal( _obs, sunEq);
+        Equatorial sunEq = CoordOps::toEquatorial( _obs, toEarth);
+        Horizontal sunHor = CoordOps::toHorizontal( _obs, sunEq);
         
         // Compute moon age
         double moonAge = MathOps::normalize( MathOps::TAU - (sun_eclipticLon - m_geocentric.getLongitude(RADS)), RADS );

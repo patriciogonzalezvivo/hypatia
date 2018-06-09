@@ -11,7 +11,7 @@
 
 #pragma once
 
-// #include "AstroOps.h"
+// #include "CoordOps.h"
 #include "Body.h"
 
 // A struct to hold the fundmental elements
