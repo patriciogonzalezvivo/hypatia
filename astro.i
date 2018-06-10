@@ -13,8 +13,6 @@
 %ignore *::operator>=;
 %ignore operator<<;
 
-%apply double &OUTPUT { double &_alt, double &_az };
-%apply double &OUTPUT { double &_ra, double &_dec };
 %apply double &OUTPUT { double &_x, double &_y };
 
 %apply double &OUTPUT { int &_deg, int &_min, double &_sec };

@@ -62,6 +62,19 @@ public:
     static Ecliptic toGeocentric(Observer& _obs, const Ecliptic& _heliocentric );
 
     /**
+     * toGeocentric() - ) Obliquity, right Ascention and declination to Ecliptic Geocentric
+     *                          (Meeus, Ch. 93)
+     *
+     * @param mean obliquity angle (radians)
+     * @param right ascention (radians)
+     * @param declination (radians)
+     * @param distance (AU)
+     *
+     * @return Equatorial position
+     */
+    static Ecliptic toGeocentric (double _obliquity, double _ra, double _dec, double _dist);
+    
+    /**
      * toGeocentric() - ECI to ecliptic geocentric
      *                          (Meeus, Ch. 93)
      *
@@ -69,7 +82,7 @@ public:
      *
      * @return Equatorial position
      */
-    static Ecliptic toGeocentric (const ECI& _eci);
+    static Ecliptic toGeocentric (Observer& _obs, const ECI& _eci);
     
     // -------------------------------------------------- to Equatorial
     
@@ -78,13 +91,12 @@ public:
      *                          (Meeus, Ch. 93)
      *
      * @param mean obliquity angle (radians)
-     * @param lng - of ecliptic position (radians) (IN)
-     * @param lat - of ecliptic position (radians) (IN)
-     * @param ra - of equatorial position (radians) (OUT)
-     * @param dec - of equatorial position (radians) (OUT)
+     * @param lng - of ecliptic position (radians)
+     * @param lat - of ecliptic position (radians)
      *
+     * @return Equatorial position
      */
-    static void eclipticToEquatorial( double _obliq, double _lng, double _lat, double &_ra, double &_dec);
+    static Equatorial toEquatorial( double _obliq, double _lng, double _lat);
     
     /**
      * toEquatorial() - ecliptic to equatorial coordinates
@@ -157,13 +169,12 @@ public:
      *                          (Meeus, Ch. 93)
      *
      * @param lat - Observer's latitud (radians)
-     * @param ha - hour angle (radians) (IN)
-     * @param dec - of equatorial position (radians) (IN)
-     * @param alt - of ecliptic position (radians) (OUT)
-     * @param az - of ecliptic position (radians) (OUT)
+     * @param ha - hour angle (radians)
+     * @param dec - of equatorial position (radians)
      *
+     * @return horizontal position
      */
-    static void equatorialToHorizontal( double _lat, double _ha, double _dec, double &_alt, double &_az);
+    static Horizontal toHorizontal( double _lat, double _ha, double _dec);
     
     /**
      * toEquatorial() - equatorial to horizontal coordinates

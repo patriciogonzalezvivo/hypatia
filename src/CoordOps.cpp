@@ -78,6 +78,34 @@ Ecliptic CoordOps::toGeocentric( Observer& _obs, const Ecliptic& _heliocentric )
 }
 
 /**
+ * toGeocentric() - ) Obliquity, right Ascention and declination to Ecliptic Geocentric
+ *                          (Meeus, Ch. 93)
+ *
+ * @param obliquity (radians)
+ * @param right ascention (radians)
+ * @param declination (radians)
+ * @param distance (AU)
+ *
+ * @return Equatorial position
+ */
+Ecliptic CoordOps::toGeocentric (double _obliquity, double _ra, double _dec, double _dist) {
+    double sin_ra = sin(_ra);
+    double cos_ra = cos(_ra);
+    
+    double sin_dec = sin(_dec);
+    double cos_dec = cos(_dec);
+    double tan_dec = tan(_dec);
+    
+    double cos_obliq = cos(_obliquity);
+    double sin_obliq = sin(_obliquity);
+    
+    double lng = atan2( (sin_ra * cos_obliq + tan_dec * sin_obliq), cos_ra );
+    double lat = asin( sin_dec * cos_obliq - cos_dec * sin_obliq * sin_ra );
+
+    return Ecliptic(lng, lat, _dist, RADS, AU);
+}
+
+/**
  * toGeocentric() - Earth Centered Innertial (Equatorial) to Ecliptic Geocentric
  *                          (Meeus, Ch. 93)
  *
@@ -85,10 +113,10 @@ Ecliptic CoordOps::toGeocentric( Observer& _obs, const Ecliptic& _heliocentric )
  *
  * @return Equatorial position
  */
-Ecliptic CoordOps::toGeocentric (const ECI& _eci) {
+Ecliptic CoordOps::toGeocentric (Observer& _obs, const ECI& _eci) {
     double distance = _eci.getPosition(AU).getMagnitud();
-    
-    Vector equatorial_vector = _eci.getPosition(AU)l
+    Equatorial equat = Equatorial(_eci.getPosition(AU));
+    return toGeocentric(_obs.getObliquity(), equat.getRightAscension(RADS), equat.getDeclination(RADS) , distance);
 }
 
 //---------------------------------------------------------------------------- to Earth Center Innertial
@@ -140,11 +168,10 @@ ECI CoordOps::toECI(double _jd, const Geodetic& _geod) {
  * @param Observer
  * @param lng - of ecliptic position (IN)
  * @param lat - of ecliptic position (IN)
- * @param ra - of equatorial position (OUT)
- * @param dec - of equatorial position (OUT)
  *
+ * @return Equatorial position
  */
-void CoordOps::eclipticToEquatorial ( double _obliq, double _lng, double _lat, double &_ra, double &_dec ) {
+Equatorial CoordOps::toEquatorial ( double _obliq, double _lng, double _lat ) {
     double sin_obliq = sin(_obliq);
     double cos_obliq = cos(_obliq);
 
@@ -154,12 +181,14 @@ void CoordOps::eclipticToEquatorial ( double _obliq, double _lng, double _lat, d
     double cb = cos(_lat);
     double tb = tan(_lat);
 
-    _ra = atan2((sl * cos_obliq - tb * sin_obliq),(cl));
-    _dec = asin(sb * cos_obliq + cb * sin_obliq * sl);
+    double ra = atan2((sl * cos_obliq - tb * sin_obliq),(cl));
+    double dec = asin(sb * cos_obliq + cb * sin_obliq * sl);
 
     // Make sure RA is positive
-    if (_ra < 0)
-        _ra += MathOps::TAU;
+    if (ra < 0)
+        ra += MathOps::TAU;
+    
+    return Equatorial(ra, dec, RADS);
 }
 
 /**
@@ -174,9 +203,7 @@ void CoordOps::eclipticToEquatorial ( double _obliq, double _lng, double _lat, d
 Equatorial CoordOps::toEquatorial ( const Observer& _obs, const Ecliptic &_ecliptic ) {
     double lng = _ecliptic.getLongitude(RADS);
     double lat = _ecliptic.getLatitude(RADS);
-    double ra, dec;
-    CoordOps::eclipticToEquatorial(_obs.getObliquity(), lng, lat, ra, dec);
-    return Equatorial(ra, dec, RADS);
+    return toEquatorial(_obs.getObliquity(), lng, lat);
 }
 
 //---------------------------------------------------------------------------- to Hour Angle
@@ -260,27 +287,28 @@ Geodetic CoordOps::toGeodetic(const ECI& _eci) {
  *   https://github.com/slowe/VirtualSky/blob/gh-pages/0.7.0/virtualsky.js#L1736
  *
  * @param Observer's latitud
- * @param hour angle (IN)
- * @param dec - of equatorial position (IN)
- * @param alt - of ecliptic position (OUT)
- * @param az - of ecliptic position (OUT)
+ * @param hour angle (radians)
+ * @param dec - of equatorial position (radians)
  *
+ * @return horizontal position
  */
-void CoordOps::equatorialToHorizontal ( double _lat, double _ha, double _dec, double &_alt, double &_az ) {
+Horizontal CoordOps::toHorizontal ( double _lat, double _ha, double _dec) {
     double sd = sin(_dec);
     double sl = sin(_lat);
     double cl = cos(_lat);
     
     // compute altitude in radians
-    _alt = asin(sd*sl + cos(_dec)*cl*cos(_ha));
+    double alt = asin(sd*sl + cos(_dec)*cl*cos(_ha));
     
     // compute azimuth in radians
     // divide by zero error at poles or if alt = 90 deg (so we should've already limited to 89.9999)
-    _az = acos((sd - sin(_alt)*sl)/(cos(_alt)*cl));
+    double az = acos((sd - sin(alt)*sl)/(cos(alt)*cl));
     
     // choose hemisphere
     if (sin(_ha) > 0.0)
-        _az = 2.*MathOps::PI - _az;
+        az = 2.*MathOps::PI - az;
+    
+    return Horizontal(alt, az, RADS);
 }
 
 /**
@@ -295,9 +323,7 @@ void CoordOps::equatorialToHorizontal ( double _lat, double _ha, double _dec, do
 Horizontal CoordOps::toHorizontal( const Observer& _obs, const Equatorial& _equatorial) {
     double dec = _equatorial.getDeclination(RADS);
     double ha = toHourAngle(_obs, _equatorial);
-    double alt, az;
-    CoordOps::equatorialToHorizontal(_obs.getLocation().getLatitude(RADS), ha, dec, alt, az);
-    return Horizontal(alt, az, RADS);
+    return toHorizontal(_obs.getLocation().getLatitude(RADS), ha, dec);
 }
 
 /**
