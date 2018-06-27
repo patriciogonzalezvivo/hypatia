@@ -31,11 +31,11 @@ public:
     double          getMeanMotionDt2() const { return m_mean_motion_dt2; }
     double          getMeanMotionDdt6() const { return m_mean_motion_ddt6; }
     double          getBStar() const { return m_bstar; }
-    double          getInclination(ANGLE_TYPE _type) const;
-    double          getRightAscendingNode(ANGLE_TYPE _type) const;
+    double          getInclination(ANGLE_UNIT _type) const;
+    double          getRightAscendingNode(ANGLE_UNIT _type) const;
     double          getEccentricity() const { return m_eccentricity; }
-    double          getArgumentPerigee(ANGLE_TYPE _type) const;
-    double          getMeanAnomaly(ANGLE_TYPE _type) const ;
+    double          getArgumentPerigee(ANGLE_UNIT _type) const;
+    double          getMeanAnomaly(ANGLE_UNIT _type) const ;
     double          getMeanMotion() const {  return m_mean_motion; }
     unsigned int    getOrbitNumber() const { return m_orbit_number; }
 

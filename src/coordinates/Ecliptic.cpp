@@ -6,7 +6,7 @@
 Ecliptic::Ecliptic() : m_radius(1.0) {
 }
 
-Ecliptic::Ecliptic(const Vector& _parent, UNIT_TYPE _type) {
+Ecliptic::Ecliptic(const Vector& _parent, DISTANCE_UNIT _type) {
     m_phi = atan2(_parent.y, _parent.x);
     m_theta = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
     if ( _type == AU ) {
@@ -17,7 +17,7 @@ Ecliptic::Ecliptic(const Vector& _parent, UNIT_TYPE _type) {
     }
 }
 
-Ecliptic::Ecliptic(double _lng, double _lat, double _radius, ANGLE_TYPE _a_type, UNIT_TYPE _r_type) {
+Ecliptic::Ecliptic(double _lng, double _lat, double _radius, ANGLE_UNIT _a_type, DISTANCE_UNIT _r_type) {
     if ( _a_type == RADS ) {
         m_phi = _lng;
         m_theta = _lat;
@@ -38,7 +38,7 @@ Ecliptic::Ecliptic(double _lng, double _lat, double _radius, ANGLE_TYPE _a_type,
 Ecliptic::~Ecliptic() {
 }
 
-double Ecliptic::getLongitude(ANGLE_TYPE _type) const {
+double Ecliptic::getLongitude(ANGLE_UNIT _type) const {
     if ( _type == DEGS ) {
         return MathOps::toDegrees( m_phi );
     }
@@ -47,7 +47,7 @@ double Ecliptic::getLongitude(ANGLE_TYPE _type) const {
     }
 }
 
-double Ecliptic::getLatitude(ANGLE_TYPE _type) const {
+double Ecliptic::getLatitude(ANGLE_UNIT _type) const {
     if ( _type == DEGS ) {
         return MathOps::toDegrees( m_theta );
     }
@@ -63,7 +63,7 @@ Ecliptic& Ecliptic::operator= (const Vector& _vec) {
     return *this;
 }
 
-double Ecliptic::getRadius (UNIT_TYPE _type) const {
+double Ecliptic::getRadius (DISTANCE_UNIT _type) const {
     if ( _type == KM ) {
         return m_radius * CoordOps::AU_TO_KM;
     }
@@ -72,7 +72,7 @@ double Ecliptic::getRadius (UNIT_TYPE _type) const {
     }
 }
 
-Vector Ecliptic::getVector (UNIT_TYPE _type) const {
+Vector Ecliptic::getVector (DISTANCE_UNIT _type) const {
     if ( _type == KM ) {
         return Vector(*this) * (m_radius * CoordOps::AU_TO_KM);
     }

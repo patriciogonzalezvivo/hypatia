@@ -9,19 +9,6 @@
 #include <chrono>
 #include <iostream>
 
-const double TimeOps::HOURS_PER_DAY         = 24.;
-const double TimeOps::DAYS_PER_HOUR         = 1./HOURS_PER_DAY;
-const double TimeOps::SECONDS_PER_MINUTE    = 60.;
-const double TimeOps::MINUTES_PER_HOUR      = 60.;
-const double TimeOps::SECONDS_PER_HOUR      = SECONDS_PER_MINUTE * MINUTES_PER_HOUR;
-const double TimeOps::MINUTES_PER_DAY       = HOURS_PER_DAY * MINUTES_PER_HOUR;
-const double TimeOps::SECONDS_PER_DAY       = MINUTES_PER_DAY * SECONDS_PER_MINUTE;
-
-const int    TimeOps::IHOURS_PER_DAY        = int(HOURS_PER_DAY);
-const int    TimeOps::ISECONDS_PER_MINUTE   = int(SECONDS_PER_MINUTE);
-const int    TimeOps::IMINUTES_PER_HOUR     = int(MINUTES_PER_HOUR);
-const int    TimeOps::ISECONDS_PER_HOUR     = int(SECONDS_PER_HOUR);
-
 const double TimeOps::TROPICAL_YEAR = 365.242195601852;
 const double TimeOps::JULIAN_EPOCH = 2440587.5;
 const double TimeOps::MJULIAN_EPOCH = 40587.0;
@@ -31,6 +18,30 @@ const double TimeOps::DAYS_PER_MILLENIUM  = 365250.;
 
 const double TimeOps::J2000 = 2451545.0;
 const double TimeOps::JD_DIFF = 0.5;
+
+const double TimeOps::DAYS_PER_YEAR         = TROPICAL_YEAR; //365.25636;
+const double TimeOps::YEARS_PER_DAY          = 1./DAYS_PER_YEAR;
+
+const double TimeOps::HOURS_PER_DAY         = 24.;
+const double TimeOps::DAYS_PER_HOUR         = 1./HOURS_PER_DAY;
+
+const double TimeOps::SECONDS_PER_MINUTE    = 60.;
+const double TimeOps::MINUTES_PER_HOUR      = 60.;
+const double TimeOps::HOURS_PER_MINUTE      = 1./MINUTES_PER_HOUR;
+const double TimeOps::SECONDS_PER_HOUR      = SECONDS_PER_MINUTE * MINUTES_PER_HOUR;
+
+const double TimeOps::MINUTES_PER_DAY       = HOURS_PER_DAY * MINUTES_PER_HOUR;
+const double TimeOps::DAYS_PER_MINUTE       = 1./MINUTES_PER_DAY;
+
+const double TimeOps::SECONDS_PER_DAY       = MINUTES_PER_DAY * SECONDS_PER_MINUTE;
+const double TimeOps::DAYS_PER_SECOND       = 1./SECONDS_PER_DAY;
+
+const int    TimeOps::IHOURS_PER_DAY        = int(HOURS_PER_DAY);
+const int    TimeOps::ISECONDS_PER_MINUTE   = int(SECONDS_PER_MINUTE);
+const int    TimeOps::IMINUTES_PER_HOUR     = int(MINUTES_PER_HOUR);
+const int    TimeOps::ISECONDS_PER_HOUR     = int(SECONDS_PER_HOUR);
+
+
 
 const double TimeOps::DST_OFFSET = DAYS_PER_HOUR;
 
@@ -322,7 +333,7 @@ double TimeOps::toGreenwichSiderealTime( double jd ) {
 //  *
 //  * @returns the local mean sidereal time
 //  */
-// double TimeOps::toLocalMeanSideralTime(double _jd, double _lng, ANGLE_TYPE _type) {
+// double TimeOps::toLocalMeanSideralTime(double _jd, double _lng, ANGLE_UNIT _type) {
 //     if ( _type == DEGS ) {
 //         _lng = MathOps::toRadians(_lng);
 //     }
@@ -341,7 +352,7 @@ double TimeOps::toGreenwichSiderealTime( double jd ) {
  *
  * @return Local Sidereal Time
  */
-double TimeOps::toLocalSideralTime (double _jd, double _lng, ANGLE_TYPE _type) {
+double TimeOps::toLocalSideralTime (double _jd, double _lng, ANGLE_UNIT _type) {
     if ( _type == DEGS ) {
         _lng = MathOps::toRadians(_lng);
     }
@@ -543,6 +554,142 @@ DateTime TimeOps::toDateTime ( double _jd ) {
  */
 double TimeOps::hourToDay ( int _hrs ) { 
     return (double)_hrs / HOURS_PER_DAY; 
+}
+
+//----------------------------------------------------------------------------
+/**
+ * yearTo(): convert years to decimal in any other unit type
+ *
+ * @param years
+ * @param unit
+ *
+ * @return years in unit
+ */
+double TimeOps::yearTo ( double _yrs, TIME_UNIT _unit ) {
+    switch (_unit) {
+        case YEARS:
+            return _yrs;
+            break;
+        case DAYS:
+            return _yrs * TimeOps::DAYS_PER_YEAR;
+            break;
+        default:
+            return TimeOps::dayTo(_yrs * TimeOps::DAYS_PER_YEAR, _unit);
+            break;
+    }
+}
+
+/**
+ * yearTo(): convert year into decimal of the right unit
+ *
+ * @param days
+ * @param unit
+ *
+ * @return days in unit
+ */
+double TimeOps::dayTo ( double _days, TIME_UNIT _unit) {
+    switch (_unit) {
+        case YEARS:
+            return _days * TimeOps::YEARS_PER_DAY;
+            break;
+        case DAYS:
+            return _days;
+            break;
+        case HOURS:
+            return _days * TimeOps::HOURS_PER_DAY;
+            break;
+        case MINS:
+            return _days * TimeOps::MINUTES_PER_DAY;
+            break;
+        case SECS:
+            return _days * TimeOps::SECONDS_PER_DAY;
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * minutesTo(): convert days into decimal of the right unit
+ *
+ * @param minutes
+ * @param unit
+ *
+ * @return minutes in units
+ */
+double TimeOps::minutesTo ( double _mins, TIME_UNIT _unit ) {
+    switch (_unit) {
+        case YEARS:
+            return _mins * TimeOps::DAYS_PER_MINUTE * TimeOps::YEARS_PER_DAY;
+            break;
+        case DAYS:
+            return _mins * TimeOps::DAYS_PER_MINUTE;
+            break;
+        case HOURS:
+            return _mins * TimeOps::HOURS_PER_MINUTE;
+            break;
+        case MINS:
+            return _mins;
+            break;
+        case SECS:
+            return _mins * TimeOps::SECONDS_PER_MINUTE;
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * convert(): convert from one time unit to another
+ *
+ * @param _in_value
+ * @param _in_unit
+ * @param _out_value
+ * @param _out_unit
+ *
+ */
+void TimeOps::convert( double _in_value, TIME_UNIT _in_unit, double &_out_value, TIME_UNIT _out_unit) {
+    double days = 0.0;
+    
+    switch (_in_unit) {
+        case YEARS:
+            days = _in_value * TimeOps::DAYS_PER_YEAR;
+            break;
+        case DAYS:
+            days = _in_value;
+            break;
+        case HOURS:
+            days = _in_value * TimeOps::DAYS_PER_HOUR;
+            break;
+        case MINS:
+            days = _in_value * TimeOps::DAYS_PER_MINUTE;
+            break;
+        case SECS:
+            days = _in_value * TimeOps::DAYS_PER_SECOND;
+            break;
+        default:
+            break;
+    }
+    
+    switch (_out_unit) {
+        case YEARS:
+            _out_value = days * TimeOps::YEARS_PER_DAY;
+            break;
+        case DAYS:
+            _out_value = days;
+            break;
+        case HOURS:
+            _out_value = days * TimeOps::HOURS_PER_DAY;
+            break;
+        case MINS:
+            _out_value = days * TimeOps::MINUTES_PER_DAY;
+            break;
+        case SECS:
+            _out_value = days * TimeOps::SECONDS_PER_DAY;
+            break;
+        default:
+            break;
+    }
 }
 
 /**

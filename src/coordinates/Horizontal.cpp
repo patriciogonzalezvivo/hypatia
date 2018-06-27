@@ -10,7 +10,7 @@ Horizontal::Horizontal ( const Vector& _parent ) {
     m_theta = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
 }
 
-Horizontal::Horizontal ( const double _alt, const double _az, ANGLE_TYPE _type ) {
+Horizontal::Horizontal ( const double _alt, const double _az, ANGLE_UNIT _type ) {
     if ( _type == RADS ) {
         m_phi = _alt;
         m_theta = _az;
@@ -24,7 +24,7 @@ Horizontal::Horizontal ( const double _alt, const double _az, ANGLE_TYPE _type )
 Horizontal::~Horizontal () {
 }
 
-double Horizontal::getAltitud(ANGLE_TYPE _type) const {
+double Horizontal::getAltitud(ANGLE_UNIT _type) const {
     if ( _type == DEGS ) {
         return MathOps::toDegrees( m_phi );
     }
@@ -33,7 +33,7 @@ double Horizontal::getAltitud(ANGLE_TYPE _type) const {
     }
 }
 
-double Horizontal::getAzimuth(ANGLE_TYPE _type) const {
+double Horizontal::getAzimuth(ANGLE_UNIT _type) const {
     if ( _type == DEGS ) {
         return MathOps::toDegrees( m_theta );
     }

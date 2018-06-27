@@ -20,6 +20,9 @@ static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"E
 
 static char* zodiacSigns[] = { (char*)"Ari", (char*)"Tau", (char*)"Gem", (char*)"Cnc", (char*)"Leo", (char*)"Vir", (char*)"Lib", (char*)"Sco", (char*)"Sgr", (char*)"Cap", (char*)"Aqr", (char*)"Psc" };
 
+//                         Sun,  Mercury, Venus, Earth,  Mars, Jupiter, Saturn, Uranus, Neptune, Pluto,   Moon, Sats
+static double period[] = { 0.0, 0.240846, 0.615,   1.0, 1.881,   11.86,  29.46,  84.01,   164.8, 248.1, 0.0748,  0.0 };
+
 Body::Body() : m_jcentury(0.0), m_ha(0.0), m_bodyId( NAB ) {
 }
 
@@ -27,6 +30,32 @@ Body::Body( BodyId _body ) : m_jcentury(0.0), m_ha(0.0), m_bodyId( _body ) {
 }
 
 Body::~Body() {
+}
+
+char*  Body::getName() const {
+    return bodyNames[m_bodyId];
+}
+
+char * Body::getZodiacSign() const {
+    return zodiacSigns[ int((m_geocentric.getLongitude(RADS)/MathOps::TAU)*12.)%12 ];
+}
+
+double Body::getHourAngle(ANGLE_UNIT _type) const {
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( m_ha );;;
+    }
+    else {
+        return m_ha;
+    }
+}
+
+double Body::getPeriod(TIME_UNIT _unit) const {
+    if (m_bodyId > SUN && m_bodyId < SATELLITE) {
+        return TimeOps::yearTo(period[m_bodyId], _unit);
+    }
+    else {
+        return 0.0;
+    }
 }
 
 // calculate the data for a given planet, jd, and location
@@ -80,26 +109,17 @@ void Body::compute( Observer& _obs ) {
         }
         
         m_equatorial = CoordOps::toEquatorial( _obs, m_geocentric );
-        m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, m_equatorial ), RADS);
-        m_horizontal = CoordOps::toHorizontal( _obs, m_equatorial );
+        
+        if ( _obs.haveLocation() ) {
+            m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, m_equatorial ), RADS);
+            m_horizontal = CoordOps::toHorizontal( _obs, m_equatorial );
+            m_bHorizontal = true;
+        }
+        else {
+            m_ha = 0.0;
+            m_horizontal[0] = 0.0;
+            m_horizontal[1] = 0.0;
+            m_bHorizontal = false;
+        }
     }
 }
-
-char*  Body::getName() const {
-    return bodyNames[m_bodyId];
-}
-
-char * Body::getZodiacSign() const {
-    return zodiacSigns[ int((m_geocentric.getLongitude(RADS)/MathOps::TAU)*12.)%12 ];
-}
-
-double Body::getHourAngle(ANGLE_TYPE _type) const {
-    if ( _type == DEGS ) {
-        return MathOps::toDegrees( m_ha );;;
-    }
-    else {
-        return m_ha;
-    }
-}
-
-

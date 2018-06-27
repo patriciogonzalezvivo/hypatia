@@ -8,17 +8,17 @@
 class Ecliptic : public Polar {
 public:
     Ecliptic ();
-    Ecliptic (const Vector& _parent, UNIT_TYPE _type);
-    Ecliptic (double _lng, double _lat, double _radius, ANGLE_TYPE _a_type, UNIT_TYPE _d_type);
+    Ecliptic (const Vector& _parent, DISTANCE_UNIT _type);
+    Ecliptic (double _lng, double _lat, double _radius, ANGLE_UNIT _a_type, DISTANCE_UNIT _d_type);
     virtual ~Ecliptic();
     
     virtual Ecliptic& operator= (const Vector& _vec);
     
-    virtual double  getLongitude (ANGLE_TYPE _type) const;
-    virtual double  getLatitude (ANGLE_TYPE _type) const;
-    virtual double  getRadius (UNIT_TYPE _type) const;
+    virtual double  getLongitude (ANGLE_UNIT _type) const;
+    virtual double  getLatitude (ANGLE_UNIT _type) const;
+    virtual double  getRadius (DISTANCE_UNIT _type) const;
     
-    virtual Vector  getVector (UNIT_TYPE _type) const;
+    virtual Vector  getVector (DISTANCE_UNIT _type) const;
     
 protected:
     double m_radius;

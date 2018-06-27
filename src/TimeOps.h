@@ -18,6 +18,14 @@ enum TIME_TYPE {
     UTC
 };
 
+enum TIME_UNIT {
+    YEARS,
+    DAYS,
+    HOURS,
+    MINS,
+    SECS
+};
+
 enum CALENDAR_TYPE {
     T_GREGORIAN = 0,
     T_JULIAN = 1
@@ -52,22 +60,32 @@ enum DATE_FMT {
 };
 
 struct TimeOps {
+    static const double JULIAN_EPOCH;
+    static const double MJULIAN_EPOCH;
+    static const double TROPICAL_YEAR;
+    
+    static const double DAYS_PER_YEAR;
+    static const double YEARS_PER_DAY;
+    
     static const double DAYS_PER_HOUR;
     static const double HOURS_PER_DAY;
-    static const double SECONDS_PER_DAY;
-    static const double SECONDS_PER_MINUTE;
-    static const double MINUTES_PER_HOUR;
-    static const double SECONDS_PER_HOUR;
+    
     static const double MINUTES_PER_DAY;
+    static const double DAYS_PER_MINUTE;
+    
+    static const double MINUTES_PER_HOUR;
+    static const double HOURS_PER_MINUTE;
+    
+    static const double SECONDS_PER_DAY;
+    static const double DAYS_PER_SECOND;
+    
+    static const double SECONDS_PER_HOUR;
+    static const double SECONDS_PER_MINUTE;
     
     static const int    IHOURS_PER_DAY;
     static const int    ISECONDS_PER_MINUTE;
     static const int    IMINUTES_PER_HOUR;
     static const int    ISECONDS_PER_HOUR;
-    
-    static const double TROPICAL_YEAR;
-    static const double JULIAN_EPOCH;
-    static const double MJULIAN_EPOCH;
     
     static const double DAYS_PER_CENTURY;
     static const double DAYS_PER_MILLENIUM;
@@ -182,6 +200,17 @@ struct TimeOps {
     static void toHMS ( double _jd, int &_hrs, int &_min, int &_sec );
     
     /**
+     * convert(): convert from one time unit to another
+     *
+     * @param _in_value
+     * @param _in_unit
+     * @param _out_value
+     * @param _out_unit
+     *
+     */
+    static void convert( double _in_value, TIME_UNIT _in_unit, double &_out_value, TIME_UNIT _out_unit);
+    
+    /**
      * hourToDay(): convert hour to decimal day, e.g., 12h -> .5d
      *
      * @param hour
@@ -189,6 +218,36 @@ struct TimeOps {
      * @return day fraction
      */
     static double hourToDay ( int _hrs );
+    
+    /**
+     * yearTo(): convert year into decimal of the right unit
+     *
+     * @param year
+     * @param unit
+     *
+     * @return years in units
+     */
+    static double yearTo ( double _yrs, TIME_UNIT _unit );
+    
+    /**
+     * yearTo(): convert days into decimal of the right unit
+     *
+     * @param days
+     * @param unit
+     *
+     * @return days in units
+     */
+    static double dayTo ( double _days, TIME_UNIT _unit );
+    
+    /**
+     * minutesTo(): convert days into decimal of the right unit
+     *
+     * @param minutes
+     * @param unit
+     *
+     * @return minutes in units
+     */
+    static double minutesTo ( double _mins, TIME_UNIT _unit );
 
     /**
      * formatDateTime(): format a JD into a text string
@@ -257,7 +316,7 @@ struct TimeOps {
      *
      * @return Local Sidereal Time
      */
-    static double toLocalSideralTime ( double _jd, double _lng, ANGLE_TYPE _type );
+    static double toLocalSideralTime ( double _jd, double _lng, ANGLE_UNIT _type );
     
     /**
      * toJD(): convert a seconds to Julian Century

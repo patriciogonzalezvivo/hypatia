@@ -33,7 +33,8 @@ public:
     virtual BodyId      getId() const { return m_bodyId; }
     virtual char*       getName() const;
     virtual char*       getZodiacSign() const;
-    virtual double      getHourAngle(ANGLE_TYPE _type) const;
+    virtual double      getHourAngle(ANGLE_UNIT _type) const;
+    virtual double      getPeriod(TIME_UNIT _unit) const;
 
     // Heliocentric
     virtual Ecliptic    getEclipticHeliocentric() const { return m_heliocentric; }
@@ -42,14 +43,15 @@ public:
     virtual Ecliptic    getEclipticGeocentric() const { return m_geocentric; }
     
     virtual Equatorial  getEquatorial() const { return m_equatorial; }
-    virtual Vector      getEquatorialVector(UNIT_TYPE _type) const { return m_equatorial.getVector() * m_geocentric.getRadius(_type); }
+    virtual Vector      getEquatorialVector(DISTANCE_UNIT _type) const { return m_equatorial.getVector() * m_geocentric.getRadius(_type); }
     
+    virtual bool        haveHorizontal() const { return m_bHorizontal; }
     virtual Horizontal  getHorizontal() const { return m_horizontal; }
-    virtual Vector      getHorizontalVector(UNIT_TYPE _type) const { return m_horizontal.getVector() * m_geocentric.getRadius(_type); };
+    virtual Vector      getHorizontalVector(DISTANCE_UNIT _type) const { return m_horizontal.getVector() * m_geocentric.getRadius(_type); };
     
-    // Calculate the data for a given planet, jd, and location
-    // This function must be called (directly or via c'tor) before calling
-    // any of the other fns!
+    //  Calculate the data for a given planet given an observer
+    //  - This function must be called (directly or via c'tor) before calling any of the other fns!
+    //  - If the observer have no location Horizontal coordinates will not be calculate and remain 0.0, 0.0
     //
     virtual void        compute( Observer& _obs );
     
@@ -63,13 +65,18 @@ protected:
     double      m_jcentury;
     double      m_ha;
     BodyId      m_bodyId;
+    
+    bool        m_bHorizontal;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Body& b) {
     strm << b.getName() << ", ";
     strm << b.getEclipticHeliocentric() << ", ";
-    strm << b.getEquatorial() << ", ";
-    strm << b.getHorizontal();
-
+    strm << b.getEquatorial();
+    
+    if ( b.haveHorizontal() ) {
+        strm << ", " << b.getHorizontal();
+    }
+    
     return strm;
 }

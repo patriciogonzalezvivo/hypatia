@@ -15,8 +15,8 @@ public:
     virtual double  getMagnitud() const;
     virtual Vector  getNormalized() const;
 
-    virtual double  getLongitude(ANGLE_TYPE _type) const;
-    virtual double  getLatitude(ANGLE_TYPE _type) const;
+    virtual double  getLongitude(ANGLE_UNIT _type) const;
+    virtual double  getLatitude(ANGLE_UNIT _type) const;
     
     virtual double  dot(const Vector& _vec) const;
     

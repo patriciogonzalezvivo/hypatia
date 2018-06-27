@@ -13,12 +13,12 @@
 class ECI {
 public:
     ECI();
-    ECI(double _jd, const Vector &_pos, const Vector &_vel = Vector(), UNIT_TYPE _type = KM);
+    ECI(double _jd, const Vector &_pos, const Vector &_vel = Vector(), DISTANCE_UNIT _type = KM);
     virtual ~ECI();
 
     virtual double      getJD() const { return m_jd; };
-    virtual Vector      getPosition(UNIT_TYPE _type) const;
-    virtual Vector      getVelocity(UNIT_TYPE _type) const;
+    virtual Vector      getPosition(DISTANCE_UNIT _type) const;
+    virtual Vector      getVelocity(DISTANCE_UNIT _type) const;
 
 private:
     Vector      m_position; // km

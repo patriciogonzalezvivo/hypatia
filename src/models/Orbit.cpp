@@ -74,7 +74,7 @@ Orbit::Orbit(const TLE& tle) {
     m_period = MathOps::TAU / getMeanMotion();
 }
 
-double Orbit::getInclination(ANGLE_TYPE _type) const {
+double Orbit::getInclination(ANGLE_UNIT _type) const {
     if (_type == DEGS) {
         return MathOps::toDegrees(m_inclination);
     }
@@ -83,7 +83,7 @@ double Orbit::getInclination(ANGLE_TYPE _type) const {
     }
 }
 
-double Orbit::getAscendingNode(ANGLE_TYPE _type) const {
+double Orbit::getAscendingNode(ANGLE_UNIT _type) const {
     if (_type == DEGS) {
         return MathOps::toDegrees(m_ascendingNode);
     }
@@ -92,7 +92,7 @@ double Orbit::getAscendingNode(ANGLE_TYPE _type) const {
     }
 }
 
-double Orbit::getArgumentPeriapsis(ANGLE_TYPE _type) const {
+double Orbit::getArgumentPeriapsis(ANGLE_UNIT _type) const {
     if (_type == DEGS) {
         return MathOps::toDegrees(m_argumentPeriapsis);
     }
@@ -101,7 +101,7 @@ double Orbit::getArgumentPeriapsis(ANGLE_TYPE _type) const {
     }
 }
 
-double Orbit::getMeanAnomaly(ANGLE_TYPE _type) const {
+double Orbit::getMeanAnomaly(ANGLE_UNIT _type) const {
     if (_type == DEGS) {
         return MathOps::toDegrees(m_meanAnomoly);
     }

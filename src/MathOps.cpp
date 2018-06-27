@@ -90,7 +90,7 @@ double MathOps::secToRadians( double _sec ) {
  *
  * @return hours double
  */
-double MathOps::toHrs( double _angle, ANGLE_TYPE _type ) {
+double MathOps::toHrs( double _angle, ANGLE_UNIT _type ) {
     if ( _type == RADS ) {
         _angle = MathOps::toDegrees(_angle);
     }
@@ -100,7 +100,7 @@ double MathOps::toHrs( double _angle, ANGLE_TYPE _type ) {
 //----------------------------------------------------------------------------
 // reduce an angle in degrees to (0 <= d < 360) or (0 <= d << 2PI )
 //
-double MathOps::normalize ( double _angle, ANGLE_TYPE _type ) {
+double MathOps::normalize ( double _angle, ANGLE_UNIT _type ) {
     
     if ( _type == DEGS ) {
         if (_angle >= 0.0 &&
@@ -154,7 +154,7 @@ int MathOps::quadrant( double _rad ) {
     return (int)( normalize( _rad, RADS ) * MathOps::TWO_OVER_PI );
 }
 
-void MathOps::toDMS ( double _angle, ANGLE_TYPE _type, int &_deg, int &_min, double &_sec ) {
+void MathOps::toDMS ( double _angle, ANGLE_UNIT _type, int &_deg, int &_min, double &_sec ) {
     // int totalSeconds = (int)round( rangeDegrees(_rad) * SECONDS_PER_DEGREE);
     // _sec = totalSeconds % 60;
     // _min = (totalSeconds / 60) % 60;
@@ -194,7 +194,7 @@ void MathOps::toDMS ( double _angle, ANGLE_TYPE _type, int &_deg, int &_min, dou
     _deg *= sign;
 }
 
-void MathOps::toHMS ( double _angle, ANGLE_TYPE _type, int &_hrs, int &_min, double &_sec ) {
+void MathOps::toHMS ( double _angle, ANGLE_UNIT _type, int &_hrs, int &_min, double &_sec ) {
     double degrees = _angle;
     if ( _type == RADS) {
         degrees = MathOps::toDegrees(_angle);
@@ -235,7 +235,7 @@ void MathOps::toHMS ( double _angle, ANGLE_TYPE _type, int &_hrs, int &_min, dou
  * @return formated string
  *
  */
-char* MathOps::formatAngle ( double _angle, ANGLE_TYPE _type, ANGLE_FMT _fmt ) {
+char* MathOps::formatAngle ( double _angle, ANGLE_UNIT _type, ANGLE_FMT _fmt ) {
     double degrees = _angle;
     if ( _type == RADS) {
         degrees = MathOps::toDegrees(_angle);

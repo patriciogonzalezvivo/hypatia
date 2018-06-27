@@ -15,11 +15,11 @@ public:
     
     double      getEccentricity() const { return m_eccentricity; }
     
-    double      getMeanAnomaly(ANGLE_TYPE _type) const;
-    double      getAscendingNode(ANGLE_TYPE _type) const;
-    double      getArgumentPeriapsis(ANGLE_TYPE _type) const;
+    double      getMeanAnomaly(ANGLE_UNIT _type) const;
+    double      getAscendingNode(ANGLE_UNIT _type) const;
+    double      getArgumentPeriapsis(ANGLE_UNIT _type) const;
     
-    double      getInclination(ANGLE_TYPE _type) const;
+    double      getInclination(ANGLE_UNIT _type) const;
     double      getMeanMotion() const { return m_meanMotion; }
     
     double      getBStar() const { return m_bstar; }

@@ -15,42 +15,47 @@
 class Observer {
 public:
     // c'tor: lon & lat are passed in DEGREES
-    Observer();
+    Observer(double _jd = 0);
     Observer(const Geodetic& _location, double _jd = 0);
     Observer(double _lng_deg, double _lat_deg, double _jd = 0);
     virtual ~Observer();
     
-    virtual void    setSeconds(unsigned long _sec = 0);
-    virtual void    setJD(double _jd);
-    virtual void    setLocation(const Geodetic& _location);
+    virtual void        setSeconds(unsigned long _sec = 0);
+    virtual void        setJD(double _jd);
+    virtual void        setLocation(const Geodetic& _location);
     
-    virtual double  getJD() const { return m_jd; }
-    virtual double  getJC() const { return m_jcentury; }
-    virtual double  getLST() const { return m_lst; }
-    virtual double  getObliquity() const { return m_obliquity; }
-    virtual Geodetic getLocation() const { return m_location; }
+    virtual double      getJD() const { return m_jd; }
+    virtual double      getJC() const { return m_jcentury; }
+    virtual double      getObliquity() const { return m_obliquity; }
     
-    virtual Vector  getHeliocentricVector(UNIT_TYPE _type);
+    virtual bool        haveLocation() const { return m_bLocation; }
+    virtual Geodetic    getLocation() const;
+    virtual double      getLST() const;
     
-    virtual void    update();
+    virtual Vector      getHeliocentricVector(DISTANCE_UNIT _type);
+    
+    virtual void        update();
 
 private:
-    Vector      m_heliocentricLoc;
-    Geodetic    m_location;
+    Vector              m_heliocentricLoc;
+    Geodetic            m_location;
     
-    double      m_jd;
-    double      m_jcentury;
-    double      m_obliquity;
-    double      m_lst;
+    double              m_jd;
+    double              m_jcentury;
+    double              m_obliquity;
+    double              m_lst;
     
-    bool        m_changed;
+    bool                m_changed;
+    bool                m_bLocation;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Observer& o) {
-    strm << "Observer, " << o.getLocation();
-    strm << ", jd:" << std::setw(8) << o.getJD();
-    strm << ", time:" << std::setw(8) << TimeOps::formatDateTime(o.getJD(), Y_M_D_HM);
+    strm << "Observer, jd:" << std::setw(8) << o.getJD();
+    strm << ", " << std::setw(8) << TimeOps::formatDateTime(o.getJD(), Y_M_D_HM);
     strm << ", obliq:" << std::setw(8) << MathOps::formatAngle(o.getObliquity(), RADS, Dd);
-    strm << ", lst:" << std::setw(8) << MathOps::formatAngle(o.getLST(), DEGS, Dd);
+    if ( o.haveLocation() ) {
+        strm << ", " << o.getLocation();
+        strm << ", lst:" << std::setw(8) << MathOps::formatAngle(o.getLST(), DEGS, Dd);
+    }
     return strm;
 }

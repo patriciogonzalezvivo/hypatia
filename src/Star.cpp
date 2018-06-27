@@ -593,7 +593,15 @@ Star::~Star() {
 }
 
 void Star::compute( Observer& _obs ) {
-    m_horizontal = CoordOps::toHorizontal( _obs, m_equatorial );
+    if ( _obs.haveLocation() ) {
+        m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, m_equatorial ), RADS);
+        m_horizontal = CoordOps::toHorizontal( _obs, m_equatorial );
+        m_bHorizontal = true;
+    }
+    else {
+        m_ha = 0.0;
+        m_horizontal[0] = 0.0;
+        m_horizontal[1] = 0.0;
+        m_bHorizontal = false;
+    }
 }
-
-

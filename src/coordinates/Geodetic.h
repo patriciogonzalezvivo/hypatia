@@ -5,15 +5,15 @@
 class Geodetic : public Polar {
 public:
     Geodetic();
-    Geodetic(double _lng, double _lat, double _alt_m, ANGLE_TYPE _a_type, UNIT_TYPE _r_type);
+    Geodetic(double _lng, double _lat, double _alt_m, ANGLE_UNIT _a_type, DISTANCE_UNIT _r_type);
     virtual ~Geodetic();
     
-    virtual double  getLongitude(ANGLE_TYPE _type) const;
-    virtual double  getLatitude(ANGLE_TYPE _type) const;
-    virtual double  getAltitude(UNIT_TYPE _type) const;
-    virtual double  getRadius(UNIT_TYPE _type) const;
+    virtual double  getLongitude(ANGLE_UNIT _type) const;
+    virtual double  getLatitude(ANGLE_UNIT _type) const;
+    virtual double  getAltitude(DISTANCE_UNIT _type) const;
+    virtual double  getRadius(DISTANCE_UNIT _type) const;
     
-    virtual Vector  getVector(UNIT_TYPE _type) const;
+    virtual Vector  getVector(DISTANCE_UNIT _type) const;
     
 protected:
     double m_alt;   // km

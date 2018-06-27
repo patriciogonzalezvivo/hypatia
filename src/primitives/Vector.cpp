@@ -33,7 +33,7 @@ double Vector::getMagnitud() const {
     return sqrt(x*x + y*y + z*z);
 }
 
-double Vector::getLongitude(ANGLE_TYPE _type) const {
+double Vector::getLongitude(ANGLE_UNIT _type) const {
     double lng = atan2(y, x);
     if ( _type == DEGS ) {
         return MathOps::toDegrees( lng );
@@ -43,7 +43,7 @@ double Vector::getLongitude(ANGLE_TYPE _type) const {
     }
     
 };
-double Vector::getLatitude(ANGLE_TYPE _type) const {
+double Vector::getLatitude(ANGLE_UNIT _type) const {
 //    double lat = asin(z);
     double lat = atan2(z, sqrt(x * x + y * y));
     if ( _type == DEGS ) {

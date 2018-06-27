@@ -6,7 +6,7 @@
 Geodetic::Geodetic () : m_alt(0.0) {
 }
 
-Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_TYPE _a_type, UNIT_TYPE _r_type) {
+Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_UNIT _a_type, DISTANCE_UNIT _r_type) {
     if ( _a_type == RADS ) {
         m_phi = _lng;
         m_theta = _lat;
@@ -27,7 +27,7 @@ Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_TYPE _a_type, 
 Geodetic::~Geodetic () {
 }
 
-double Geodetic::getLongitude ( ANGLE_TYPE _type ) const {
+double Geodetic::getLongitude ( ANGLE_UNIT _type ) const {
     if ( _type == DEGS ) {
         return MathOps::toDegrees( m_phi );
     }
@@ -36,7 +36,7 @@ double Geodetic::getLongitude ( ANGLE_TYPE _type ) const {
     }
 }
 
-double Geodetic::getLatitude ( ANGLE_TYPE _type ) const {
+double Geodetic::getLatitude ( ANGLE_UNIT _type ) const {
     if ( _type == DEGS ) {
         return MathOps::toDegrees( m_theta );
     }
@@ -45,7 +45,7 @@ double Geodetic::getLatitude ( ANGLE_TYPE _type ) const {
     }
 }
 
-double Geodetic::getRadius ( UNIT_TYPE _type ) const {
+double Geodetic::getRadius ( DISTANCE_UNIT _type ) const {
     double pct = abs(sin(m_theta));
     double rad = CoordOps::EARTH_EQUATORIAL_RADIUS_KM * (1.-pct) + CoordOps::EARTH_POLAR_RADIUS_KM * pct;
     rad += m_alt * 0.001; // radious is in KM
@@ -58,7 +58,7 @@ double Geodetic::getRadius ( UNIT_TYPE _type ) const {
     }
 }
 
-double Geodetic::getAltitude (UNIT_TYPE _type) const {
+double Geodetic::getAltitude (DISTANCE_UNIT _type) const {
     if (_type == KM) {
         return m_alt;
     }
@@ -67,7 +67,7 @@ double Geodetic::getAltitude (UNIT_TYPE _type) const {
     }
 };
 
-Vector Geodetic::getVector (UNIT_TYPE _type) const {
+Vector Geodetic::getVector (DISTANCE_UNIT _type) const {
     if (_type == KM) {
         return Vector(*this);
     }

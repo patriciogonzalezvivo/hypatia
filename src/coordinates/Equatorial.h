@@ -9,11 +9,11 @@ class Equatorial : public Polar {
 public:
     Equatorial();
     Equatorial(const Vector& _parent);
-    Equatorial(const double _ra, const double _dec, ANGLE_TYPE _type);
+    Equatorial(const double _ra, const double _dec, ANGLE_UNIT _type);
     virtual ~Equatorial();
     
-    virtual double  getRightAscension(ANGLE_TYPE _type) const;
-    virtual double  getDeclination(ANGLE_TYPE _type) const;
+    virtual double  getRightAscension(ANGLE_UNIT _type) const;
+    virtual double  getDeclination(ANGLE_UNIT _type) const;
     
     virtual Vector  getVector() const;
 };

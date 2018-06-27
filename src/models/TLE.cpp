@@ -437,7 +437,7 @@ void TLE::initialize() {
  * @param in_degrees Whether to return the value in degrees or radians
  * @returns the inclination
  */
-double TLE::getInclination(ANGLE_TYPE _type) const {
+double TLE::getInclination(ANGLE_UNIT _type) const {
     if (_type == DEGS) {
         return m_inclination;
     }
@@ -452,7 +452,7 @@ double TLE::getInclination(ANGLE_TYPE _type) const {
  * @param in_degrees Whether to return the value in degrees or radians
  * @returns the right ascension of the ascending node
  */
-double TLE::getRightAscendingNode(ANGLE_TYPE _type) const {
+double TLE::getRightAscendingNode(ANGLE_UNIT _type) const {
     if (_type == DEGS) {
         return m_right_ascending_node;
     }
@@ -466,7 +466,7 @@ double TLE::getRightAscendingNode(ANGLE_TYPE _type) const {
  * @param in_degrees Whether to return the value in degrees or radians
  * @returns the argument of perigee
  */
-double TLE::getArgumentPerigee(ANGLE_TYPE _type) const {
+double TLE::getArgumentPerigee(ANGLE_UNIT _type) const {
     if (_type == DEGS) {
         return m_argument_perigee;
     }
@@ -480,7 +480,7 @@ double TLE::getArgumentPerigee(ANGLE_TYPE _type) const {
  * @param in_degrees Whether to return the value in degrees or radians
  * @returns the mean anomaly
  */
-double TLE::getMeanAnomaly(ANGLE_TYPE _type) const {
+double TLE::getMeanAnomaly(ANGLE_UNIT _type) const {
     if (_type == DEGS) {
         return m_mean_anomaly;
     }

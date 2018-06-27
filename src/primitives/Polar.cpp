@@ -12,7 +12,7 @@
 Polar::Polar() : m_phi(0.0),  m_theta(0.0) {
 }
 
-Polar::Polar(const double _phi, const double _theta, ANGLE_TYPE _type) {
+Polar::Polar(const double _phi, const double _theta, ANGLE_UNIT _type) {
     if (_type == RADS) {
         m_phi = _phi;
         m_theta = _theta;

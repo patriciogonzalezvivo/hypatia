@@ -222,7 +222,7 @@ Luna::Luna(): m_age(0.0), m_posAngle(0.0) {
 /**
  * calculate current phase angle in radians (Meeus' easy lower precision method)
  */
-double Luna::getPhaseAngle(ANGLE_TYPE _type) {
+double Luna::getPhaseAngle(ANGLE_UNIT _type) {
     double phase = MathOps::normalize(
         180 - MathOps::toDegrees(m_f.D)
           - 6.289 * sin( m_f.Mp )
@@ -425,7 +425,6 @@ void Luna::compute( Observer &_obs ) {
         m_geocentric = Ecliptic(lng, lat, rad, RADS, KM);
         
         m_equatorial = CoordOps::toEquatorial( _obs, m_geocentric );
-        m_horizontal = CoordOps::toHorizontal( _obs, m_equatorial );
 
         // Compute Sun's coords
         double sun_eclipticLon, sun_eclipticLat, sun_radius;
@@ -452,16 +451,26 @@ void Luna::compute( Observer &_obs ) {
         // convert radians to Synodic day
         m_age = SYNODIC_MONTH * (moonAge / MathOps::TAU);
 
-        // Position Angle
-        double delta_az = m_horizontal.getAzimuth(RADS) - sunHor.getAzimuth(RADS);
-        m_posAngle = atan2( cos(sunHor.getAltitud(RADS)) * sin(delta_az),
-                            sin(sunHor.getAltitud(RADS)) * cos(m_horizontal.getAzimuth(RADS)) - cos(sunHor.getAltitud(RADS)) * sin(m_horizontal.getAzimuth(RADS)) * cos(delta_az));
-
-        // double hour_angle = MathOps::toRadians(localSiderealTime(obs.getJulianDay(), obs.getLongitud())) - m_ra;
+        if (_obs.haveLocation()) {
+            m_horizontal = CoordOps::toHorizontal( _obs, m_equatorial );
+            // Position Angle
+            double delta_az = m_horizontal.getAzimuth(RADS) - sunHor.getAzimuth(RADS);
+            m_posAngle = atan2( cos(sunHor.getAltitud(RADS)) * sin(delta_az),
+                               sin(sunHor.getAltitud(RADS)) * cos(m_horizontal.getAzimuth(RADS)) - cos(sunHor.getAltitud(RADS)) * sin(m_horizontal.getAzimuth(RADS)) * cos(delta_az));
+            m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, m_equatorial ), RADS);
+            m_bHorizontal = true;
+        }
+        else {
+            m_ha = 0.0;
+            m_horizontal[0] = 0.0;
+            m_horizontal[1] = 0.0;
+            m_posAngle = 0.0;
+            m_bHorizontal = false;
+        }
     }
 }
 
-double Luna::getPositionAngle(ANGLE_TYPE _type) const {
+double Luna::getPositionAngle(ANGLE_UNIT _type) const {
     if (_type == DEGS) {
         return MathOps::toDegrees( m_posAngle );
     }

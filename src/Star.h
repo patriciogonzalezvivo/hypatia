@@ -15,11 +15,14 @@ public:
     Star( double _ra, double _dec, double _mag );
     virtual ~Star();
 
-    virtual int     getId() const { return m_id; };
-    virtual double  getMagnitud() const { return m_mag; };
+    virtual int         getId() const { return m_id; };
+    virtual double      getMagnitud() const { return m_mag; };
+    virtual double      getHourAngle(ANGLE_UNIT _type) const;
     
-    virtual Equatorial getEquatorial() const { return m_equatorial; }
-    virtual Horizontal getHorizontal() const { return m_horizontal; }
+    virtual Equatorial  getEquatorial() const { return m_equatorial; }
+    
+    virtual bool        haveHorizontal() const { return m_bHorizontal; }
+    virtual Horizontal  getHorizontal() const { return m_horizontal; }
 
     virtual void    compute( Observer& _obs );
     
@@ -28,7 +31,10 @@ protected:
     Horizontal  m_horizontal;
     
     double      m_mag;
+    double      m_ha;
     int         m_id;
+    
+    bool        m_bHorizontal;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Star& s) {

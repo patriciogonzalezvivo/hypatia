@@ -9,11 +9,11 @@
 #pragma once
 #undef PI
 
-enum UNIT_TYPE {
+enum DISTANCE_UNIT {
     KM, AU
 };
 
-enum ANGLE_TYPE {
+enum ANGLE_UNIT {
     DEGS, RADS
 };
 
@@ -101,7 +101,7 @@ struct MathOps {
      *
      * @return hours double
      */
-    static double toHrs( double _angle, ANGLE_TYPE _type );
+    static double toHrs( double _angle, ANGLE_UNIT _type );
     
     /**
      * toDMS(): convert angle to degrees, minutes and seconds
@@ -114,7 +114,7 @@ struct MathOps {
      * @param seconds out
      *
      */
-    static void toDMS ( double _angles, ANGLE_TYPE _type, int &_deg, int &_min, double &_sec );
+    static void toDMS ( double _angles, ANGLE_UNIT _type, int &_deg, int &_min, double &_sec );
     
     /**
      * toHMS(): convert angles to degrees, minutes and seconds
@@ -127,7 +127,7 @@ struct MathOps {
      * @param seconds out
      *
      */
-    static void toHMS ( double _deg, ANGLE_TYPE _type, int &_hrs, int &_min, double &_sec );
+    static void toHMS ( double _deg, ANGLE_UNIT _type, int &_hrs, int &_min, double &_sec );
     
     /**
      * formatAngle(): format angle into a string
@@ -139,7 +139,7 @@ struct MathOps {
      * @return formated string
      *
      */
-    static char* formatAngle ( double _angle, ANGLE_TYPE _type, ANGLE_FMT _format );
+    static char* formatAngle ( double _angle, ANGLE_UNIT _type, ANGLE_FMT _format );
       
     /**
      * normalize(): reduce an angle to the range (0 <= d < 360 or 0 <= d << TAO)
@@ -150,7 +150,7 @@ struct MathOps {
      *
      * @return a
      */
-    static double normalize( double _angle, ANGLE_TYPE _type );
+    static double normalize( double _angle, ANGLE_UNIT _type );
     
     /**
      *  quadrant(): returns the quadrant ( 0, 1, 2, or 3 ) of the spec'd angle

@@ -12,11 +12,11 @@ public:
     virtual void        setTLE(const TLE& _tle);
     
     virtual Orbit       getOrbit() const { return m_sgp4.getOrbit(); };
+    virtual double      getPeriod(TIME_UNIT _unit) const;
     
     virtual ECI         getECI() const { return m_eci; };
-    
-    virtual Geodetic    getGeodetic() const { return m_geodetic; };
-    virtual Vector      getEquatorialVector(UNIT_TYPE _type) const { return m_geodetic.getVector(_type); }
+    virtual Geodetic    getGeodetic() const;
+    virtual Vector      getEquatorialVector(DISTANCE_UNIT _type) const { return getGeodetic().getVector(_type); }
     
     virtual char*       getName() const;
     
@@ -25,7 +25,6 @@ public:
 protected:
     SGP4        m_sgp4;
     ECI         m_eci;
-    Geodetic    m_geodetic;
     
     std::string m_name;
 };

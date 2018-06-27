@@ -6,7 +6,7 @@
 class Polar {
 public:
     Polar();
-    Polar(const double _phi, const double _theta, ANGLE_TYPE _type);
+    Polar(const double _phi, const double _theta, ANGLE_UNIT _type);
     virtual ~Polar();
     
     virtual Polar& invert();
