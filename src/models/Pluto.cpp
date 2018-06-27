@@ -65,17 +65,20 @@ PlutoCoeffs plutoCoeff[N_COEFFS] = {
     {  3,  0,  0, 0,    -1,    -2,     0,     1,    13,     3 }
 };
 
-void
-reduce_elements (
-                 double mj0,    /* initial epoch */
-                 double mj,    /* desired epoch */
-                 double inc0,    /* initial inclination, rads */
-                 double ap0,    /* initial argument of perihelion, as an mj */
-                 double om0,    /* initial long of ascending node, rads */
-                 double *inc,    /* resultant inclination, rads */
-                 double *ap,    /* resultant arg of perihelion, as an mj */
-                 double *om)    /* resultant long of ascending node, rads */
-{
+/**
+ * reduceElements() -
+ *
+ * @param - mj0, initial epoch
+ * @param - mj, desired epoch
+ * @param - inc0, initial inclination, rads
+ * @param - ap0, initial argument of perihelion, as an mj
+ * @param - om0, initial long of ascending node, rads
+ * @param - inc, resultant inclination, rads
+ * @param - ap, resultant arg of perihelion, as an mj
+ * @param - om, resultant long of ascending node, rads
+ *
+ */
+void reduceElements ( double mj0, double mj, double inc0, double ap0, double om0, double *inc, double *ap, double *om) {
     double t0, t1;
     double tt, tt2, t02, tt3;
     double eta, th, th0;
@@ -149,9 +152,9 @@ void Pluto::calcAllLocs (double& _lon, double& _lat, double& _rad, const double 
      */
     double a = 39.543;                                  /* semimajor axis, au */
     double e = 0.2490;                                  /* excentricity */
-    double inc0 = 17.140;                               /* inclination, deg */
-    double Om0 = 110.307;                               /* long asc node, deg */
-    double omeg0 = 113.768;                             /* arg of perihel, deg */
+    double inc0 = MathOps::toRadians(17.140);           /* inclination, deg */
+    double Om0 = MathOps::toRadians(110.307);           /* long asc node, deg */
+    double omeg0 = MathOps::toRadians(113.768);         /* arg of perihel, deg */
     double mjp = 2448045.539 - MJD0;                    /* epoch of perihel */
     double mjeq = TimeOps::J2000;                       /* equinox of elements */
     double n = 144.9600/ TimeOps::DAYS_PER_CENTURY;     /* daily motion, deg */
@@ -160,7 +163,7 @@ void Pluto::calcAllLocs (double& _lon, double& _lat, double& _rad, const double 
     double ma, ea, nu;          /* mean, excentric and true anomaly */
     double lo, slo, clo;        /* longitude in orbit from asc node */
     
-    reduce_elements(mjeq, mj, MathOps::toRadians(inc0), MathOps::toRadians(omeg0), MathOps::toRadians(Om0), &inc, &omeg, &Om);
+    reduceElements(mjeq, mj, inc0, omeg0, Om0, &inc, &omeg, &Om);
     
     ma = MathOps::toRadians((mj - mjp) * n);
     CoordOps::anomaly(ma, e, &nu, &ea);
