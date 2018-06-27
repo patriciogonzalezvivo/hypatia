@@ -439,7 +439,7 @@ double CoordOps::solarLongitude( double jd ) {
  * @return - the anomaly in radians
  */
 double CoordOps::meanSolarAnomaly( double _jc ) {
-    return MathOps::toRadians(357.52911 + 35999.05029*_jc - 0.0001537*_jc*_jc);
+    return MathOps::toRadians(357.52911 + 35999.05029 * _jc - 0.0001537 * _jc * _jc);
 }
 
 //----------------------------------------------------------------------------
@@ -664,6 +664,73 @@ void CoordOps::nutation( double jd, double* pDPhi, double* pDEpsilon ) {
     
     if( pDEpsilon )
         *pDEpsilon *= .0001;
+}
+
+/**
+ * anomaly() - calculate delta phi and/or delta epsilon for the given jd
+ *
+ * @param - mean anomaly of elliptical motion (rad),
+ * @param - eccentricity of elliptical motion (rad),
+ * @param - return true anomaly (rad)
+ * @param - return eccentrict anomaly (rad),
+ */
+void CoordOps::anomaly (double _mean_anomaly, double _eccentricity, double* _true_anomaly, double* _eccentrict_anomaly) {
+    double m, fea, corr;
+    
+    if (_eccentricity < 1.0) {
+        /* elliptical */
+        double dla;
+        
+        m = _mean_anomaly - MathOps::TAU * (long)(_mean_anomaly / MathOps::TAU);
+        
+        if (m > MathOps::PI) {
+            m -= MathOps::TAU;
+        }
+        
+        if (m < -MathOps::PI) {
+            m += MathOps::TAU;
+        }
+        
+        fea = m;
+        
+        for (;;) {
+            dla = fea - ( _eccentricity * sin(fea) ) - m;
+            if (fabs(dla) < (1e-8)) {
+                break;
+            }
+            /* avoid runnaway corrections for e>.97 and M near 0*/
+            corr = 1.0 - ( _eccentricity * cos(fea));
+            if (corr < 0.1) {
+                corr = 0.1;
+            }
+            dla /= corr;
+            fea -= dla;
+        }
+        *_true_anomaly = 2.0 * atan(sqrt((1.0 + _eccentricity) / (1.0 - _eccentricity)) * tan(fea * 0.5));
+    } else {
+        /* hyperbolic */
+        double fea1;
+        
+        m = fabs(_mean_anomaly);
+        fea = m / (_eccentricity - 1.);
+        fea1 = pow(6.0 * m / (_eccentricity * _eccentricity), 1./3.);
+        
+        /* whichever is smaller is the better initial guess */
+        if (fea1 < fea) {
+            fea = fea1;
+        }
+        
+        corr = 1;
+        while (fabs(corr) > (1e-8)) {
+            corr = (m - _eccentricity * sinh(fea) + fea) / (_eccentricity * cosh(fea) - 1.0);
+            fea += corr;
+        }
+        if (_mean_anomaly < 0.) {
+            fea = -fea;
+        }
+        *_true_anomaly = 2.0 * atan(sqrt(( _eccentricity + 1.0) /( _eccentricity - 1.0)) * tanh(fea * 0.5));
+    }
+    *_eccentrict_anomaly = fea;
 }
 
 /**

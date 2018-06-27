@@ -12,6 +12,7 @@
 #pragma once
 
 #define N_COEFFS 36
+#define XEPHEM
 
 struct PlutoCoeffs {
    short j, s, p, dummyToMaintainAlignment;

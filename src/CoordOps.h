@@ -267,6 +267,17 @@ public:
      */
     static void   nutation( double _jd, double* _pDPhi, double* _pDEpsilon );
     
+    
+    /**
+     * anomaly() - calculate delta phi and/or delta epsilon for the given jd
+     *
+     * @param - mean anomaly of elliptical motion (rad),
+     * @param - eccentricity of elliptical motion (rad),
+     * @param - return true anomaly (rad)
+     * @param - return eccentrict anomaly (rad),
+     */
+    static void anomaly (double _mean_anomaly, double _eccentricity, double* _true_anomaly, double* _eccentrict_anomaly);
+    
     /**
      * parallaticAngle() - compute parallactic angle given latitude, object dec and alt.
      *                      all angles in rads.
