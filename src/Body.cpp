@@ -21,7 +21,7 @@ static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"E
 static char* zodiacSigns[] = { (char*)"Ari", (char*)"Tau", (char*)"Gem", (char*)"Cnc", (char*)"Leo", (char*)"Vir", (char*)"Lib", (char*)"Sco", (char*)"Sgr", (char*)"Cap", (char*)"Aqr", (char*)"Psc" };
 
 //                         Sun,  Mercury, Venus, Earth,  Mars, Jupiter, Saturn, Uranus, Neptune, Pluto,   Moon, Sats
-static double period[] = { 0.0, 0.240846, 0.615,   1.0, 1.881,   11.86,  29.46,  84.01,   164.8, 248.1, 0.0748,  0.0 };
+static double period[] = { 0.0, 0.240846, 0.615,   1.0, 1.881,   11.86,  29.46,  84.01,   164.8, 248.1, 0.0751,  0.0 };
 
 Body::Body() : m_jcentury(0.0), m_ha(0.0), m_bodyId( NAB ) {
 }

@@ -59,6 +59,13 @@ enum DATE_FMT {
     M_D_HM        // 01/01 12:00
 };
 
+enum SolExType {
+    SPRING,
+    SUMMER,
+    AUTUMN,
+    WINTER
+};
+
 struct TimeOps {
     static const double JULIAN_EPOCH;
     static const double MJULIAN_EPOCH;
@@ -92,8 +99,6 @@ struct TimeOps {
     
     static const double J2000;
     static const double JD_DIFF;
-    
-    enum SolExType { SPRING, SUMMER, AUTUMN, WINTER };
     
     // These are initialized in DateOps.cpp
     static const double DST_OFFSET;

@@ -33,9 +33,9 @@ public:
     virtual BodyId      getId() const { return m_bodyId; }
     virtual char*       getName() const;
     virtual char*       getZodiacSign() const;
-    virtual double      getHourAngle(ANGLE_UNIT _type) const;
     virtual double      getPeriod(TIME_UNIT _unit) const;
-
+    virtual double      getHourAngle(ANGLE_UNIT _type) const;
+    
     // Heliocentric
     virtual Ecliptic    getEclipticHeliocentric() const { return m_heliocentric; }
 
