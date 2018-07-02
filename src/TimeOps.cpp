@@ -605,6 +605,7 @@ double TimeOps::dayTo ( double _days, TIME_UNIT _unit) {
             return _days * TimeOps::SECONDS_PER_DAY;
             break;
         default:
+            return 0.0;
             break;
     }
 }
@@ -635,6 +636,7 @@ double TimeOps::minutesTo ( double _mins, TIME_UNIT _unit ) {
             return _mins * TimeOps::SECONDS_PER_MINUTE;
             break;
         default:
+            return 0.0;
             break;
     }
 }
