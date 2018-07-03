@@ -592,6 +592,15 @@ Star::Star( double _ra, double _dec, double _mag ) : m_equatorial(_ra, _dec, DEG
 Star::~Star() {
 }
 
+double Star::getHourAngle(ANGLE_UNIT _type) const {
+	if (_type == DEGS) {
+		return MathOps::toDegrees(m_ha);
+	}
+	else {
+		return m_ha;
+	}
+}
+
 void Star::compute( Observer& _obs ) {
     if ( _obs.haveLocation() ) {
         m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, m_equatorial ), RADS);
