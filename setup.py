@@ -18,6 +18,7 @@ astro_module = Extension(
     'src/primitives/Vector.cpp',
     'src/primitives/TimeSpan.cpp',
     'src/primitives/DateTime.cpp',
+    'src/coordinates/Galactic.cpp',
     'src/coordinates/Ecliptic.cpp',
     'src/coordinates/Equatorial.cpp',
     'src/coordinates/Horizontal.cpp',

@@ -160,6 +160,35 @@ ECI CoordOps::toECI(double _jd, const Geodetic& _geod) {
 //---------------------------------------------------------------------------- to Equatorial
 
 /**
+ * toEquatorial() - Galactic to equatorial coordinates
+ *
+ * @param Observer
+ * @param Galactic position
+ *
+ * @return Equatorial position
+ */
+Equatorial CoordOps::toEquatorial (const Galactic& _galactic ) {
+    // https://github.com/DarkEnergySurvey/despyastro/blob/master/python/despyastro/coords.py
+    double a = _galactic.getLongitude(RADS) - 0.57477043300;
+    double b = _galactic.getLatitude(RADS);
+    
+    double sb = sin(b);
+    double cb = cos(b);
+    double cbsa = cb * sin(a);
+    b = 0.88998808748 * cbsa + 0.45598377618 * sb;
+    // w, = numpy.where(b > 1.0)
+    // if w.size > 0:
+    //     b[w] = 1.
+    double bo = asin(b);
+    a = atan2( 0.45598377618 * cbsa + -0.88998808748 * sb, cb * cos(a) );
+    // double ao = fmod(a + 4.9368292465 + MathOps::TAU * 2.0, MathOps::TAU);
+    double ao = MathOps::normalize(a + 4.9368292465, RADS);
+
+    return Equatorial(ao, bo, RADS);
+}
+
+
+/**
  * eclipticToEquatorial() - ecliptic to equatorial coordinates
  *                          (Meeus, Ch. 93)
  *

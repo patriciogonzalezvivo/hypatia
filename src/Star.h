@@ -15,25 +15,36 @@ public:
     Star( double _ra, double _dec, double _mag );
     virtual ~Star();
 
+    // ID
     virtual int         getId() const { return m_id; };
-    virtual double      getMagnitud() const { return m_mag; };
-    virtual double      getHourAngle(ANGLE_UNIT _type) const;
-    
+    virtual int         getHIP() const;
+
+    // Positioning
     virtual Equatorial  getEquatorial() const { return m_equatorial; }
-    
-    virtual bool        haveHorizontal() const { return m_bHorizontal; }
     virtual Horizontal  getHorizontal() const { return m_horizontal; }
+    virtual double      getHourAngle(ANGLE_UNIT _type) const;
+    virtual bool        haveHorizontal() const { return m_bHorizontal; }
+
+    // Extra data
+    virtual char*       getName() const;
+    virtual double      getMagnitud() const;
+    virtual double      getAbsMagnitud() const;
+    virtual double      getParalax() const;
+    virtual double      getTemperature() const;
+    virtual double      getVB() const;
 
     virtual void    compute( Observer& _obs );
     
 protected:
+
+    // Position
     Equatorial  m_equatorial;
     Horizontal  m_horizontal;
-    
-    double      m_mag;
     double      m_ha;
+
+    // ID
     int         m_id;
-    
+
     bool        m_bHorizontal;
 };
 

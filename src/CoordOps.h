@@ -10,6 +10,7 @@
 
 #include "Observer.h"
 
+#include "coordinates/Galactic.h"
 #include "coordinates/Ecliptic.h"
 #include "coordinates/Equatorial.h"
 #include "coordinates/Horizontal.h"
@@ -47,7 +48,7 @@ public:
      *
      * @return Ecliptic heliocentric
      */
-    static Ecliptic toHeliocentric(Observer& _obs, const Ecliptic& _geocentric );
+    static Ecliptic toHeliocentric(Observer& _obs, const Ecliptic& _geocentric);
     
     // -------------------------------------------------- to GeoCentric (Ecliptic)
     
@@ -85,6 +86,16 @@ public:
     static Ecliptic toGeocentric (Observer& _obs, const ECI& _eci);
     
     // -------------------------------------------------- to Equatorial
+
+    /**
+     * toEquatorial() - Galactic to equatorial coordinates
+     *
+     * @param Observer
+     * @param Galactic position
+     *
+     * @return Equatorial position
+     */
+    static Equatorial toEquatorial (const Galactic& _galactic );
     
     /**
      * eclipticToEquatorial() - ecliptic to equatorial coordinates
@@ -97,7 +108,7 @@ public:
      * @return Equatorial position
      */
     static Equatorial toEquatorial( double _obliq, double _lng, double _lat);
-    
+
     /**
      * toEquatorial() - ecliptic to equatorial coordinates
      *                          (Meeus, Ch. 93)

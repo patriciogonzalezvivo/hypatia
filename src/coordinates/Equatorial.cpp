@@ -45,3 +45,18 @@ double Equatorial::getDeclination(ANGLE_UNIT _type) const {
 Vector Equatorial::getVector() const {
     return Vector(*this);
 }
+
+double Equatorial::getDistanceTo(const Equatorial& _equ) const {
+    double ra1 = m_phi;
+    double dec1 = m_theta;
+
+    double ra2 = _equ.getRightAscension(RADS);
+    double dec2 = _equ.getDeclination(RADS);
+
+    // return acos( sin(dec1) * sin(dec2) + cos(dec1) * cos(dec2) * cos(ra1 - ra2) );
+
+    // http://spiff.rit.edu/classes/phys373/lectures/radec/radec.html
+    dec1 = MathOps::PI_OVER_TWO - dec1;
+    dec2 = MathOps::PI_OVER_TWO - dec2;
+    return acos( cos(dec1) * cos(dec2) + sin(dec1) * sin(dec2) * cos(ra1 - ra2) );
+}
