@@ -17,7 +17,7 @@ public:
     
     virtual Vector  getVector() const;
 
-    virtual double  getDistanceTo(const Equatorial& _equ) const;
+    virtual double  getAngularDistance(const Equatorial& _equ, ANGLE_UNIT _type) const;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Equatorial& p) {

@@ -46,17 +46,32 @@ Vector Equatorial::getVector() const {
     return Vector(*this);
 }
 
-double Equatorial::getDistanceTo(const Equatorial& _equ) const {
+double Equatorial::getAngularDistance(const Equatorial& _equ, ANGLE_UNIT _type) const {
+    // Astronomical Formulae for Calculators by J. Meeus
+    // Pag 109
+
     double ra1 = m_phi;
     double dec1 = m_theta;
 
     double ra2 = _equ.getRightAscension(RADS);
     double dec2 = _equ.getDeclination(RADS);
 
-    // return acos( sin(dec1) * sin(dec2) + cos(dec1) * cos(dec2) * cos(ra1 - ra2) );
+    double raD = ra1 - ra2;
 
-    // http://spiff.rit.edu/classes/phys373/lectures/radec/radec.html
-    dec1 = MathOps::PI_OVER_TWO - dec1;
-    dec2 = MathOps::PI_OVER_TWO - dec2;
-    return acos( cos(dec1) * cos(dec2) + sin(dec1) * sin(dec2) * cos(ra1 - ra2) );
+    double ang_dist = acos( sin(dec1) * sin(dec2) + cos(dec1) * cos(dec2) * cos(raD) );
+
+    // if the angular distance is close to 0 o 180 deg by 10 sec use approximate formula
+    if (ang_dist < 0.00290888) {
+        double decD = dec1 - dec2;
+        double a = raD * cos(dec1);
+
+        ang_dist = sqrt(a * a + decD * decD);
+    }
+
+    if (_type == RADS) {
+        return ang_dist;
+    }
+    else {
+        return MathOps::toDegrees(ang_dist);
+    }
 }

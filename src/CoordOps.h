@@ -21,11 +21,16 @@ class CoordOps {
 public:
     
     static const double SPEED_OF_LIGHT;
+    static const double AU_PER_DAY;
     
     static const double KM_TO_AU;
     static const double AU_TO_KM;
     static const double AU_TO_M;
-    static const double AU_PER_DAY;
+    static const double AU_TO_LY;
+    static const double LY_TO_AU;
+    static const double LY_TO_PC;
+    static const double PC_TO_LY;
+
     
     static const double EARTH_FLATTENING;
     static const double EARTH_POLAR_RADIUS_KM;

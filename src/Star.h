@@ -5,6 +5,8 @@
 
 #include "Observer.h"
 
+#define USE_HIPPACOS
+
 class Star {
 public:
 
@@ -15,23 +17,25 @@ public:
     Star( double _ra, double _dec, double _mag );
     virtual ~Star();
 
-    // ID
     virtual int         getId() const { return m_id; };
-    virtual int         getHIP() const;
 
+    virtual int         getHIP() const;
+    virtual char*       getName() const;
+
+    virtual double      getMagnitud() const;
+    
     // Positioning
     virtual Equatorial  getEquatorial() const { return m_equatorial; }
     virtual Horizontal  getHorizontal() const { return m_horizontal; }
     virtual double      getHourAngle(ANGLE_UNIT _type) const;
     virtual bool        haveHorizontal() const { return m_bHorizontal; }
 
-    // Extra data
-    virtual char*       getName() const;
-    virtual double      getMagnitud() const;
+    #ifdef USE_HIPPACOS
     virtual double      getAbsMagnitud() const;
     virtual double      getParalax() const;
     virtual double      getTemperature() const;
     virtual double      getVB() const;
+    #endif
 
     virtual void    compute( Observer& _obs );
     
@@ -41,6 +45,9 @@ protected:
     Equatorial  m_equatorial;
     Horizontal  m_horizontal;
     double      m_ha;
+    
+    // Magnitud
+    double      m_mag;      // aparent
 
     // ID
     int         m_id;

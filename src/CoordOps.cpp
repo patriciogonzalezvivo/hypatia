@@ -26,7 +26,12 @@ const double CoordOps::SPEED_OF_LIGHT = 299792.458;
 const double CoordOps::KM_TO_AU = 0.000000006684587;
 const double CoordOps::AU_TO_KM = 1.495978707e+8;
 const double CoordOps::AU_TO_M = (CoordOps::AU_TO_KM * 1000.);
-const double CoordOps::AU_PER_DAY = (86400. * CoordOps::SPEED_OF_LIGHT / CoordOps::AU_TO_KM);
+const double CoordOps::AU_PER_DAY = (86400.0 * CoordOps::SPEED_OF_LIGHT / CoordOps::AU_TO_KM);
+
+const double CoordOps::LY_TO_AU = 63241.077;
+const double CoordOps::AU_TO_LY = 1.0/LY_TO_AU;
+const double CoordOps::PC_TO_LY = 3.26156;
+const double CoordOps::LY_TO_PC = 0.306601;
 
 const double CoordOps::EARTH_FLATTENING = 1.0 / 298.26;
 const double CoordOps::EARTH_POLAR_RADIUS_KM = 6356.76;
@@ -168,23 +173,39 @@ ECI CoordOps::toECI(double _jd, const Geodetic& _geod) {
  * @return Equatorial position
  */
 Equatorial CoordOps::toEquatorial (const Galactic& _galactic ) {
-    // https://github.com/DarkEnergySurvey/despyastro/blob/master/python/despyastro/coords.py
-    double a = _galactic.getLongitude(RADS) - 0.57477043300;
-    double b = _galactic.getLatitude(RADS);
-    
-    double sb = sin(b);
-    double cb = cos(b);
-    double cbsa = cb * sin(a);
-    b = 0.88998808748 * cbsa + 0.45598377618 * sb;
-    // w, = numpy.where(b > 1.0)
-    // if w.size > 0:
-    //     b[w] = 1.
-    double bo = asin(b);
-    a = atan2( 0.45598377618 * cbsa + -0.88998808748 * sb, cb * cos(a) );
-    // double ao = fmod(a + 4.9368292465 + MathOps::TAU * 2.0, MathOps::TAU);
-    double ao = MathOps::normalize(a + 4.9368292465, RADS);
+    double lng = _galactic.getLongitude(RADS);
+    double lat = _galactic.getLatitude(RADS);
+    double ra = 0.0;
+    double dec = 0.0;
 
-    return Equatorial(ao, bo, RADS);
+// // https://github.com/DarkEnergySurvey/despyastro/blob/master/python/despyastro/coords.py
+
+// #define GAL_E1950
+#ifdef GAL_E1950
+        double psi      =  4.9261918136;
+        double stheta   = -0.88781538514;
+        double ctheta   =  0.46019978478;
+        double phi      =  0.57595865315;
+#else
+        double psi      = 4.9368292465;
+        double stheta   = -0.88998808748;
+        double ctheta   = 0.45598377618;
+        double phi      = 0.57477043300;
+#endif
+
+    lng -= phi;
+    lat = _galactic.getLatitude(RADS);
+    
+    double slat = sin(lat);
+    double clat = cos(lat);
+    double clat_slng = clat * sin(lng);
+    lat = -stheta * clat_slng + ctheta * slat;
+    dec = asin(lat);
+
+    lng = atan2( ctheta * clat_slng + stheta * slat, clat * cos(lng) );
+    ra = MathOps::normalize(lng + psi, RADS);
+    
+    return Equatorial(ra, dec, RADS);
 }
 
 
