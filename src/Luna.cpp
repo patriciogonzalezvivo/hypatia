@@ -478,3 +478,18 @@ double Luna::getPositionAngle(ANGLE_UNIT _type) const {
         return m_posAngle;
     }
 }
+
+double Luna::getDistance(DISTANCE_UNIT _type) const { 
+    if (_type == KM) {
+        return m_distance; 
+    }
+    else if (_type == AU) {
+        return getDistance(KM) * CoordOps::KM_TO_AU;
+    }
+    else if (_type == LY) {
+        return getDistance(AU) * CoordOps::AU_TO_LY;
+    }
+    else if (_type == PC) {
+        return getDistance(LY) * CoordOps::LY_TO_PC;
+    } 
+}; 

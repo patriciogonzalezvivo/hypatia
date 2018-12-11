@@ -10,7 +10,7 @@
 #undef PI
 
 enum DISTANCE_UNIT {
-    KM, AU
+    KM, AU, LY, PC
 };
 
 enum ANGLE_UNIT {

@@ -5,7 +5,7 @@
 
 #include "Observer.h"
 
-#define USE_HIPPACOS
+#define USE_HIPPACOS_EXTRADATA
 
 class Star {
 public:
@@ -26,13 +26,18 @@ public:
     
     // Positioning
     virtual Equatorial  getEquatorial() const { return m_equatorial; }
-    virtual Horizontal  getHorizontal() const { return m_horizontal; }
-    virtual double      getHourAngle(ANGLE_UNIT _type) const;
-    virtual bool        haveHorizontal() const { return m_bHorizontal; }
+    virtual Vector      getEquatorialVector(DISTANCE_UNIT _type) const { return m_equatorial.getVector() * getDistance(_type); }
 
-    #ifdef USE_HIPPACOS
-    virtual double      getAbsMagnitud() const;
+    virtual bool        haveHorizontal() const { return m_bHorizontal; }
+    virtual Horizontal  getHorizontal() const { return m_horizontal; }
+    virtual Vector      getHorizontalVector(DISTANCE_UNIT _type) const { return m_horizontal.getVector() * getDistance(_type); };
+    virtual double      getHourAngle(ANGLE_UNIT _type) const;
+
     virtual double      getParalax() const;
+    virtual double      getDistance(DISTANCE_UNIT _type) const;
+
+    #ifdef USE_HIPPACOS_EXTRADATA
+    virtual double      getAbsMagnitud() const;
     virtual double      getTemperature() const;
     virtual double      getVB() const;
     #endif

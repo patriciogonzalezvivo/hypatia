@@ -64,19 +64,20 @@ Ecliptic& Ecliptic::operator= (const Vector& _vec) {
 }
 
 double Ecliptic::getRadius (DISTANCE_UNIT _type) const {
-    if ( _type == KM ) {
-        return m_radius * CoordOps::AU_TO_KM;
-    }
-    else {
+    if (_type == AU) {
         return m_radius;
+    }
+    else if ( _type == KM ) {
+        return getRadius(AU) * CoordOps::AU_TO_KM;
+    }
+    else if ( _type == LY ) {
+        return getRadius(AU) * CoordOps::AU_TO_LY;
+    }
+    else if ( _type == PC ) {
+        return getRadius(LY) * CoordOps::LY_TO_PC;
     }
 }
 
 Vector Ecliptic::getVector (DISTANCE_UNIT _type) const {
-    if ( _type == KM ) {
-        return Vector(*this) * (m_radius * CoordOps::AU_TO_KM);
-    }
-    else {
-        return Vector(*this) * m_radius;
-    }
+    return Vector(*this) * getRadius(_type);
 }

@@ -42,8 +42,12 @@ Vector ECI::getPosition(DISTANCE_UNIT _type) const {
     if (_type == KM) {
         return m_position;
     }
-    else {
+    else if (_type == AU) {
         return m_position * CoordOps::KM_TO_AU;
+    }
+    else {
+        // PC and LY are to big of a scale
+        return m_position * 0.0;
     }
 }
 
@@ -54,7 +58,11 @@ Vector ECI::getVelocity(DISTANCE_UNIT _type) const {
     if (_type == KM) {
         return m_velocity;
     }
-    else {
+    else if (_type == AU) {
         return m_velocity * CoordOps::KM_TO_AU;
+    }
+    else {
+        // PC and LY are to big of a scale
+        return m_position * 0.0;
     }
 }
