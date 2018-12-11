@@ -21,7 +21,7 @@ public:
     virtual Vector  getVector (DISTANCE_UNIT _type) const;
     
 protected:
-    double m_radius;
+    double m_radius; // AU
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Ecliptic& p) {

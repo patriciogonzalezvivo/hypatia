@@ -56,9 +56,14 @@ double Geodetic::getRadius ( DISTANCE_UNIT _type ) const {
     else if ( _type == AU ) {
         return rad * CoordOps::KM_TO_AU;
     }
+    else if ( _type == LY ) {
+        return rad * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY;
+    }
+    else if ( _type == PC ) {
+        return rad * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY * CoordOps::LY_TO_PC;
+    }
     else {
-        // PC and LY are to big of a scale
-        return 0.0;
+        return rad;
     }
 }
 
@@ -69,9 +74,14 @@ double Geodetic::getAltitude (DISTANCE_UNIT _type) const {
     else if ( _type == AU ) {
         return m_alt * CoordOps::KM_TO_AU;
     }
+    else if ( _type == LY ) {
+        return m_alt * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY;
+    }
+    else if ( _type == PC ) {
+        return m_alt * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY * CoordOps::LY_TO_PC;
+    }
     else {
-        // PC and LY are to big of a scale
-        return 0.0;
+        return m_alt;
     }
 };
 
@@ -82,8 +92,13 @@ Vector Geodetic::getVector (DISTANCE_UNIT _type) const {
     else if ( _type == AU ) {
         return Vector(*this) * CoordOps::KM_TO_AU;
     }
+    else if ( _type == LY ) {
+        return Vector(*this) * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY;
+    }
+    else if ( _type == PC ) {
+        return Vector(*this) * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY * CoordOps::LY_TO_PC;
+    }
     else {
-        // PC and LY are to big of a scale
-        return Vector(*this) * 0.0;
+        return Vector(*this);
     }
 }

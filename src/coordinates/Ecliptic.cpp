@@ -88,6 +88,9 @@ double Ecliptic::getRadius (DISTANCE_UNIT _type) const {
     else if ( _type == PC ) {
         return getRadius(LY) * CoordOps::LY_TO_PC;
     }
+    else {
+        return m_radius;
+    }
 }
 
 Vector Ecliptic::getVector (DISTANCE_UNIT _type) const {

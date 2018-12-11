@@ -491,5 +491,8 @@ double Luna::getDistance(DISTANCE_UNIT _type) const {
     }
     else if (_type == PC) {
         return getDistance(LY) * CoordOps::LY_TO_PC;
-    } 
+    }
+    else {
+        return m_distance; 
+    }
 }; 

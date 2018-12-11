@@ -2321,6 +2321,9 @@ double Star::getDistance(DISTANCE_UNIT _type) const {
     else if (_type == KM) {
         return getDistance(AU) * CoordOps::AU_TO_KM;
     }
+    else {
+        return 1.0/getParalax();
+    }
 }
 
 #ifdef USE_HIPPACOS_EXTRADATA

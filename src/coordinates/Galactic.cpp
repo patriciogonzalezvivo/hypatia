@@ -9,11 +9,18 @@ Galactic::Galactic() : m_radius(1.0) {
 Galactic::Galactic(const Vector& _parent, DISTANCE_UNIT _type) {
     m_phi = atan2(_parent.y, _parent.x);
     m_theta = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
-    if ( _type == AU ) {
+    
+    if ( _type == PC ) {
         m_radius = _parent.getMagnitud();
     }
-    else {
-        m_radius = _parent.getMagnitud() * CoordOps::KM_TO_AU;
+    else if ( _type == LY ) {
+        m_radius = _parent.getMagnitud() * CoordOps::LY_TO_PC;
+    }
+    else if ( _type == AU ) {
+        m_radius = _parent.getMagnitud() * CoordOps::AU_TO_LY * CoordOps::LY_TO_PC;
+    }
+    else if ( _type == KM ) {
+        m_radius = _parent.getMagnitud() *  CoordOps::KM_TO_AU * CoordOps::AU_TO_LY * CoordOps::LY_TO_PC;
     }
 }
 
@@ -30,7 +37,7 @@ Galactic::Galactic(double _lng, double _lat, ANGLE_UNIT _a_type) {
     m_radius = 1.0;
 }
 
-Galactic::Galactic(double _lng, double _lat, double _radius, ANGLE_UNIT _a_type, DISTANCE_UNIT _r_type) {
+Galactic::Galactic(double _lng, double _lat, double _paralax, ANGLE_UNIT _a_type) {
     if ( _a_type == RADS ) {
         m_phi = _lng;
         m_theta = _lat;
@@ -39,12 +46,31 @@ Galactic::Galactic(double _lng, double _lat, double _radius, ANGLE_UNIT _a_type,
         m_phi = MathOps::toRadians( _lng );
         m_theta = MathOps::toRadians( _lat );
     }
-    
-    if (_r_type == AU ) {
-        m_radius = _radius;
+
+    m_radius = (1.0/_paralax);
+}
+
+Galactic::Galactic (double _lng, double _lat, double _radius, ANGLE_UNIT _a_type, DISTANCE_UNIT _d_type) {
+    if ( _a_type == RADS ) {
+        m_phi = _lng;
+        m_theta = _lat;
     }
     else {
-        m_radius = _radius * CoordOps::KM_TO_AU;
+        m_phi = MathOps::toRadians( _lng );
+        m_theta = MathOps::toRadians( _lat );
+    }
+
+    if ( _d_type == PC ) {
+        m_radius = _radius;
+    }
+    else if ( _d_type == LY ) {
+        m_radius = _radius * CoordOps::LY_TO_PC;
+    }
+    else if ( _d_type == AU ) {
+        m_radius = _radius * CoordOps::AU_TO_LY * CoordOps::LY_TO_PC;
+    }
+    else if ( _d_type == KM ) {
+        m_radius = _radius *  CoordOps::KM_TO_AU * CoordOps::AU_TO_LY * CoordOps::LY_TO_PC;
     }
 }
 
@@ -83,8 +109,17 @@ Galactic& Galactic::operator= (const Polar& _pol) {
 }
 
 double Galactic::getRadius (DISTANCE_UNIT _type) const {
-    if ( _type == KM ) {
-        return m_radius * CoordOps::AU_TO_KM;
+    if ( _type == PC) {
+        return m_radius;
+    }
+    else if ( _type == LY ) {
+       return getRadius(PC) * CoordOps::PC_TO_LY;
+    }
+    else if ( _type == AU ) {
+        return getRadius(LY) * CoordOps::LY_TO_AU;
+    }
+    else if ( _type == KM ) {
+        return getRadius(AU) * CoordOps::AU_TO_KM;
     }
     else {
         return m_radius;
@@ -92,10 +127,19 @@ double Galactic::getRadius (DISTANCE_UNIT _type) const {
 }
 
 Vector Galactic::getVector (DISTANCE_UNIT _type) const {
-    if ( _type == KM ) {
-        return Vector(*this) * (m_radius * CoordOps::AU_TO_KM);
+    if ( _type == PC ) {
+        return Vector(*this) * m_radius;
+    }
+    else if ( _type == LY ) {
+       return getVector(PC) * CoordOps::PC_TO_LY;
+    }
+    else if ( _type == AU ) {
+        return getVector(LY) * CoordOps::LY_TO_AU;
+    }
+    else if ( _type == KM ) {
+        return getVector(AU) * CoordOps::AU_TO_KM;
     }
     else {
-        return Vector(*this) * m_radius;
+        return Vector(*this);
     }
 }

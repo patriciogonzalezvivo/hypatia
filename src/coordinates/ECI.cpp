@@ -22,13 +22,22 @@ ECI::ECI() {
  */
 ECI::ECI(double _jd, const Vector &_pos, const Vector &_vel, DISTANCE_UNIT _type) {
     m_jd = _jd;
+
     if (_type == KM) {
         m_position = _pos;
         m_velocity = _vel;
     }
-    else {
+    else if (_type == AU) {
         m_position = _pos * CoordOps::AU_TO_KM;
-        m_velocity = _vel * CoordOps::AU_TO_KM;;
+        m_velocity = _vel * CoordOps::AU_TO_KM;
+    }
+    else if (_type == LY) {
+        m_position = _pos * CoordOps::LY_TO_AU * CoordOps::AU_TO_KM;
+        m_velocity = _vel * CoordOps::LY_TO_AU * CoordOps::AU_TO_KM;
+    }
+    else if (_type == PC) {
+        m_position = _pos * CoordOps::PC_TO_LY * CoordOps::LY_TO_AU * CoordOps::AU_TO_KM;
+        m_velocity = _vel * CoordOps::PC_TO_LY * CoordOps::LY_TO_AU * CoordOps::AU_TO_KM;
     }
 }
 
@@ -43,11 +52,16 @@ Vector ECI::getPosition(DISTANCE_UNIT _type) const {
         return m_position;
     }
     else if (_type == AU) {
-        return m_position * CoordOps::KM_TO_AU;
+        return getPosition(KM) * CoordOps::KM_TO_AU;
+    }
+    else if (_type == LY) {
+        return getPosition(AU) * CoordOps::AU_TO_LY;
+    }
+    else if (_type == PC) {
+        return getPosition(LY) * CoordOps::LY_TO_PC;
     }
     else {
-        // PC and LY are to big of a scale
-        return m_position * 0.0;
+        return m_position;
     }
 }
 
@@ -59,10 +73,15 @@ Vector ECI::getVelocity(DISTANCE_UNIT _type) const {
         return m_velocity;
     }
     else if (_type == AU) {
-        return m_velocity * CoordOps::KM_TO_AU;
+        return getVelocity(KM) * CoordOps::KM_TO_AU;
+    }
+    else if (_type == LY) {
+        return getVelocity(AU) * CoordOps::AU_TO_LY;
+    }
+    else if (_type == PC) {
+        return getVelocity(LY) * CoordOps::LY_TO_PC;
     }
     else {
-        // PC and LY are to big of a scale
-        return m_position * 0.0;
+        return m_velocity;
     }
 }

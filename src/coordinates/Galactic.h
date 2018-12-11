@@ -10,6 +10,7 @@ public:
     Galactic ();
     Galactic (const Vector& _parent, DISTANCE_UNIT _type);
     Galactic (double _lng, double _lat, ANGLE_UNIT _a_type);
+    Galactic (double _lng, double _lat, double _paralax, ANGLE_UNIT _a_type);
     Galactic (double _lng, double _lat, double _radius, ANGLE_UNIT _a_type, DISTANCE_UNIT _d_type);
     virtual ~Galactic();
     
@@ -23,7 +24,7 @@ public:
     virtual Vector  getVector (DISTANCE_UNIT _type) const;
     
 protected:
-    double m_radius;
+    double m_radius; // PC
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Galactic& p) {
