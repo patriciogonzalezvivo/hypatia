@@ -2241,14 +2241,27 @@ static double sts_data[N_STARS][7] = {
 Star::Star() : m_ha(0.0), m_id(-1) {
 }
 
-Star::Star( int _id ) :  m_ha(0.0), m_id(-1) {
-    if (_id < 0 || _id >= N_STARS ) 
+Star::Star( int _id, STAR_CATALOG _cat  ) :  m_ha(0.0), m_id(-1) {
+    if (_cat == HIP) {
+        bool found = false;
+        for (int i = 0; i < N_STARS; i++) {
+            if (sts_hip[i] == _id) {
+                _id = i;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+            return;
+    }
+    else if (_id < 0 || _id >= N_STARS ) 
         return;
 
     m_id = _id;
-
-    m_equatorial = Equatorial(sts_data[_id][0], sts_data[_id][1], DEGS);
-    m_mag = sts_data[_id][2];
+    
+    m_equatorial = Equatorial(sts_data[m_id][0], sts_data[m_id][1], DEGS);
+    m_mag = sts_data[m_id][2];
 }
 
 Star::Star( double _ra, double _dec, double _mag ) : m_equatorial(_ra, _dec, DEGS), m_ha(0.0), m_mag(_mag), m_id(-1) {

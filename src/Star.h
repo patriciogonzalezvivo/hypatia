@@ -7,13 +7,17 @@
 
 #define USE_HIPPACOS_EXTRADATA
 
+enum STAR_CATALOG {
+    ASTRO, HIP 
+};
+
 class Star {
 public:
 
     static const int TOTAL;
 
     Star();
-    Star( int _id );
+    Star( int _id, STAR_CATALOG _cat );
     Star( double _ra, double _dec, double _mag );
     virtual ~Star();
 
