@@ -12,8 +12,14 @@ Ecliptic::Ecliptic(const Vector& _parent, DISTANCE_UNIT _type) {
     if ( _type == AU ) {
         m_radius = _parent.getMagnitud();
     }
-    else {
+    else if ( _type == KM ) {
         m_radius = _parent.getMagnitud() * CoordOps::KM_TO_AU;
+    }
+    else if ( _type == LY ) {
+        m_radius = _parent.getMagnitud() * CoordOps::LY_TO_AU;
+    }
+    else if ( _type == PC ) {
+        m_radius = _parent.getMagnitud() * CoordOps::PC_TO_LY * CoordOps::LY_TO_AU;
     }
 }
 
@@ -30,8 +36,14 @@ Ecliptic::Ecliptic(double _lng, double _lat, double _radius, ANGLE_UNIT _a_type,
     if (_r_type == AU ) {
         m_radius = _radius;
     }
-    else {
+    else if ( _r_type == KM ) {
         m_radius = _radius * CoordOps::KM_TO_AU;
+    }
+    else if ( _r_type == LY ) {
+        m_radius = _radius * CoordOps::LY_TO_AU;
+    }
+    else if ( _r_type == PC ) {
+        m_radius = _radius * CoordOps::PC_TO_LY * CoordOps::LY_TO_AU;
     }
 }
 
