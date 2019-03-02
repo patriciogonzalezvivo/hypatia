@@ -17,7 +17,7 @@ public:
     static const int TOTAL;
 
     Star();
-    Star( int _id, STAR_CATALOG _cat );
+    Star( int _id, STAR_CATALOG _cat = ASTRO );
     Star( double _ra, double _dec, double _mag );
     virtual ~Star();
 
