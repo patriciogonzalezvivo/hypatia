@@ -193,7 +193,7 @@ public:
     static Horizontal toHorizontal( double _lat, double _ha, double _dec);
     
     /**
-     * toEquatorial() - equatorial to horizontal coordinates
+     * toHorizontal() - to horizontal coordinates
      *                          (Meeus, Ch. 93)
      *
      * @param Observer
