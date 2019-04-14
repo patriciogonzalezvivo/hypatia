@@ -2,6 +2,7 @@
 %module astro
 %include "typemaps.i"
 %include <std_vector.i>
+%include <std_string.i>
 
 %ignore *::operator[];
 %ignore *::operator=;
@@ -45,6 +46,7 @@
     #include "src/Star.h"
     #include "src/Constellation.h"
     #include "src/Satellite.h"
+    #include "src/models/TLE.h"
 %}
 
 %include "src/primitives/Polar.h"
@@ -67,6 +69,7 @@
 %include "src/Star.h"
 %include "src/Constellation.h"
 %include "src/Satellite.h"
+%include "src/models/TLE.h"
 
 namespace std {
     %template(VectorInt) vector<int>;
