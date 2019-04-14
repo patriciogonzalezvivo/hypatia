@@ -12,6 +12,7 @@ from distutils.core import setup, Extension
 doc_lines = __doc__.split('\n')
 astro_module = Extension(  
   '_astro',
+
   sources= [ 
     'astro_wrap.cxx', 
     'src/primitives/Polar.cpp',
