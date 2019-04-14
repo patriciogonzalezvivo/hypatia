@@ -5,15 +5,15 @@ install:
 	python2 setup.py build_ext --inplace
 	$(LIB)
 	@rm -rf build
-	python2 setup.py install
+	sudo python2 setup.py install
 
 
 install_3:
 	swig -c++ -python astro.i
-	python3 setup.py build_ext --inplace
-	$(LIB)
-	@rm -rf build
-	python3 setup.py install
+	# python3 setup.py build_ext --inplace
+	# $(LIB)
+	# @rm -rf build
+	sudo python3 setup.py install
 
 install_anaconda3:
 	# swig -c++ -python astro.i
