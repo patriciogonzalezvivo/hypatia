@@ -39,9 +39,11 @@ std::cout << "Moon's transit constelation: " << const.getName() << std::endl
 * First you need to create the package and install it
 
 ```bash
+sudo apt install swig
 make
 make install
 ```
+
 * Then use it:
 
 ```python
