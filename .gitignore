@@ -2,5 +2,5 @@
 *.pyc
 *.so
 build/*
-astro_wrap.cxx
-astro.py
+hypatia_wrap.cxx
+hypatia.py

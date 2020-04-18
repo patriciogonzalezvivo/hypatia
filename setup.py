@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-astro: is an astronomy library based on Mark Huss's and Bill Gray's code. Both authors have very technical and ambitious projects, with over comboluted code for my porposes. I mostly:
+hypatia: is an astronomy library based on Mark Huss's and Bill Gray's code. Both authors have very technical and ambitious projects, with over comboluted code for my porposes. I mostly:
 - simplify the C++ interfaces by making simpler and clear objects and classes
 - clean the dependences so the C++ code can be added to other C++ projects easily
 - add Python package which makes a C++ wrapper usign swig
@@ -10,11 +10,11 @@ astro: is an astronomy library based on Mark Huss's and Bill Gray's code. Both a
 from distutils.core import setup, Extension
 
 doc_lines = __doc__.split('\n')
-astro_module = Extension(  
-  '_astro',
+hypatia_module = Extension(  
+  '_hypatia',
 
   sources= [ 
-    'astro_wrap.cxx', 
+    'hypatia_wrap.cxx', 
     'src/primitives/Polar.cpp',
     'src/primitives/Vector.cpp',
     'src/primitives/TimeSpan.cpp',
@@ -45,12 +45,12 @@ astro_module = Extension(
 )
 
 setup(  
-  name = 'astro',
+  name = 'hypatia',
   description = doc_lines[0],
   long_description = '\n'.join(doc_lines[2:]),
-  version     = '0.1',
+  version     = '0.2',
   author      = 'Patricio Gonzalez Vivo',
   author_email = 'patriciogonzalezvivo@gmail.com',
-  ext_modules = [ astro_module ],
-  py_modules = [ 'astro' ],
+  ext_modules = [ hypatia_module ],
+  py_modules = [ 'hypatia' ],
 )

@@ -9,7 +9,7 @@ import time
 import datetime
 import math
 
-from astro import *
+from hypatia import *
 import ephem
 
 def testEqual(A, B):

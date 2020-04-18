@@ -10,7 +10,7 @@ import time
 import datetime
 import math
 
-from astro import *
+from hypatia import *
 import ephem
 
 LNG = -122.0442

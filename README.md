@@ -20,9 +20,9 @@ References:
 ## As C++ code
 
 ```cpp
-#include "Astro/Body.h"
-#include "Astro/Luna.h"
-#include "Astro/Constellation.h"
+#include "Hypatia/src/Body.h"
+#include "Hypatia/src/Luna.h"
+#include "Hypatia/src/Constellation.h"
 
 obs = Observer(40.781098831465, -73.97715657655);
 
@@ -47,7 +47,7 @@ make install
 * Then use it:
 
 ```python
-from astro import *
+from hypatia import *
 
 obs = Observer(40.781098831465, -73.97715657655)
 

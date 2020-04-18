@@ -1,5 +1,5 @@
 
-%module astro
+%module hypatia
 %include "typemaps.i"
 %include <std_vector.i>
 %include <std_string.i>
