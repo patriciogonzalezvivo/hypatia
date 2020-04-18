@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 import csv
 from astroquery.gaia import Gaia
 import numpy as np
-from astro import *
+from hypatia import *
 
 import warnings
 warnings.filterwarnings('ignore')
