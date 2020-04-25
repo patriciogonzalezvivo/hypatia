@@ -7,7 +7,7 @@ In comparison with other astronomical/geographical libraries created for profesi
 * realtime performance
 * simplicity of the interface, than other 
 
-## Hypatia as C++ code
+## Hypatia as C++ lib
 
 You can easily add hypatia into your project by adding the `include/` and `src/` folder or by installing hypatia into your system. For the former option you need to:
 
@@ -42,7 +42,7 @@ void main(int argc, char **argv) {
 }
 ```
 
-## Hypatia as Python package
+## Hypatia as Python module
 
 First you need to create the package and install it
 
@@ -53,7 +53,7 @@ make install
 
 **Note**: to install inside anaconda do:
 ```bash
-	/anaconda3/bin/./python3.7 setup.py install 
+/anaconda3/bin/./python3.7 setup.py install 
 ```
 
 Then you can use it as follow:
