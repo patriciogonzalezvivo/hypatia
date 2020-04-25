@@ -10,9 +10,9 @@ In comparison with other astronomical/geographical libraries created for profesi
 ## Hypatia as C++ code
 
 ```cpp
-#include "hypatia/src/Body.h"
-#include "hypatia/src/Luna.h"
-#include "hypatia/src/Constellation.h"
+#include "hypatia/Body.h"
+#include "hypatia/Luna.h"
+#include "hypatia/Constellation.h"
 
 obs = Observer(40.781098831465, -73.97715657655);
 
