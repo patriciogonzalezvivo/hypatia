@@ -1,23 +1,13 @@
-![](../docs/00.jpg)
+![](docs/00.jpg)
 
-This library started as an astronomical set of equations based on [Jean Meeus](https://en.wikipedia.org/wiki/Jean_Meeus), [Mark Huss](http://mhuss.com/AstroLib), [Bill Gray](https://github.com/Bill-Gray ), [Stuart Lowe](http://mhuss.com/AstroLib), [Brandon Rhodes](https://github.com/brandon-rhodes/pyephem) , [Daniel Warner](https://github.com/dnwrnr/sgp4), [Oliver Montenbruck and Thomas Peleger](https://www.amazon.com/gp/product/3540672214/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1) work. I created mostly to learn. Each of those authors have very deep and technical knowladege and their project are substantially more ambitious. They are profesional astronomers doing cientific research. This project takes some artistic licenses.
+Hypatia is a geo-astronomical library based on the work of  [Jean Meeus](https://en.wikipedia.org/wiki/Jean_Meeus), [Mark Huss](http://mhuss.com/AstroLib), [Bill Gray](https://github.com/Bill-Gray ), [Stuart Lowe](http://mhuss.com/AstroLib), [Brandon Rhodes](https://github.com/brandon-rhodes/pyephem) , [Daniel Warner](https://github.com/dnwrnr/sgp4), [Oliver Montenbruck and Thomas Peleger](https://www.amazon.com/gp/product/3540672214/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1). I created mostly to learn and use in different personal projects. There is some focus around reusability, realtime performance and simplicity on the interface.
 
-Goals:
 
-- Simple interface using Object Oriented Paradigm and with an eye on performance with out sacrificing much precision
-- Independent self suficiant code that can by use in different projects.
-- Build in basic/standar databases for constellations, stars and planets.
-- Make a Python package which wrapps the C++ code usign swig, to use it in a bigger set of projects
-- Use the Python for https://opensource.org/licenses/BSD-2-Clauseunit testing
+# Instalation
 
-References:
- - Jean Meeus: https://www.amazon.com/Astronomical-Algorithms-Jean-Meeus/dp/0943396611
- - Oliver Montenbruck and Thomas Peleger: https://www.amazon.com/gp/product/3540672214/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1
- - Bill Gray: https://github.com/Bill-Gray 
- - Mark Huss: http://mhuss.com/AstroLib
- - Stuart Lowe: https://github.com/slowe/VirtualSky
- - Brandon Rhodes: https://github.com/brandon-rhodes/pyephem
- - Daniel Warner: https://github.com/dnwrnr/sgp4
+TODO
+
+# Use
 
 ## As C++ code
 
