@@ -1,15 +1,13 @@
 ![](docs/00.jpg)
 
-Hypatia is a geo-astronomical library based on the work of  [Jean Meeus](https://en.wikipedia.org/wiki/Jean_Meeus), [Mark Huss](http://mhuss.com/AstroLib), [Bill Gray](https://github.com/Bill-Gray ), [Stuart Lowe](http://mhuss.com/AstroLib), [Brandon Rhodes](https://github.com/brandon-rhodes/pyephem) , [Daniel Warner](https://github.com/dnwrnr/sgp4), [Oliver Montenbruck and Thomas Peleger](https://www.amazon.com/gp/product/3540672214/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1). I created mostly to learn and use in different personal projects. There is some focus around reusability, realtime performance and simplicity on the interface.
+Hypatia is a geo-astronomical library based on the work of  [Jean Meeus](https://en.wikipedia.org/wiki/Jean_Meeus), [Mark Huss](http://mhuss.com/AstroLib), [Bill Gray](https://github.com/Bill-Gray ), [Stuart Lowe](http://mhuss.com/AstroLib), [Brandon Rhodes](https://github.com/brandon-rhodes/pyephem) , [Daniel Warner](https://github.com/dnwrnr/sgp4), [Oliver Montenbruck and Thomas Peleger](https://www.amazon.com/gp/product/3540672214/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1). Was created mostly for educational purposes, but also to use in different personal artistic projects. 
 
+In comparison with other astronomical/geographical libraries created for profesional uses Hypatia have a focus on: 
+* reusability and portability
+* realtime performance
+* simplicity of the interface, than other 
 
-# Instalation
-
-TODO
-
-# Use
-
-## As C++ code
+## Hypatia as C++ code
 
 ```cpp
 #include "hypatia/src/Body.h"
@@ -26,7 +24,7 @@ const = Constellation(moon)
 std::cout << "Moon's transit constelation: " << const.getName() << std::endl
 ```
 
-## As Python package
+## Hypatia as Python package
 
 * First you need to create the package and install it
 
@@ -34,6 +32,11 @@ std::cout << "Moon's transit constelation: " << const.getName() << std::endl
 sudo apt install swig
 make
 make install
+```
+
+**Note**: to install inside anaconda do:
+```bash
+	/anaconda3/bin/./python3.7 setup.py install 
 ```
 
 * Then use it:
