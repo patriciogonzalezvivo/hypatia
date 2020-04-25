@@ -1,7 +1,7 @@
-#include "Constellation.h"
+#include "hypatia/Constellation.h"
 
-#include "CoordOps.h"
-#include "TimeOps.h"
+#include "hypatia/CoordOps.h"
+#include "hypatia/TimeOps.h"
 
 #include <stdio.h>
 #include <string.h>

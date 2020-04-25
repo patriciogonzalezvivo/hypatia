@@ -8,9 +8,9 @@
  *
 \*****************************************************************************/
 
-#include "../MathOps.h"
-#include "../CoordOps.h"
-#include "Pluto.h"
+#include "hypatia/MathOps.h"
+#include "hypatia/CoordOps.h"
+#include "hypatia/models/Pluto.h"
 
 #include <math.h>
 

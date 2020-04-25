@@ -8,14 +8,14 @@
  *
 \*****************************************************************************/
 
-#include "CoordOps.h"
+#include "hypatia/CoordOps.h"
 
-#include "MathOps.h"
-#include "TimeOps.h"
+#include "hypatia/MathOps.h"
+#include "hypatia/TimeOps.h"
 
-#include "primitives/Vector.h"
+#include "hypatia/primitives/Vector.h"
 
-#include "models/VSOP87.h"
+#include "hypatia/models/VSOP87.h"
 
 #include <math.h>
 

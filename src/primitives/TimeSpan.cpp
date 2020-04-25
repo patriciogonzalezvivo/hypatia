@@ -5,7 +5,7 @@
 //  Created by Patricio González Vivo on 2/13/18.
 //
 
-#include "TimeSpan.h"
+#include "hypatia/primitives/TimeSpan.h"
 
 #include <cmath>
 

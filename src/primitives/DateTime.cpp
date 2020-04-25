@@ -1,6 +1,6 @@
-#include "DateTime.h"
+#include "hypatia/primitives/DateTime.h"
 
-#include "../TimeOps.h"
+#include "hypatia/TimeOps.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 

@@ -1,6 +1,6 @@
-#include "TimeOps.h"
+#include "hypatia/TimeOps.h"
 
-#include "CoordOps.h"
+#include "hypatia/CoordOps.h"
 
 #include <math.h>
 #include <string.h>

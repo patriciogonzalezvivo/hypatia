@@ -1,6 +1,6 @@
-#include "Galactic.h"
+#include "hypatia/coordinates/Galactic.h"
+#include "hypatia/CoordOps.h"
 
-#include "../CoordOps.h"
 #include <math.h>
 
 Galactic::Galactic() : m_radius(1.0) {

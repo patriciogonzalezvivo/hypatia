@@ -1,11 +1,11 @@
 
-#include "Observer.h"
+#include "hypatia/Observer.h"
 
-#include "MathOps.h"
-#include "CoordOps.h"
-#include "TimeOps.h"
+#include "hypatia/MathOps.h"
+#include "hypatia/CoordOps.h"
+#include "hypatia/TimeOps.h"
 
-#include "models/VSOP87.h"
+#include "hypatia/models/VSOP87.h"
 
 Observer::Observer(double _jd) :
 m_jd(0.0),

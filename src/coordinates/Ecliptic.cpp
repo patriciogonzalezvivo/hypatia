@@ -1,6 +1,6 @@
-#include "Ecliptic.h"
+#include "hypatia/coordinates/Ecliptic.h"
 
-#include "../CoordOps.h"
+#include "hypatia/CoordOps.h"
 #include <math.h>
 
 Ecliptic::Ecliptic() : m_radius(1.0) {

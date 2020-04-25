@@ -1,4 +1,4 @@
-#include "ProjOps.h"
+#include "hypatia/ProjOps.h"
 
 #include <math.h>
 

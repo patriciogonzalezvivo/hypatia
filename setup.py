@@ -12,7 +12,7 @@ from distutils.core import setup, Extension
 doc_lines = __doc__.split('\n')
 hypatia_module = Extension(  
   '_hypatia',
-
+  include_dirs=['include'],
   sources= [ 
     'hypatia_wrap.cxx', 
     'src/primitives/Polar.cpp',
@@ -51,6 +51,7 @@ setup(
   version     = '0.2',
   author      = 'Patricio Gonzalez Vivo',
   author_email = 'patriciogonzalezvivo@gmail.com',
+  license     = "BSD",
   ext_modules = [ hypatia_module ],
   py_modules = [ 'hypatia' ],
 )

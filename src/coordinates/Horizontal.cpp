@@ -1,4 +1,4 @@
-#include "Horizontal.h"
+#include "hypatia/coordinates/Horizontal.h"
 
 #include <math.h>
 

@@ -8,13 +8,13 @@
  *
 \*****************************************************************************/
 
-#include "Body.h"
+#include "hypatia/Body.h"
 
-#include "CoordOps.h"
+#include "hypatia/CoordOps.h"
 
-#include "Luna.h"
-#include "models/Pluto.h"
-#include "models/VSOP87.h"
+#include "hypatia/Luna.h"
+#include "hypatia/models/Pluto.h"
+#include "hypatia/models/VSOP87.h"
 
 static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"Earth", (char*)"Mar", (char*)"Jup", (char*)"Sat", (char*)"Ur", (char*)"Nep", (char*)"Pl", (char*)"Luna", (char*)"Satellite" };
 

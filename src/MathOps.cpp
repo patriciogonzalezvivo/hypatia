@@ -1,4 +1,4 @@
-#include "MathOps.h"
+#include "hypatia/MathOps.h"
 
 #include <math.h>
 #include <stdio.h>

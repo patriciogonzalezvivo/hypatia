@@ -9,13 +9,13 @@
  *
 \*****************************************************************************/
 
-#include "Luna.h"
+#include "hypatia/Luna.h"
 
-#include "TimeOps.h"
-#include "CoordOps.h"
+#include "hypatia/TimeOps.h"
+#include "hypatia/CoordOps.h"
 
-#include "Body.h"
-#include "models/VSOP87.h"
+#include "hypatia/Body.h"
+#include "hypatia/models/VSOP87.h"
 
 #include <stdlib.h>
 #include <math.h>

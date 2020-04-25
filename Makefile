@@ -2,10 +2,10 @@ scripts=$(wildcard test/*.py)
 
 install:
 	swig -c++ -python hypatia.i
-	python setup.py build_ext --inplace
+	python3 setup.py build_ext --inplace
 	$(LIB)
 	@rm -rf build
-	sudo python setup.py install
+	sudo python3 setup.py install
 
 clean:
 	@rm -rvf $(LIB) *.o */*.o *.so hypatia.py* hypatia_wrap.c* build

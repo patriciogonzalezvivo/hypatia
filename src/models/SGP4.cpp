@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#include "SGP4.h"
-#include "Exception.h"
+#include "hypatia/models/SGP4.h"
+#include "hypatia/models/Exception.h"
 
-#include "../TimeOps.h"
-#include "../CoordOps.h"
-#include "../primitives/Vector.h"
+#include "hypatia/TimeOps.h"
+#include "hypatia/CoordOps.h"
+#include "hypatia/primitives/Vector.h"
 
 #include <cmath>
 #include <iomanip>

@@ -8,8 +8,8 @@
  *
 \*****************************************************************************/
 
-#include "VSOP87.h"
-#include "../MathOps.h"
+#include "hypatia/models/VSOP87.h"
+#include "hypatia/MathOps.h"
 
 #include <math.h>
 

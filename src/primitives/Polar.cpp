@@ -5,7 +5,7 @@
 //  Created by Patricio González Vivo on 2/11/18.
 //
 
-#include "Polar.h"
+#include "hypatia/primitives/Polar.h"
 
 #include <math.h>
 

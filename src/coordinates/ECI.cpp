@@ -5,10 +5,10 @@
 //  Created by Patricio González Vivo on 5/31/18.
 //
 
-#include "ECI.h"
+#include "hypatia/coordinates/ECI.h"
 
-#include "../TimeOps.h"
-#include "../CoordOps.h"
+#include "hypatia/TimeOps.h"
+#include "hypatia/CoordOps.h"
 
 #include <math.h>
 

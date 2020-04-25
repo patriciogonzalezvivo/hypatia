@@ -4,9 +4,8 @@
 //  Created by Patricio González Vivo on 6/2/18.
 //
 
-#include "Satellite.h"
-
-#include "CoordOps.h"
+#include "hypatia/Satellite.h"
+#include "hypatia/CoordOps.h"
 
 Satellite::Satellite(): m_name("NAN") {
     m_bodyId = SATELLITE;

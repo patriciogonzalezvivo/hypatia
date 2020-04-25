@@ -4,11 +4,11 @@
 //  Created by Patricio González Vivo on 5/31/18.
 //
 
-#include "TLE.h"
+#include "hypatia/models/TLE.h"
 
-#include "../MathOps.h"
-#include "../TimeOps.h"
-#include "Exception.h"
+#include "hypatia/MathOps.h"
+#include "hypatia/TimeOps.h"
+#include "hypatia/models/Exception.h"
 
 #include <sstream>
 #include <locale>

@@ -1,6 +1,6 @@
-#include "Vector.h"
+#include "hypatia/primitives/Vector.h"
+#include "hypatia/MathOps.h"
 
-#include "../MathOps.h"
 #include <math.h>
 
 Vector::Vector() : x(0.0), y(0.0), z(0.0) {

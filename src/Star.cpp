@@ -1,6 +1,6 @@
-#include "Star.h"
+#include "hypatia/Star.h"
 
-#include "CoordOps.h"
+#include "hypatia/CoordOps.h"
 #include <string.h>
 
 #define N_STARS 2826

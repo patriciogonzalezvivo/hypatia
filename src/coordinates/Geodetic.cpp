@@ -1,6 +1,6 @@
-#include "Geodetic.h"
+#include "hypatia/coordinates/Geodetic.h"
+#include "hypatia/CoordOps.h"
 
-#include "../CoordOps.h"
 #include <math.h>
 
 Geodetic::Geodetic () : m_alt(0.0) {
