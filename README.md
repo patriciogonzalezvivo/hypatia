@@ -9,24 +9,45 @@ In comparison with other astronomical/geographical libraries created for profesi
 
 ## Hypatia as C++ code
 
+You can easily add hypatia into your project by adding the `include/` and `src/` folder or by installing hypatia into your system. For the former option you need to:
+
+```bash
+sudo apt install cmake
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+
 ```cpp
+#include <sstream>
+
 #include "hypatia/Body.h"
 #include "hypatia/Luna.h"
 #include "hypatia/Constellation.h"
 
-obs = Observer(40.781098831465, -73.97715657655);
+void main(int argc, char **argv) {
 
-sun = Body(SUN);
-moon = Luna(LUNA);
-std::cout << "Moon's phase: " << moon.getPhase() << std::endl
+    obs = Observer(40.781098831465, -73.97715657655);
 
-const = Constellation(moon)
-std::cout << "Moon's transit constelation: " << const.getName() << std::endl
+    sun = Body(SUN);
+    moon = Luna(LUNA);
+    std::cout << "Moon's phase: " << moon.getPhase() << std::endl
+
+    const = Constellation(moon)
+    std::cout << "Moon's transit constelation: " << const.getName() << std::endl
+
+    return 0;
+}
+
+
+
 ```
 
 ## Hypatia as Python package
 
-* First you need to create the package and install it
+First you need to create the package and install it
 
 ```bash
 sudo apt install swig
@@ -39,7 +60,7 @@ make install
 	/anaconda3/bin/./python3.7 setup.py install 
 ```
 
-* Then use it:
+Then you can use it as follow:
 
 ```python
 from hypatia import *
