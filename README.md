@@ -40,9 +40,6 @@ void main(int argc, char **argv) {
 
     return 0;
 }
-
-
-
 ```
 
 ## Hypatia as Python package
@@ -51,7 +48,6 @@ First you need to create the package and install it
 
 ```bash
 sudo apt install swig
-make
 make install
 ```
 
