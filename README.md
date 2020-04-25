@@ -8,7 +8,7 @@ Goals:
 - Independent self suficiant code that can by use in different projects.
 - Build in basic/standar databases for constellations, stars and planets.
 - Make a Python package which wrapps the C++ code usign swig, to use it in a bigger set of projects
-- Use the Python for unit testing
+- Use the Python for https://opensource.org/licenses/BSD-2-Clauseunit testing
 
 References:
  - Jean Meeus: https://www.amazon.com/Astronomical-Algorithms-Jean-Meeus/dp/0943396611
@@ -22,9 +22,9 @@ References:
 ## As C++ code
 
 ```cpp
-#include "Hypatia/src/Body.h"
-#include "Hypatia/src/Luna.h"
-#include "Hypatia/src/Constellation.h"
+#include "hypatia/src/Body.h"
+#include "hypatia/src/Luna.h"
+#include "hypatia/src/Constellation.h"
 
 obs = Observer(40.781098831465, -73.97715657655);
 
@@ -66,7 +66,7 @@ print("Moon's transit constelation: ", const.getName())
 
 # [License](LICENSE)
 
-Hypatia is open source. You may use, extend, and redistribute without charge under the terms of the [BSD license].
+hypatia is open source. You may use, extend, and redistribute without charge under the terms of the [BSD license].
 
 ```
 Copyright (c) 2018, Patricio Gonzalez Vivo
