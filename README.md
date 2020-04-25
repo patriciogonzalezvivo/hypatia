@@ -57,9 +57,9 @@ const = Constellation(moon)
 print("Moon's transit constelation: ", const.getName())
 ```
 
-# [License](LICENSE)
+# License
 
-hypatia is open source. You may use, extend, and redistribute without charge under the terms of the [BSD license].
+hypatia is open source. You may use, extend, and redistribute without charge under the terms of the [BSD license](LICENSE).
 
 ```
 Copyright (c) 2018, Patricio Gonzalez Vivo
