@@ -207,4 +207,16 @@ struct MathOps {
      */
     static long mod ( long x, long y );
     static double mod ( double _x, double _y );
+
+    /**
+     * clamp(): clamp thev x value between _low and _high
+     *
+     * @param value
+     * @param lower
+     * @param higest
+     *
+     * @return the clamped value between low and high
+     */
+    static double clamp( double _x, double _low, double _high);
+
 };

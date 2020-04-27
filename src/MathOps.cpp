@@ -386,3 +386,7 @@ long MathOps::mod ( long x, long y ) {
     
     return rval;
 }
+
+double MathOps::clamp( double _v, double _low, double _high) {
+    return (_v < _low) ? _low : (_high < _v) ? _high : _v;
+}

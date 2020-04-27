@@ -15,6 +15,7 @@
 %ignore operator<<;
 
 %apply double &OUTPUT { double &_x, double &_y };
+%apply double &OUTPUT { double &_lng, double &_lat };
 
 %apply double &OUTPUT { int &_deg, int &_min, double &_sec };
 %apply double &OUTPUT { int &_hrs, int &_min, double &_sec };
@@ -36,6 +37,7 @@
     #include "include/hypatia/coordinates/Horizontal.h"
     #include "include/hypatia/coordinates/Geodetic.h"
     #include "include/hypatia/coordinates/ECI.h"
+    #include "include/hypatia/coordinates/Tile.h"
     #include "include/hypatia/MathOps.h"
     #include "include/hypatia/TimeOps.h"
     #include "include/hypatia/CoordOps.h"
@@ -59,6 +61,7 @@
 %include "include/hypatia/coordinates/Horizontal.h"
 %include "include/hypatia/coordinates/Geodetic.h"
 %include "include/hypatia/coordinates/ECI.h"
+%include "include/hypatia/coordinates/Tile.h"
 %include "include/hypatia/MathOps.h"
 %include "include/hypatia/TimeOps.h"
 %include "include/hypatia/CoordOps.h"

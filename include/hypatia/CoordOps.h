@@ -16,6 +16,7 @@
 #include "coordinates/Horizontal.h"
 #include "coordinates/ECI.h"
 #include "coordinates/Geodetic.h"
+#include "coordinates/Tile.h"
 
 class CoordOps {
 public:
@@ -34,7 +35,10 @@ public:
     
     static const double EARTH_FLATTENING;
     static const double EARTH_POLAR_RADIUS_KM;
+    static const double EARTH_EQUATORIAL_RADIUS_M;
     static const double EARTH_EQUATORIAL_RADIUS_KM;
+    static const double EARTH_EQUATORIAL_CIRCUMFERENCE_M;
+    static const double EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
     static const double EARTH_ROTATION_PER_SIDERAL_DAY;
     static const double EARTH_GRAVITATIONAL_CONSTANT;
     
@@ -147,6 +151,16 @@ public:
      * @return Geodetic Coordinate
      */
     static Geodetic toGeodetic(const ECI& _eci);
+
+    // /**
+    //  * toTile() - Geodetic location to Tile coordinates 
+    //  *
+    //  * @param geodetic location (lat/lng)
+    //  * @param zoom level
+    //  *
+    //  * @return tile coords on a mercator tile grid
+    //  */
+    static Tile toTile(const Geodetic& _geo, int _zoomLevel);
     
     // -------------------------------------------------- to Hour Angle
     /**

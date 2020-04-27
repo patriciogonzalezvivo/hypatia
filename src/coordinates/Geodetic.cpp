@@ -6,8 +6,8 @@
 Geodetic::Geodetic () : m_alt(0.0) {
 }
 
-Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_UNIT _a_type, DISTANCE_UNIT _r_type) {
-    if ( _a_type == RADS ) {
+Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_UNIT _angles_unit, DISTANCE_UNIT _alt_unit) {
+    if ( _angles_unit == RADS ) {
         m_phi = _lng;
         m_theta = _lat;
     }
@@ -16,7 +16,7 @@ Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_UNIT _a_type, 
         m_theta = MathOps::toRadians( _lat );
     }
     
-    if ( _r_type == KM ) {
+    if ( _alt_unit == KM ) {
         m_alt = _alt;
     }
     else {

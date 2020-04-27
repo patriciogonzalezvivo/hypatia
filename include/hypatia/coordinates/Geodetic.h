@@ -5,7 +5,7 @@
 class Geodetic : public Polar {
 public:
     Geodetic();
-    Geodetic(double _lng, double _lat, double _alt_m, ANGLE_UNIT _a_type, DISTANCE_UNIT _r_type);
+    Geodetic(double _lng, double _lat, double _alt, ANGLE_UNIT _a_type, DISTANCE_UNIT _alt_unit);
     virtual ~Geodetic();
     
     virtual double  getLongitude(ANGLE_UNIT _type) const;
@@ -16,7 +16,7 @@ public:
     virtual Vector  getVector(DISTANCE_UNIT _type) const;
     
 protected:
-    double m_alt;   // km
+    double m_alt;   // always stored on KM
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Geodetic& p) {

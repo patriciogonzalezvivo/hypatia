@@ -1,4 +1,5 @@
 #include "hypatia/ProjOps.h"
+#include "hypatia/CoordOps.h"
 
 #include <math.h>
 
@@ -19,8 +20,8 @@ void ProjOps::toXY( ProjId _id, double _alt, double _az, double _width, double _
     }
 }
 
-void ProjOps::toXY( ProjId _id, const Horizontal& _eq, double _width, double _height, double &_x, double &_y ) {
-    ProjOps::toXY(_id, _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y);
+void ProjOps::toXY( ProjId _id, const Horizontal& _coord, double _width, double _height, double &_x, double &_y ) {
+    ProjOps::toXY(_id, _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y);
 }
 
 //  https://github.com/slowe/VirtualSky/blob/gh-pages/virtualsky.js
@@ -32,8 +33,8 @@ void ProjOps::toPolar( double _alt, double _az, double _width, double _height, d
     _y = (radius - r * cos(_az)) - .5;
 }
 
-void ProjOps::toPolar( const Horizontal& _eq, double _width, double _height, double &_x, double &_y) {
-    ProjOps::toPolar( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
+void ProjOps::toPolar( const Horizontal& _coord, double _width, double _height, double &_x, double &_y) {
+    ProjOps::toPolar( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toFisheye(double _alt, double _az, double _width, double _height, double &_x, double &_y) {
@@ -44,8 +45,8 @@ void ProjOps::toFisheye(double _alt, double _az, double _width, double _height, 
     _y = (radius - r * cos(_az)) - .5;
 }
 
-void ProjOps::toFisheye(const Horizontal& _eq, double _width, double _height, double &_x, double &_y) {
-    ProjOps::toFisheye( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
+void ProjOps::toFisheye(const Horizontal& _coord, double _width, double _height, double &_x, double &_y) {
+    ProjOps::toFisheye( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toOrtho( double _alt, double _az, double _width, double _height, double &_x, double &_y) {
@@ -56,8 +57,8 @@ void ProjOps::toOrtho( double _alt, double _az, double _width, double _height, d
     _y = (radius - r * cos(_az)) - .5;
 }
 
-void ProjOps::toOrtho( const Horizontal& _eq, double _width, double _height, double &_x, double &_y) {
-    ProjOps::toOrtho( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
+void ProjOps::toOrtho( const Horizontal& _coord, double _width, double _height, double &_x, double &_y) {
+    ProjOps::toOrtho( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -74,8 +75,8 @@ void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, 
     _y = _height - f * _height * k * (cosel1 * sinel - sinel1 * cosel * cosaz);
 }
 
-void ProjOps::toStereo( const Horizontal& _eq, double _width ,double _height, double &_x, double &_y ) {
-    ProjOps::toStereo( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
+void ProjOps::toStereo( const Horizontal& _coord, double _width ,double _height, double &_x, double &_y ) {
+    ProjOps::toStereo( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toLambert( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -88,8 +89,8 @@ void ProjOps::toLambert( double _alt, double _az, double _width ,double _height,
     _x = _width * .5 + 0.6 * _height * k * cosel * sinaz;
     _y = _height - 0.6 * _height * k * sinel;
 }
-void ProjOps::toLambert( const Horizontal& _eq, double _width ,double _height, double &_x, double &_y ) {
-    ProjOps::toLambert( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
+void ProjOps::toLambert( const Horizontal& _coord, double _width ,double _height, double &_x, double &_y ) {
+    ProjOps::toLambert( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
 }
 
 void ProjOps::toEquirectangular( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -102,6 +103,26 @@ void ProjOps::toEquirectangular( double _alt, double _az, double _width ,double 
     _y = _height - (_alt / MathOps::PI_OVER_TWO) * _height;
 }
 
-void ProjOps::toEquirectangular( const Horizontal& _eq,  double _width ,double _height, double &_x, double &_y ) {
-    ProjOps::toEquirectangular( _eq.getAltitud(RADS), _eq.getAzimuth(RADS), _width, _height, _x, _y );
+void ProjOps::toEquirectangular( const Horizontal& _coord,  double _width ,double _height, double &_x, double &_y ) {
+    ProjOps::toEquirectangular( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
 }
+
+void ProjOps::toMercator( double _lng, double _lat, double& _x, double& _y) {
+    _x = _lng *CoordOps::EARTH_EQUATORIAL_RADIUS_M;
+    _y = log(tan(MathOps::PI * 0.25 + _lat * 0.5)) * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
+}
+
+void ProjOps::toMercator( const Geodetic& _coord, double& _x, double& _y) {
+    ProjOps::toMercator( _coord.getLongitude(RADS), _coord.getLatitude(RADS), _x, _y);
+}
+
+// void ProjOps::fromMercator( double _x, double _y, double& _lng, double& _lat) {
+//     _lng = _x * CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
+//     _lat = (2.0 * atan(exp(_y / CoordOps::EARTH_EQUATORIAL_RADIUS_M)) - MathOps::PI_OVER_TWO);
+// }
+
+// void ProjOps::toMercator( const Tile& _coord, double& _x, double& _y) {
+//     double metersPerTile = _coord.metersPerTile();
+//     _x = _coords.x * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
+//     _y = CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - _coords.y * metersPerTile;
+// }

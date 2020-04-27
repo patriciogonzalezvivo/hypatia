@@ -25,6 +25,7 @@ hypatia_module = Extension(
     'src/coordinates/Horizontal.cpp',
     'src/coordinates/Geodetic.cpp',
     'src/coordinates/ECI.cpp',
+    'src/coordinates/Tile.cpp',
     'src/MathOps.cpp',
     'src/TimeOps.cpp',
     'src/CoordOps.cpp',

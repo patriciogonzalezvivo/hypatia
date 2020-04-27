@@ -9,6 +9,7 @@
 \*****************************************************************************/
 
 #include "hypatia/CoordOps.h"
+#include "hypatia/ProjOps.h"
 
 #include "hypatia/MathOps.h"
 #include "hypatia/TimeOps.h"
@@ -35,7 +36,10 @@ const double CoordOps::LY_TO_PC = 0.306601;
 
 const double CoordOps::EARTH_FLATTENING = 1.0 / 298.26;
 const double CoordOps::EARTH_POLAR_RADIUS_KM = 6356.76;
-const double CoordOps::EARTH_EQUATORIAL_RADIUS_KM = 6378.135;
+const double CoordOps::EARTH_EQUATORIAL_RADIUS_KM = 6378.137;
+const double CoordOps::EARTH_EQUATORIAL_RADIUS_M = CoordOps::EARTH_EQUATORIAL_RADIUS_KM / 1000.0;
+const double CoordOps::EARTH_EQUATORIAL_CIRCUMFERENCE_M = MathOps::TAU * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
+const double CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M = MathOps::PI * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
 const double CoordOps::EARTH_ROTATION_PER_SIDERAL_DAY = 1.00273790934;
 const double CoordOps::EARTH_GRAVITATIONAL_CONSTANT = 398600.8;
 
@@ -328,6 +332,21 @@ Geodetic CoordOps::toGeodetic(const ECI& _eci) {
     
     return Geodetic(lat, lon, alt, RADS, KM);
 }
+
+Tile CoordOps::toTile(const Geodetic& _geo, int _zoomLevel) {
+
+    // Convert to Mercator meters
+    double x, y;
+    ProjOps::toMercator(_geo, x, y);
+
+    double meters = Tile::getMetersPerTileAt(_zoomLevel);
+
+    double X = (x + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
+    double Y = (-y + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
+
+    return Tile(X, Y, _zoomLevel);
+    // return Tile(colum + tX, row + tY, _zoomLevel);
+ }
 
 //---------------------------------------------------------------------------- to Horizontal
 /**
