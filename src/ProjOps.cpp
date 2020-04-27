@@ -20,8 +20,10 @@ void ProjOps::toXY( ProjId _id, double _alt, double _az, double _width, double _
     }
 }
 
-void ProjOps::toXY( ProjId _id, const Horizontal& _coord, double _width, double _height, double &_x, double &_y ) {
-    ProjOps::toXY(_id, _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y);
+Vector2 ProjOps::toVector2( ProjId _id, const Horizontal& _coord, double _width, double _height ) {
+    Vector2 rta;
+    ProjOps::toXY(_id, _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, rta.x, rta.y);
+    return rta;
 }
 
 //  https://github.com/slowe/VirtualSky/blob/gh-pages/virtualsky.js
@@ -33,8 +35,10 @@ void ProjOps::toPolar( double _alt, double _az, double _width, double _height, d
     _y = (radius - r * cos(_az)) - .5;
 }
 
-void ProjOps::toPolar( const Horizontal& _coord, double _width, double _height, double &_x, double &_y) {
-    ProjOps::toPolar( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
+Vector2 ProjOps::toPolar( const Horizontal& _coord, double _width, double _height ) {
+    Vector2 rta;
+    ProjOps::toPolar( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, rta.x, rta.y );
+    return rta;
 }
 
 void ProjOps::toFisheye(double _alt, double _az, double _width, double _height, double &_x, double &_y) {
@@ -45,8 +49,10 @@ void ProjOps::toFisheye(double _alt, double _az, double _width, double _height, 
     _y = (radius - r * cos(_az)) - .5;
 }
 
-void ProjOps::toFisheye(const Horizontal& _coord, double _width, double _height, double &_x, double &_y) {
-    ProjOps::toFisheye( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
+Vector2 ProjOps::toFisheye(const Horizontal& _coord, double _width, double _height ) {
+    Vector2 rta;
+    ProjOps::toFisheye( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, rta.x, rta.y );
+    return rta;
 }
 
 void ProjOps::toOrtho( double _alt, double _az, double _width, double _height, double &_x, double &_y) {
@@ -57,8 +63,10 @@ void ProjOps::toOrtho( double _alt, double _az, double _width, double _height, d
     _y = (radius - r * cos(_az)) - .5;
 }
 
-void ProjOps::toOrtho( const Horizontal& _coord, double _width, double _height, double &_x, double &_y) {
-    ProjOps::toOrtho( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
+Vector2 ProjOps::toOrtho( const Horizontal& _coord, double _width, double _height ) {
+    Vector2 rta;
+    ProjOps::toOrtho( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, rta.x, rta.y);
+    return rta;
 }
 
 void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -75,8 +83,10 @@ void ProjOps::toStereo( double _alt, double _az, double _width ,double _height, 
     _y = _height - f * _height * k * (cosel1 * sinel - sinel1 * cosel * cosaz);
 }
 
-void ProjOps::toStereo( const Horizontal& _coord, double _width ,double _height, double &_x, double &_y ) {
-    ProjOps::toStereo( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
+Vector2 ProjOps::toStereo( const Horizontal& _coord, double _width ,double _height ) {
+    Vector2 rta;
+    ProjOps::toStereo( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, rta.x, rta.y );
+    return rta;
 }
 
 void ProjOps::toLambert( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -89,8 +99,11 @@ void ProjOps::toLambert( double _alt, double _az, double _width ,double _height,
     _x = _width * .5 + 0.6 * _height * k * cosel * sinaz;
     _y = _height - 0.6 * _height * k * sinel;
 }
-void ProjOps::toLambert( const Horizontal& _coord, double _width ,double _height, double &_x, double &_y ) {
-    ProjOps::toLambert( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
+
+Vector2 ProjOps::toLambert( const Horizontal& _coord, double _width ,double _height ) {
+    Vector2 rta;
+    ProjOps::toLambert( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, rta.x, rta.y );
+    return rta;
 }
 
 void ProjOps::toEquirectangular( double _alt, double _az, double _width ,double _height, double &_x, double &_y ) {
@@ -103,8 +116,10 @@ void ProjOps::toEquirectangular( double _alt, double _az, double _width ,double 
     _y = _height - (_alt / MathOps::PI_OVER_TWO) * _height;
 }
 
-void ProjOps::toEquirectangular( const Horizontal& _coord,  double _width ,double _height, double &_x, double &_y ) {
-    ProjOps::toEquirectangular( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, _x, _y );
+Vector2 ProjOps::toEquirectangular( const Horizontal& _coord,  double _width ,double _height ) {
+    Vector2 rta;
+    ProjOps::toEquirectangular( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, rta.x, rta.y );
+    return rta;
 }
 
 void ProjOps::toMercator( double _lng, double _lat, double& _x, double& _y) {
@@ -112,12 +127,15 @@ void ProjOps::toMercator( double _lng, double _lat, double& _x, double& _y) {
     _y = log(tan(MathOps::PI * 0.25 + _lat * 0.5)) * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
 }
 
-void ProjOps::toMercator( const Geodetic& _coord, double& _x, double& _y) {
-    ProjOps::toMercator( _coord.getLongitude(RADS), _coord.getLatitude(RADS), _x, _y);
+Vector2 ProjOps::toMercator( const Geodetic& _coord ) {
+    Vector2 rta;
+    ProjOps::toMercator( _coord.getLongitude(RADS), _coord.getLatitude(RADS), rta.x, rta.y);
+    return rta;
 }
 
-// void ProjOps::toMercator( const Tile& _coord, double& _x, double& _y) {
+Vector2 ProjOps::toMercator( const Tile& _tile ) {
 //     double metersPerTile = _coord.getMetersPerTile();
 //     _x = _coord.x * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
 //     _y = CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - _coord.y * metersPerTile;
-// }
+    return _tile.getMercator();
+}

@@ -16,9 +16,8 @@ int main(int argc, char **argv) {
     Geodetic loc = Geodetic(lng, lat, 0.0, DEGS, KM);
     std::cout << loc.getLongitude(DEGS) << "," << loc.getLatitude(DEGS) << std::endl;
 
-    double x, y;
-    ProjOps::toMercator(loc, x, y);
-    std::cout << std::setprecision(10) << x << "," << y << std::endl;
+    Vector2 mercator = ProjOps::toMercator(loc);
+    std::cout << mercator << std::endl;
 
     Tile tile = CoordOps::toTile(loc, 19);
     std::cout << tile << std::endl;
@@ -39,6 +38,8 @@ int main(int argc, char **argv) {
     std::cout << "mercator: " << tile.getMercator() << std::endl;
     std::cout << "location: " << tile.getGeodetic() << std::endl;
 
+    for (int i = 16; i < 26; i++)
+        std::cout << "Zoom " << std::setw(2) << i << " : " << std::setw(6) << Tile::getMetersPerTileAt(i) << "m" << std::endl;
  
     return 0;
 }

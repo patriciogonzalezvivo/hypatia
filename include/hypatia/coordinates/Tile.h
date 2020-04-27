@@ -63,7 +63,7 @@ public:
     static double   getMetersPerTileAt(int zoom);
 
 protected:
-    double      m_meters;
+    double      meters;
     double      x, y;
     int         z;
 };

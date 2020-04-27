@@ -3,28 +3,27 @@
 #include "hypatia/ProjOps.h"
 #include <math.h>
 
-Tile::Tile(): x(0.0), y(0.0), z(0) {
+Tile::Tile(): meters(0.0), x(0.0), y(0.0), z(0) {
 }
 
 Tile::Tile(double _mercatorX, double _mercatorY, int _z): x(_mercatorX), y(_mercatorY), z(_z) {
-    m_meters = getMetersPerTileAt(_z);
+    meters = getMetersPerTileAt(_z);
 }
 
 Tile::Tile(const Geodetic& _coords, int _zoom): x(0.0), y(0.0), z(_zoom) {
-    m_meters = getMetersPerTileAt(_zoom);
+    meters = getMetersPerTileAt(_zoom);
 
     // Convert to Mercator meters
-    double mercatorX, mercatorY;
-    ProjOps::toMercator(_coords, mercatorX, mercatorY);
+    Vector2 mercator = ProjOps::toMercator( _coords );
 
     double meters = Tile::getMetersPerTileAt(_zoom);
 
-    x = (mercatorX + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
-    y = (-mercatorY + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
+    x = (mercator.x + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
+    y = (-mercator.y + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
 }
 
-Tile::Tile(const Tile& _tile) : x(_tile.x), y(_tile.y), z(_tile.z) {
-    m_meters = getMetersPerTileAt(_tile.z);
+Tile::Tile(const Tile& _tile) : meters(_tile.meters), x(_tile.x), y(_tile.y), z(_tile.z) {
+    meters = getMetersPerTileAt(_tile.z);
 }
 
 int Tile::getColumn() const { 
@@ -85,7 +84,7 @@ double Tile::getMetersPerTileAt(int _zoom) {
 
 double Tile::getMetersPerTile() const {
     // return Tile::getMetersPerTileAt(z);
-    return m_meters;
+    return meters;
 }
 
 Tile Tile::getTileAtZoom(const int& _zoom) const {

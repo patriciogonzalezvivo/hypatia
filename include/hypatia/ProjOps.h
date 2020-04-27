@@ -3,6 +3,7 @@
 #include "coordinates/Horizontal.h"
 #include "coordinates/Geodetic.h"
 #include "coordinates/Tile.h"
+#include "primitives/Vector2.h"
 
 enum ProjId {
     POLAR=0, FISHEYE=1, ORTHO=2,
@@ -13,29 +14,29 @@ class ProjOps {
 public:
     
     static void toXY( ProjId _id, double _alt, double _az, double _width, double _height, double &_x, double &_y );
-    static void toXY( ProjId _id, const Horizontal& _coord, double _width, double _height, double &_x, double &_y );
+    static Vector2 toVector2( ProjId _id, const Horizontal& _coord, double _width, double _height);
     
     static void toPolar( double _alt, double _az, double _width, double _height, double &_x, double &_y );
-    static void toPolar( const Horizontal& _coord, double _width, double _height, double &_x, double &_y );
+    static Vector2 toPolar( const Horizontal& _coord, double _width, double _height );
     
     static void toFisheye( double _alt, double _az, double _width, double _height, double &_x, double &_y );
-    static void toFisheye( const Horizontal& _coord, double _width, double _height, double &_x, double &_y );
+    static Vector2 toFisheye( const Horizontal& _coord, double _width, double _height );
     
     static void toOrtho( double _alt, double _az, double _width, double _height, double &_x, double &_y );
-    static void toOrtho( const Horizontal& _coord, double _width, double _height, double &_x, double &_y );
+    static Vector2 toOrtho( const Horizontal& _coord, double _width, double _height );
     
     static void toStereo( double _alt, double _az, double _width, double _height, double &_x, double &_y );
-    static void toStereo( const Horizontal& _coord, double _width, double _height, double &_x, double &_y );
+    static Vector2 toStereo( const Horizontal& _coord, double _width, double _height );
     
     static void toLambert( double _alt, double _az, double _width, double _height, double &_x, double &_y );
-    static void toLambert( const Horizontal& _coord, double _width, double _height, double &_x, double &_y );
+    static Vector2 toLambert( const Horizontal& _coord, double _width, double _height );
     
     static void toEquirectangular( double _alt, double _az, double _width, double _height, double &_x, double &_y );
-    static void toEquirectangular( const Horizontal& _coord, double _width, double _height, double &_x, double &_y );
+    static Vector2 toEquirectangular( const Horizontal& _coord, double _width, double _height );
 
 // Geografic projections
 
-    static void toMercator( double _lng, double _lat, double &_x, double &_y);
-    static void toMercator( const Geodetic& _coord, double &_x, double &_y);
-    // static void toMercator( const Tile& _coord, double &_x, double &_y);
+    static void toMercator( double _lng, double _lat, double &_x, double &_y );
+    static Vector2 toMercator( const Geodetic& _coord );
+    static Vector2 toMercator( const Tile& _coord );
 };
