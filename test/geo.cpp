@@ -6,6 +6,7 @@
 
 #include "hypatia/CoordOps.h"
 #include "hypatia/ProjOps.h"
+#include "hypatia/MathOps.h"
 
 int main(int argc, char **argv) {
 
@@ -13,12 +14,11 @@ int main(int argc, char **argv) {
     double lng = -122.085486;
 
     Geodetic loc = Geodetic(lng, lat, 0.0, DEGS, KM);
-
-    // std::cout << loc.getLongitude(RADS) << "," << loc.getLatitude(RADS) << std::endl;
+    std::cout << loc.getLongitude(DEGS) << "," << loc.getLatitude(DEGS) << std::endl;
 
     double x, y;
     ProjOps::toMercator(loc, x, y);
-    std::cout << x << "," << y << std::endl;
+    std::cout << std::setprecision(10) << x << "," << y << std::endl;
 
     Tile tile = CoordOps::toTile(loc, 19);
     std::cout << tile << std::endl;
@@ -35,5 +35,10 @@ int main(int argc, char **argv) {
     std::cout << "         " << tile.getParent().getChild(2, 20) << std::endl;
     std::cout << "         " << tile.getParent().getChild(3, 20) << std::endl;
 
+    std::cout << "col: " << tile.getColumn() << " row: " << tile.getRow() << " zoom: " << tile.getZoom() << std::endl;
+    std::cout << "u: "   << tile.getU() << " v: " << tile.getV() << std::endl;
+    std::cout << "lng: " << std::setprecision(10) << tile.getLongitude(DEGS) << " lat:" << tile.getLatitude(DEGS) << std::endl;
+
+ 
     return 0;
 }

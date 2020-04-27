@@ -1,6 +1,7 @@
 #pragma once
 
-// #include <iostream>
+#include "Geodetic.h"
+#include "../primitives/BoundingBox.h"
 #include <iomanip>
 
 /* An immutable identifier for a map tile
@@ -14,16 +15,29 @@
 class Tile {
 public: 
     Tile();
-    Tile(const Tile &_tile);
+    Tile(const Tile& _tile);
+    Tile(const Geodetic& _coords, int _zoom);
     Tile(double _mercatorX, double _mercatorY, int _zoom);
 
     int getColumn() const;
     int getRow() const;
     int getZoom() const;
 
-    double getX() const;
-    double getY() const;
-    
+    double getU() const;
+    double getV() const;
+
+    double getMercatorX() const;
+    double getMercatorY() const;
+    double getMercatorXFor(double _u) const;
+    double getMercatorYFor(double _v) const;
+
+    BoundingBox getMercatorBoundingBox() const;
+
+    double getLongitude(ANGLE_UNIT _type) const;
+    double getLatitude(ANGLE_UNIT _type) const;
+    double getLongitudeFor(double _u, ANGLE_UNIT _type) const;
+    double getLatitudeFor(double _v, ANGLE_UNIT _type) const;
+
     bool operator < (const Tile& _tile) const;
 
     bool operator >  (const Tile& _tile) const;
@@ -50,8 +64,9 @@ public:
     static double   getMetersPerTileAt(int zoom);
 
 protected:
-    double  x, y;
-    int     z;
+    double      m_meters;
+    double      x, y;
+    int         z;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Tile& p) {

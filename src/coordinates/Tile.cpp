@@ -1,14 +1,30 @@
 #include "hypatia/coordinates/Tile.h"
 #include "hypatia/CoordOps.h"
+#include "hypatia/ProjOps.h"
 #include <math.h>
 
 Tile::Tile(): x(0.0), y(0.0), z(0) {
 }
 
 Tile::Tile(double _mercatorX, double _mercatorY, int _z): x(_mercatorX), y(_mercatorY), z(_z) {
+    m_meters = getMetersPerTileAt(_z);
 }
 
-Tile::Tile(const Tile &_tile) : x(_tile.x), y(_tile.y), z(_tile.z) {
+Tile::Tile(const Geodetic& _coords, int _zoom): x(0.0), y(0.0), z(_zoom) {
+    m_meters = getMetersPerTileAt(_zoom);
+
+    // Convert to Mercator meters
+    double mercatorX, mercatorY;
+    ProjOps::toMercator(_coords, mercatorX, mercatorY);
+
+    double meters = Tile::getMetersPerTileAt(_zoom);
+
+    x = (mercatorX + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
+    y = (-mercatorY + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
+}
+
+Tile::Tile(const Tile& _tile) : x(_tile.x), y(_tile.y), z(_tile.z) {
+    m_meters = getMetersPerTileAt(_tile.z);
 }
 
 int Tile::getColumn() const { 
@@ -23,12 +39,97 @@ int Tile::getZoom() const {
     return z; 
 }
 
+double Tile::getU() const {
+    return MathOps::fract(x);
+}
+
+double Tile::getV() const {
+    return MathOps::fract(y);
+}
+
+double Tile::getMercatorX() const {
+    double metersPerTile = getMetersPerTile();
+    return x * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
+}
+
+double Tile::getMercatorY() const {
+    double metersPerTile = getMetersPerTile();
+    return CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - y * metersPerTile;
+}
+
+double Tile::getMercatorXFor(double _u) const {
+    double metersPerTile = getMetersPerTile();
+    return (getColumn() + _u) * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
+}
+
+double Tile::getMercatorYFor(double _v) const {
+    double metersPerTile = getMetersPerTile();
+    return CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - (getRow()  + _v) * metersPerTile;
+}
+
+double Tile::getLongitude(ANGLE_UNIT _type) const {
+    double phi = getMercatorX() / CoordOps::EARTH_EQUATORIAL_RADIUS_M;
+
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( phi );
+    }
+    else {
+        return phi;
+    }
+}
+
+double Tile::getLatitude(ANGLE_UNIT _type) const {
+    double theta = (2.0 * atan(exp(getMercatorY() / CoordOps::EARTH_EQUATORIAL_RADIUS_M)) - MathOps::PI_OVER_TWO);
+
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( theta );
+    }
+    else {
+        return theta;
+    }
+}
+
+double Tile::getLongitudeFor(double _u, ANGLE_UNIT _type) const {
+    double phi = getMercatorXFor(_u) / CoordOps::EARTH_EQUATORIAL_RADIUS_M;
+
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( phi );
+    }
+    else {
+        return phi;
+    }
+}
+
+double Tile::getLatitudeFor(double _v, ANGLE_UNIT _type) const {
+    double theta = (2.0 * atan(exp(getMercatorYFor(_v) / CoordOps::EARTH_EQUATORIAL_RADIUS_M)) - MathOps::PI_OVER_TWO);
+
+    if ( _type == DEGS ) {
+        return MathOps::toDegrees( theta );
+    }
+    else {
+        return theta;
+    }
+}
+
+BoundingBox Tile::getMercatorBoundingBox() const {
+    Tile minT = Tile(getColumn(),       getRow() + 1.0, z);
+    Tile maxT = Tile(getColumn() + 1.0, getRow(),       z);
+
+    BoundingBox bb;
+    bb.minX = minT.getMercatorX();
+    bb.minY = minT.getMercatorY();
+    bb.maxX = maxT.getMercatorX();
+    bb.maxY = maxT.getMercatorY();
+    return bb;
+}
+
 double Tile::getMetersPerTileAt(int _zoom) {
     return CoordOps::EARTH_EQUATORIAL_CIRCUMFERENCE_M / (1 << _zoom);
 }
 
 double Tile::getMetersPerTile() const {
-    return Tile::getMetersPerTileAt(z);
+    // return Tile::getMetersPerTileAt(z);
+    return m_meters;
 }
 
 Tile Tile::getTileAtZoom(const int& _zoom) const {
@@ -92,7 +193,6 @@ Tile Tile::down(const double& _distance) const {
 Tile Tile::left(const double& _distance) const {
     return Tile(x - _distance, y, z);
 }
-
 
 bool Tile::operator < (const Tile& _tile) const {
     return z > _tile.z || (z == _tile.z && (x < _tile.x || (x == _tile.x && (y < _tile.y))));

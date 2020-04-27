@@ -108,7 +108,7 @@ void ProjOps::toEquirectangular( const Horizontal& _coord,  double _width ,doubl
 }
 
 void ProjOps::toMercator( double _lng, double _lat, double& _x, double& _y) {
-    _x = _lng *CoordOps::EARTH_EQUATORIAL_RADIUS_M;
+    _x = _lng * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
     _y = log(tan(MathOps::PI * 0.25 + _lat * 0.5)) * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
 }
 
@@ -116,13 +116,8 @@ void ProjOps::toMercator( const Geodetic& _coord, double& _x, double& _y) {
     ProjOps::toMercator( _coord.getLongitude(RADS), _coord.getLatitude(RADS), _x, _y);
 }
 
-// void ProjOps::fromMercator( double _x, double _y, double& _lng, double& _lat) {
-//     _lng = _x * CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
-//     _lat = (2.0 * atan(exp(_y / CoordOps::EARTH_EQUATORIAL_RADIUS_M)) - MathOps::PI_OVER_TWO);
-// }
-
 // void ProjOps::toMercator( const Tile& _coord, double& _x, double& _y) {
-//     double metersPerTile = _coord.metersPerTile();
-//     _x = _coords.x * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
-//     _y = CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - _coords.y * metersPerTile;
+//     double metersPerTile = _coord.getMetersPerTile();
+//     _x = _coord.x * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
+//     _y = CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - _coord.y * metersPerTile;
 // }

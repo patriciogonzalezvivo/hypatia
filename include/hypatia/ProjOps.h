@@ -37,8 +37,5 @@ public:
 
     static void toMercator( double _lng, double _lat, double &_x, double &_y);
     static void toMercator( const Geodetic& _coord, double &_x, double &_y);
-
     // static void toMercator( const Tile& _coord, double &_x, double &_y);
-
-    // static void fromMercator( double _x, double _y, double& _lng, double& _lat);
 };
