@@ -5,7 +5,7 @@
 Horizontal::Horizontal () {
 }
 
-Horizontal::Horizontal ( const Vector& _parent ) {
+Horizontal::Horizontal ( const Vector3& _parent ) {
     m_phi = atan2(_parent.y, _parent.x);
     m_theta = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
 }
@@ -42,6 +42,6 @@ double Horizontal::getAzimuth(ANGLE_UNIT _type) const {
     }
 }
 
-Vector Horizontal::getVector () const {
-    return Vector(Polar(m_phi, -m_theta, RADS));
+Vector3 Horizontal::getVector () const {
+    return Vector3(Polar(m_phi, -m_theta, RADS));
 }

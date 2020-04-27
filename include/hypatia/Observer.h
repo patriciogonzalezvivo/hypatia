@@ -32,12 +32,12 @@ public:
     virtual Geodetic    getLocation() const;
     virtual double      getLST() const;
     
-    virtual Vector      getHeliocentricVector(DISTANCE_UNIT _type);
+    virtual Vector3     getHeliocentricVector(DISTANCE_UNIT _type);
     
     virtual void        update();
 
 private:
-    Vector              m_heliocentricLoc;
+    Vector3             m_heliocentricLoc;
     Geodetic            m_location;
     
     double              m_jd;

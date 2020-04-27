@@ -432,9 +432,9 @@ void Luna::compute( Observer &_obs ) {
         
         // Get HelioCentric values
         Ecliptic toEarth = Ecliptic(sun_eclipticLon, sun_eclipticLat, sun_radius, RADS, AU);
-        Vector Sun2Earth = toEarth.getVector(AU);
-        Vector Earth2Moon = m_geocentric.getVector(AU);
-        Vector Sun2Moon = Sun2Earth + Earth2Moon;
+        Vector3 Sun2Earth = toEarth.getVector(AU);
+        Vector3 Earth2Moon = m_geocentric.getVector(AU);
+        Vector3 Sun2Moon = Sun2Earth + Earth2Moon;
         
         m_heliocentric = CoordOps::toHeliocentric(_obs, m_geocentric);
         

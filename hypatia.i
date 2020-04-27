@@ -28,7 +28,8 @@
     #define SWIG_FILE_WITH_INIT
     
     #include "include/hypatia/primitives/Polar.h"
-    #include "include/hypatia/primitives/Vector.h"
+    #include "include/hypatia/primitives/Vector2.h"
+    #include "include/hypatia/primitives/Vector3.h"
     #include "include/hypatia/primitives/TimeSpan.h"
     #include "include/hypatia/primitives/DateTime.h"
     #include "include/hypatia/primitives/BoundingBox.h"
@@ -53,7 +54,8 @@
 %}
 
 %include "include/hypatia/primitives/Polar.h"
-%include "include/hypatia/primitives/Vector.h"
+%include "include/hypatia/primitives/Vector2.h"
+%include "include/hypatia/primitives/Vector3.h"
 %include "include/hypatia/primitives/TimeSpan.h"
 %include "include/hypatia/primitives/DateTime.h"
 %include "include/hypatia/primitives/BoundingBox.h"

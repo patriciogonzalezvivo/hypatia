@@ -3,19 +3,19 @@
 
 #pragma once
 
-#include "../primitives/Vector.h"
+#include "../primitives/Vector3.h"
 
 class Horizontal : public Polar {
 public:
     Horizontal();
-    Horizontal( const Vector& _parent );
+    Horizontal( const Vector3& _parent );
     Horizontal(const double _alt, const double _az, ANGLE_UNIT _type);
     virtual ~Horizontal();
     
     virtual double  getAltitud(ANGLE_UNIT _type) const;
     virtual double  getAzimuth(ANGLE_UNIT _type) const;
     
-    virtual Vector  getVector() const;
+    virtual Vector3 getVector() const;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Horizontal& p) {

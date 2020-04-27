@@ -5,7 +5,7 @@
 Equatorial::Equatorial() {
 }
 
-Equatorial::Equatorial(const Vector& _parent) {
+Equatorial::Equatorial(const Vector3& _parent) {
     m_phi = atan2(_parent.y, _parent.x);
     m_theta = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
 }
@@ -42,8 +42,8 @@ double Equatorial::getDeclination(ANGLE_UNIT _type) const {
     }
 }
 
-Vector Equatorial::getVector() const {
-    return Vector(*this);
+Vector3 Equatorial::getVector() const {
+    return Vector3(*this);
 }
 
 double Equatorial::getAngularDistance(const Equatorial& _equ, ANGLE_UNIT _type) const {

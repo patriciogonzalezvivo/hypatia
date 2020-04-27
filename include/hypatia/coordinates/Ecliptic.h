@@ -3,22 +3,22 @@
 
 #pragma once
 
-#include "../primitives/Vector.h"
+#include "../primitives/Vector3.h"
 
 class Ecliptic : public Polar {
 public:
     Ecliptic ();
-    Ecliptic (const Vector& _parent, DISTANCE_UNIT _type);
+    Ecliptic (const Vector3& _parent, DISTANCE_UNIT _type);
     Ecliptic (double _lng, double _lat, double _radius, ANGLE_UNIT _a_type, DISTANCE_UNIT _d_type);
     virtual ~Ecliptic();
     
-    virtual Ecliptic& operator= (const Vector& _vec);
+    virtual Ecliptic& operator= (const Vector3& _vec);
     
     virtual double  getLongitude (ANGLE_UNIT _type) const;
     virtual double  getLatitude (ANGLE_UNIT _type) const;
     virtual double  getRadius (DISTANCE_UNIT _type) const;
     
-    virtual Vector  getVector (DISTANCE_UNIT _type) const;
+    virtual Vector3  getVector (DISTANCE_UNIT _type) const;
     
 protected:
     double m_radius; // AU

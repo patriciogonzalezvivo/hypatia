@@ -16,7 +16,8 @@ hypatia_module = Extension(
   sources= [ 
     'hypatia_wrap.cxx', 
     'src/primitives/Polar.cpp',
-    'src/primitives/Vector.cpp',
+    'src/primitives/Vector2.cpp',
+    'src/primitives/Vector3.cpp',
     'src/primitives/TimeSpan.cpp',
     'src/primitives/DateTime.cpp',
     'src/coordinates/Galactic.cpp',

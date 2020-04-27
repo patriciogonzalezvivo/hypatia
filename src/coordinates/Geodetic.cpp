@@ -85,20 +85,20 @@ double Geodetic::getAltitude (DISTANCE_UNIT _type) const {
     }
 };
 
-Vector Geodetic::getVector (DISTANCE_UNIT _type) const {
+Vector3 Geodetic::getVector (DISTANCE_UNIT _type) const {
     if (_type == KM) {
-        return Vector(*this);
+        return Vector3(*this);
     }
     else if ( _type == AU ) {
-        return Vector(*this) * CoordOps::KM_TO_AU;
+        return Vector3(*this) * CoordOps::KM_TO_AU;
     }
     else if ( _type == LY ) {
-        return Vector(*this) * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY;
+        return Vector3(*this) * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY;
     }
     else if ( _type == PC ) {
-        return Vector(*this) * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY * CoordOps::LY_TO_PC;
+        return Vector3(*this) * CoordOps::KM_TO_AU * CoordOps::AU_TO_LY * CoordOps::LY_TO_PC;
     }
     else {
-        return Vector(*this);
+        return Vector3(*this);
     }
 }

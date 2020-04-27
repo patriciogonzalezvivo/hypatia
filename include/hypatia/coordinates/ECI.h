@@ -5,7 +5,7 @@
 //
 #pragma once
 
-#include "../primitives/Vector.h"
+#include "../primitives/Vector3.h"
 
 /**
  * @brief Stores an Earth-centered inertial position for a particular time.
@@ -13,16 +13,16 @@
 class ECI {
 public:
     ECI();
-    ECI(double _jd, const Vector &_pos, const Vector &_vel = Vector(), DISTANCE_UNIT _type = KM);
+    ECI(double _jd, const Vector3 &_pos, const Vector3 &_vel = Vector3(), DISTANCE_UNIT _type = KM);
     virtual ~ECI();
 
     virtual double      getJD() const { return m_jd; };
-    virtual Vector      getPosition(DISTANCE_UNIT _type) const;
-    virtual Vector      getVelocity(DISTANCE_UNIT _type) const;
+    virtual Vector3     getPosition(DISTANCE_UNIT _type) const;
+    virtual Vector3     getVelocity(DISTANCE_UNIT _type) const;
 
 private:
-    Vector      m_position; // km
-    Vector      m_velocity; // km/s
+    Vector3     m_position; // km
+    Vector3     m_velocity; // km/s
     double      m_jd;
 };
 

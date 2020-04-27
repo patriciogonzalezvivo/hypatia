@@ -20,7 +20,7 @@ ECI::ECI() {
  * @param[in] position the position
  * @param[in] velocity the velocity
  */
-ECI::ECI(double _jd, const Vector &_pos, const Vector &_vel, DISTANCE_UNIT _type) {
+ECI::ECI(double _jd, const Vector3 &_pos, const Vector3 &_vel, DISTANCE_UNIT _type) {
     m_jd = _jd;
 
     if (_type == KM) {
@@ -47,7 +47,7 @@ ECI::~ECI(){
 /**
  * @returns the position
  */
-Vector ECI::getPosition(DISTANCE_UNIT _type) const {
+Vector3 ECI::getPosition(DISTANCE_UNIT _type) const {
     if (_type == KM) {
         return m_position;
     }
@@ -68,7 +68,7 @@ Vector ECI::getPosition(DISTANCE_UNIT _type) const {
 /**
  * @returns the velocity
  */
-Vector ECI::getVelocity(DISTANCE_UNIT _type) const {
+Vector3 ECI::getVelocity(DISTANCE_UNIT _type) const {
     if (_type == KM) {
         return m_velocity;
     }

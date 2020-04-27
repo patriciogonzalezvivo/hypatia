@@ -43,11 +43,11 @@ public:
     virtual Ecliptic    getEclipticGeocentric() const { return m_geocentric; }
     
     virtual Equatorial  getEquatorial() const { return m_equatorial; }
-    virtual Vector      getEquatorialVector(DISTANCE_UNIT _type) const { return m_equatorial.getVector() * m_geocentric.getRadius(_type); }
+    virtual Vector3     getEquatorialVector(DISTANCE_UNIT _type) const { return m_equatorial.getVector() * m_geocentric.getRadius(_type); }
     
     virtual bool        haveHorizontal() const { return m_bHorizontal; }
     virtual Horizontal  getHorizontal() const { return m_horizontal; }
-    virtual Vector      getHorizontalVector(DISTANCE_UNIT _type) const { return m_horizontal.getVector() * m_geocentric.getRadius(_type); };
+    virtual Vector3     getHorizontalVector(DISTANCE_UNIT _type) const { return m_horizontal.getVector() * m_geocentric.getRadius(_type); };
     
     //  Calculate the data for a given planet given an observer
     //  - This function must be called (directly or via c'tor) before calling any of the other fns!

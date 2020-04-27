@@ -6,7 +6,7 @@
 Ecliptic::Ecliptic() : m_radius(1.0) {
 }
 
-Ecliptic::Ecliptic(const Vector& _parent, DISTANCE_UNIT _type) {
+Ecliptic::Ecliptic(const Vector3& _parent, DISTANCE_UNIT _type) {
     m_phi = atan2(_parent.y, _parent.x);
     m_theta = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
     if ( _type == AU ) {
@@ -68,7 +68,7 @@ double Ecliptic::getLatitude(ANGLE_UNIT _type) const {
     }
 }
 
-Ecliptic& Ecliptic::operator= (const Vector& _vec) {
+Ecliptic& Ecliptic::operator= (const Vector3& _vec) {
     m_phi = atan2(_vec.y, _vec.x);
     m_theta = atan2(_vec.z, sqrt(_vec.x * _vec.x + _vec.y * _vec.y));
     m_radius = _vec.getMagnitud();
@@ -93,6 +93,6 @@ double Ecliptic::getRadius (DISTANCE_UNIT _type) const {
     }
 }
 
-Vector Ecliptic::getVector (DISTANCE_UNIT _type) const {
-    return Vector(*this) * getRadius(_type);
+Vector3 Ecliptic::getVector (DISTANCE_UNIT _type) const {
+    return Vector3(*this) * getRadius(_type);
 }

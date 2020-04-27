@@ -35,9 +35,9 @@ int main(int argc, char **argv) {
     std::cout << "         " << tile.getParent().getChild(2, 20) << std::endl;
     std::cout << "         " << tile.getParent().getChild(3, 20) << std::endl;
 
-    std::cout << "col: " << tile.getColumn() << " row: " << tile.getRow() << " zoom: " << tile.getZoom() << std::endl;
-    std::cout << "u: "   << tile.getU() << " v: " << tile.getV() << std::endl;
-    std::cout << "lng: " << std::setprecision(10) << tile.getLongitude(DEGS) << " lat:" << tile.getLatitude(DEGS) << std::endl;
+    std::cout << "uv      : " << tile.getUV() << std::endl;
+    std::cout << "mercator: " << tile.getMercator() << std::endl;
+    std::cout << "location: " << tile.getGeodetic() << std::endl;
 
  
     return 0;

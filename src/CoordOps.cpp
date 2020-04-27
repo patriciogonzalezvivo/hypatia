@@ -14,7 +14,7 @@
 #include "hypatia/MathOps.h"
 #include "hypatia/TimeOps.h"
 
-#include "hypatia/primitives/Vector.h"
+#include "hypatia/primitives/Vector3.h"
 
 #include "hypatia/models/VSOP87.h"
 
@@ -64,9 +64,9 @@ Ecliptic CoordOps::toHeliocentric(Observer& _obs, const Ecliptic& _geocentric ){
     
     // Get HelioCentric values
     Ecliptic toEarth = Ecliptic(sun_eclipticLon, sun_eclipticLat, sun_radius, RADS, AU);
-    Vector Sun2Earth = toEarth.getVector(AU);
-    Vector Earth2Moon = _geocentric.getVector(AU);
-    Vector Sun2Moon = Sun2Earth + Earth2Moon;
+    Vector3 Sun2Earth = toEarth.getVector(AU);
+    Vector3 Earth2Moon = _geocentric.getVector(AU);
+    Vector3 Sun2Moon = Sun2Earth + Earth2Moon;
     
     return Ecliptic(Sun2Moon, AU);
 }
@@ -82,7 +82,7 @@ Ecliptic CoordOps::toHeliocentric(Observer& _obs, const Ecliptic& _geocentric ){
  * @return Ecliptic geocentric
  */
 Ecliptic CoordOps::toGeocentric( Observer& _obs, const Ecliptic& _heliocentric ) {
-    Vector heliocentric = _heliocentric.getVector(AU);
+    Vector3 heliocentric = _heliocentric.getVector(AU);
     return Ecliptic(heliocentric - _obs.getHeliocentricVector(AU), AU);
 }
 
@@ -153,12 +153,12 @@ ECI CoordOps::toECI(double _jd, const Geodetic& _geod) {
     const double s = pow(1.0 - CoordOps::EARTH_FLATTENING, 2.0) * c;
     const double achcp = (CoordOps::EARTH_EQUATORIAL_RADIUS_KM * c + _geod.getLatitude(RADS)) * cos(_geod.getLatitude(RADS));
     
-    Vector position;
+    Vector3 position;
     position.x = achcp * cos(theta); // km
     position.y = achcp * sin(theta); // km
     position.z = (CoordOps::EARTH_EQUATORIAL_RADIUS_KM * s + _geod.getLatitude(RADS)) * sin(_geod.getLatitude(RADS)); // km
     
-    Vector velocity;
+    Vector3 velocity;
     velocity.x = -mfactor * position.y; // km/s
     velocity.y = mfactor * position.x;  // km/s
     velocity.z = 0.0;                   // km/s
@@ -399,8 +399,8 @@ Horizontal CoordOps::toHorizontal(const Observer& _obs, const ECI& _eci) {
     /*
      * calculate differences
      */
-    Vector range_rate = _eci.getVelocity(KM) - obs.getVelocity(KM);
-    Vector range = _eci.getPosition(KM) - obs.getPosition(KM);
+    Vector3 range_rate = _eci.getVelocity(KM) - obs.getVelocity(KM);
+    Vector3 range = _eci.getPosition(KM) - obs.getPosition(KM);
     
     /*
      * Calculate Local Mean Sidereal Time for observers longitude
@@ -839,12 +839,12 @@ double CoordOps::parallaticAngle( double _lat, double _alt, double _dec ) {
  *
  * Note: pos and dir must refer to the same coordinate system and equinox
  */
-double CoordOps::positionAngle( const Vector& _pos, const Vector& _dir ) {
-    Vector e_1, e_2, e_3;
+double CoordOps::positionAngle( const Vector3& _pos, const Vector3& _dir ) {
+    Vector3 e_1, e_2, e_3;
     double c, s, phi;
     
     e_1 = _pos / _pos.getNormalized();
-    e_2 = Vector(0., 0., 1.) * _pos;
+    e_2 = Vector3(0., 0., 1.) * _pos;
     e_2 = e_2 / e_2.getNormalized();
     e_3 = e_1 * e_2;
     

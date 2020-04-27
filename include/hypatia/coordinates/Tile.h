@@ -12,6 +12,10 @@
  * 3. row,      lowest to highest
  */
 
+struct TileID {
+    int column, row, zoom;
+};
+
 class Tile {
 public: 
     Tile();
@@ -19,24 +23,19 @@ public:
     Tile(const Geodetic& _coords, int _zoom);
     Tile(double _mercatorX, double _mercatorY, int _zoom);
 
-    int getColumn() const;
-    int getRow() const;
-    int getZoom() const;
+    int         getColumn() const;
+    int         getRow() const;
+    int         getZoom() const;
 
-    double getU() const;
-    double getV() const;
+    Vector2     getUV() const;
 
-    double getMercatorX() const;
-    double getMercatorY() const;
-    double getMercatorXFor(double _u) const;
-    double getMercatorYFor(double _v) const;
+    Vector2     getMercator() const;
+    Vector2     getMercatorForUV(const Vector2& _uv) const;
+
+    Geodetic    getGeodetic() const;
+    Geodetic    getGeodeticForUV( const Vector2& _uv) const;
 
     BoundingBox getMercatorBoundingBox() const;
-
-    double getLongitude(ANGLE_UNIT _type) const;
-    double getLatitude(ANGLE_UNIT _type) const;
-    double getLongitudeFor(double _u, ANGLE_UNIT _type) const;
-    double getLatitudeFor(double _v, ANGLE_UNIT _type) const;
 
     bool operator < (const Tile& _tile) const;
 

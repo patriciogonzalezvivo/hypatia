@@ -16,7 +16,7 @@ public:
     
     virtual ECI         getECI() const { return m_eci; };
     virtual Geodetic    getGeodetic() const;
-    virtual Vector      getEquatorialVector(DISTANCE_UNIT _type) const { return getGeodetic().getVector(_type); }
+    virtual Vector3     getEquatorialVector(DISTANCE_UNIT _type) const { return getGeodetic().getVector(_type); }
     
     virtual char*       getName() const;
     

@@ -106,7 +106,7 @@ double Observer::getLST() const {
     }
 }
 
-Vector Observer::getHeliocentricVector(DISTANCE_UNIT _type) {
+Vector3 Observer::getHeliocentricVector(DISTANCE_UNIT _type) {
     if (m_changed) {
         double pLng, pLat, pRad = 0.0;
         VSOP87::calcAllLocs(pLng, pLat, pRad, m_jcentury, EARTH);

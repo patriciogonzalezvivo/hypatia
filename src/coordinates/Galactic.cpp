@@ -6,7 +6,7 @@
 Galactic::Galactic() : m_radius(1.0) {
 }
 
-Galactic::Galactic(const Vector& _parent, DISTANCE_UNIT _type) {
+Galactic::Galactic(const Vector3& _parent, DISTANCE_UNIT _type) {
     m_phi = atan2(_parent.y, _parent.x);
     m_theta = atan2(_parent.z, sqrt(_parent.x * _parent.x + _parent.y * _parent.y));
     
@@ -95,7 +95,7 @@ double Galactic::getLatitude(ANGLE_UNIT _type) const {
     }
 }
 
-Galactic& Galactic::operator= (const Vector& _vec) {
+Galactic& Galactic::operator= (const Vector3& _vec) {
     m_phi = atan2(_vec.y, _vec.x);
     m_theta = atan2(_vec.z, sqrt(_vec.x * _vec.x + _vec.y * _vec.y));
     m_radius = _vec.getMagnitud();
@@ -126,9 +126,9 @@ double Galactic::getRadius (DISTANCE_UNIT _type) const {
     }
 }
 
-Vector Galactic::getVector (DISTANCE_UNIT _type) const {
+Vector3 Galactic::getVector (DISTANCE_UNIT _type) const {
     if ( _type == PC ) {
-        return Vector(*this) * m_radius;
+        return Vector3(*this) * m_radius;
     }
     else if ( _type == LY ) {
        return getVector(PC) * CoordOps::PC_TO_LY;
@@ -140,6 +140,6 @@ Vector Galactic::getVector (DISTANCE_UNIT _type) const {
         return getVector(AU) * CoordOps::AU_TO_KM;
     }
     else {
-        return Vector(*this);
+        return Vector3(*this);
     }
 }

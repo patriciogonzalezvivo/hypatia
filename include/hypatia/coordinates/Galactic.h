@@ -3,25 +3,25 @@
 
 #pragma once
 
-#include "../primitives/Vector.h"
+#include "../primitives/Vector3.h"
 
 class Galactic : public Polar {
 public:
     Galactic ();
-    Galactic (const Vector& _parent, DISTANCE_UNIT _type);
+    Galactic (const Vector3& _parent, DISTANCE_UNIT _type);
     Galactic (double _lng, double _lat, ANGLE_UNIT _a_type);
     Galactic (double _lng, double _lat, double _paralax, ANGLE_UNIT _a_type);
     Galactic (double _lng, double _lat, double _radius, ANGLE_UNIT _a_type, DISTANCE_UNIT _d_type);
     virtual ~Galactic();
     
-    virtual Galactic& operator= (const Vector& _vec);
+    virtual Galactic& operator= (const Vector3& _vec);
     virtual Galactic& operator= (const Polar& _vec);
     
     virtual double  getLongitude (ANGLE_UNIT _type) const;
     virtual double  getLatitude (ANGLE_UNIT _type) const;
     virtual double  getRadius (DISTANCE_UNIT _type) const;
     
-    virtual Vector  getVector (DISTANCE_UNIT _type) const;
+    virtual Vector3 getVector (DISTANCE_UNIT _type) const;
     
 protected:
     double m_radius; // PC

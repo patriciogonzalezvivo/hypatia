@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../primitives/Vector.h"
+#include "../primitives/Vector3.h"
 
 class Geodetic : public Polar {
 public:
@@ -13,7 +13,7 @@ public:
     virtual double  getAltitude(DISTANCE_UNIT _type) const;
     virtual double  getRadius(DISTANCE_UNIT _type) const;
     
-    virtual Vector  getVector(DISTANCE_UNIT _type) const;
+    virtual Vector3 getVector(DISTANCE_UNIT _type) const;
     
 protected:
     double m_alt;   // always stored on KM

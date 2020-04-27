@@ -335,6 +335,6 @@ public:
      *
      * Note: pos and dir must refer to the same coordinate system and equinox
      */
-    static double positionAngle( const Vector& _pos, const Vector& _dir );
+    static double positionAngle( const Vector3& _pos, const Vector3& _dir );
 };
 

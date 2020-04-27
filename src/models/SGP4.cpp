@@ -19,7 +19,7 @@
 
 #include "hypatia/TimeOps.h"
 #include "hypatia/CoordOps.h"
-#include "hypatia/primitives/Vector.h"
+#include "hypatia/primitives/Vector3.h"
 
 #include <cmath>
 #include <iomanip>
@@ -578,11 +578,11 @@ ECI SGP4::calculateFinalPositionVelocity(
     const double x = rk * ux * CoordOps::EARTH_EQUATORIAL_RADIUS_KM;
     const double y = rk * uy * CoordOps::EARTH_EQUATORIAL_RADIUS_KM;
     const double z = rk * uz * CoordOps::EARTH_EQUATORIAL_RADIUS_KM;
-    Vector position(x, y, z);
+    Vector3 position(x, y, z);
     const double xdot = (rdotk * ux + rfdotk * vx) * CoordOps::EARTH_EQUATORIAL_RADIUS_KM / 60.0;
     const double ydot = (rdotk * uy + rfdotk * vy) * CoordOps::EARTH_EQUATORIAL_RADIUS_KM / 60.0;
     const double zdot = (rdotk * uz + rfdotk * vz) * CoordOps::EARTH_EQUATORIAL_RADIUS_KM / 60.0;
-    Vector velocity(xdot, ydot, zdot);
+    Vector3 velocity(xdot, ydot, zdot);
     
     if (rk < 1.0)
     {

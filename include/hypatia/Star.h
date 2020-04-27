@@ -30,11 +30,11 @@ public:
     
     // Positioning
     virtual Equatorial  getEquatorial() const { return m_equatorial; }
-    virtual Vector      getEquatorialVector(DISTANCE_UNIT _type) const { return m_equatorial.getVector() * getDistance(_type); }
+    virtual Vector3     getEquatorialVector(DISTANCE_UNIT _type) const { return m_equatorial.getVector() * getDistance(_type); }
 
     virtual bool        haveHorizontal() const { return m_bHorizontal; }
     virtual Horizontal  getHorizontal() const { return m_horizontal; }
-    virtual Vector      getHorizontalVector(DISTANCE_UNIT _type) const { return m_horizontal.getVector() * getDistance(_type); };
+    virtual Vector3     getHorizontalVector(DISTANCE_UNIT _type) const { return m_horizontal.getVector() * getDistance(_type); };
     virtual double      getHourAngle(ANGLE_UNIT _type) const;
 
     virtual double      getParalax() const;
