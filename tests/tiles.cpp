@@ -17,8 +17,11 @@ int main(int argc, char **argv) {
     Geodetic loc = Geodetic(lng, lat, 0.0, DEGS, KM);
     std::cout << loc.getLongitude(DEGS) << "," << loc.getLatitude(DEGS) << std::endl;
 
+    UTM utm = loc.getUTM();
+    std::cout << "utm: " << utm << std::endl;
+
     Vector2 mercator = ProjOps::toMercator(loc);
-    std::cout << mercator << std::endl;
+    std::cout << "Mercator: " << mercator << std::endl;
 
     Tile tile = CoordOps::toTile(loc, zoom);
     std::cout << tile << std::endl;
@@ -45,46 +48,17 @@ int main(int argc, char **argv) {
     std::cout <<  tile.getProviderURL(NEXTZEN_JSON) << std::endl;
     std::cout <<  tile.getProviderURL(NEXTZEN_MVT) << std::endl;
     
-    std::cout <<  tile.getProviderURL(OSM_A) << std::endl;
-    std::cout <<  tile.getProviderURL(OSM_B) << std::endl;
-    std::cout <<  tile.getProviderURL(OSM_C) << std::endl;
+    std::cout <<  tile.getProviderURL(OSM) << std::endl;
 
-    std::cout <<  tile.getProviderURL(BING_T0) << std::endl;
-    std::cout <<  tile.getProviderURL(BING_T1) << std::endl;
-    std::cout <<  tile.getProviderURL(BING_T2) << std::endl;
-    std::cout <<  tile.getProviderURL(BING_T3) << std::endl;
+    std::cout <<  tile.getProviderURL(BING) << std::endl;
 
     std::cout <<  tile.getProviderURL(MICROSOFT_BASE) << std::endl;
 
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_A) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_B) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_C) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_D) << std::endl;
-
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_HYBRID_A) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_HYBRID_B) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_HYBRID_C) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_HYBRID_D) << std::endl;
-
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_LABELS_A) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_LABELS_B) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_LABELS_C) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_LABELS_D) << std::endl;
-
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_LINES_A) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_LINES_B) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_LINES_C) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_LINES_D) << std::endl;
-
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_BACKGROUND_A) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_BACKGROUND_B) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_BACKGROUND_C) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TONER_BACKGROUND_D) << std::endl;
-
-    std::cout <<  tile.getProviderURL(STAMEN_TERRAIN_A) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TERRAIN_B) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TERRAIN_C) << std::endl;
-    std::cout <<  tile.getProviderURL(STAMEN_TERRAIN_D) << std::endl;
-
+    std::cout <<  tile.getProviderURL(STAMEN_TONER) << std::endl;
+    std::cout <<  tile.getProviderURL(STAMEN_TONER_HYBRID) << std::endl;
+    std::cout <<  tile.getProviderURL(STAMEN_TONER_LABELS) << std::endl;
+    std::cout <<  tile.getProviderURL(STAMEN_TONER_LINES) << std::endl;
+    std::cout <<  tile.getProviderURL(STAMEN_TONER_BACKGROUND) << std::endl;
+    std::cout <<  tile.getProviderURL(STAMEN_TERRAIN) << std::endl;
     return 0;
 }

@@ -1,7 +1,9 @@
 #include "hypatia/coordinates/Tile.h"
 #include "hypatia/CoordOps.h"
 #include "hypatia/ProjOps.h"
+
 #include <math.h>
+#include <stdlib.h>
 
 Tile::Tile(): meters(0.0), x(0.0), y(0.0), z(0) {
 }
@@ -110,6 +112,9 @@ std::string Tile::getProviderURL( TileProvider _prov ) const {
     std::string Y = std::to_string(getRow());
     std::string Z = std::to_string(getZoom());
 
+    std::string letter[] = { "a", "b", "c", "d" };
+    int rnd = rand() % 4;
+
     switch (_prov) {
         case NEXTZEN_JSON:
             return "https://tile.nextzen.org/tilezen/vector/v1/all/"+Z+"/"+X+"/"+Y+".json?api_key=";
@@ -126,27 +131,12 @@ std::string Tile::getProviderURL( TileProvider _prov ) const {
             return "https://tile.nextzen.org/tilezen/terrain/v1/geotiff/"+Z+"/"+X+"/"+Y+".tif?api_key=your-nextzen-api-key";
             break;
 
-        case OSM_A:
-            return "https://a.tile.openstreetmap.org/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case OSM_B:
-            return "https://b.tile.openstreetmap.org/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case OSM_C:
-            return "https://c.tile.openstreetmap.org/"+Z+"/"+X+"/"+Y+".png";
+        case OSM:
+            return "https://"+letter[rnd%3]+".tile.openstreetmap.org/"+Z+"/"+X+"/"+Y+".png";
             break;
 
-        case BING_T0:
-            return "http://ecn.t0.tiles.virtualearth.net/tiles/a"+ getQuadKey() +".jpeg?g=543";
-            break;
-        case BING_T1:
-            return "http://ecn.t1.tiles.virtualearth.net/tiles/a"+ getQuadKey() +".jpeg?g=543";
-            break;
-        case BING_T2:
-            return "http://ecn.t2.tiles.virtualearth.net/tiles/a"+ getQuadKey() +".jpeg?g=543";
-            break;
-        case BING_T3:
-            return "http://ecn.t3.tiles.virtualearth.net/tiles/a"+ getQuadKey() +".jpeg?g=543";
+        case BING:
+            return "http://ecn.t"+std::to_string( rnd )+".tiles.virtualearth.net/tiles/a"+ getQuadKey() +".jpeg?g=543";
             break;
 
         case MICROSOFT_BASE:
@@ -177,120 +167,33 @@ std::string Tile::getProviderURL( TileProvider _prov ) const {
             return "https://atlas.microsoft.com/map/tile?api-version=2.0&tilesetId=road_shaded_relief&zoom="+Z+"&x="+X+"&y="+Y+"?subscription-key=";
             break;
 
-        case STAMEN_TONER_A:
-            return "http://a.tile.stamen.com/toner/"+Z+"/"+X+"/"+Y+".png";
+        case STAMEN_TONER:
+            return "http://"+letter[rnd]+".tile.stamen.com/toner/"+Z+"/"+X+"/"+Y+".png";
             break;
-        case STAMEN_TONER_HYBRID_A:
-            return "http://a.tile.stamen.com/toner-hybrid/"+Z+"/"+X+"/"+Y+".png";
+        case STAMEN_TONER_HYBRID:
+            return "http://"+letter[rnd]+".tile.stamen.com/toner-hybrid/"+Z+"/"+X+"/"+Y+".png";
             break;
-        case STAMEN_TONER_LABELS_A:
-            return "http://a.tile.stamen.com/toner-labels/"+Z+"/"+X+"/"+Y+".png";
+        case STAMEN_TONER_LABELS:
+            return "http://"+letter[rnd]+".tile.stamen.com/toner-labels/"+Z+"/"+X+"/"+Y+".png";
             break;
-        case STAMEN_TONER_LINES_A:
-            return "http://a.tile.stamen.com/toner-lines/"+Z+"/"+X+"/"+Y+".png";
+        case STAMEN_TONER_LINES:
+            return "http://"+letter[rnd]+".tile.stamen.com/toner-lines/"+Z+"/"+X+"/"+Y+".png";
             break;
-        case STAMEN_TONER_BACKGROUND_A:
-            return "http://a.tile.stamen.com/toner-background/"+Z+"/"+X+"/"+Y+".png";
-            break;
-
-        case STAMEN_TONER_B:
-            return "http://b.tile.stamen.com/toner/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TONER_HYBRID_B:
-            return "http://b.tile.stamen.com/toner-hybrid/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TONER_LABELS_B:
-            return "http://b.tile.stamen.com/toner-labels/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TONER_LINES_B:
-            return "http://b.tile.stamen.com/toner-lines/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TONER_BACKGROUND_B:
-            return "http://b.tile.stamen.com/toner-background/"+Z+"/"+X+"/"+Y+".png";
+        case STAMEN_TONER_BACKGROUND:
+            return "http://"+letter[rnd]+".tile.stamen.com/toner-background/"+Z+"/"+X+"/"+Y+".png";
             break;
 
-        case STAMEN_TONER_C:
-            return "http://c.tile.stamen.com/toner/"+Z+"/"+X+"/"+Y+".png";
+        case STAMEN_TERRAIN:
+            return "http://"+letter[rnd]+".tile.stamen.com/terrain/"+Z+"/"+X+"/"+Y+".png";
             break;
-        case STAMEN_TONER_HYBRID_C:
-            return "http://c.tile.stamen.com/toner-hybrid/"+Z+"/"+X+"/"+Y+".png";
+        case STAMEN_TERRAIN_LABELS:
+            return "http://"+letter[rnd]+".tile.stamen.com/terrain-labels/"+Z+"/"+X+"/"+Y+".png";
             break;
-        case STAMEN_TONER_LABELS_C:
-            return "http://c.tile.stamen.com/toner-labels/"+Z+"/"+X+"/"+Y+".png";
+        case STAMEN_TERRAIN_LINES:
+            return "http://"+letter[rnd]+".tile.stamen.com/terrain-lines/"+Z+"/"+X+"/"+Y+".png";
             break;
-        case STAMEN_TONER_LINES_C:
-            return "http://c.tile.stamen.com/toner-lines/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TONER_BACKGROUND_C:
-            return "http://c.tile.stamen.com/toner-background/"+Z+"/"+X+"/"+Y+".png";
-            break;
-
-        case STAMEN_TONER_D:
-            return "http://d.tile.stamen.com/toner/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TONER_HYBRID_D:
-            return "http://d.tile.stamen.com/toner-hybrid/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TONER_LABELS_D:
-            return "http://d.tile.stamen.com/toner-labels/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TONER_LINES_D:
-            return "http://d.tile.stamen.com/toner-lines/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TONER_BACKGROUND_D:
-            return "http://d.tile.stamen.com/toner-background/"+Z+"/"+X+"/"+Y+".png";
-            break;
-
-        case STAMEN_TERRAIN_A:
-            return "http://a.tile.stamen.com/terrain/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_LABELS_A:
-            return "http://a.tile.stamen.com/terrain-labels/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_LINES_A:
-            return "http://a.tile.stamen.com/terrain-lines/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_BACKGROUND_A:
-            return "http://a.tile.stamen.com/terrain-background/"+Z+"/"+X+"/"+Y+".png";
-            break;
-
-        case STAMEN_TERRAIN_B:
-            return "http://b.tile.stamen.com/terrain/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_LABELS_B:
-            return "http://b.tile.stamen.com/terrain-labels/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_LINES_B:
-            return "http://b.tile.stamen.com/terrain-lines/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_BACKGROUND_B:
-            return "http://b.tile.stamen.com/terrain-background/"+Z+"/"+X+"/"+Y+".png";
-            break;
-
-        case STAMEN_TERRAIN_C:
-            return "http://c.tile.stamen.com/terrain/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_LABELS_C:
-            return "http://c.tile.stamen.com/terrain-labels/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_LINES_C:
-            return "http://c.tile.stamen.com/terrain-lines/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_BACKGROUND_C:
-            return "http://c.tile.stamen.com/terrain-background/"+Z+"/"+X+"/"+Y+".png";
-            break;
-
-        case STAMEN_TERRAIN_D:
-            return "http://d.tile.stamen.com/terrain/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_LABELS_D:
-            return "http://d.tile.stamen.com/terrain-labels/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_LINES_D:
-            return "http://d.tile.stamen.com/terrain-lines/"+Z+"/"+X+"/"+Y+".png";
-            break;
-        case STAMEN_TERRAIN_BACKGROUND_D:
-            return "http://d.tile.stamen.com/terrain-background/"+Z+"/"+X+"/"+Y+".png";
+        case STAMEN_TERRAIN_BACKGROUND:
+            return "http://"+letter[rnd]+".tile.stamen.com/terrain-background/"+Z+"/"+X+"/"+Y+".png";
             break;
 
         default:
