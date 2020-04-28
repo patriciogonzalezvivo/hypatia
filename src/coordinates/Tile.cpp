@@ -6,6 +6,35 @@
 Tile::Tile(): meters(0.0), x(0.0), y(0.0), z(0) {
 }
 
+// https://docs.microsoft.com/en-us/azure/azure-maps/zoom-levels-and-tile-grid?tabs=csharp
+Tile::Tile(const std::string& _quadKey): meters(0.0), x(0.0), y(0.0), z(0){
+    z = _quadKey.size();
+    int tileX, tileY;
+    for (int i = z; i > 0; i--) {
+        int mask = 1 << (i - 1);
+        switch (_quadKey[z - i]) {
+            case '0':
+                break;
+
+            case '1':
+                tileX |= mask;
+                break;
+
+            case '2':
+                tileY |= mask;
+                break;
+
+            case '3':
+                tileX |= mask;
+                tileY |= mask;
+                break;
+        }
+    }
+
+    x = tileX;
+    y = tileY;
+}
+
 Tile::Tile(double _mercatorX, double _mercatorY, int _z): x(_mercatorX), y(_mercatorY), z(_z) {
     meters = getMetersPerTileAt(_z);
 }
@@ -76,6 +105,200 @@ BoundingBox Tile::getMercatorBoundingBox() const {
     bb.min = minT.getMercator();
     bb.max = maxT.getMercator();
     return bb;
+}
+
+std::string Tile::getProviderURL( TileProvider _prov ) const {
+    std::string X = std::to_string(getColumn());
+    std::string Y = std::to_string(getRow());
+    std::string Z = std::to_string(getZoom());
+
+    switch (_prov) {
+        case NEXTZEN_JSON:
+            return "https://tile.nextzen.org/tilezen/vector/v1/all/"+Z+"/"+X+"/"+Y+".json?api_key=";
+        case NEXTZEN_MVT:
+            return "https://tile.nextzen.org/tilezen/vector/v1/all/"+Z+"/"+X+"/"+Y+".mvt?api_key=";
+            break;
+        case NEXTZEN_TERRARIUM:
+            return "https://tile.nextzen.org/tilezen/terrain/v1/256/terrarium/"+Z+"/"+X+"/"+Y+".png?api_key=your-nextzen-api-key";
+            break;
+        case NEXTZEN_NORMAL:
+            return "https://tile.nextzen.org/tilezen/terrain/v1/256/terrarium/"+Z+"/"+X+"/"+Y+".png?api_key=your-nextzen-api-key";
+            break;
+        case NEXTZEN_GEOTIFF:
+            return "https://tile.nextzen.org/tilezen/terrain/v1/geotiff/"+Z+"/"+X+"/"+Y+".tif?api_key=your-nextzen-api-key";
+            break;
+
+        case OSM_A:
+            return "https://a.tile.openstreetmap.org/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case OSM_B:
+            return "https://b.tile.openstreetmap.org/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case OSM_C:
+            return "https://c.tile.openstreetmap.org/"+Z+"/"+X+"/"+Y+".png";
+            break;
+
+        case BING_T0:
+            return "http://ecn.t0.tiles.virtualearth.net/tiles/a"+ getQuadKey() +".jpeg?g=543";
+            break;
+        case BING_T1:
+            return "http://ecn.t1.tiles.virtualearth.net/tiles/a"+ getQuadKey() +".jpeg?g=543";
+            break;
+        case BING_T2:
+            return "http://ecn.t2.tiles.virtualearth.net/tiles/a"+ getQuadKey() +".jpeg?g=543";
+            break;
+        case BING_T3:
+            return "http://ecn.t3.tiles.virtualearth.net/tiles/a"+ getQuadKey() +".jpeg?g=543";
+            break;
+
+        case MICROSOFT_BASE:
+            return "https://atlas.microsoft.com/map/tile?api-version=2.0&tilesetId=microsoft.base&zoom="+Z+"&x="+X+"&y="+Y+"?subscription-key=";
+            break;
+
+        case MICROSOFT_SATELLITE:
+            return "https://atlas.microsoft.com/map/tile?api-version=2.0&tilesetId=satellite&zoom="+Z+"&x="+X+"&y="+Y+"?subscription-key=";
+            break;
+
+        case MICROSOFT_SATELLITE_ROAD_LABELS:
+            return "https://atlas.microsoft.com/map/tile?api-version=2.0&tilesetId=satellite_road_labels&zoom="+Z+"&x="+X+"&y="+Y+"?subscription-key=";
+            break;
+
+        case MICROSOFT_GRAYSCALE_DARK:
+            return "https://atlas.microsoft.com/map/tile?api-version=2.0&tilesetId=grayscale_dark&zoom="+Z+"&x="+X+"&y="+Y+"?subscription-key=";
+            break;
+
+        case MICROSOFT_GRAYSCALE_LIGHT:
+            return "https://atlas.microsoft.com/map/tile?api-version=2.0&tilesetId=grayscale_light&zoom="+Z+"&x="+X+"&y="+Y+"?subscription-key=";
+            break;
+
+        case MICROSOFT_NIGHT:
+            return "https://atlas.microsoft.com/map/tile?api-version=2.0&tilesetId=night&zoom="+Z+"&x="+X+"&y="+Y+"?subscription-key=";
+            break;
+
+        case MICROSOFT_ROAD_SHADED_RELIEVEF:
+            return "https://atlas.microsoft.com/map/tile?api-version=2.0&tilesetId=road_shaded_relief&zoom="+Z+"&x="+X+"&y="+Y+"?subscription-key=";
+            break;
+
+        case STAMEN_TONER_A:
+            return "http://a.tile.stamen.com/toner/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_HYBRID_A:
+            return "http://a.tile.stamen.com/toner-hybrid/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_LABELS_A:
+            return "http://a.tile.stamen.com/toner-labels/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_LINES_A:
+            return "http://a.tile.stamen.com/toner-lines/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_BACKGROUND_A:
+            return "http://a.tile.stamen.com/toner-background/"+Z+"/"+X+"/"+Y+".png";
+            break;
+
+        case STAMEN_TONER_B:
+            return "http://b.tile.stamen.com/toner/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_HYBRID_B:
+            return "http://b.tile.stamen.com/toner-hybrid/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_LABELS_B:
+            return "http://b.tile.stamen.com/toner-labels/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_LINES_B:
+            return "http://b.tile.stamen.com/toner-lines/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_BACKGROUND_B:
+            return "http://b.tile.stamen.com/toner-background/"+Z+"/"+X+"/"+Y+".png";
+            break;
+
+        case STAMEN_TONER_C:
+            return "http://c.tile.stamen.com/toner/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_HYBRID_C:
+            return "http://c.tile.stamen.com/toner-hybrid/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_LABELS_C:
+            return "http://c.tile.stamen.com/toner-labels/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_LINES_C:
+            return "http://c.tile.stamen.com/toner-lines/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_BACKGROUND_C:
+            return "http://c.tile.stamen.com/toner-background/"+Z+"/"+X+"/"+Y+".png";
+            break;
+
+        case STAMEN_TONER_D:
+            return "http://d.tile.stamen.com/toner/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_HYBRID_D:
+            return "http://d.tile.stamen.com/toner-hybrid/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_LABELS_D:
+            return "http://d.tile.stamen.com/toner-labels/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_LINES_D:
+            return "http://d.tile.stamen.com/toner-lines/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TONER_BACKGROUND_D:
+            return "http://d.tile.stamen.com/toner-background/"+Z+"/"+X+"/"+Y+".png";
+            break;
+
+        case STAMEN_TERRAIN_A:
+            return "http://a.tile.stamen.com/terrain/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_LABELS_A:
+            return "http://a.tile.stamen.com/terrain-labels/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_LINES_A:
+            return "http://a.tile.stamen.com/terrain-lines/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_BACKGROUND_A:
+            return "http://a.tile.stamen.com/terrain-background/"+Z+"/"+X+"/"+Y+".png";
+            break;
+
+        case STAMEN_TERRAIN_B:
+            return "http://b.tile.stamen.com/terrain/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_LABELS_B:
+            return "http://b.tile.stamen.com/terrain-labels/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_LINES_B:
+            return "http://b.tile.stamen.com/terrain-lines/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_BACKGROUND_B:
+            return "http://b.tile.stamen.com/terrain-background/"+Z+"/"+X+"/"+Y+".png";
+            break;
+
+        case STAMEN_TERRAIN_C:
+            return "http://c.tile.stamen.com/terrain/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_LABELS_C:
+            return "http://c.tile.stamen.com/terrain-labels/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_LINES_C:
+            return "http://c.tile.stamen.com/terrain-lines/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_BACKGROUND_C:
+            return "http://c.tile.stamen.com/terrain-background/"+Z+"/"+X+"/"+Y+".png";
+            break;
+
+        case STAMEN_TERRAIN_D:
+            return "http://d.tile.stamen.com/terrain/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_LABELS_D:
+            return "http://d.tile.stamen.com/terrain-labels/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_LINES_D:
+            return "http://d.tile.stamen.com/terrain-lines/"+Z+"/"+X+"/"+Y+".png";
+            break;
+        case STAMEN_TERRAIN_BACKGROUND_D:
+            return "http://d.tile.stamen.com/terrain-background/"+Z+"/"+X+"/"+Y+".png";
+            break;
+
+        default:
+            return Z+"/"+X+"/"+Y;
+    }
+
 }
 
 double Tile::getMetersPerTileAt(int _zoom) {
@@ -166,4 +389,17 @@ bool Tile::isValid() const {
 
 bool Tile::isValid(int _maxZoom) const {
     return isValid() && z <= _maxZoom;
+}
+
+std::string Tile::getQuadKey() const {
+    return getQuadKey(getColumn(), getRow(), getZoom());
+}
+
+std::string Tile::getQuadKey(int _column, int _row, int _zoom) {
+    std::stringstream key;
+    for (int i = 1; i <= _zoom; i++) {
+        int digit = (((_row >> (_zoom - i)) & 1) << 1) | ((_column >> (_zoom - i)) & 1);
+        key << digit;
+    }
+    return key.str();
 }

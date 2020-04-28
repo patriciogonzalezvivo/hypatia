@@ -3,6 +3,7 @@
 #include "Geodetic.h"
 #include "../primitives/BoundingBox.h"
 #include <iomanip>
+#include <string>
 
 /* An immutable identifier for a map tile
  *
@@ -12,14 +13,35 @@
  * 3. row,      lowest to highest
  */
 
-struct TileID {
-    int column, row, zoom;
+enum TileProvider {
+    
+    NEXTZEN_JSON, NEXTZEN_MVT,
+    NEXTZEN_TERRARIUM, NEXTZEN_NORMAL, NEXTZEN_GEOTIFF,
+    
+    OSM_A, OSM_B, OSM_C,
+    
+    BING_T0, BING_T1, BING_T2, BING_T3,
+
+    MICROSOFT_BASE, MICROSOFT_NIGHT, MICROSOFT_ROAD_SHADED_RELIEVEF,
+    MICROSOFT_SATELLITE, MICROSOFT_SATELLITE_ROAD_LABELS, 
+    MICROSOFT_GRAYSCALE_DARK, MICROSOFT_GRAYSCALE_LIGHT,
+
+    STAMEN_TONER_A, STAMEN_TONER_HYBRID_A, STAMEN_TONER_LABELS_A, STAMEN_TONER_LINES_A, STAMEN_TONER_BACKGROUND_A, 
+    STAMEN_TONER_B, STAMEN_TONER_HYBRID_B, STAMEN_TONER_LABELS_B, STAMEN_TONER_LINES_B, STAMEN_TONER_BACKGROUND_B, 
+    STAMEN_TONER_C, STAMEN_TONER_HYBRID_C, STAMEN_TONER_LABELS_C, STAMEN_TONER_LINES_C, STAMEN_TONER_BACKGROUND_C, 
+    STAMEN_TONER_D, STAMEN_TONER_HYBRID_D, STAMEN_TONER_LABELS_D, STAMEN_TONER_LINES_D, STAMEN_TONER_BACKGROUND_D,
+    STAMEN_TERRAIN_A, STAMEN_TERRAIN_LABELS_A, STAMEN_TERRAIN_LINES_A, STAMEN_TERRAIN_BACKGROUND_A,
+    STAMEN_TERRAIN_B, STAMEN_TERRAIN_LABELS_B, STAMEN_TERRAIN_LINES_B, STAMEN_TERRAIN_BACKGROUND_B,
+    STAMEN_TERRAIN_C, STAMEN_TERRAIN_LABELS_C, STAMEN_TERRAIN_LINES_C, STAMEN_TERRAIN_BACKGROUND_C,
+    STAMEN_TERRAIN_D, STAMEN_TERRAIN_LABELS_D, STAMEN_TERRAIN_LINES_D, STAMEN_TERRAIN_BACKGROUND_D
+
 };
 
 class Tile {
 public: 
     Tile();
     Tile(const Tile& _tile);
+    Tile(const std::string& _quadKey);
     Tile(const Geodetic& _coords, int _zoom);
     Tile(double _mercatorX, double _mercatorY, int _zoom);
 
@@ -36,6 +58,7 @@ public:
     Geodetic    getGeodeticForUV( const Vector2& _uv) const;
 
     BoundingBox getMercatorBoundingBox() const;
+    std::string getProviderURL( TileProvider _prov ) const;
 
     bool operator < (const Tile& _tile) const;
 
@@ -60,12 +83,15 @@ public:
     Tile left(const double& _distance=1) const;
 
     double          getMetersPerTile() const;
-    static double   getMetersPerTileAt(int zoom);
+    std::string     getQuadKey() const;
+
+    static double       getMetersPerTileAt(int zoom);
+    static std::string  getQuadKey(int _column, int _row, int _zoom);
 
 protected:
-    double      meters;
-    double      x, y;
-    int         z;
+    double      meters; // meters per tile in te given zoom level (cached)
+    double      x, y;   // This is the actual grid column and rows but with decimals
+    int         z;      // the zoom is sorted from highest to lowest
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Tile& p) {
