@@ -133,9 +133,16 @@ Vector2 ProjOps::toMercator( const Geodetic& _coord ) {
     return rta;
 }
 
-Vector2 ProjOps::toMercator( const Tile& _tile ) {
-//     double metersPerTile = _coord.getMetersPerTile();
-//     _x = _coord.x * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
-//     _y = CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - _coord.y * metersPerTile;
-    return _tile.getMercator();
-}
+// Vector2 ProjOps::toMercator( const Tile& _tile ) {
+//     // Vector2 rta;
+//     // double metersPerTile = _tile.getMetersPerTile();
+//     // rta.x = _tile.x * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
+//     // rta.y = CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - _tile.y * metersPerTile;
+//     // return rta;
+//     return _tile.getMercator();
+// }
+
+// UTM ProjOps::toUTM( const Geodetic& _coord ) {
+//     return _coord.getUTM();
+// }
+

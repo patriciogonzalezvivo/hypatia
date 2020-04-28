@@ -10,8 +10,8 @@
 
 int main(int argc, char **argv) {
 
-    double lat = 37.669894;
-    double lng = -122.085486;
+    double lat = 40.785091;
+    double lng = -73.968285;
     int zoom = 16;
 
     Geodetic loc = Geodetic(lng, lat, 0.0, DEGS, KM);
@@ -85,7 +85,6 @@ int main(int argc, char **argv) {
     std::cout <<  tile.getProviderURL(STAMEN_TERRAIN_B) << std::endl;
     std::cout <<  tile.getProviderURL(STAMEN_TERRAIN_C) << std::endl;
     std::cout <<  tile.getProviderURL(STAMEN_TERRAIN_D) << std::endl;
-// _7S1L9AOTm6fq2QR2D75bw
 
     return 0;
 }

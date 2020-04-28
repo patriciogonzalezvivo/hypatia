@@ -35,7 +35,7 @@ Tile::Tile(const std::string& _quadKey): meters(0.0), x(0.0), y(0.0), z(0){
     y = tileY;
 }
 
-Tile::Tile(double _mercatorX, double _mercatorY, int _z): x(_mercatorX), y(_mercatorY), z(_z) {
+Tile::Tile(double _x, double _y, int _z): x(_x), y(_y), z(_z) {
     meters = getMetersPerTileAt(_z);
 }
 
@@ -46,13 +46,11 @@ Tile::Tile(const Geodetic& _coords, int _zoom): x(0.0), y(0.0), z(_zoom) {
     Vector2 mercator = ProjOps::toMercator( _coords );
 
     double meters = Tile::getMetersPerTileAt(_zoom);
-
     x = (mercator.x + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
     y = (-mercator.y + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
 }
 
-Tile::Tile(const Tile& _tile) : meters(_tile.meters), x(_tile.x), y(_tile.y), z(_tile.z) {
-    meters = getMetersPerTileAt(_tile.z);
+Tile::~Tile() {
 }
 
 int Tile::getColumn() const { 

@@ -40,12 +40,12 @@ enum TileProvider {
 class Tile {
 public: 
     Tile();
-    Tile(const Tile& _tile);
     Tile(const std::string& _quadKey);
+    Tile(double _x, double _y, int _zoom);
     Tile(const Geodetic& _coords, int _zoom);
-    Tile(double _mercatorX, double _mercatorY, int _zoom);
+    virtual ~Tile();
 
-    int         getColumn() const;
+    int getColumn() const;
     int         getRow() const;
     int         getZoom() const;
 

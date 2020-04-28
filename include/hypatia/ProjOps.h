@@ -2,7 +2,7 @@
 
 #include "coordinates/Horizontal.h"
 #include "coordinates/Geodetic.h"
-#include "coordinates/Tile.h"
+
 #include "primitives/Vector2.h"
 
 enum ProjId {
@@ -38,5 +38,4 @@ public:
 
     static void toMercator( double _lng, double _lat, double &_x, double &_y );
     static Vector2 toMercator( const Geodetic& _coord );
-    static Vector2 toMercator( const Tile& _coord );
 };
