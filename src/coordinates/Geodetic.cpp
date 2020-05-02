@@ -34,7 +34,7 @@ double sphtmd(double ap, double bp, double cp, double dp, double ep,
 Geodetic::Geodetic( const UTM& _utm ) {
     double fe = 500000.0;
     double ok = 0.9996;
-    char cArray[] = "CDEFGHJKLMNPQRSTUVWX";
+    // char cArray[] = "CDEFGHJKLMNPQRSTUVWX";
     
     double a = CoordOps::EARTH_EQUATORIAL_RADIUS_M;
     double f = 1/298.257223563;

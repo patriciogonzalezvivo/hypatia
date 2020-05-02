@@ -97,15 +97,15 @@ Geodetic Tile::getGeodeticForUV( const Vector2& _uv) const {
     return Geodetic(lng, lat, 0.0, RADS, KM);
 }
 
-BoundingBox Tile::getMercatorBoundingBox() const {
-    Tile minT = Tile(getColumn(),       getRow() + 1.0, z);
-    Tile maxT = Tile(getColumn() + 1.0, getRow(),       z);
+// BoundingBox Tile::getMercatorBoundingBox() const {
+//     Tile minT = Tile(getColumn(),       getRow() + 1.0, z);
+//     Tile maxT = Tile(getColumn() + 1.0, getRow(),       z);
 
-    BoundingBox bb;
-    bb.min = minT.getMercator();
-    bb.max = maxT.getMercator();
-    return bb;
-}
+//     BoundingBox bb;
+//     bb.min = minT.getMercator();
+//     bb.max = maxT.getMercator();
+//     return bb;
+// }
 
 std::string Tile::getProviderURL( TileProvider _prov ) const {
     std::string X = std::to_string(getColumn());

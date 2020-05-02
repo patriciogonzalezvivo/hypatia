@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Geodetic.h"
-#include "../primitives/BoundingBox.h"
+#include "hypatia/primitives/Vector2.h"
 #include <iomanip>
 #include <string>
 
@@ -51,7 +51,6 @@ public:
     Geodetic    getGeodetic() const;
     Geodetic    getGeodeticForUV( const Vector2& _uv) const;
 
-    BoundingBox getMercatorBoundingBox() const;
     std::string getProviderURL( TileProvider _prov ) const;
 
     bool operator < (const Tile& _tile) const;
