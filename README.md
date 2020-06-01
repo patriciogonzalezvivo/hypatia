@@ -12,7 +12,7 @@ In comparison with other astronomical/geographical libraries created for profesi
 You can easily add hypatia into your project by adding the `include/` and `src/` folder or by installing hypatia into your system. For the former option you need to:
 
 ```bash
-sudo apt install cmake
+sudo apt install cmake swig
 mkdir build
 cd build
 cmake ..

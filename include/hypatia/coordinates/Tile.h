@@ -39,7 +39,7 @@ public:
     Tile(const Geodetic& _coords, int _zoom);
     virtual ~Tile();
 
-    int getColumn() const;
+    int         getColumn() const;
     int         getRow() const;
     int         getZoom() const;
 
@@ -47,6 +47,8 @@ public:
 
     Vector2     getMercator() const;
     Vector2     getMercatorForUV(const Vector2& _uv) const;
+    Vector2     getMercatorForSouthWestCorner() const;
+    Vector2     getMercatorForNorthWestCorner() const;
 
     Geodetic    getGeodetic() const;
     Geodetic    getGeodeticForUV( const Vector2& _uv) const;

@@ -77,6 +77,18 @@ Vector2 Tile::getMercator() const {
                     CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - y * metersPerTile );
 }
 
+Vector2 Tile::getMercatorForSouthWestCorner() const {
+    double metersPerTile = getMetersPerTile();
+    return Vector2( floor(x) * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
+                    CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - floor(y) * metersPerTile );
+}
+
+Vector2 Tile::getMercatorForNorthWestCorner() const {
+    double metersPerTile = getMetersPerTile();
+    return Vector2( floor(x) * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
+                    CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - floor(y+1.0) * metersPerTile );
+}
+
 Vector2 Tile::getMercatorForUV(const Vector2& _uv) const {
     double metersPerTile = getMetersPerTile();
     return Vector2( (getColumn() + _uv.x) * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
@@ -122,13 +134,13 @@ std::string Tile::getProviderURL( TileProvider _prov ) const {
             return "https://tile.nextzen.org/tilezen/vector/v1/all/"+Z+"/"+X+"/"+Y+".mvt?api_key=";
             break;
         case NEXTZEN_TERRARIUM:
-            return "https://tile.nextzen.org/tilezen/terrain/v1/256/terrarium/"+Z+"/"+X+"/"+Y+".png?api_key=your-nextzen-api-key";
+            return "https://tile.nextzen.org/tilezen/terrain/v1/512/terrarium/"+Z+"/"+X+"/"+Y+".png?api_key=";
             break;
         case NEXTZEN_NORMAL:
-            return "https://tile.nextzen.org/tilezen/terrain/v1/256/terrarium/"+Z+"/"+X+"/"+Y+".png?api_key=your-nextzen-api-key";
+            return "https://tile.nextzen.org/tilezen/terrain/v1/512/terrarium/"+Z+"/"+X+"/"+Y+".png?api_key=";
             break;
         case NEXTZEN_GEOTIFF:
-            return "https://tile.nextzen.org/tilezen/terrain/v1/geotiff/"+Z+"/"+X+"/"+Y+".tif?api_key=your-nextzen-api-key";
+            return "https://tile.nextzen.org/tilezen/terrain/v1/geotiff/"+Z+"/"+X+"/"+Y+".tif?api_key=";
             break;
 
         case OSM:
@@ -232,6 +244,10 @@ Tile Tile::getChild(int _index, int _maxZoom) const {
     // _index: 0, 1, 2, 3
     // i:      0, 0, 1, 1
     // j:      0, 1, 0, 1
+    //
+    //  0 | 2
+    // ---|---
+    //  1 | 3
 
     double xF = MathOps::fract(x);
     double yF = MathOps::fract(y);
