@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../MathOps.h"
+#include "hypatia/MathOps.h"
 #include <iomanip>
 
 class Polar {

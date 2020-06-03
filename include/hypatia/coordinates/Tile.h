@@ -4,6 +4,8 @@
 #include "hypatia/primitives/Vector2.h"
 #include <iomanip>
 #include <string>
+#include <vector>
+#include <algorithm>
 
 /* An immutable identifier for a map tile
  *
@@ -82,6 +84,21 @@ public:
 
     static double       getMetersPerTileAt(int zoom);
     static std::string  getQuadKey(int _column, int _row, int _zoom);
+
+    static bool         compareNW(const Tile& a, const Tile& b) {
+        int col = 2 ^ a.getZoom();
+        return (a.getColumn() + a.getRow() * col) < (b.getColumn() + b.getRow() * col);
+    }
+
+    static std::vector<Tile> sorteNW( std::vector<Tile> _TileList ) {
+        std::sort(_TileList.begin(), _TileList.end(), Tile::compareNW);
+        return _TileList;
+    }
+
+    // static void         sorteNW( Tile* _array1D, int _n ) {
+    //     std::sort(_array1D, _array1D+_n, Tile::compareNW);
+    // }
+
 
 protected:
     double      meters; // meters per tile in te given zoom level (cached)
