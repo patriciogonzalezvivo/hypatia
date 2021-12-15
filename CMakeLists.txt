@@ -6,6 +6,8 @@ project(hypatia
     DESCRIPTION "a Geo-Astronomical library for artist"
     LANGUAGES CXX)
 
+add_compile_options(-std=c++14 -fpermissive -Wno-psabi)
+
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
@@ -28,4 +30,7 @@ endif()
 
 # The compiled library code is here
 add_subdirectory(src)
-add_subdirectory(tests)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    add_subdirectory(tests)
+endif()
