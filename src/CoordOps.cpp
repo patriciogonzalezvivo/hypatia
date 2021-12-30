@@ -364,7 +364,7 @@ Horizontal CoordOps::toHorizontal ( double _lat, double _ha, double _dec) {
     
     // choose hemisphere
     if (sin(_ha) > 0.0)
-        az = 2.*MathOps::PI - az;
+        az = MathOps::TAU - az;
     
     return Horizontal(alt, az, RADS);
 }
