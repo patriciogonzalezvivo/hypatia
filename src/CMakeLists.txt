@@ -37,26 +37,22 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     # PYTHON BINDINGS 
     #
-    if(POLICY CMP0078)
-        cmake_policy(SET CMP0078 OLDif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME))
-    endif(POLICY CMP0078)
+    # if(POLICY CMP0078)
+    #     cmake_policy(SET CMP0078 OLDif(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME))
+    # endif(POLICY CMP0078)
 
-    if(POLICY CMP0086)
-        cmake_policy(SET CMP0086 OLD)
-    endif(POLICY CMP0086)
-
-    find_package(SWIG REQUIRED)
-    include(${SWIG_USE_FILE})
+    # if(POLICY CMP0086)
+    #     cmake_policy(SET CMP0086 OLD)
+    # endif(POLICY CMP0086)
 
     find_package(PythonLibs REQUIRED)
     include_directories(${PYTHON_INCLUDE_DIRS})
-
     if(NOT PYTHON_NUMPY_INCLUDE_DIR)
         execute_process(COMMAND python3 -c "import numpy; print(numpy.get_include())"
-                        RESULT_VARIABLE PYTHON_NUMPY_PROCESS
-                        OUTPUT_VARIABLE PYTHON_NUMPY_INCLUDE_DIR
-                        OUTPUT_STRIP_TRAILING_WHITESPACE)
-
+                            RESULT_VARIABLE PYTHON_NUMPY_PROCESS
+                            OUTPUT_VARIABLE PYTHON_NUMPY_INCLUDE_DIR
+                            OUTPUT_STRIP_TRAILING_WHITESPACE)
+                        
         if(PYTHON_NUMPY_PROCESS EQUAL 0)
             file(TO_CMAKE_PATH "${PYTHON_NUMPY_INCLUDE_DIR}" PYTHON_NUMPY_INCLUDE_CMAKE_PATH)
             set(PYTHON_NUMPY_INCLUDE_DIR ${PYTHON_NUMPY_INCLUDE_CMAKE_PATH} CACHE PATH "Numpy include directory")
@@ -64,26 +60,35 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
             message(SEND_ERROR "Could not determine the NumPy include directory, verify that NumPy was installed correctly.")
         endif()
     endif()
-
+    
     include_directories(${PYTHON_NUMPY_INCLUDE_DIR} ${INCLUDE_FOLDER})
     set_property(SOURCE ${INCLUDE_SWIG_FILE} PROPERTY CPLUSPLUS ON)
-
-    if (CMAKE_VERSION VERSION_LESS "3.8")
-        swig_add_module(${PROJECT_NAME} 
-                        python 
-                        ${INCLUDE_SWIG_FILE} ${ROOT_SOURCE} ${COORD_SOURCE} ${MODEL_SOURCE} ${PRIMI_SOURCE})
-    else()
-        swig_add_library(${PROJECT_NAME} 
-                        LANGUAGE python
-                        SOURCES ${INCLUDE_SWIG_FILE} ${ROOT_SOURCE} ${COORD_SOURCE} ${MODEL_SOURCE} ${PRIMI_SOURCE})
-    endif()
-    swig_link_libraries(${PROJECT_NAME} ${PYTHON_LIBRARIES})
+                        
+    find_package(SWIG REQUIRED)
+    include(${SWIG_USE_FILE})
+    cmake_policy(SET CMP0078 NEW)
+    cmake_policy(SET CMP0086 NEW)
+    include(UseSWIG)
+    set(UseSWIG_TARGET_NAME_PREFERENCE STANDARD)
+    set(PYTHON_WRAPPER "${PROJECT_SOURCE_DIR}/hypatia.i")
+    set_property(
+        SOURCE "${PYTHON_WRAPPER}" PROPERTY
+        GENERATED_INCLUDE_DIRECTORIES "${PYTHON_INCLUDE_DIRS}"
+    )
+    set_property(
+        SOURCE "${PYTHON_WRAPPER}" PROPERTY
+        CPLUSPLUS ON
+    )
+    swig_add_library(py${PROJECT_NAME}
+                    LANGUAGE python
+                    SOURCES ${INCLUDE_SWIG_FILE} ${ROOT_SOURCE} ${COORD_SOURCE} ${MODEL_SOURCE} ${PRIMI_SOURCE})
+    target_link_libraries(py${PROJECT_NAME} ${PYTHON_LIBRARIES})
 
     # INSTALL PYTHON BINDINGS
     # Get the python site packages directory by invoking python
     execute_process(COMMAND python3 -c "import site; print(site.getsitepackages()[0])" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
     message("Installing at ${SITE_PACKAGES}")
 
-    install(TARGETS _${PROJECT_NAME} DESTINATION ${PYTHON_SITE_PACKAGES})
+    install(TARGETS py${PROJECT_NAME} DESTINATION ${PYTHON_SITE_PACKAGES})
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.py DESTINATION ${PYTHON_SITE_PACKAGES})
 endif()
