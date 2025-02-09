@@ -75,7 +75,3 @@ print("Moon's phase: ", const.getPhase())
 const = Constellation(moon)
 print("Moon's transit constelation: ", const.getName())
 ```
-
-# License
-
-Hypatia have a [non-commercial open source license](LICENSE.md).. If you want to use it for a commercial project, you have 30 days trial time. After that please get in touch to patriciogonzalezvivo@gmail.com to purchase a license.
