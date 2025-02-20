@@ -172,6 +172,7 @@ public:
      * @return hour angle
      */
     static double toHourAngle( double _lst, double _ra );
+    static double toHourAngle( double _lst, double _ra, double _precession );
     
     /**
      * toHourAngle() - calcuate hour angle (Meeus, Ch. 92)
@@ -182,6 +183,7 @@ public:
      * @return hour angle
      */
     static double toHourAngle( const Observer& _obs, double _ra );
+    static double toHourAngle( const Observer& _obs, double _ra, double _precession );
     
     /**
      * toHourAngle() - calcuate hour angle (Meeus, Ch. 92)
@@ -192,6 +194,7 @@ public:
      * @return hour angle
      */
     static double toHourAngle( const Observer& _obs, const Equatorial& _equatorial );
+    static double toHourAngle( const Observer& _obs, const Equatorial& _equatorial, double _precession );
     
     // -------------------------------------------------- to TopoCentric
     /**
@@ -216,6 +219,7 @@ public:
      * @return horizontal position
      */
     static Horizontal toHorizontal( const Observer& _obs, const Equatorial& _equatorial);
+    static Horizontal toHorizontal( const Observer& _obs, const Equatorial& _equatorial, double _precession);
     
     /**
      * toECI() - Earth Center Innertial to Horizontal coordinates

@@ -47,6 +47,7 @@ public:
     #endif
 
     virtual void    compute( Observer& _obs );
+    virtual void    compute( Observer& _obs, double _precession);
     
 protected:
 

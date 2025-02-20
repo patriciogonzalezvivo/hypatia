@@ -273,6 +273,9 @@ Equatorial CoordOps::toEquatorial ( const Observer& _obs, const Ecliptic &_eclip
 double CoordOps::toHourAngle( double _lst, double _ra ) {
     return _lst - _ra;
 }
+double CoordOps::toHourAngle( double _lst, double _ra, double _precession ) {
+    return _lst - _ra + _precession * MathOps::DEGS_TO_RADS;
+}
 
 /**
  * toHourAngle() - calcuate hour angle
@@ -286,6 +289,9 @@ double CoordOps::toHourAngle( double _lst, double _ra ) {
 double CoordOps::toHourAngle( const Observer& _obs, double _ra ) {
     return _obs.getLST() - _ra;
 }
+double CoordOps::toHourAngle( const Observer& _obs, double _ra, double _precession ) {
+    return _obs.getLST() - _ra + _precession * MathOps::DEGS_TO_RADS;
+}
 
 /**
  * toHourAngle() - calcuate hour angle
@@ -298,6 +304,9 @@ double CoordOps::toHourAngle( const Observer& _obs, double _ra ) {
  */
 double CoordOps::toHourAngle( const Observer& _obs, const Equatorial &_equatorial ) {
     return _obs.getLST() - _equatorial.getRightAscension(RADS);
+}
+double CoordOps::toHourAngle( const Observer& _obs, const Equatorial &_equatorial, double _precession ) {
+    return _obs.getLST() - _equatorial.getRightAscension(RADS) + _precession * MathOps::DEGS_TO_RADS;
 }
 
 //---------------------------------------------------------------------------- to Geodetic
@@ -381,6 +390,12 @@ Horizontal CoordOps::toHorizontal ( double _lat, double _ha, double _dec) {
 Horizontal CoordOps::toHorizontal( const Observer& _obs, const Equatorial& _equatorial) {
     double dec = _equatorial.getDeclination(RADS);
     double ha = toHourAngle(_obs, _equatorial);
+    return toHorizontal(_obs.getLocation().getLatitude(RADS), ha, dec);
+}
+
+Horizontal CoordOps::toHorizontal( const Observer& _obs, const Equatorial& _equatorial, double _precession) {
+    double dec = _equatorial.getDeclination(RADS);
+    double ha = toHourAngle(_obs, _equatorial, _precession);
     return toHorizontal(_obs.getLocation().getLatitude(RADS), ha, dec);
 }
 
