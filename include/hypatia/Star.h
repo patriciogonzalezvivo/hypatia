@@ -2,6 +2,7 @@
 
 #include "coordinates/Equatorial.h"
 #include "coordinates/Horizontal.h"
+#include "coordinates/PrecessionMatrix.h"
 
 #include "Observer.h"
 
@@ -46,8 +47,8 @@ public:
     virtual double      getVB() const;
     #endif
 
-    virtual void    compute( Observer& _obs );
-    virtual void    compute( Observer& _obs, double _precession);
+    virtual void        compute( Observer& _obs );
+    virtual void        compute( Observer& _obs, const PrecessionMatrix& _matrix );
     
 protected:
 

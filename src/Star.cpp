@@ -1711,36 +1711,6 @@ double Star::getHourAngle(ANGLE_UNIT _type) const {
     }
 }
 
-void Star::compute( Observer& _obs) {
-    if ( _obs.haveLocation() ) {
-        Equatorial eq = m_equatorial;
-        m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, eq ), RADS);
-        m_horizontal = CoordOps::toHorizontal( _obs, eq);
-        m_bHorizontal = true;
-    }
-    else {
-        m_ha = 0.0;
-        m_horizontal[0] = 0.0;
-        m_horizontal[1] = 0.0;
-        m_bHorizontal = false;
-    }
-}
-
-void Star::compute( Observer& _obs, double _precession ) {
-    if ( _obs.haveLocation() ) {
-        Equatorial eq = m_equatorial;
-        m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, eq, _precession), RADS);
-        m_horizontal = CoordOps::toHorizontal( _obs, eq, _precession);
-        m_bHorizontal = true;
-    }
-    else {
-        m_ha = 0.0;
-        m_horizontal[0] = 0.0;
-        m_horizontal[1] = 0.0;
-        m_bHorizontal = false;
-    }
-}
-
 double Star::getMagnitud() const {
     return m_mag;
 }
@@ -1811,3 +1781,33 @@ double Star::getVB() const {
 }
 
 #endif
+
+void Star::compute( Observer& _obs) {
+    if ( _obs.haveLocation() ) {
+        Equatorial eq = m_equatorial;
+        m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, eq ), RADS);
+        m_horizontal = CoordOps::toHorizontal( _obs, eq);
+        m_bHorizontal = true;
+    }
+    else {
+        m_ha = 0.0;
+        m_horizontal[0] = 0.0;
+        m_horizontal[1] = 0.0;
+        m_bHorizontal = false;
+    }
+}
+
+void Star::compute(Observer& _obs, const PrecessionMatrix& _matrix) {
+    if ( _obs.haveLocation() ) {
+        Equatorial eq = CoordOps::precess(_matrix, m_equatorial);
+        m_ha = MathOps::normalize(CoordOps::toHourAngle( _obs, eq ), RADS);
+        m_horizontal = CoordOps::toHorizontal( _obs, eq);
+        m_bHorizontal = true;
+    }
+    else {
+        m_ha = 0.0;
+        m_horizontal[0] = 0.0;
+        m_horizontal[1] = 0.0;
+        m_bHorizontal = false;
+    }
+}

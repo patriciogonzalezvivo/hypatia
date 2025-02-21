@@ -18,6 +18,8 @@
 #include "coordinates/Geodetic.h"
 #include "coordinates/Tile.h"
 
+#include "coordinates/PrecessionMatrix.h"
+
 class CoordOps {
 public:
     
@@ -172,7 +174,6 @@ public:
      * @return hour angle
      */
     static double toHourAngle( double _lst, double _ra );
-    static double toHourAngle( double _lst, double _ra, double _precession );
     
     /**
      * toHourAngle() - calcuate hour angle (Meeus, Ch. 92)
@@ -183,7 +184,6 @@ public:
      * @return hour angle
      */
     static double toHourAngle( const Observer& _obs, double _ra );
-    static double toHourAngle( const Observer& _obs, double _ra, double _precession );
     
     /**
      * toHourAngle() - calcuate hour angle (Meeus, Ch. 92)
@@ -194,7 +194,6 @@ public:
      * @return hour angle
      */
     static double toHourAngle( const Observer& _obs, const Equatorial& _equatorial );
-    static double toHourAngle( const Observer& _obs, const Equatorial& _equatorial, double _precession );
     
     // -------------------------------------------------- to TopoCentric
     /**
@@ -219,7 +218,6 @@ public:
      * @return horizontal position
      */
     static Horizontal toHorizontal( const Observer& _obs, const Equatorial& _equatorial);
-    static Horizontal toHorizontal( const Observer& _obs, const Equatorial& _equatorial, double _precession);
     
     /**
      * toECI() - Earth Center Innertial to Horizontal coordinates
@@ -340,5 +338,15 @@ public:
      * Note: pos and dir must refer to the same coordinate system and equinox
      */
     static double positionAngle( const Vector3& _pos, const Vector3& _dir );
+
+    /**
+     * precess() - precess the given equatorial coordinates
+     *
+     * @param _matrix - precession matrix
+     * @param _equatorial - equatorial coordinates
+     *
+     * @return precessed equatorial coordinates
+     */
+    static Equatorial precess(const PrecessionMatrix& _matrix, const Equatorial& _equatorial);
 };
 

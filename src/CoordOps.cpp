@@ -15,6 +15,7 @@
 #include "hypatia/TimeOps.h"
 
 #include "hypatia/primitives/Vector3.h"
+#include "hypatia/primitives/Matrix3x3.h"
 
 #include "hypatia/models/VSOP87.h"
 
@@ -273,9 +274,6 @@ Equatorial CoordOps::toEquatorial ( const Observer& _obs, const Ecliptic &_eclip
 double CoordOps::toHourAngle( double _lst, double _ra ) {
     return _lst - _ra;
 }
-double CoordOps::toHourAngle( double _lst, double _ra, double _precession ) {
-    return _lst - _ra + _precession * MathOps::DEGS_TO_RADS;
-}
 
 /**
  * toHourAngle() - calcuate hour angle
@@ -289,9 +287,6 @@ double CoordOps::toHourAngle( double _lst, double _ra, double _precession ) {
 double CoordOps::toHourAngle( const Observer& _obs, double _ra ) {
     return _obs.getLST() - _ra;
 }
-double CoordOps::toHourAngle( const Observer& _obs, double _ra, double _precession ) {
-    return _obs.getLST() - _ra + _precession * MathOps::DEGS_TO_RADS;
-}
 
 /**
  * toHourAngle() - calcuate hour angle
@@ -304,9 +299,6 @@ double CoordOps::toHourAngle( const Observer& _obs, double _ra, double _precessi
  */
 double CoordOps::toHourAngle( const Observer& _obs, const Equatorial &_equatorial ) {
     return _obs.getLST() - _equatorial.getRightAscension(RADS);
-}
-double CoordOps::toHourAngle( const Observer& _obs, const Equatorial &_equatorial, double _precession ) {
-    return _obs.getLST() - _equatorial.getRightAscension(RADS) + _precession * MathOps::DEGS_TO_RADS;
 }
 
 //---------------------------------------------------------------------------- to Geodetic
@@ -390,12 +382,6 @@ Horizontal CoordOps::toHorizontal ( double _lat, double _ha, double _dec) {
 Horizontal CoordOps::toHorizontal( const Observer& _obs, const Equatorial& _equatorial) {
     double dec = _equatorial.getDeclination(RADS);
     double ha = toHourAngle(_obs, _equatorial);
-    return toHorizontal(_obs.getLocation().getLatitude(RADS), ha, dec);
-}
-
-Horizontal CoordOps::toHorizontal( const Observer& _obs, const Equatorial& _equatorial, double _precession) {
-    double dec = _equatorial.getDeclination(RADS);
-    double ha = toHourAngle(_obs, _equatorial, _precession);
     return toHorizontal(_obs.getLocation().getLatitude(RADS), ha, dec);
 }
 
@@ -867,4 +853,46 @@ double CoordOps::positionAngle( const Vector3& _pos, const Vector3& _dir ) {
     s = _dir.dot(e_2);
     phi = atan2(s, c);
     return MathOps::mod(phi, MathOps::TAU);
+}
+
+/*
+    * precess() - precess equatorial coordinates
+    *                          (Meeus, Ch. 93)
+    *
+    * @param PrecessionMatrix
+    * @param Equatorial position
+    *
+    * @return Equatorial position
+*/
+
+Equatorial CoordOps::precess(const PrecessionMatrix& _matrix, const Equatorial& _equatorial) {
+    
+    const double old_ra = _equatorial.getRightAscension(RADS);
+    
+    Vector3 v1 = _equatorial.getVector();
+    // v1.x = cos(_equatorial.getRightAscension(RADS)) * cos(_equatorial.getDeclination(RADS));
+    // v1.y = sin(_equatorial.getRightAscension(RADS)) * cos(_equatorial.getDeclination(RADS));
+    // v1.z = sin(_equatorial.getDeclination(RADS));
+    
+    double ra, dec;
+    
+    Vector3 v2;
+    if( _matrix.isBackward())
+        v2 = _matrix.deprecess(v1);
+    else
+        v2 = _matrix.precess(v1);
+
+    if (v2.y != 0.0 || v2.x != 0.0)
+        ra = atan2( v2.y, v2.x);
+    else
+        ra = 0.0;
+
+    dec = MathOps::asine(v2.z);
+    
+    // while (ra - old_ra > MathOps::PI)
+    //     ra -= MathOps::TAU;
+    // while (ra - old_ra < - MathOps::PI)
+    //     ra += MathOps::TAU;
+    
+    return Equatorial(ra, dec, RADS);
 }
