@@ -4,6 +4,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <sstream>
 
 Tile::Tile(): meters(0.0), x(0.0), y(0.0), z(0) {
 }
