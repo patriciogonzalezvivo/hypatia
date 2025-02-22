@@ -870,9 +870,6 @@ Equatorial CoordOps::precess(const PrecessionMatrix& _matrix, const Equatorial& 
     const double old_ra = _equatorial.getRightAscension(RADS);
     
     Vector3 v1 = _equatorial.getVector();
-    // v1.x = cos(_equatorial.getRightAscension(RADS)) * cos(_equatorial.getDeclination(RADS));
-    // v1.y = sin(_equatorial.getRightAscension(RADS)) * cos(_equatorial.getDeclination(RADS));
-    // v1.z = sin(_equatorial.getDeclination(RADS));
     
     double ra, dec;
     
@@ -889,10 +886,41 @@ Equatorial CoordOps::precess(const PrecessionMatrix& _matrix, const Equatorial& 
 
     dec = MathOps::asine(v2.z);
     
-    // while (ra - old_ra > MathOps::PI)
-    //     ra -= MathOps::TAU;
-    // while (ra - old_ra < - MathOps::PI)
-    //     ra += MathOps::TAU;
+    while (ra - old_ra > MathOps::PI)
+        ra -= MathOps::TAU;
+    while (ra - old_ra < - MathOps::PI)
+        ra += MathOps::TAU;
     
     return Equatorial(ra, dec, RADS);
+}
+
+Matrix3x3 CoordOps::equatorialToEcliptic(const double _obliquity) {
+    double sin_obliq = sin(_obliquity);
+    double cos_obliq = cos(_obliquity);
+    
+    return Matrix3x3(
+        1.0, 0.0, 0.0,
+        0.0, cos_obliq, -sin_obliq,
+        0.0, sin_obliq, cos_obliq
+    );
+}
+
+Matrix3x3 CoordOps::eclipticToEquatorial(const double _obliquity) {
+    return Matrix3x3::transpose( equatorialToEcliptic(_obliquity) );
+}
+
+// Based on https://github.com/Bill-Gray/lunar/blob/master/precess.cpp#L109
+//
+Matrix3x3 CoordOps::eclipticPrecessionFromJ2000(const double _year) {
+    double t = (_year - 2000.0) / 100.0; // t in Julian centuries from J2000
+    const double eta = t * (47.0029 * MathOps::ARCS_TO_RADS + (-.03302 * MathOps::ARCS_TO_RADS + 6.e-5 * MathOps::ARCS_TO_RADS * t) * t);
+    const double pie = 174.876384 * MathOps::DEGS_TO_RADS - t * (869.8089 * MathOps::ARCS_TO_RADS - .03536 * MathOps::ARCS_TO_RADS * t);
+    const double p = t * (5029.0966 * MathOps::ARCS_TO_RADS + (1.11113 * MathOps::ARCS_TO_RADS - 6.e-5 * MathOps::ARCS_TO_RADS * t) * t);
+
+    Matrix3x3 m = Matrix3x3();
+    m *= Matrix3x3::rotationZ(-pie);
+    m *= Matrix3x3::rotationY(-eta);
+    m *= Matrix3x3::rotationZ(p);
+    m *= Matrix3x3::rotationZ(pie);
+    return m;
 }

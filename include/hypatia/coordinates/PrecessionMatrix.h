@@ -5,7 +5,7 @@
 class PrecessionMatrix : public Matrix3x3 {
 public:
     PrecessionMatrix();
-    PrecessionMatrix(double _fromYear, double _toYear);
+    PrecessionMatrix(double _toYear, double _fromYear = 2000.0);
     virtual ~PrecessionMatrix();
 
     double  fromYear() const { return m_fromYear; }

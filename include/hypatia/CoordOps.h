@@ -348,5 +348,36 @@ public:
      * @return precessed equatorial coordinates
      */
     static Equatorial precess(const PrecessionMatrix& _matrix, const Equatorial& _equatorial);
+
+
+    /**
+     * eclipticToEquatorial() - ecliptic to equatorial coordinates
+     *                         (Meeus, Ch. 93)
+     * *
+     * @param mean obliquity angle (radians)
+     * * @return transformation matrix
+     * 
+     */
+    static Matrix3x3 eclipticToEquatorial(const double _obliquity);
+
+    /**
+     * equatorialToEcliptic() - equatorial to ecliptic coordinates
+     *                         (Meeus, Ch. 93)
+     * *
+     * @param mean obliquity angle (radians)
+     * * @return transformation matrix
+     * 
+     */
+    static Matrix3x3 equatorialToEcliptic(const double _obliquity);
+
+    /**
+     * eclipticPrecessionFromJ2000() - ecliptic precession matrix from J2000
+     *                                 (Meeus, Ch. 93)
+     *
+     * @param year - year to precess to
+     *
+     * @return transformation matrix
+     */
+    static Matrix3x3 eclipticPrecessionFromJ2000(const double _year);
 };
 
