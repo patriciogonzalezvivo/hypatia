@@ -128,6 +128,74 @@ struct TimeOps {
     /*** TIME ******************************************************************/
 
     /**
+     * tzNameToIndex(): convert a time zone string to an index
+     * 
+     * @param _tz = time zone name string
+     * 
+     * @return index of time zone
+     */
+    static size_t tzNameToIndex ( const char* _tz );
+
+
+    /**
+     * tzIndexToName(): convert a time zone index to a string
+     * 
+     * @param _tzIndex = time zone index
+     * 
+     * @return time zone name string
+     */
+    static const char* tzIndexToName ( size_t _tzIndex );
+
+    /**
+     * tzOffsetInDays(): calculate time zone offset from Universal Time
+     *                   in days for the spec'd time_t (includes DST)
+     *
+     * @param _tzIndex = time zone index
+     *
+     * @return Offset (-0.5 ... +0.5 )
+     */
+
+    static double tzOffsetInDaysST ( size_t _tzIndex );
+
+
+    /**
+     * tzOffsetInDaysDST(): calculate time zone offset from Universal Time
+     *                   in days for the spec'd time_t (includes DST)
+     * 
+     * @param _tzIndex = time zone index
+     * 
+     * @return Offset (-0.5 ... +0.5 )
+     */
+
+    static double tzOffsetInDaysDST ( size_t _tzIndex );
+
+
+    /**
+     * tzIsDST(): determine if the given date is in Daylight Savings Time
+     *
+     * @param _lat = latitude of location
+     * @param _month = month of year
+     * @param _day = day of month
+     * @param _year = year
+     *
+     * @return true if in DST, false otherwise
+     */
+    static bool tzIsDST ( double _lat, int _month, int _day );
+
+    /**
+     * tzOffsetInDays(): calculate time zone offset from Universal Time
+     *                   in days for the spec'd time_t (includes DST)
+     *
+     * @param _lat = latitude of location
+     * @param _month = month of year
+     * @param _day = day of month
+     * @param _tzIndex = time zone index
+     *
+     * @return Offset (-0.5 ... +0.5 )
+     */
+    static double tzOffsetInDays ( double _lat, int _month, int _day, size_t _tzIndex );
+
+    /**
      * tzOffsetInDays(): calculate time zone offset from Universal Time
      *                   in days for the spec'd time_t (includes DST)
      *
@@ -165,15 +233,15 @@ struct TimeOps {
      */
     static double dstOffsetInDays ( time_t _tt );
     
-    /**
-     * dstOffsetInDays(): calculate daylight savings time offset in days at
-     *                    the spec'd time
-     *
-     * @param jd - date to use
-     *
-     * @return Offset ( 0 or 1/24 )
-     */
-    static double dstOffsetInDays ( double _jd );
+    // /**
+    //  * dstOffsetInDays(): calculate daylight savings time offset in days at
+    //  *                    the spec'd time
+    //  *
+    //  * @param jd - date to use
+    //  *
+    //  * @return Offset ( 0 or 1/24 )
+    //  */
+    // static double dstOffsetInDays ( double _jd );
     
     /**
      * dstOffsetInDays(): calculate current daylight savings time offset in days

@@ -21,16 +21,25 @@ public:
     virtual ~Observer();
     
     virtual void        setSeconds(unsigned long _sec = 0);
-    virtual void        setJD(double _jd);
     virtual void        setLocation(const Geodetic& _location);
+    virtual void        setJD(double _jd);
+    virtual void        setJDLocal(double _jd);
+
+    virtual void        setTimezone(const char* _tz);
+    virtual void        setTimezoneIndex(size_t _tz);
     
     virtual double      getJD() const { return m_jd; }
+    virtual double      getJDLocal() const;
     virtual double      getJC() const { return m_jcentury; }
     virtual double      getObliquity() const { return m_obliquity; }
     
     virtual bool        haveLocation() const { return m_bLocation; }
     virtual Geodetic    getLocation() const;
     virtual double      getLST() const;
+
+    virtual double      getTZOffsetST() const { return m_tzOffsetST; }
+    virtual double      getTZOffsetDST() const { return m_tzOffsetDST; }
+    virtual size_t      getTimezoneIndex() const { return m_tzIndex; }
     
     virtual Vector3     getHeliocentricVector(DISTANCE_UNIT _type);
     
@@ -44,6 +53,10 @@ private:
     double              m_jcentury;
     double              m_obliquity;
     double              m_lst;
+
+    double              m_tzOffsetST;
+    double              m_tzOffsetDST;
+    size_t              m_tzIndex;
     
     bool                m_changed;
     bool                m_bLocation;

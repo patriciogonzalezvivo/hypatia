@@ -6,13 +6,18 @@
 #include "hypatia/TimeOps.h"
 
 #include "hypatia/models/VSOP87.h"
+#include <iostream>
 
 Observer::Observer(double _jd) :
 m_jd(0.0),
 m_jcentury(0.0),
 m_obliquity(0.0),
 m_lst(0.0),
-m_bLocation(false) {
+m_tzOffsetST(0.0),
+m_tzOffsetDST(0.0),
+m_tzIndex(0),
+m_bLocation(false) 
+{
     if ( _jd == 0 ) {
         setJD( TimeOps::now(UTC) );
     }
@@ -27,6 +32,9 @@ m_jd(0.0),
 m_jcentury(0.0),
 m_obliquity(0.0),
 m_lst(0.0),
+m_tzOffsetST(0.0),
+m_tzOffsetDST(0.0),
+m_tzIndex(0),
 m_bLocation(true) {
     if ( _jd == 0 ) {
         setJD( TimeOps::now(UTC) );
@@ -42,6 +50,9 @@ m_jd(0.0),
 m_jcentury(0.0),
 m_obliquity(0.0),
 m_lst(0.0),
+m_tzOffsetST(0.0),
+m_tzOffsetDST(0.0),
+m_tzIndex(0),
 m_bLocation(true) {
     if ( _jd == 0 ) {
         setJD( TimeOps::now(UTC) );
@@ -68,6 +79,23 @@ void Observer::setJD(double _jd) {
     }
 }
 
+void Observer::setJDLocal(double _jd) {
+    if ( !haveLocation() || m_tzIndex == 0 ) {
+        setJD(_jd);
+        return;
+    }
+
+    int month, day, year;
+    TimeOps::toDMY(_jd, day, month, year);
+    setJD(_jd - (TimeOps::tzIsDST(m_location.getLatitude(RADS), month, day)? m_tzOffsetDST : m_tzOffsetST));
+}
+
+void Observer::setTimezone(const char* _tz) {
+    size_t tzIndex = TimeOps::tzNameToIndex(_tz);
+    if ( tzIndex != m_tzIndex )
+        setTimezoneIndex(tzIndex);
+}
+
 void Observer::setLocation(const Geodetic &_location) {
     if (m_location.getLongitude(RADS) != _location.getLongitude(RADS) ||
         m_location.getLatitude(RADS) != _location.getLatitude(RADS) ) {
@@ -75,6 +103,21 @@ void Observer::setLocation(const Geodetic &_location) {
         m_bLocation = true;
         update();
     }
+}
+
+void Observer::setTimezoneIndex(size_t _tz) {
+    m_tzIndex = _tz;
+    m_tzOffsetST = TimeOps::tzOffsetInDaysST(_tz);
+    m_tzOffsetDST = TimeOps::tzOffsetInDaysDST(_tz);
+}
+
+double Observer::getJDLocal() const { 
+    if ( !haveLocation() )
+        return m_jd;
+
+    int month, day, year;
+    TimeOps::toDMY(m_jd, day, month, year);
+    return m_jd + (TimeOps::tzIsDST(m_location.getLatitude(RADS), month, day)? m_tzOffsetDST : m_tzOffsetST);
 }
 
 void Observer::update() {
