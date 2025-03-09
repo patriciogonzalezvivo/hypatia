@@ -1086,6 +1086,9 @@ char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
     
     switch (_fmt) {
             // date only
+        case YEAR:
+            sprintf ( clientBuf, "%04d", y );
+            break;
         case Y_MON_D:
             sprintf ( clientBuf, "%04d %s %02d", y, MONTH3[m], d );
             break;
@@ -1094,6 +1097,9 @@ char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
             break;
         case MON_D:
             sprintf ( clientBuf, "%s %02d", MONTH3[m], d );
+            break;
+        case MON_Y:
+            sprintf ( clientBuf, "%s %04d", MONTH3[m], y );
             break;
         case Y_M_D:
             sprintf ( clientBuf, "%04d-%02d-%02d", y, m, d );

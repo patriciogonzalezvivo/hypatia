@@ -43,9 +43,11 @@ enum CALENDAR_TYPE {
 // examples provided are for J2000 (January 1, 2000 at noon)
 
 enum DATE_FMT {
+    YEAR,         // 2000
     Y_MON_D,      // 2000 Jan 01
     MON_D_Y,      // Jan 01 2000
     MON_D,        // Jan 01
+    MON_Y,        // Jan 2000
     Y_M_D,        // 2000-01-01
     M_D_Y,        // 01/01/2000
     M_D,          // 01/01
