@@ -1,5 +1,6 @@
 #include "hypatia/ProjOps.h"
 #include "hypatia/CoordOps.h"
+#include "hypatia/GeoOps.h"
 
 #include <math.h>
 
@@ -121,28 +122,4 @@ Vector2 ProjOps::toEquirectangular( const Horizontal& _coord,  double _width ,do
     ProjOps::toEquirectangular( _coord.getAltitud(RADS), _coord.getAzimuth(RADS), _width, _height, rta.x, rta.y );
     return rta;
 }
-
-void ProjOps::toMercator( double _lng, double _lat, double& _x, double& _y) {
-    _x = _lng * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
-    _y = log(tan(MathOps::PI * 0.25 + _lat * 0.5)) * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
-}
-
-Vector2 ProjOps::toMercator( const Geodetic& _coord ) {
-    Vector2 rta;
-    ProjOps::toMercator( _coord.getLongitude(RADS), _coord.getLatitude(RADS), rta.x, rta.y);
-    return rta;
-}
-
-// Vector2 ProjOps::toMercator( const Tile& _tile ) {
-//     // Vector2 rta;
-//     // double metersPerTile = _tile.getMetersPerTile();
-//     // rta.x = _tile.x * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
-//     // rta.y = CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - _tile.y * metersPerTile;
-//     // return rta;
-//     return _tile.getMercator();
-// }
-
-// UTM ProjOps::toUTM( const Geodetic& _coord ) {
-//     return _coord.getUTM();
-// }
 

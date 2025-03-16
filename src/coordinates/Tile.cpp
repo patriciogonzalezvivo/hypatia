@@ -1,6 +1,5 @@
 #include "hypatia/coordinates/Tile.h"
-#include "hypatia/CoordOps.h"
-#include "hypatia/ProjOps.h"
+#include "hypatia/GeoOps.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -39,18 +38,7 @@ Tile::Tile(const std::string& _quadKey): meters(0.0), x(0.0), y(0.0), z(0){
 }
 
 Tile::Tile(double _x, double _y, int _z): x(_x), y(_y), z(_z) {
-    meters = getMetersPerTileAt(_z);
-}
-
-Tile::Tile(const Geodetic& _coords, int _zoom): x(0.0), y(0.0), z(_zoom) {
-    meters = getMetersPerTileAt(_zoom);
-
-    // Convert to Mercator meters
-    Vector2 mercator = ProjOps::toMercator( _coords );
-
-    double meters = Tile::getMetersPerTileAt(_zoom);
-    x = (mercator.x + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
-    y = (-mercator.y + CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M) / meters;
+    meters = GeoOps::getMetersPerTileAt(_z);
 }
 
 Tile::~Tile() {
@@ -74,40 +62,26 @@ Vector2 Tile::getUV() const {
 
 Vector2 Tile::getMercator() const {
     double metersPerTile = getMetersPerTile();
-    return Vector2( x * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
-                    CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - y * metersPerTile );
+    return Vector2( x * metersPerTile - GeoOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
+                    GeoOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - y * metersPerTile );
 }
 
 Vector2 Tile::getMercatorForSouthWestCorner() const {
     double metersPerTile = getMetersPerTile();
-    return Vector2( floor(x) * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
-                    CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - floor(y) * metersPerTile );
+    return Vector2( floor(x) * metersPerTile - GeoOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
+                    GeoOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - floor(y) * metersPerTile );
 }
 
 Vector2 Tile::getMercatorForNorthWestCorner() const {
     double metersPerTile = getMetersPerTile();
-    return Vector2( floor(x) * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
-                    CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - floor(y+1.0) * metersPerTile );
+    return Vector2( floor(x) * metersPerTile - GeoOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
+                    GeoOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - floor(y+1.0) * metersPerTile );
 }
 
 Vector2 Tile::getMercatorForUV(const Vector2& _uv) const {
     double metersPerTile = getMetersPerTile();
-    return Vector2( (getColumn() + _uv.x) * metersPerTile - CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
-                     CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - (getRow()  + _uv.y) * metersPerTile );
-}
-
-Geodetic Tile::getGeodetic() const {
-    Vector2 mercator = getMercator();
-    double lng = mercator.x / CoordOps::EARTH_EQUATORIAL_RADIUS_M;
-    double lat = (2.0 * atan(exp(mercator.y / CoordOps::EARTH_EQUATORIAL_RADIUS_M)) - MathOps::PI_OVER_TWO);
-    return Geodetic(lng, lat, 0.0, RADS, KM);
-}
-
-Geodetic Tile::getGeodeticForUV( const Vector2& _uv) const {
-    Vector2 mercator = getMercatorForUV( _uv );
-    double lng = mercator.x / CoordOps::EARTH_EQUATORIAL_RADIUS_M;
-    double lat = (2.0 * atan(exp(mercator.y / CoordOps::EARTH_EQUATORIAL_RADIUS_M)) - MathOps::PI_OVER_TWO);
-    return Geodetic(lng, lat, 0.0, RADS, KM);
+    return Vector2( (getColumn() + _uv.x) * metersPerTile - GeoOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M,
+                     GeoOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M - (getRow()  + _uv.y) * metersPerTile );
 }
 
 // BoundingBox Tile::getMercatorBoundingBox() const {
@@ -215,14 +189,7 @@ std::string Tile::getProviderURL( TileProvider _prov ) const {
 
 }
 
-double Tile::getMetersPerTileAt(int _zoom) {
-    return CoordOps::EARTH_EQUATORIAL_CIRCUMFERENCE_M / (1 << _zoom);
-}
-
-double Tile::getMetersPerTile() const {
-    // return Tile::getMetersPerTileAt(z);
-    return meters;
-}
+double Tile::getMetersPerTile() const { return meters; }
 
 Tile Tile::getTileAtZoom(const int& _zoom) const {
     return zoom(_zoom - z);

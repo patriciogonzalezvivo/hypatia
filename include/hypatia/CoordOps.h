@@ -33,16 +33,6 @@ public:
     static const double LY_TO_AU;
     static const double LY_TO_PC;
     static const double PC_TO_LY;
-
-    
-    static const double EARTH_FLATTENING;
-    static const double EARTH_POLAR_RADIUS_KM;
-    static const double EARTH_EQUATORIAL_RADIUS_M;
-    static const double EARTH_EQUATORIAL_RADIUS_KM;
-    static const double EARTH_EQUATORIAL_CIRCUMFERENCE_M;
-    static const double EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M;
-    static const double EARTH_ROTATION_PER_SIDERAL_DAY;
-    static const double EARTH_GRAVITATIONAL_CONSTANT;
     
     static const double SUN_DIAMETER_KM;
     
@@ -154,15 +144,6 @@ public:
      */
     static Geodetic toGeodetic(const ECI& _eci);
 
-    // /**
-    //  * toTile() - Geodetic location to Tile coordinates 
-    //  *
-    //  * @param geodetic location (lat/lng)
-    //  * @param zoom level
-    //  *
-    //  * @return tile coords on a mercator tile grid
-    //  */
-    static Tile toTile(const Geodetic& _geo, int _zoomLevel);
     
     // -------------------------------------------------- to Hour Angle
     /**

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Geodetic.h"
 #include "hypatia/primitives/Vector2.h"
 #include <iomanip>
 #include <string>
@@ -38,7 +37,6 @@ public:
     Tile();
     Tile(const std::string& _quadKey);
     Tile(double _x, double _y, int _zoom);
-    Tile(const Geodetic& _coords, int _zoom);
     virtual ~Tile();
 
     int         getColumn() const;
@@ -46,14 +44,10 @@ public:
     int         getZoom() const;
 
     Vector2     getUV() const;
-
     Vector2     getMercator() const;
     Vector2     getMercatorForUV(const Vector2& _uv) const;
     Vector2     getMercatorForSouthWestCorner() const;
     Vector2     getMercatorForNorthWestCorner() const;
-
-    Geodetic    getGeodetic() const;
-    Geodetic    getGeodeticForUV( const Vector2& _uv) const;
 
     std::string getProviderURL( TileProvider _prov ) const;
 

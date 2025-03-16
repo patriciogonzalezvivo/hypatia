@@ -4,11 +4,16 @@
 #include "hypatia/MathOps.h"
 #include "hypatia/CoordOps.h"
 #include "hypatia/TimeOps.h"
+#include "hypatia/GeoOps.h"
 
 #include "hypatia/models/VSOP87.h"
 #include <iostream>
+#include <math.h>
+
 
 Observer::Observer(double _jd) :
+m_locationCity("unknown"),
+m_locationCountry("unknown"),
 m_jd(0.0),
 m_jcentury(0.0),
 m_obliquity(0.0),
@@ -16,8 +21,7 @@ m_lst(0.0),
 m_tzOffsetST(0.0),
 m_tzOffsetDST(0.0),
 m_tzIndex(0),
-m_bLocation(false) 
-{
+m_bLocation(false) {
     if ( _jd == 0 ) {
         setJD( TimeOps::now(UTC) );
     }
@@ -28,6 +32,8 @@ m_bLocation(false)
 
 Observer::Observer(const Geodetic& _location, double _jd) :
 m_location(_location),
+m_locationCity("unknown"),
+m_locationCountry("unknown"),
 m_jd(0.0),
 m_jcentury(0.0),
 m_obliquity(0.0),
@@ -46,6 +52,8 @@ m_bLocation(true) {
 
 Observer::Observer( double _lng_deg, double _lat_deg, double _jd) :
 m_location(_lng_deg, _lat_deg, 0., DEGS, KM),
+m_locationCity("unknown"),
+m_locationCountry("unknown"),
 m_jd(0.0),
 m_jcentury(0.0),
 m_obliquity(0.0),
@@ -87,11 +95,11 @@ void Observer::setJDLocal(double _jd) {
 
     int month, day, year;
     TimeOps::toDMY(_jd, day, month, year);
-    setJD(_jd - (TimeOps::tzIsDST(m_location.getLatitude(RADS), month, day)? m_tzOffsetDST : m_tzOffsetST));
+    setJD(_jd - (GeoOps::tzIsDST(m_location.getLatitude(RADS), month, day)? m_tzOffsetDST : m_tzOffsetST));
 }
 
 void Observer::setTimezone(const char* _tz) {
-    size_t tzIndex = TimeOps::tzNameToIndex(_tz);
+    size_t tzIndex = GeoOps::tzNameToIndex(_tz);
     if ( tzIndex != m_tzIndex )
         setTimezoneIndex(tzIndex);
 }
@@ -107,8 +115,24 @@ void Observer::setLocation(const Geodetic &_location) {
 
 void Observer::setTimezoneIndex(size_t _tz) {
     m_tzIndex = _tz;
-    m_tzOffsetST = TimeOps::tzOffsetInDaysST(_tz);
-    m_tzOffsetDST = TimeOps::tzOffsetInDaysDST(_tz);
+    m_tzOffsetST = GeoOps::tzOffsetInDaysST(_tz);
+    m_tzOffsetDST = GeoOps::tzOffsetInDaysDST(_tz);
+}
+
+
+
+bool Observer::searchLocation(double _lng_deg, double _lat_deg) {
+    std::cout << "Searching location: " << _lng_deg << ", " << _lat_deg << std::endl;
+    setLocation(Geodetic(_lng_deg, _lat_deg, 0., DEGS, KM));
+
+    size_t id = GeoOps::findClosestCity(_lng_deg, _lat_deg);
+    if (id != 0) {
+        m_locationCity = GeoOps::getCityName(id);
+        m_locationCountry = GeoOps::getCityCountry(id);
+        setTimezoneIndex(GeoOps::getCityTimezoneIndex(id));
+        return true;
+    }
+    return false;
 }
 
 double Observer::getJDLocal() const { 
@@ -117,7 +141,7 @@ double Observer::getJDLocal() const {
 
     int month, day, year;
     TimeOps::toDMY(m_jd, day, month, year);
-    return m_jd + (TimeOps::tzIsDST(m_location.getLatitude(RADS), month, day)? m_tzOffsetDST : m_tzOffsetST);
+    return m_jd + (GeoOps::tzIsDST(m_location.getLatitude(RADS), month, day)? m_tzOffsetDST : m_tzOffsetST);
 }
 
 void Observer::update() {
@@ -147,6 +171,10 @@ double Observer::getLST() const {
     else {
         return 0.0;
     }
+}
+
+std::string Observer::getTimezone() const {
+    return std::string( GeoOps::tzIndexToName(m_tzIndex) );
 }
 
 Vector3 Observer::getHeliocentricVector(DISTANCE_UNIT _type) {

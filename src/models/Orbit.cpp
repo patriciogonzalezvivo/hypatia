@@ -6,7 +6,7 @@
 
 #include "hypatia/MathOps.h"
 #include "hypatia/TimeOps.h"
-#include "hypatia/CoordOps.h"
+#include "hypatia/GeoOps.h"
 
 #include <math.h>
 
@@ -23,7 +23,7 @@ const double kXJ2 = 1.082616e-3;
  * dundee
  * const double kXKE = 7.43669161331734132e-2;
  */
-const double kXKE = 60.0 / sqrt(CoordOps::EARTH_EQUATORIAL_RADIUS_KM * CoordOps::EARTH_EQUATORIAL_RADIUS_KM * CoordOps::EARTH_EQUATORIAL_RADIUS_KM / CoordOps::EARTH_GRAVITATIONAL_CONSTANT);
+const double kXKE = 60.0 / sqrt(GeoOps::EARTH_EQUATORIAL_RADIUS_KM * GeoOps::EARTH_EQUATORIAL_RADIUS_KM * GeoOps::EARTH_EQUATORIAL_RADIUS_KM / GeoOps::EARTH_GRAVITATIONAL_CONSTANT);
 const double kCK2 = 0.5 * kXJ2 * kAE * kAE;
 
 Orbit::Orbit() {
@@ -70,7 +70,7 @@ Orbit::Orbit(const TLE& tle) {
     /*
      * find perigee and period
      */
-    m_periapsis = (getSemiMajorAxis() * (1.0 - getEccentricity()) - kAE) * CoordOps::EARTH_EQUATORIAL_RADIUS_KM;
+    m_periapsis = (getSemiMajorAxis() * (1.0 - getEccentricity()) - kAE) * GeoOps::EARTH_EQUATORIAL_RADIUS_KM;
     m_period = MathOps::TAU / getMeanMotion();
 }
 

@@ -33,9 +33,4 @@ public:
     
     static void toEquirectangular( double _alt, double _az, double _width, double _height, double &_x, double &_y );
     static Vector2 toEquirectangular( const Horizontal& _coord, double _width, double _height );
-
-// Geografic projections
-
-    static void toMercator( double _lng, double _lat, double &_x, double &_y );
-    static Vector2 toMercator( const Geodetic& _coord );
 };

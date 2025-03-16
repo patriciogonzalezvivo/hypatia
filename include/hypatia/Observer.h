@@ -27,6 +27,10 @@ public:
 
     virtual void        setTimezone(const char* _tz);
     virtual void        setTimezoneIndex(size_t _tz);
+
+    virtual bool        searchLocation(double _lng_deg, double _lat_deg);
+    virtual std::string getLocationCity() const { return m_locationCity; }
+    virtual std::string getLocationCountry() const { return m_locationCountry; }
     
     virtual double      getJD() const { return m_jd; }
     virtual double      getJDLocal() const;
@@ -40,6 +44,7 @@ public:
     virtual double      getTZOffsetST() const { return m_tzOffsetST; }
     virtual double      getTZOffsetDST() const { return m_tzOffsetDST; }
     virtual size_t      getTimezoneIndex() const { return m_tzIndex; }
+    virtual std::string getTimezone() const;
     
     virtual Vector3     getHeliocentricVector(DISTANCE_UNIT _type);
     
@@ -49,6 +54,9 @@ private:
     Vector3             m_heliocentricLoc;
     Geodetic            m_location;
     
+    std::string         m_locationCity;
+    std::string         m_locationCountry;
+
     double              m_jd;
     double              m_jcentury;
     double              m_obliquity;

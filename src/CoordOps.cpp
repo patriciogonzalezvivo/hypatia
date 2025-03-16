@@ -10,6 +10,7 @@
 
 #include "hypatia/CoordOps.h"
 #include "hypatia/ProjOps.h"
+#include "hypatia/GeoOps.h"
 
 #include "hypatia/MathOps.h"
 #include "hypatia/TimeOps.h"
@@ -34,15 +35,6 @@ const double CoordOps::LY_TO_AU = 63241.077;
 const double CoordOps::AU_TO_LY = 1.0/LY_TO_AU;
 const double CoordOps::PC_TO_LY = 3.26156;
 const double CoordOps::LY_TO_PC = 0.306601;
-
-const double CoordOps::EARTH_FLATTENING = 1.0 / 298.26;
-const double CoordOps::EARTH_POLAR_RADIUS_KM = 6356.76;
-const double CoordOps::EARTH_EQUATORIAL_RADIUS_KM = 6378.137;
-const double CoordOps::EARTH_EQUATORIAL_RADIUS_M = 6378137.0;
-const double CoordOps::EARTH_EQUATORIAL_CIRCUMFERENCE_M = MathOps::TAU * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
-const double CoordOps::EARTH_EQUATORIAL_HALF_CIRCUMFERENCE_M = MathOps::PI * CoordOps::EARTH_EQUATORIAL_RADIUS_M;
-const double CoordOps::EARTH_ROTATION_PER_SIDERAL_DAY = 1.00273790934;
-const double CoordOps::EARTH_GRAVITATIONAL_CONSTANT = 398600.8;
 
 const double CoordOps::SUN_DIAMETER_KM = 1392000;
 
@@ -140,7 +132,7 @@ Ecliptic CoordOps::toGeocentric (Observer& _obs, const ECI& _eci) {
  * @return Earth Center Innertial
  */
 ECI CoordOps::toECI(double _jd, const Geodetic& _geod) {
-    static const double mfactor = MathOps::TAU * (CoordOps::EARTH_ROTATION_PER_SIDERAL_DAY / TimeOps::SECONDS_PER_DAY);
+    static const double mfactor = MathOps::TAU * (GeoOps::EARTH_ROTATION_PER_SIDERAL_DAY / TimeOps::SECONDS_PER_DAY);
     
     /*
      * Calculate Local Mean Sidereal Time for observers longitude
@@ -150,14 +142,14 @@ ECI CoordOps::toECI(double _jd, const Geodetic& _geod) {
     /*
      * take into account earth flattening
      */
-    const double c = 1.0 / sqrt(1.0 + CoordOps::EARTH_FLATTENING * (CoordOps::EARTH_FLATTENING - 2.0) * pow(sin(_geod.getLatitude(RADS)), 2.0));
-    const double s = pow(1.0 - CoordOps::EARTH_FLATTENING, 2.0) * c;
-    const double achcp = (CoordOps::EARTH_EQUATORIAL_RADIUS_KM * c + _geod.getLatitude(RADS)) * cos(_geod.getLatitude(RADS));
+    const double c = 1.0 / sqrt(1.0 + GeoOps::EARTH_FLATTENING * (GeoOps::EARTH_FLATTENING - 2.0) * pow(sin(_geod.getLatitude(RADS)), 2.0));
+    const double s = pow(1.0 - GeoOps::EARTH_FLATTENING, 2.0) * c;
+    const double achcp = (GeoOps::EARTH_EQUATORIAL_RADIUS_KM * c + _geod.getLatitude(RADS)) * cos(_geod.getLatitude(RADS));
     
     Vector3 position;
     position.x = achcp * cos(theta); // km
     position.y = achcp * sin(theta); // km
-    position.z = (CoordOps::EARTH_EQUATORIAL_RADIUS_KM * s + _geod.getLatitude(RADS)) * sin(_geod.getLatitude(RADS)); // km
+    position.z = (GeoOps::EARTH_EQUATORIAL_RADIUS_KM * s + _geod.getLatitude(RADS)) * sin(_geod.getLatitude(RADS)); // km
     
     Vector3 velocity;
     velocity.x = -mfactor * position.y; // km/s
@@ -313,7 +305,7 @@ Geodetic CoordOps::toGeodetic(const ECI& _eci) {
     const double r = sqrt((_eci.getPosition(KM).x * _eci.getPosition(KM).x)
                           + (_eci.getPosition(KM).y * _eci.getPosition(KM).y));
     
-    static const double e2 = CoordOps::EARTH_FLATTENING * (2.0 - CoordOps::EARTH_FLATTENING);
+    static const double e2 = GeoOps::EARTH_FLATTENING * (2.0 - GeoOps::EARTH_FLATTENING);
     
     double lat = MathOps::actan(_eci.getPosition(KM).z, r);
     double phi = 0.0;
@@ -324,19 +316,16 @@ Geodetic CoordOps::toGeodetic(const ECI& _eci) {
         phi = lat;
         const double sinphi = sin(phi);
         c = 1.0 / sqrt(1.0 - e2 * sinphi * sinphi);
-        lat = MathOps::actan(_eci.getPosition(KM).z + CoordOps::EARTH_EQUATORIAL_RADIUS_KM * c * e2 * sinphi, r);
+        lat = MathOps::actan(_eci.getPosition(KM).z + GeoOps::EARTH_EQUATORIAL_RADIUS_KM * c * e2 * sinphi, r);
         cnt++;
     }
     while (fabs(lat - phi) >= 1e-10 && cnt < 10);
     
-    const double alt = r / cos(lat) - CoordOps::EARTH_EQUATORIAL_RADIUS_KM * c;
+    const double alt = r / cos(lat) - GeoOps::EARTH_EQUATORIAL_RADIUS_KM * c;
     
     return Geodetic(lat, lon, alt, RADS, KM);
 }
 
-Tile CoordOps::toTile(const Geodetic& _geo, int _zoomLevel) {
-    return Tile(_geo, _zoomLevel);
- }
 
 //---------------------------------------------------------------------------- to Horizontal
 /**
