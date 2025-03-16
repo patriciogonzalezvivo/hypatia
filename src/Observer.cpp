@@ -3,8 +3,6 @@
 
 #include "hypatia/MathOps.h"
 #include "hypatia/CoordOps.h"
-#include "hypatia/TimeOps.h"
-#include "hypatia/GeoOps.h"
 
 #include "hypatia/models/VSOP87.h"
 #include <iostream>
@@ -12,8 +10,7 @@
 
 
 Observer::Observer(double _jd) :
-m_locationCity("unknown"),
-m_locationCountry("unknown"),
+m_cityId(0),
 m_jd(0.0),
 m_jcentury(0.0),
 m_obliquity(0.0),
@@ -32,8 +29,7 @@ m_bLocation(false) {
 
 Observer::Observer(const Geodetic& _location, double _jd) :
 m_location(_location),
-m_locationCity("unknown"),
-m_locationCountry("unknown"),
+m_cityId(0),
 m_jd(0.0),
 m_jcentury(0.0),
 m_obliquity(0.0),
@@ -52,8 +48,7 @@ m_bLocation(true) {
 
 Observer::Observer( double _lng_deg, double _lat_deg, double _jd) :
 m_location(_lng_deg, _lat_deg, 0., DEGS, KM),
-m_locationCity("unknown"),
-m_locationCountry("unknown"),
+m_cityId(0),
 m_jd(0.0),
 m_jcentury(0.0),
 m_obliquity(0.0),
@@ -127,8 +122,7 @@ bool Observer::searchLocation(double _lng_deg, double _lat_deg) {
 
     size_t id = GeoOps::findClosestCity(_lng_deg, _lat_deg);
     if (id != 0) {
-        m_locationCity = GeoOps::getCityName(id);
-        m_locationCountry = GeoOps::getCityCountry(id);
+        m_cityId = id;
         setTimezoneIndex(GeoOps::getCityTimezoneIndex(id));
         return true;
     }

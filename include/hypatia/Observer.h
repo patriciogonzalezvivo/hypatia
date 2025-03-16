@@ -9,6 +9,7 @@
 #pragma once
 
 #include "TimeOps.h"
+#include "GeoOps.h"
 #include "coordinates/Geodetic.h"
 
 // * * * * * Observer's Location Info * * * * *
@@ -29,8 +30,10 @@ public:
     virtual void        setTimezoneIndex(size_t _tz);
 
     virtual bool        searchLocation(double _lng_deg, double _lat_deg);
-    virtual std::string getLocationCity() const { return m_locationCity; }
-    virtual std::string getLocationCountry() const { return m_locationCountry; }
+    virtual size_t      getCityId() const { return m_cityId; }
+    virtual std::string getCity() const { return GeoOps::getCityName(m_cityId); }
+    virtual std::string getCountry() const { return GeoOps::getCountryName( GeoOps::getCityCountryIndex(m_cityId) ); }
+    virtual std::string getCountry2LetterCode() const { return GeoOps::getCountry2LetterCode( GeoOps::getCityCountryIndex(m_cityId) ); }
     
     virtual double      getJD() const { return m_jd; }
     virtual double      getJDLocal() const;
@@ -53,9 +56,7 @@ public:
 private:
     Vector3             m_heliocentricLoc;
     Geodetic            m_location;
-    
-    std::string         m_locationCity;
-    std::string         m_locationCountry;
+    size_t              m_cityId;
 
     double              m_jd;
     double              m_jcentury;
