@@ -944,7 +944,7 @@ char* TimeOps::formatTime( double dayFrac, bool doSecs ) {
  * @return ormatted string
  */
 char* TimeOps::formatMS( double _min ) {
-    char *buf = new char[6];
+    char *buf = new char[7];
     sprintf( buf, "%02d:%02.1f", int(_min), (_min - int(_min)) * TimeOps::SECONDS_PER_MINUTE );
     return buf;
 }
