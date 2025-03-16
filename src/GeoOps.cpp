@@ -259,7 +259,7 @@ double GeoOps::getCityLatitude(size_t _index) {
 }
 int GeoOps::getCityAltitudeM(size_t _index) {
     if (_index < CITIES_TOTAL) {
-        return cities_loc[_index][2];
+        return cities_alt[_index];
     }
     return 0;
 }
