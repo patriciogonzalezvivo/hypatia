@@ -117,16 +117,11 @@ void Observer::setTimezoneIndex(size_t _tz) {
 
 
 bool Observer::searchLocation(double _lng_deg, double _lat_deg) {
-    std::cout << "Searching location: " << _lng_deg << ", " << _lat_deg << std::endl;
+    // std::cout << "Searching location: " << _lng_deg << ", " << _lat_deg << std::endl;
     setLocation(Geodetic(_lng_deg, _lat_deg, 0., DEGS, KM));
-
-    size_t id = GeoOps::findClosestCity(_lng_deg, _lat_deg);
-    if (id != 0) {
-        m_cityId = id;
-        setTimezoneIndex(GeoOps::getCityTimezoneIndex(id));
-        return true;
-    }
-    return false;
+    m_cityId = GeoOps::findClosestCity(_lng_deg, _lat_deg);
+    setTimezoneIndex(GeoOps::getCityTimezoneIndex(m_cityId));
+    return m_cityId != 0;
 }
 
 double Observer::getJDLocal() const { 

@@ -176,15 +176,13 @@ double GeoOps::distance(const Geodetic& _g1, const Geodetic& _g2) {
 }
 
 size_t GeoOps::findClosestCity(double _lng, double _lat) {
-    double minDist = 1e10;
+    double minDist = 50.0;
     size_t minIndex = 0;
-    bool found = false;
     for (size_t i = 0; i < CITIES_TOTAL; ++i) {
         double dist = distance(_lng, _lat, cities_loc[i][1] , cities_loc[i][0]);
-        if (dist < minDist) {
+        if (dist < minDist && dist < 1000.0) {
             minDist = dist;
             minIndex = i;
-            found = true;
         }
     }
     return minIndex;
