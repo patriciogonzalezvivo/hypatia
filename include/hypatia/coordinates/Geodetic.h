@@ -1,20 +1,24 @@
 #pragma once
 
 #include "../primitives/Vector3.h"
-#include "UTM.h"
 
 class Geodetic : public Polar {
 public:
     Geodetic();
     Geodetic( double _lng, double _lat, double _alt, ANGLE_UNIT _a_type, DISTANCE_UNIT _alt_unit );
     virtual ~Geodetic();
+
+    virtual void    setLongitude( double _lng, ANGLE_UNIT _type );
+    virtual void    setLatitude( double _lat, ANGLE_UNIT _type );
+    virtual void    setAltitude( double _alt, DISTANCE_UNIT _type );
     
-    virtual double  getLongitude(ANGLE_UNIT _type) const;
-    virtual double  getLatitude(ANGLE_UNIT _type) const;
-    virtual double  getAltitude(DISTANCE_UNIT _type) const;
-    virtual double  getRadius(DISTANCE_UNIT _type) const;
-    
-    virtual Vector3 getVector(DISTANCE_UNIT _type) const;
+    virtual double  getLongitude( ANGLE_UNIT _type ) const;
+    virtual double  getLatitude( ANGLE_UNIT _type ) const;
+    virtual double  getAltitude( DISTANCE_UNIT _type ) const;
+
+    virtual double  getRadius( DISTANCE_UNIT _type ) const;
+
+    virtual Vector3 getVector( DISTANCE_UNIT _type ) const;
     
 protected:
     double m_alt;   // always stored on KM

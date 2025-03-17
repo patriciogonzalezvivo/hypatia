@@ -108,20 +108,27 @@ void Observer::setLocation(const Geodetic &_location) {
     }
 }
 
-void Observer::setTimezoneIndex(size_t _tz) {
-    m_tzIndex = _tz;
-    m_tzOffsetST = GeoOps::tzOffsetInDaysST(_tz);
-    m_tzOffsetDST = GeoOps::tzOffsetInDaysDST(_tz);
+void Observer::setLocation(double _lng_deg, double _lat_deg) {
+    if (m_location.getLongitude(DEGS) != _lng_deg ||
+        m_location.getLatitude(DEGS) != _lat_deg ) {
+        m_location.setLongitude(_lng_deg, DEGS);
+        m_location.setLatitude(_lat_deg, DEGS);
+        m_bLocation = true;
+        update();
+    }
 }
 
-
-
 bool Observer::searchLocation(double _lng_deg, double _lat_deg) {
-    // std::cout << "Searching location: " << _lng_deg << ", " << _lat_deg << std::endl;
     setLocation(Geodetic(_lng_deg, _lat_deg, 0., DEGS, KM));
     m_cityId = GeoOps::findClosestCity(_lng_deg, _lat_deg);
     setTimezoneIndex(GeoOps::getCityTimezoneIndex(m_cityId));
     return m_cityId != 0;
+}
+
+void Observer::setTimezoneIndex(size_t _tz) {
+    m_tzIndex = _tz;
+    m_tzOffsetST = GeoOps::tzOffsetInDaysST(_tz);
+    m_tzOffsetDST = GeoOps::tzOffsetInDaysDST(_tz);
 }
 
 double Observer::getJDLocal() const { 

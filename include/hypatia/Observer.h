@@ -23,6 +23,7 @@ public:
     
     virtual void        setSeconds(unsigned long _sec = 0);
     virtual void        setLocation(const Geodetic& _location);
+    virtual void        setLocation(double _lng_deg, double _lat_deg);
     virtual void        setJD(double _jd);
     virtual void        setJDLocal(double _jd);
 

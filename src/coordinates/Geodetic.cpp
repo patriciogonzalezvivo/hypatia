@@ -20,12 +20,57 @@ Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_UNIT _angles_u
     if ( _alt_unit == KM ) {
         m_alt = _alt;
     }
-    else {
+    else if ( _alt_unit == AU ) {
         m_alt = _alt * CoordOps::AU_TO_KM;
+    }
+    else if ( _alt_unit == LY ) {
+        m_alt = _alt * CoordOps::AU_TO_KM * CoordOps::LY_TO_AU;
+    }
+    else if ( _alt_unit == PC ) {
+        m_alt = _alt * CoordOps::AU_TO_KM * CoordOps::LY_TO_AU * CoordOps::LY_TO_PC;
+    }
+    else {
+        m_alt = _alt;
     }
 }
 
 Geodetic::~Geodetic () {
+}
+
+void Geodetic::setLongitude( double _lng, ANGLE_UNIT _type ) {
+    if ( _type == DEGS ) {
+        m_phi = MathOps::toRadians( _lng );
+    }
+    else {
+        m_phi = _lng;
+    }
+}
+
+void Geodetic::setLatitude( double _lat, ANGLE_UNIT _type ) {
+    if ( _type == DEGS ) {
+        m_theta = MathOps::toRadians( _lat );
+    }
+    else {
+        m_theta = _lat;
+    }
+}
+
+void Geodetic::setAltitude( double _alt, DISTANCE_UNIT _type ) {
+    if ( _type == KM ) {
+        m_alt = _alt;
+    }
+    else if ( _type == AU ) {
+        m_alt = _alt * CoordOps::AU_TO_KM;
+    }
+    else if ( _type == LY ) {
+        m_alt = _alt * CoordOps::AU_TO_KM * CoordOps::LY_TO_AU;
+    }
+    else if ( _type == PC ) {
+        m_alt = _alt * CoordOps::AU_TO_KM * CoordOps::LY_TO_AU * CoordOps::LY_TO_PC;
+    }
+    else {
+        m_alt = _alt;
+    }
 }
 
 double Geodetic::getLongitude ( ANGLE_UNIT _type ) const {
