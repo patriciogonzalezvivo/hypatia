@@ -118,11 +118,21 @@ void Observer::setLocation(double _lng_deg, double _lat_deg) {
     }
 }
 
-bool Observer::searchLocation(double _lng_deg, double _lat_deg) {
+size_t Observer::searchLocation(double _lng_deg, double _lat_deg) {
     setLocation(Geodetic(_lng_deg, _lat_deg, 0., DEGS, KM));
     m_cityId = GeoOps::findClosestCity(_lng_deg, _lat_deg);
     setTimezoneIndex(GeoOps::getCityTimezoneIndex(m_cityId));
-    return m_cityId != 0;
+    return m_cityId;
+}
+
+void Observer::setCityId(size_t _cityId) {
+    if ( _cityId != m_cityId ) {
+        m_cityId = _cityId;
+        m_location = GeoOps::getCityLocation(_cityId);
+        setTimezoneIndex(GeoOps::getCityTimezoneIndex(_cityId));
+        m_bLocation = true;
+        update();
+    }
 }
 
 void Observer::setTimezoneIndex(size_t _tz) {

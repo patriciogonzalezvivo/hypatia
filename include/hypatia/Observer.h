@@ -30,7 +30,9 @@ public:
     virtual void        setTimezone(const char* _tz);
     virtual void        setTimezoneIndex(size_t _tz);
 
-    virtual bool        searchLocation(double _lng_deg, double _lat_deg);
+    virtual size_t      searchLocation(double _lng_deg, double _lat_deg);
+
+    virtual void        setCityId(size_t _cityId);
     virtual size_t      getCityId() const { return m_cityId; }
     virtual std::string getCity() const { return GeoOps::getCityName(m_cityId); }
     virtual std::string getCountry() const { return GeoOps::getCountryName( GeoOps::getCityCountryIndex(m_cityId) ); }
