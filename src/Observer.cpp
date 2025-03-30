@@ -8,6 +8,17 @@
 #include <iostream>
 #include <math.h>
 
+Observer::Observer() :
+m_cityId(0),
+m_jd(0.0),
+m_jcentury(0.0),
+m_obliquity(0.0),
+m_lst(0.0),
+m_tzOffsetST(0.0),
+m_tzOffsetDST(0.0),
+m_tzIndex(0),
+m_bLocation(false) {
+}
 
 Observer::Observer(double _jd) :
 m_cityId(0),

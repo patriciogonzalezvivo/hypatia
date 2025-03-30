@@ -16,7 +16,8 @@
 class Observer {
 public:
     // c'tor: lon & lat are passed in DEGREES
-    Observer(double _jd = 0);
+    Observer();
+    Observer(double _jd);
     Observer(const Geodetic& _location, double _jd = 0);
     Observer(double _lng_deg, double _lat_deg, double _jd = 0);
     virtual ~Observer();
@@ -59,19 +60,19 @@ public:
 private:
     Vector3             m_heliocentricLoc;
     Geodetic            m_location;
-    size_t              m_cityId;
+    size_t              m_cityId    = 0;
 
-    double              m_jd;
-    double              m_jcentury;
-    double              m_obliquity;
-    double              m_lst;
+    double              m_jd        = 0.0;
+    double              m_jcentury  = 0.0;
+    double              m_obliquity = 0.0;
+    double              m_lst       = 0.0;
 
-    double              m_tzOffsetST;
-    double              m_tzOffsetDST;
-    size_t              m_tzIndex;
+    double              m_tzOffsetST    = 0.0;
+    double              m_tzOffsetDST   = 0.0;
+    size_t              m_tzIndex       = 0;
     
-    bool                m_changed;
-    bool                m_bLocation;
+    bool                m_changed   = true;
+    bool                m_bLocation = false;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Observer& o) {
