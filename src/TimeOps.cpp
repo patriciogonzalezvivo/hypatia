@@ -232,13 +232,7 @@ long TimeOps::toJD( int year, int month, int day, CALENDAR_TYPE calendar ) {
  */
 double TimeOps::toJD( int _year,  int _month, int _day, int _hrs, int _min, int _sec, CALENDAR_TYPE _calendar ) {
     double jd = (double)toJD(_year, _month, _day, _calendar);
-    if (_hrs < 12.0) {
-        jd -= MathOps::toDegrees(_hrs, _min, _sec) / 24.0;
-    }
-    else {
-        jd += MathOps::toDegrees(_hrs, _min, _sec) / 24.0 - 0.5;
-    }
-    
+    jd += MathOps::toDegrees(_hrs, _min, _sec) / 24.0 - 0.5;
     return jd;
 }
 
