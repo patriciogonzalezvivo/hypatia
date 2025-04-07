@@ -138,12 +138,11 @@ size_t Observer::searchLocation(double _lng_deg, double _lat_deg) {
         int timezone_number = int( m_location.getLongitude(DEGS) / 15.0);
         std::string timezone_name = "Etc/GMT";
         if ( timezone_number > 0 ) {
-            timezone_name += "-";
+            timezone_name += "-" + std::to_string(abs(timezone_number));
         }
-        else {
-            timezone_name += "+";
+        else if ( timezone_number < 0 ) {
+            timezone_name += "+" + std::to_string(abs(timezone_number));
         }
-        timezone_name += std::to_string(abs(timezone_number));
         setTimezone(timezone_name.c_str());
     } 
     else {
