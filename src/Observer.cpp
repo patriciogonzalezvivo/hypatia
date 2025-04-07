@@ -132,7 +132,23 @@ void Observer::setLocation(double _lng_deg, double _lat_deg) {
 size_t Observer::searchLocation(double _lng_deg, double _lat_deg) {
     setLocation(Geodetic(_lng_deg, _lat_deg, 0., DEGS, KM));
     m_cityId = GeoOps::findClosestCity(_lng_deg, _lat_deg);
-    setTimezoneIndex(GeoOps::getCityTimezoneIndex(m_cityId));
+    if ( m_cityId == 0 ) {
+        // No city found, use the current location and construct the correct timezone "Etc/GMT{+X/-X}" basedo on the longitude
+        
+        int timezone_number = int( m_location.getLongitude(DEGS) / 15.0);
+        std::string timezone_name = "Etc/GMT";
+        if ( timezone_number > 0 ) {
+            timezone_name += "-";
+        }
+        else {
+            timezone_name += "+";
+        }
+        timezone_name += std::to_string(abs(timezone_number));
+        setTimezone(timezone_name.c_str());
+    } 
+    else {
+        setTimezoneIndex(GeoOps::getCityTimezoneIndex(m_cityId));
+    }
     return m_cityId;
 }
 
