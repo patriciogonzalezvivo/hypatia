@@ -16,6 +16,9 @@ Geodetic::Geodetic ( double _lng, double _lat, double _alt, ANGLE_UNIT _angles_u
         m_phi = MathOps::toRadians( _lng );
         m_theta = MathOps::toRadians( _lat );
     }
+
+    m_phi = std::max( std::min( m_phi, MathOps::toRadians( 180.0 ) ), MathOps::toRadians( -180.0 ) );
+    m_theta = std::max( std::min( m_theta, MathOps::toRadians( 90.0 ) ), MathOps::toRadians( -90.0 ) );
     
     if ( _alt_unit == KM ) {
         m_alt = _alt;
