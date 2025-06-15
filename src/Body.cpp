@@ -16,9 +16,9 @@
 #include "hypatia/models/Pluto.h"
 #include "hypatia/models/VSOP87.h"
 
-static char* bodyNames[] = { (char*)"Sun", (char*)"Mer", (char*)"Ven", (char*)"Earth", (char*)"Mar", (char*)"Jup", (char*)"Sat", (char*)"Ur", (char*)"Nep", (char*)"Pl", (char*)"Luna", (char*)"Satellite" };
+static char* bodyNames[] = { (char*)"Sun", (char*)"Mercury", (char*)"Venus", (char*)"Earth", (char*)"Mars", (char*)"Jupiter", (char*)"Saturn", (char*)"Uranus", (char*)"Neptune", (char*)"Pluto", (char*)"Luna", (char*)"Satellite" };
 
-static char* zodiacSigns[] = { (char*)"Ari", (char*)"Tau", (char*)"Gem", (char*)"Cnc", (char*)"Leo", (char*)"Vir", (char*)"Lib", (char*)"Sco", (char*)"Sgr", (char*)"Cap", (char*)"Aqr", (char*)"Psc" };
+static char* zodiacSigns[] = { (char*)"Ari", (char*)"Taurus", (char*)"Gemini", (char*)"Cancer", (char*)"Leo", (char*)"Virgo", (char*)"Libra", (char*)"Scorpion", (char*)"Sagittarius", (char*)"Capricorn", (char*)"Aquarius", (char*)"Pisces" };
 
 //                         Sun,  Mercury, Venus, Earth,  Mars, Jupiter, Saturn, Uranus, Neptune, Pluto,   Moon, Sats
 static double period[] = { 0.0, 0.240846, 0.615,   1.0, 1.881,   11.86,  29.46,  84.01,   164.8, 248.1, 0.0751,  0.0 };
@@ -36,7 +36,7 @@ char*  Body::getName() const {
     return bodyNames[m_bodyId];
 }
 
-char * Body::getZodiacSign() const {
+char* Body::getZodiacSign() const {
     return zodiacSigns[ int((m_geocentric.getLongitude(RADS)/MathOps::TAU)*12.)%12 ];
 }
 
