@@ -7,7 +7,7 @@ hypatia: is an astronomy library based on Mark Huss's and Bill Gray's code. Both
 - add Python package which makes a C++ wrapper usign swig
 """
 
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 import numpy
 
 doc_lines = __doc__.split('\n')

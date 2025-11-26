@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "numpy"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hypatia"
+version = "0.2"
+description = "a Geo-Astronomical library for artist"
+authors = [
+    {name = "Patricio Gonzalez Vivo", email = "patriciogonzalezvivo@gmail.com"}
+]
+license = {text = "BSD"}
+requires-python = ">=3.7"
+dependencies = [
+    "numpy"
+]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
