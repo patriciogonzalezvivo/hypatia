@@ -8,11 +8,12 @@ hypatia: is an astronomy library based on Mark Huss's and Bill Gray's code. Both
 """
 
 from distutils.core import setup, Extension
+import numpy
 
 doc_lines = __doc__.split('\n')
 hypatia_module = Extension(  
   '_hypatia',
-  include_dirs=['include'],
+  include_dirs=['include', numpy.get_include()],
   sources= [ 
     'hypatia_wrap.cxx', 
     'src/primitives/Polar.cpp',
