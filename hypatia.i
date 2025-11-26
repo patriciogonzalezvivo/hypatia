@@ -11,6 +11,8 @@
 %include <std_vector.i>
 %include <std_string.i>
 
+#pragma SWIG nowarn=509
+
 %ignore *::operator[];
 %ignore *::operator=;
 %ignore *::operator==;

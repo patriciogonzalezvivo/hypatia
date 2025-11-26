@@ -191,6 +191,10 @@ std::string Tile::getProviderURL( TileProvider _prov ) const {
 
 double Tile::getMetersPerTile() const { return meters; }
 
+double Tile::getMetersPerTileAt(int zoom) {
+    return GeoOps::getMetersPerTileAt(zoom);
+}
+
 Tile Tile::getTileAtZoom(const int& _zoom) const {
     return zoom(_zoom - z);
 }

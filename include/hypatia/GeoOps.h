@@ -117,7 +117,7 @@ class GeoOps {
     static Geodetic getCityLocation(size_t _index);
 
     static UTM toUTM(double _lng, double _lat);
-    static UTM toUTM(const Geodetic& _g);
+    // static UTM toUTM(const Geodetic& _g);
 
     static Geodetic toGeodetic(const UTM& _utm);
     static Geodetic toGeodetic(const Vector2& _mercator);

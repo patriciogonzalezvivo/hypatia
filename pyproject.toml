@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hypatia"
-version = "0.2"
+version = "0.3"
 description = "a Geo-Astronomical library for artist"
 authors = [
     {name = "Patricio Gonzalez Vivo", email = "patriciogonzalezvivo@gmail.com"}
