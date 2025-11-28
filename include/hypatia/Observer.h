@@ -54,6 +54,9 @@ public:
     virtual std::string getTimezone() const;
     
     virtual Vector3     getHeliocentricVector(DISTANCE_UNIT _type);
+
+    virtual double      getAscendant() const;
+    virtual double      getMidheaven() const;
     
     virtual void        update();
 
