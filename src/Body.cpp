@@ -37,7 +37,9 @@ char*  Body::getName() const {
 }
 
 char* Body::getZodiacSign() const {
-    return zodiacSigns[ int((m_geocentric.getLongitude(RADS)/MathOps::TAU)*12.)%12 ];
+    int deg = MathOps::normalize( getEclipticGeocentric().getLongitude(DEGS), DEGS );
+    int zod = int(deg / 30) % 12;
+    return zodiacSigns[zod];
 }
 
 double Body::getHourAngle(ANGLE_UNIT _type) const {
