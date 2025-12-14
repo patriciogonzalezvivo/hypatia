@@ -226,11 +226,11 @@ double Observer::getAscendant() const {
     double e = getObliquity();
     double lat = getLocation().getLatitude(RADS);
 
-    
-    double x = sin(oL) * cos(e) - tan(lat) * sin(e);
-    double y = -cos(oL);
 
-    double asc_rad = atan2(y, x) + M_PI;
+    double y = cos(oL);
+    double x = -(sin(oL) * cos(e) + tan(lat) * sin(e));
+
+    double asc_rad = atan2(y, x);
 
     return MathOps::normalize(MathOps::toDegrees(asc_rad), DEGS);
 }
@@ -239,7 +239,7 @@ double Observer::getMidheaven() const {
     double oL = getLST();
     double e = getObliquity();
 
-    double mc_rad = atan2( sin(oL) * cos(e), cos(oL) );
+    double mc_rad = atan2( sin(oL), cos(oL) * cos(e));
     return MathOps::normalize(MathOps::toDegrees(mc_rad), DEGS);
 }
 
