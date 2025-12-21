@@ -52,8 +52,6 @@ public:
     // calculate all three location elements of the spec'd body at the given time
     virtual void compute( Observer &_obs );
 
-    virtual double getNorthNode( Observer &_obs, ANGLE_UNIT _type ) const;
-
 private:
     LunarFundamentals m_f;      // our calculated fundmentals
     

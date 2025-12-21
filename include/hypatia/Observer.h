@@ -55,9 +55,10 @@ public:
     
     virtual Vector3     getHeliocentricVector(DISTANCE_UNIT _type);
 
-    virtual double      getAscendant() const;
-    virtual double      getMidheaven() const;
-    
+    virtual double      getAscendant( ANGLE_UNIT _type ) const;
+    virtual double      getMidheaven( ANGLE_UNIT _type ) const;
+    virtual double      getNorthNode( ANGLE_UNIT _type ) const;
+
     virtual void        update();
 
 private:

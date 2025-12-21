@@ -496,20 +496,3 @@ double Luna::getDistance(DISTANCE_UNIT _type) const {
         return m_distance; 
     }
 }; 
-
-double Luna::getNorthNode( Observer &_obs, ANGLE_UNIT _type ) const { // Compute the true ecliptic longitude of the lunar ascending node in the requested unit.
-    const double jd = _obs.getJD(); // Obtain the observer Julian day to anchor the node calculation.
-    const double jCentury = TimeOps::toJC(jd); // Convert the Julian day into Julian centuries referenced to J2000 using TimeOps utilities.
-    const double jCenturySq = jCentury * jCentury; // Precompute the squared Julian century term required by the polynomial model.
-    const double jCenturyCu = jCenturySq * jCentury; // Precompute the cubic Julian century term required by the polynomial model.
-    const double nodeLongitudeDeg = 125.04452 - 1934.136261 * jCentury + 0.0020708 * jCenturySq + jCenturyCu / 450000.0; // Evaluate the mean ecliptic longitude of the lunar ascending node in degrees (Meeus 1998, Ch. 47).
-    const double normalizedLongitudeDeg = MathOps::normalize(nodeLongitudeDeg, DEGS); // Normalize the mean longitude into the canonical 0-360 degree domain.
-    const double a1Deg = MathOps::normalize(119.75 + 131.849 * jCentury, DEGS); // Compute the first periodic argument used to correct the node to its true position.
-    const double a2Deg = MathOps::normalize(53.09 + 479264.29 * jCentury, DEGS); // Compute the second periodic argument used to correct the node to its true position.
-    const double nodeTrueDeg = normalizedLongitudeDeg + 0.0004664 * cos(MathOps::toRadians(a1Deg)) + 0.0000754 * cos(MathOps::toRadians(a2Deg)); // Apply the periodic terms that yield the true (osculating) node longitude.
-    const double normalizedTrueDeg = MathOps::normalize(nodeTrueDeg, DEGS); // Normalize the corrected longitude back into the 0-360 degree range.
-    if (_type == DEGS) { // Return in degrees when the caller specifies DEGS.
-        return normalizedTrueDeg; // Provide the true node longitude in degrees.
-    }
-    return MathOps::toRadians(normalizedTrueDeg); // Convert the normalized true longitude into radians through MathOps helpers.
-}
