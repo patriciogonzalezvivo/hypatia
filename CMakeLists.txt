@@ -2,7 +2,7 @@
 
 # Project name and a few useful settings. Other commands can pick up the results
 project(hypatia
-    VERSION 0.3
+    VERSION 0.4
     DESCRIPTION "a Geo-Astronomical library for artist"
     LANGUAGES CXX)
 

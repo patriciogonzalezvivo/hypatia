@@ -54,7 +54,7 @@ setup(
   name = 'hypatia',
   description = doc_lines[0],
   long_description = '\n'.join(doc_lines[2:]),
-  version     = '0.2',
+  version     = '0.4',
   author      = 'Patricio Gonzalez Vivo',
   author_email = 'patriciogonzalezvivo@gmail.com',
   license     = "BSD",
