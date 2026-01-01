@@ -126,14 +126,14 @@ bool GeoOps::tzIsDST ( double _lat, int _month, int _day) {
             }
         }
         else if ( _month == 11 ) {
-            if ( _day < 1 ) {
+            if ( _day < 8 ) {
                 isDST = true;
             }
         }
     }
     else {
         // Southern Hemisphere
-        if ( _month > 9 && _month < 4 ) {
+        if ( _month > 9 || _month < 4 ) {
             isDST = true;
         }
         else if ( _month == 9 ) {
@@ -142,7 +142,7 @@ bool GeoOps::tzIsDST ( double _lat, int _month, int _day) {
             }
         }
         else if ( _month == 4 ) {
-            if ( _day < 1 ) {
+            if ( _day < 8 ) {
                 isDST = true;
             }
         }

@@ -55,6 +55,7 @@
 %}
 
 %include "numpy.i"
+%include <std_array.i>
 %init %{
     import_array();
 %}
@@ -70,6 +71,7 @@
 %apply int &OUTPUT { int &_hrs, int &_min, int &_sec };
 
 namespace std {
+    %template(DoubleArray12) array<double, 12>;
     %template(IntVector) vector<int>;
     %template(EquatorialVector) vector<Equatorial>;
     %template(TileList) vector<Tile>;

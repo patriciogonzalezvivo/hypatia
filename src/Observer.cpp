@@ -234,6 +234,9 @@ double Observer::getAscendant( ANGLE_UNIT _type ) const {
 
     double asc_rad = atan2(y, x);
 
+    if ( _type == RADS ) {
+        return MathOps::normalize(asc_rad, RADS);
+    }
     return MathOps::normalize(MathOps::toDegrees(asc_rad), DEGS);
 }
 
