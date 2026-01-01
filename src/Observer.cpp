@@ -5,6 +5,8 @@
 #include "hypatia/CoordOps.h"
 
 #include "hypatia/models/VSOP87.h"
+#include <algorithm>
+#include <array>
 #include <iostream>
 #include <math.h>
 
@@ -245,8 +247,6 @@ double Observer::getMidheaven( ANGLE_UNIT _type ) const {
     return MathOps::normalize(MathOps::toDegrees(mc_rad), DEGS);
 }
 
-
-
 double Observer::getNorthNode( ANGLE_UNIT _type ) const { // Compute the true ecliptic longitude of the lunar ascending node in the requested unit.
     const double jd = getJD(); // Obtain the observer Julian day to anchor the node calculation.
     const double jCentury = TimeOps::toJC(jd); // Convert the Julian day into Julian centuries referenced to J2000 using TimeOps utilities.
@@ -264,4 +264,157 @@ double Observer::getNorthNode( ANGLE_UNIT _type ) const { // Compute the true ec
     return MathOps::toRadians(normalizedTrueDeg); // Convert the normalized true longitude into radians through MathOps helpers.
 }
 
-// -----------------------------------------------------------------------------
+std::array<double, 12> Observer::getHousesPlacidus(ANGLE_UNIT _type) const {
+    std::array<double, 12> cusps{};
+
+    if (!haveLocation()) {
+        return cusps;
+    }
+
+    const double ascActual = MathOps::normalize(getAscendant(DEGS), DEGS);
+    const double mcActual = MathOps::normalize(getMidheaven(DEGS), DEGS);
+    const double descActual = MathOps::normalize(ascActual + 180.0, DEGS);
+    const double icActual = MathOps::normalize(mcActual + 180.0, DEGS);
+
+    const double lstDeg = MathOps::normalize(MathOps::toDegrees(getLST()), DEGS);
+    const double obliquity = getObliquity();
+    const double latitude = getLocation().getLatitude(RADS);
+
+    const double sinE = sin(obliquity);
+    const double cosE = cos(obliquity);
+    const double tanPhi = tan(latitude);
+
+    auto toSignedDegrees = [](double degrees) {
+        double normalized = MathOps::normalize(degrees, DEGS);
+        if (normalized > 180.0) {
+            normalized -= 360.0;
+        }
+        return normalized;
+    };
+
+    auto clamp01 = [](double value, double minValue, double maxValue) {
+        return value < minValue ? minValue : (value > maxValue ? maxValue : value);
+    };
+
+    auto placidusEquation = [&](double eclipticLongitudeDeg, double target) {
+        double lambdaNorm = MathOps::normalize(eclipticLongitudeDeg, DEGS);
+        double lambdaRad = MathOps::toRadians(lambdaNorm);
+
+        double sinLambda = sin(lambdaRad);
+        double cosLambda = cos(lambdaRad);
+
+        double alpha = atan2(sinLambda * cosE, cosLambda);
+        double delta = asin(sinLambda * sinE);
+
+        double alphaDeg = MathOps::normalize(MathOps::toDegrees(alpha), DEGS);
+        double hourAngle = toSignedDegrees(lstDeg - alphaDeg);
+
+        double argument = -tanPhi * tan(delta);
+        argument = clamp01(argument, -1.0, 1.0);
+
+        double semiArc = MathOps::toDegrees(acos(argument));
+        return hourAngle - target * semiArc;
+    };
+
+    auto solveCusp = [&](double target, double seed) {
+        const double step = 0.5;
+        double candidate = MathOps::normalize(seed, DEGS);
+
+        auto scan = [&](double width) {
+            double start = seed - width * 0.5;
+            double prevLambda = start;
+            double prevValue = placidusEquation(prevLambda, target);
+            bool prevValid = std::isfinite(prevValue);
+
+            for (double offset = step; offset <= width; offset += step) {
+                double currentLambda = start + offset;
+                double currentValue = placidusEquation(currentLambda, target);
+                bool currentValid = std::isfinite(currentValue);
+
+                if (prevValid && currentValid && prevValue * currentValue <= 0.0) {
+                    double a = prevLambda;
+                    double b = currentLambda;
+                    double fa = prevValue;
+                    double fb = currentValue;
+
+                    for (int i = 0; i < 48; ++i) {
+                        double mid = 0.5 * (a + b);
+                        double fm = placidusEquation(mid, target);
+                        if (!std::isfinite(fm)) {
+                            break;
+                        }
+                        if (std::fabs(fm) < 1e-8) {
+                            a = b = mid;
+                            break;
+                        }
+                        if (fa * fm <= 0.0) {
+                            b = mid;
+                            fb = fm;
+                        } else {
+                            a = mid;
+                            fa = fm;
+                        }
+                    }
+
+                    candidate = MathOps::normalize(0.5 * (a + b), DEGS);
+                    return true;
+                }
+
+                prevLambda = currentLambda;
+                prevValue = currentValue;
+                prevValid = currentValid;
+            }
+            return false;
+        };
+
+        if (!scan(120.0)) {
+            scan(360.0);
+        }
+
+        return candidate;
+    };
+
+    auto normalizeDifference = [&](double from, double to) {
+        return MathOps::normalize(to - from, DEGS);
+    };
+
+    const double arcAscToMc = toSignedDegrees(mcActual - ascActual);
+    const double arcMcToDesc = toSignedDegrees(descActual - mcActual);
+
+    const double guessCusp12 = MathOps::normalize(ascActual + arcAscToMc * (2.0 / 3.0), DEGS);
+    const double guessCusp11 = MathOps::normalize(ascActual + arcAscToMc * (1.0 / 3.0), DEGS);
+    const double guessCusp9 = MathOps::normalize(mcActual + arcMcToDesc * (1.0 / 3.0), DEGS);
+    const double guessCusp8 = MathOps::normalize(mcActual + arcMcToDesc * (2.0 / 3.0), DEGS);
+
+    const double cusp12Actual = solveCusp(-2.0 / 3.0, guessCusp12);
+    const double cusp11Actual = solveCusp(-1.0 / 3.0, guessCusp11);
+    const double cusp9Actual = solveCusp(1.0 / 3.0, guessCusp9);
+    const double cusp8Actual = solveCusp(2.0 / 3.0, guessCusp8);
+
+    const double cusp2Actual = MathOps::normalize(cusp8Actual + 180.0, DEGS);
+    const double cusp3Actual = MathOps::normalize(cusp9Actual + 180.0, DEGS);
+    const double cusp5Actual = MathOps::normalize(cusp11Actual + 180.0, DEGS);
+    const double cusp6Actual = MathOps::normalize(cusp12Actual + 180.0, DEGS);
+
+    std::array<double, 12> absoluteCusps = {
+        ascActual,
+        cusp2Actual,
+        cusp3Actual,
+        icActual,
+        cusp5Actual,
+        cusp6Actual,
+        descActual,
+        cusp8Actual,
+        cusp9Actual,
+        mcActual,
+        cusp11Actual,
+        cusp12Actual
+    };
+
+    for (size_t i = 0; i < absoluteCusps.size(); ++i) {
+        double relativeDeg = normalizeDifference(ascActual, absoluteCusps[i]);
+        cusps[i] = (_type == RADS) ? MathOps::toRadians(relativeDeg) : relativeDeg;
+    }
+
+    return cusps;
+}

@@ -12,6 +12,8 @@
 #include "GeoOps.h"
 #include "coordinates/Geodetic.h"
 
+#include <array>
+
 // * * * * * Observer's Location Info * * * * *
 class Observer {
 public:
@@ -58,6 +60,7 @@ public:
     virtual double      getAscendant( ANGLE_UNIT _type ) const;
     virtual double      getMidheaven( ANGLE_UNIT _type ) const;
     virtual double      getNorthNode( ANGLE_UNIT _type ) const;
+    virtual std::array<double, 12>  getHousesPlacidus( ANGLE_UNIT _type ) const;
 
     virtual void        update();
 
