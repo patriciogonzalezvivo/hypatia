@@ -4,3 +4,4 @@
 build/*
 hypatia_wrap.cxx
 hypatia.py
+hypatia.egg-info/*
