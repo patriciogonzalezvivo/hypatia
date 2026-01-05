@@ -60,6 +60,38 @@ double Body::getPeriod(TIME_UNIT _unit) const {
     }
 }
 
+bool Body::isRetrograde() const {
+    if (m_bodyId == SUN || m_bodyId == LUNA) {
+        return false;
+    }
+
+    // Current geocentric longitude
+    double lng1 = m_geocentric.getLongitude(RADS);
+
+    // Calculate previous position (1 hour earlier)
+    double delta_days = 1.0 / 24.0;
+    double current_jc = m_jcentury;
+    double prev_jc = current_jc - (delta_days / 36525.0);
+    double prev_jd = prev_jc * 36525.0 + 2451545.0;
+
+    Observer prev_obs;
+    prev_obs.setJD(prev_jd);
+
+    Body prev_body(m_bodyId);
+    prev_body.compute(prev_obs);
+
+    double lng0 = prev_body.getEclipticGeocentric().getLongitude(RADS);
+
+    // Calculate difference
+    double diff = lng1 - lng0;
+
+    // Normalize to -PI to PI
+    while (diff <= -MathOps::PI) diff += MathOps::TAU;
+    while (diff > MathOps::PI) diff -= MathOps::TAU;
+
+    return diff < 0.0;
+}
+
 // calculate the data for a given planet, jd, and location
 //
 void Body::compute( Observer& _obs ) {

@@ -36,6 +36,8 @@ public:
     virtual double      getPeriod(TIME_UNIT _unit) const;
     virtual double      getHourAngle(ANGLE_UNIT _type) const;
     
+    virtual bool        isRetrograde() const;
+
     // Heliocentric
     virtual Ecliptic    getEclipticHeliocentric() const { return m_heliocentric; }
 
