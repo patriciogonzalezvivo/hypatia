@@ -48,7 +48,7 @@ public:
     
     virtual bool        haveLocation() const { return m_bLocation; }
     virtual Geodetic    getLocation() const;
-    virtual double      getLST() const;
+    virtual double      getLST(ANGLE_UNIT _type = RADS) const;
 
     virtual double      getTZOffsetST() const { return m_tzOffsetST; }
     virtual double      getTZOffsetDST() const { return m_tzOffsetDST; }

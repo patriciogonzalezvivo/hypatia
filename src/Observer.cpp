@@ -198,9 +198,13 @@ Geodetic Observer::getLocation() const {
     }
 }
 
-double Observer::getLST() const {
+double Observer::getLST(ANGLE_UNIT _type) const {
     if ( haveLocation() ) {
-        return m_lst;
+        if (_type == RADS) {
+            return m_lst;
+        } else {
+            return MathOps::toDegrees(m_lst);
+        }
     }
     else {
         return 0.0;

@@ -360,7 +360,7 @@ Horizontal CoordOps::toHorizontal ( double _lat, double _ha, double _dec) {
 }
 
 /**
- * toEquatorial() - equatorial to horizontal coordinates
+ * toHorizontal() - equatorial to horizontal coordinates
  *                          (Meeus, Ch. 93)
  *
  * @param Observer
