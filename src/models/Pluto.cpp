@@ -155,7 +155,7 @@ void Pluto::calcAllLocs (double& _lon, double& _lat, double& _rad, const double 
     double inc0 = MathOps::toRadians(17.140);           /* inclination, deg */
     double Om0 = MathOps::toRadians(110.307);           /* long asc node, deg */
     double omeg0 = MathOps::toRadians(113.768);         /* arg of perihel, deg */
-    double mjp = 2448045.539 - MJD0;                    /* epoch of perihel */
+    double mjp = 2448045.539;                           /* epoch of perihel */
     double mjeq = TimeOps::J2000;                       /* equinox of elements */
     double n = 144.9600/ TimeOps::DAYS_PER_CENTURY;     /* daily motion, deg */
     
