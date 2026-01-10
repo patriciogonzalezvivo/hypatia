@@ -186,7 +186,11 @@ void Observer::update() {
         m_lst = TimeOps::toLocalSideralTime(m_jd, m_location.getLongitude(RADS), RADS);
     }
     
-    m_changed = true;
+    // Reset cached values
+    m_changed = true; // force heliocentric location update
+    m_ascendant  = -1.0;
+    m_midheaven  = -1.0;
+    m_northNode  = -1.0;
 }
 
 Geodetic Observer::getLocation() const {
@@ -227,59 +231,56 @@ Vector3 Observer::getHeliocentricVector(DISTANCE_UNIT _type) {
 }
 
 // Formula from https://en.wikipedia.org/wiki/Ascendant#Calculation
-double Observer::getAscendant( ANGLE_UNIT _type ) const {
-    double oL = getLST();
-    double e = getObliquity();
-    double lat = getLocation().getLatitude(RADS);
-
-
-    double y = cos(oL);
-    double x = -(sin(oL) * cos(e) + tan(lat) * sin(e));
-
-    double asc_rad = atan2(y, x);
-
-    if ( _type == RADS ) {
-        return MathOps::normalize(asc_rad, RADS);
+double Observer::getAscendant( ANGLE_UNIT _type ) {
+    if ( haveLocation() &&m_ascendant == -1.0 ) {
+        double oL = getLST();
+        double e = getObliquity();
+        double lat = getLocation().getLatitude(RADS);
+        double y = cos(oL);
+        double x = -(sin(oL) * cos(e) + tan(lat) * sin(e));
+        m_ascendant = MathOps::normalize(atan2(y, x), RADS);
     }
-    return MathOps::normalize(MathOps::toDegrees(asc_rad), DEGS);
+
+    return ( _type == RADS )? m_ascendant : MathOps::toDegrees(m_ascendant);
 }
 
-double Observer::getMidheaven( ANGLE_UNIT _type ) const {
-    double oL = getLST();
-    double e = getObliquity();
-    double mc_rad = atan2( sin(oL), cos(oL) * cos(e));
-    if ( _type == RADS ) {
-        return MathOps::normalize(mc_rad, RADS);
+// Formula from https://en.wikipedia.org/wiki/Midheaven
+double Observer::getMidheaven( ANGLE_UNIT _type ) {
+    if ( haveLocation() && m_midheaven == -1.0 ) {   
+        double oL = getLST();
+        double e = getObliquity();
+        m_midheaven = MathOps::normalize( atan2( sin(oL), cos(oL) * cos(e)), RADS);
     }
-    return MathOps::normalize(MathOps::toDegrees(mc_rad), DEGS);
+    return ( _type == RADS )? m_midheaven : MathOps::toDegrees(m_midheaven);
 }
 
-double Observer::getNorthNode( ANGLE_UNIT _type ) const { // Compute the true ecliptic longitude of the lunar ascending node in the requested unit.
-    const double jd = getJD(); // Obtain the observer Julian day to anchor the node calculation.
-    const double jCentury = TimeOps::toJC(jd); // Convert the Julian day into Julian centuries referenced to J2000 using TimeOps utilities.
-    const double jCenturySq = jCentury * jCentury; // Precompute the squared Julian century term required by the polynomial model.
-    const double jCenturyCu = jCenturySq * jCentury; // Precompute the cubic Julian century term required by the polynomial model.
-    const double nodeLongitudeDeg = 125.04452 - 1934.136261 * jCentury + 0.0020708 * jCenturySq + jCenturyCu / 450000.0; // Evaluate the mean ecliptic longitude of the lunar ascending node in degrees (Meeus 1998, Ch. 47).
-    const double normalizedLongitudeDeg = MathOps::normalize(nodeLongitudeDeg, DEGS); // Normalize the mean longitude into the canonical 0-360 degree domain.
-    const double a1Deg = MathOps::normalize(119.75 + 131.849 * jCentury, DEGS); // Compute the first periodic argument used to correct the node to its true position.
-    const double a2Deg = MathOps::normalize(53.09 + 479264.29 * jCentury, DEGS); // Compute the second periodic argument used to correct the node to its true position.
-    const double nodeTrueDeg = normalizedLongitudeDeg + 0.0004664 * cos(MathOps::toRadians(a1Deg)) + 0.0000754 * cos(MathOps::toRadians(a2Deg)); // Apply the periodic terms that yield the true (osculating) node longitude.
-    const double normalizedTrueDeg = MathOps::normalize(nodeTrueDeg, DEGS); // Normalize the corrected longitude back into the 0-360 degree range.
-    if (_type == DEGS) { // Return in degrees when the caller specifies DEGS.
-        return normalizedTrueDeg; // Provide the true node longitude in degrees.
+// Compute the true ecliptic longitude of the lunar ascending node in the requested unit.
+double Observer::getNorthNode( ANGLE_UNIT _type ) { 
+    if ( m_northNode == -1.0 ) {
+        const double jd = getJD(); // Obtain the observer Julian day to anchor the node calculation.
+        const double jCentury = TimeOps::toJC(jd); // Convert the Julian day into Julian centuries referenced to J2000 using TimeOps utilities.
+        const double jCenturySq = jCentury * jCentury; // Precompute the squared Julian century term required by the polynomial model.
+        const double jCenturyCu = jCenturySq * jCentury; // Precompute the cubic Julian century term required by the polynomial model.
+        const double nodeLongitudeDeg = 125.04452 - 1934.136261 * jCentury + 0.0020708 * jCenturySq + jCenturyCu / 450000.0; // Evaluate the mean ecliptic longitude of the lunar ascending node in degrees (Meeus 1998, Ch. 47).
+        const double normalizedLongitudeDeg = MathOps::normalize(nodeLongitudeDeg, DEGS); // Normalize the mean longitude into the canonical 0-360 degree domain.
+        const double a1Deg = MathOps::normalize(119.75 + 131.849 * jCentury, DEGS); // Compute the first periodic argument used to correct the node to its true position.
+        const double a2Deg = MathOps::normalize(53.09 + 479264.29 * jCentury, DEGS); // Compute the second periodic argument used to correct the node to its true position.
+        const double nodeTrueDeg = normalizedLongitudeDeg + 0.0004664 * cos(MathOps::toRadians(a1Deg)) + 0.0000754 * cos(MathOps::toRadians(a2Deg)); // Apply the periodic terms that yield the true (osculating) node longitude.
+        m_northNode = MathOps::normalize(nodeTrueDeg, DEGS); // Normalize the corrected longitude back into the 0-360 degree range.
     }
-    return MathOps::toRadians(normalizedTrueDeg); // Convert the normalized true longitude into radians through MathOps helpers.
+    
+    return ( _type == RADS )? MathOps::toRadians(m_northNode) : m_northNode;
 }
 
-std::array<double, 12> Observer::getHousesPlacidus(ANGLE_UNIT _type) const {
+std::array<double, 12> Observer::getHousesPlacidus(ANGLE_UNIT _type) {
     std::array<double, 12> cusps{};
 
     if (!haveLocation()) {
         return cusps;
     }
 
-    const double ascActual = MathOps::normalize(getAscendant(DEGS), DEGS);
-    const double mcActual = MathOps::normalize(getMidheaven(DEGS), DEGS);
+    const double ascActual = getAscendant(DEGS);
+    const double mcActual = getMidheaven(DEGS);
     const double descActual = MathOps::normalize(ascActual + 180.0, DEGS);
     const double icActual = MathOps::normalize(mcActual + 180.0, DEGS);
 

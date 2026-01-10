@@ -57,10 +57,10 @@ public:
     
     virtual Vector3     getHeliocentricVector(DISTANCE_UNIT _type);
 
-    virtual double      getAscendant( ANGLE_UNIT _type ) const;
-    virtual double      getMidheaven( ANGLE_UNIT _type ) const;
-    virtual double      getNorthNode( ANGLE_UNIT _type ) const;
-    virtual std::array<double, 12>  getHousesPlacidus( ANGLE_UNIT _type ) const;
+    virtual double      getAscendant( ANGLE_UNIT _type );
+    virtual double      getMidheaven( ANGLE_UNIT _type );
+    virtual double      getNorthNode( ANGLE_UNIT _type );
+    virtual std::array<double, 12>  getHousesPlacidus( ANGLE_UNIT _type );
 
     virtual void        update();
 
@@ -73,6 +73,10 @@ private:
     double              m_jcentury  = 0.0;
     double              m_obliquity = 0.0;
     double              m_lst       = 0.0;
+
+    double              m_ascendant  = -1.0;
+    double              m_midheaven  = -1.0;
+    double              m_northNode  = -1.0;
 
     double              m_tzOffsetST    = 0.0;
     double              m_tzOffsetDST   = 0.0;
