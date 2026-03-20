@@ -271,6 +271,48 @@ Geodetic GeoOps::getCityLocation(size_t _index) {
     return Geodetic();
 }
 
+std::string toLower(const std::string& _string) {
+    std::string std = _string;
+    for (int i = 0; _string[i]; i++) {
+        std[i] = tolower(_string[i]);
+    }
+    return std;
+}
+
+size_t GeoOps::findCity(const std::string& _place) {
+    std::string place_lower = toLower(_place);
+
+    size_t best_idx  = 0;
+    size_t best_score = 0;
+
+    for (size_t i = 0; i < GeoOps::CITIES_TOTAL; i++) {
+        std::string city_lower = toLower(GeoOps::getCityName(i));
+        size_t city_len = city_lower.size();
+
+        // Place must start with the city name followed by a space or end of string
+        if (place_lower.size() < city_len)
+            continue;
+        if (place_lower.substr(0, city_len) != city_lower)
+            continue;
+        if (place_lower.size() != city_len && place_lower[city_len] != ' ')
+            continue;
+
+        int score = (int)city_len;
+
+        // Bonus when the country name also appears in the place string
+        std::string country_lower = toLower(GeoOps::getCityCountry(i));
+        if (!country_lower.empty() && place_lower.find(country_lower) != std::string::npos)
+            score += 100;
+
+        if (score > best_score) {
+            best_score = score;
+            best_idx   = i;
+        }
+    }
+
+    return best_idx;
+}
+
 double CalculateESquared(double a, double b) {
     return ((a * a) - (b * b)) / (a * a);
 }

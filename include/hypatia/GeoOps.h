@@ -99,6 +99,7 @@ class GeoOps {
     // Find closest city Index
     static size_t findClosestCity(double _lng, double _lat);
     static size_t findClosestCity(const Geodetic& _g);
+    static size_t findCity(const std::string& _place);
 
     // return City data
     static std::string getCityName(size_t _index);
