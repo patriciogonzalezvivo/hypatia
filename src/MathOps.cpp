@@ -98,7 +98,10 @@ double MathOps::toHrs( double _angle, ANGLE_UNIT _type ) {
 };
 
 //----------------------------------------------------------------------------
-// reduce an angle in degrees to (0 <= d < 360) or (0 <= d << 2PI )
+// normalize() - reduce an angle to its canonical range:
+//   DEGS: [0, 360)   RADS: [0, 2π)
+// Uses MathOps::mod() for the general case; the fast-path check avoids
+// the modulo for angles already in range (common during interpolation).
 //
 double MathOps::normalize ( double _angle, ANGLE_UNIT _type ) {
     
@@ -226,14 +229,28 @@ void MathOps::toHMS ( double _angle, ANGLE_UNIT _type, int &_hrs, int &_min, dou
 }
 
 /**
- * formatAngle(): format angle into a string
+ * formatAngle(): format an angle into a human-readable string.
  *
- * @param angle value
- * @param angle type
- * @param format type
+ * The returned buffer is heap-allocated (new char[32]); the caller is
+ * responsible for deleting it (use delete[]).
  *
- * @return formated string
+ * Format codes:
+ *   Dd    -> "%.1f°" (one decimal degree)
+ *   Ddd   -> "%.2f°" (two decimal degrees)
+ *   Dddd  -> "%.3f°" (three decimal degrees)
+ *   Hs    -> "%.1f°" as hours
+ *   Hss   -> "%.2f°" as hours
+ *   Hsss  -> "%.3f°" as hours
+ *   D_M_Ss -> "± DD° MM' SS.ss\""
+ *   D_Mm   -> "± DD° MM.mm'"
+ *   H_M_Ss -> "± HHhs MMm SS.ssfs"
+ *   H_Mm   -> "± HHhs MM.mmfm"
  *
+ * @param _angle - angle value
+ * @param _type  - DEGS or RADS
+ * @param _fmt   - one of the ANGLE_FMT enumeration values
+ *
+ * @return heap-allocated formatted C-string (caller must delete[])
  */
 char* MathOps::formatAngle ( double _angle, ANGLE_UNIT _type, ANGLE_FMT _fmt ) {
     double degrees = _angle;
@@ -251,7 +268,7 @@ char* MathOps::formatAngle ( double _angle, ANGLE_UNIT _type, ANGLE_FMT _fmt ) {
         sprintf ( buf, "%.2f°", degrees);
         return buf;
     }
-    else if (_fmt == Ddd) {
+    else if (_fmt == Dddd) {
         sprintf ( buf, "%.3f°", degrees);
         return buf;
     }
@@ -337,6 +354,26 @@ double MathOps::asine ( double _angle ) {
         return( asin( _angle ) );
 }
 
+/**
+ * actan() - quadrant-aware arctangent returning a value in [0, 2π).
+ *
+ * Unlike atan2() which returns [-π, π], this function returns an angle
+ * in [0, 2π) matching the SGP4 convention used in satellite propagation.
+ *
+ *   sinx > 0, cosx > 0  ->  result in (0, π/2)
+ *   sinx > 0, cosx < 0  ->  result in (π/2, π)
+ *   sinx < 0, cosx < 0  ->  result in (π, 3π/2)
+ *   sinx < 0, cosx > 0  ->  result in (3π/2, 2π) via negative atan
+ *
+ * Note: the last quadrant (sinx < 0, cosx > 0) returns a negative value
+ * from atan(); callers that need a fully-normalized [0, 2π) result should
+ * call MathOps::normalize() on the output.
+ *
+ * @param sinx - sine component
+ * @param cosx - cosine component
+ *
+ * @return angle in radians in [0, 3π/2] (or negative for 4th quadrant)
+ */
 double MathOps::actan(const double sinx, const double cosx) {
     if (cosx == 0.0) {
         if (sinx > 0.0) {

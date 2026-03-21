@@ -222,6 +222,17 @@ Luna::Luna(): m_age(0.0), m_posAngle(0.0) {
 /**
  * calculate current phase angle in radians (Meeus' easy lower precision method)
  */
+/**
+ * Luna::getPhaseAngle() - compute the Moon's phase angle (angle at Moon
+ *                         between Sun and Earth).
+ *
+ * Uses the elongation D and the five fundamental arguments to apply the
+ * main correction terms.  The result is normalized to [0°, 360°).
+ *
+ * @param _type - DEGS or RADS
+ *
+ * @return phase angle in the requested units
+ */
 double Luna::getPhaseAngle(ANGLE_UNIT _type) {
     double phase = MathOps::normalize(
         180 - MathOps::toDegrees(m_f.D)
@@ -240,16 +251,31 @@ double Luna::getPhaseAngle(ANGLE_UNIT _type) {
     }
 }
 
-//-------------------------------------------------------------------------
+/**
+ * Luna::getPhase() - compute Moon's illuminated fraction.
+ *
+ * Returns a value in [0, 1] where 0 = new moon and 1 = full moon.
+ * Derived from the phase angle: fraction = (1 + cos(phase)) / 2.
+ *
+ * @return illuminated fraction [0 .. 1]
+ */
 double Luna::getPhase() {
     return (1. + cos( getPhaseAngle(RADS) )) / 2.;
 }
 
-//----------------------------------------------------------------------------
-// calculate an individual fundimental
-//  tptr - points to array of doubles
-//  _jcentury - time in decimal Julian centuries
-//
+/**
+ * getFund() - evaluate a 5-term polynomial for one lunar fundamental argument
+ *             and normalize the result to [0, 2π).
+ *
+ * This encapsulates the common "degree + centuries polynomial" pattern used
+ * for L', D, M, M', and F.  The coefficient array must have 5 elements:
+ * [constant_deg, T_coeff, T2_coeff, T3_coeff, T4_coeff].
+ *
+ * @param tptr     - pointer to 5-element coefficient array (degrees)
+ * @param _jcentury - Julian centuries from J2000.0 (T)
+ *
+ * @return fundamental argument in radians, normalized to [0, 2π)
+ */
 double getFund( const double* tptr, double _jcentury ) {
     double d = *tptr++;
     double tpow = _jcentury;
@@ -260,11 +286,28 @@ double getFund( const double* tptr, double _jcentury ) {
     return MathOps::toRadians( MathOps::normalize( d, DEGS ) );
 }
 
-//----------------------------------------------------------------------------
-// calculate the fundamanentals given the vsop.bin data and a time
-//   ad has vsop.bin data
-//   t = decimal julian centuries
-//
+/**
+ * Luna::compute() - compute all lunar quantities for the given Observer.
+ *
+ * Implements the ELP2000-82 truncated series (Meeus, Astronomical Algorithms
+ * Chapter 47) with 60-term longitude/radius series and 60-term latitude series.
+ *
+ * Computed quantities (cached until JC changes):
+ *   - m_geocentric  : ecliptic geocentric position (lng, lat, distance in km)
+ *   - m_heliocentric: ecliptic heliocentric position
+ *   - m_equatorial  : equatorial RA/Dec
+ *   - m_horizontal  : altitude/azimuth (only if observer has a location)
+ *   - m_distance    : geocentric distance in km
+ *   - m_age         : Moon age in days within the synodic month
+ *   - m_posAngle    : illumination position angle (radians)
+ *   - m_ha          : hour angle (radians)
+ *
+ * The eccentricity correction factor e = 1 - 0.002516*T - 0.0000074*T² is
+ * applied to terms that involve the solar mean anomaly M (|m| == 1 multiplied
+ * once, |m| == 2 multiplied twice).
+ *
+ * @param _obs - Observer carrying JD, location, obliquity, and LST
+ */
 void Luna::compute( Observer &_obs ) {
     if (m_jcentury != _obs.getJC()) {
         m_jcentury = _obs.getJC();
@@ -335,15 +378,17 @@ void Luna::compute( Observer &_obs ) {
 
                     rval += term;
                 }
-                rval +=   -2235. * sin( m_f.Lp ) +
-                           382.  * sin( m_f.A3 ) +
-                           175.  * sin( m_f.A1 - m_f.F ) +
-                           175.  * sin( m_f.A1 + m_f.F ) +
-                           127.  * sin( m_f.Lp - m_f.Mp ) -
-                           115.  * sin( m_f.Lp + m_f.Mp );
-
                 tptr++;
             }
+            // Additional latitude correction terms (Meeus Ch.47, Table 47.b)
+            // These corrections are applied once, after summing the 60-term series.
+            rval +=   -2235. * sin( m_f.Lp ) +
+                       382.  * sin( m_f.A3 ) +
+                       175.  * sin( m_f.A1 - m_f.F ) +
+                       175.  * sin( m_f.A1 + m_f.F ) +
+                       127.  * sin( m_f.Lp - m_f.Mp ) -
+                       115.  * sin( m_f.Lp + m_f.Mp );
+
             lat = MathOps::toRadians(rval * 1.e-6);
         }
 

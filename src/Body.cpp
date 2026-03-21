@@ -60,6 +60,19 @@ double Body::getPeriod(TIME_UNIT _unit) const {
     }
 }
 
+/**
+ * Body::isRetrograde() - determine whether this body is currently moving
+ *                        retrograde (westward along the ecliptic).
+ *
+ * Computes the body's geocentric ecliptic longitude both at the current JD
+ * and 1 hour earlier, then checks whether the longitude decreased.
+ * Not applicable for SUN or LUNA (always returns false for these).
+ *
+ * Note: creates a temporary Observer and Body on every call; this is not
+ * performance-critical since retrograde detection is rarely needed every frame.
+ *
+ * @return true if the body is moving retrograde, false otherwise
+ */
 bool Body::isRetrograde() const {
     if (m_bodyId == SUN || m_bodyId == LUNA) {
         return false;
@@ -92,8 +105,29 @@ bool Body::isRetrograde() const {
     return diff < 0.0;
 }
 
-// calculate the data for a given planet, jd, and location
-//
+/**
+ * Body::compute() - compute all position quantities for this body at the
+ *                   Observer's current JD and location.
+ *
+ * Dispatches to the appropriate model:
+ *   - LUNA    : ELP2000-82 truncated via Luna::compute()
+ *   - PLUTO   : Meeus Pluto series via Pluto::calcAllLocs()
+ *   - SUN     : VSOP87 for EARTH, then inverted (geocentric view)
+ *   - Planets : VSOP87 heliocentric, then converted to geocentric
+ *
+ * For the SUN, the VSOP87 result gives the Earth as seen from the Sun;
+ * to get the Sun as seen from Earth: longitude += PI, latitude = -latitude.
+ *
+ * Computed quantities (always updated on each call due to commented-out
+ * JC guard -- uncomment the guard to enable caching):
+ *   - m_heliocentric : ecliptic heliocentric position
+ *   - m_geocentric   : ecliptic geocentric position
+ *   - m_equatorial   : equatorial RA/Dec
+ *   - m_horizontal   : altitude/azimuth (only when observer has a location)
+ *   - m_ha           : hour angle (radians)
+ *
+ * @param _obs - Observer carrying JD, location, obliquity, and LST
+ */
 void Body::compute( Observer& _obs ) {
     // There's a lot of calculating here, but the one we need most often
     // is the last one (AltAzLoc), which depends on all the previous

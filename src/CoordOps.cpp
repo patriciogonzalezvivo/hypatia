@@ -124,12 +124,14 @@ Ecliptic CoordOps::toGeocentric (Observer& _obs, const ECI& _eci) {
 //---------------------------------------------------------------------------- to Earth Center Innertial
 
 /**
- * toECI() - Geodetic to Earth Center Innertial coordinatws
+ * toECI() - Convert Geodetic (lat/lon/alt) coordinates to Earth-Centered
+ *           Inertial (ECI) Cartesian coordinates, accounting for Earth
+ *           oblateness (WGS-84 flattening) and sidereal rotation.
  *
- * @param julian days
- * @param geodetic coordinate
+ * @param _jd   - Julian Day (used to compute Greenwich Sidereal Time)
+ * @param _geod - geodetic coordinate (latitude, longitude, altitude)
  *
- * @return Earth Center Innertial
+ * @return ECI position+velocity in km and km/s
  */
 ECI CoordOps::toECI(double _jd, const Geodetic& _geod) {
     static const double mfactor = MathOps::TAU * (GeoOps::EARTH_ROTATION_PER_SIDERAL_DAY / TimeOps::SECONDS_PER_DAY);
@@ -144,12 +146,13 @@ ECI CoordOps::toECI(double _jd, const Geodetic& _geod) {
      */
     const double c = 1.0 / sqrt(1.0 + GeoOps::EARTH_FLATTENING * (GeoOps::EARTH_FLATTENING - 2.0) * pow(sin(_geod.getLatitude(RADS)), 2.0));
     const double s = pow(1.0 - GeoOps::EARTH_FLATTENING, 2.0) * c;
-    const double achcp = (GeoOps::EARTH_EQUATORIAL_RADIUS_KM * c + _geod.getLatitude(RADS)) * cos(_geod.getLatitude(RADS));
+    const double alt_km = _geod.getAltitude(KM);
+    const double achcp = (GeoOps::EARTH_EQUATORIAL_RADIUS_KM * c + alt_km) * cos(_geod.getLatitude(RADS));
     
     Vector3 position;
     position.x = achcp * cos(theta); // km
     position.y = achcp * sin(theta); // km
-    position.z = (GeoOps::EARTH_EQUATORIAL_RADIUS_KM * s + _geod.getLatitude(RADS)) * sin(_geod.getLatitude(RADS)); // km
+    position.z = (GeoOps::EARTH_EQUATORIAL_RADIUS_KM * s + alt_km) * sin(_geod.getLatitude(RADS)); // km
     
     Vector3 velocity;
     velocity.x = -mfactor * position.y; // km/s
@@ -295,6 +298,15 @@ double CoordOps::toHourAngle( const Observer& _obs, const Equatorial &_equatoria
 
 //---------------------------------------------------------------------------- to Geodetic
 
+/**
+ * toGeodetic() - convert ECI Cartesian coordinates back to Geodetic
+ *                (lat/lon/alt) using an iterative refinement loop that
+ *                converges to better than 1e-10 rad (~0.6 mm on Earth's surface).
+ *
+ * @param _eci - Earth-Centered Inertial position
+ *
+ * @return Geodetic coordinate (lat in rad, lon in rad, alt in km)
+ */
 Geodetic CoordOps::toGeodetic(const ECI& _eci) {
     const double theta = MathOps::actan(_eci.getPosition(KM).y, _eci.getPosition(KM).x);
     
@@ -503,15 +515,22 @@ double CoordOps::earthEccentricity( double _jc ) {
     return 0.016708634 - 0.000042037*_jc - 0.0000001267*_jc*_jc;
 }
 
-/*----------------------------------------------------------------------------
- * The obliquity formula (and all the magic numbers below) come from Meeus,
- * Astro Algorithms p 135.
+/**
+ * meanObliquity() - compute the mean obliquity of the ecliptic (epsilon_0).
  *
- * Input _jcentury is time in julian centuries from 2000.
- * Valid range is the years -8000 to +12000 (t = -100 to 100).
+ * Uses a 10-term polynomial in Julian millennia (u = T/100) valid for
+ * approximately -8000 to +12000 CE (T in range [-100, 100]).
+ * Outside that range the result is clamped to the boundary values.
  *
- * return value is mean obliquity (epsilon sub 0) in radians.
+ * The function caches its last result via a static variable: if called
+ * with the same _jcentury it returns immediately without recomputing.
+ * This is not thread-safe but is fine for single-threaded use.
  *
+ * (Meeus, Astronomical Algorithms, p. 135; Bill Gray's lunar library)
+ *
+ * @param _jcentury - Julian centuries from J2000.0
+ *
+ * @return mean obliquity epsilon_0 in radians
  */
 double CoordOps::meanObliquity( double _jcentury ){
     //
@@ -587,6 +606,12 @@ void CoordOps::nutation( double jd, double* pDPhi, double* pDEpsilon ) {
     
     static const int N_NUTATION_COEFFS = 62;
     
+    // Each row encodes: [base-5 argument multipliers | dpsi_coeff | deps_coeff]
+    // The first element encodes multipliers for the 5 fundamental arguments
+    // (Omega, L, Lp, F, D) packed as a base-5 number where digit d maps to
+    // multiplier (d - 2), i.e.: 0->-2, 1->-1, 2->0, 3->+1, 4->+2.
+    // The second element is the dpsi coefficient (0.1 arcsec units, before t correction).
+    // The third element is the deps coefficient (0.1 arcsec units, before t correction).
     static const int args[N_NUTATION_COEFFS][3] = {
         {  324,-13187,5736 },
         { 1574, -2274, 977 },
@@ -715,12 +740,16 @@ void CoordOps::nutation( double jd, double* pDPhi, double* pDEpsilon ) {
 }
 
 /**
- * anomaly() - calculate delta phi and/or delta epsilon for the given jd
+ * anomaly() - solve Kepler's equation for true and eccentric anomaly.
+ *              Handles both elliptical (e < 1) and hyperbolic (e >= 1) cases.
+ *              Uses iterative Newton-Raphson with a runaway correction guard
+ *              for high eccentricity near M=0.
+ *              (Meeus, Ch. 30)
  *
- * @param - mean anomaly of elliptical motion (rad),
- * @param - eccentricity of elliptical motion (rad),
- * @param - return true anomaly (rad)
- * @param - return eccentrict anomaly (rad),
+ * @param _mean_anomaly    - mean anomaly M (radians)
+ * @param _eccentricity    - orbital eccentricity e (dimensionless)
+ * @param _true_anomaly    - [out] true anomaly v (radians)
+ * @param _eccentrict_anomaly - [out] eccentric anomaly E (radians; or F for hyperbolic)
  */
 void CoordOps::anomaly (double _mean_anomaly, double _eccentricity, double* _true_anomaly, double* _eccentrict_anomaly) {
     double m, fea, corr;
