@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <string>
 
 // In-class constants cannot be initialized in the class declaration. Sigh.
 //
@@ -252,37 +253,37 @@ void MathOps::toHMS ( double _angle, ANGLE_UNIT _type, int &_hrs, int &_min, dou
  *
  * @return heap-allocated formatted C-string (caller must delete[])
  */
-char* MathOps::formatAngle ( double _angle, ANGLE_UNIT _type, ANGLE_FMT _fmt ) {
+std::string MathOps::formatAngle ( double _angle, ANGLE_UNIT _type, ANGLE_FMT _fmt ) {
     double degrees = _angle;
     if ( _type == RADS) {
         degrees = MathOps::toDegrees(_angle);
     }
     
-    char *buf = new char[32];
+    char buf[32] = {};
     
     if (_fmt == Dd) {
-        sprintf ( buf, "%.1f°", degrees);
-        return buf;
+        sprintf ( buf, "%.1f\xc2\xb0", degrees);
+        return std::string(buf);
     }
     else if (_fmt == Ddd) {
-        sprintf ( buf, "%.2f°", degrees);
-        return buf;
+        sprintf ( buf, "%.2f\xc2\xb0", degrees);
+        return std::string(buf);
     }
     else if (_fmt == Dddd) {
-        sprintf ( buf, "%.3f°", degrees);
-        return buf;
+        sprintf ( buf, "%.3f\xc2\xb0", degrees);
+        return std::string(buf);
     }
     else if (_fmt == Hs) {
-        sprintf ( buf, "%.1f°", toHrs(degrees, DEGS));
-        return buf;
+        sprintf ( buf, "%.1f\xc2\xb0", toHrs(degrees, DEGS));
+        return std::string(buf);
     }
     else if (_fmt == Hss) {
-        sprintf ( buf, "%.2f°", toHrs(degrees, DEGS));
-        return buf;
+        sprintf ( buf, "%.2f\xc2\xb0", toHrs(degrees, DEGS));
+        return std::string(buf);
     }
     else if (_fmt == Hsss) {
-        sprintf ( buf, "%.3f°", toHrs(degrees, DEGS));
-        return buf;
+        sprintf ( buf, "%.3f\xc2\xb0", toHrs(degrees, DEGS));
+        return std::string(buf);
     }
     
     int first, m;
@@ -319,7 +320,7 @@ char* MathOps::formatAngle ( double _angle, ANGLE_UNIT _type, ANGLE_FMT _fmt ) {
             break;
     }
     
-    return buf;
+    return std::string(buf);
 }
 
 /**

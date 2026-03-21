@@ -1,8 +1,8 @@
 #pragma once
 
-#include "coordinates/Equatorial.h"
-
+#include <string>
 #include <vector>
+#include "coordinates/Equatorial.h"
 
 class Constellation {
 public:
@@ -18,8 +18,8 @@ public:
     void        setId( int _id );
     int         getId() const { return m_id; }
 
-    char*       getName() const;
-    char*       getAbbreviation() const;
+    std::string getName() const;
+    std::string getAbbreviation() const;
 
     Equatorial  getEquatorialCentroid() const { return m_centroid; }
 

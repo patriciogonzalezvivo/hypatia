@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "coordinates/Equatorial.h"
 #include "coordinates/Horizontal.h"
 #include "coordinates/PrecessionMatrix.h"
@@ -25,7 +26,7 @@ public:
     virtual int         getId() const { return m_id; };
 
     virtual int         getHIP() const;
-    virtual char*       getName() const;
+    virtual std::string getName() const;
 
     virtual double      getMagnitud() const;
     

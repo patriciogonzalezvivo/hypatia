@@ -1,5 +1,7 @@
 #include "hypatia/Constellation.h"
 
+#include <string>
+
 #include "hypatia/CoordOps.h"
 #include "hypatia/TimeOps.h"
 
@@ -959,21 +961,16 @@ void Constellation::setId( int _id ) {
  * return "???: ????" if id is invalid.
  */
 
-char* Constellation::getName() const {
+std::string Constellation::getName() const {
     if ( m_id < 0 ) {
-        return ((char*)"????");
+        return std::string("????");
     }
-    int len = strlen(cns_namemap[m_id]);// / sizeof(cns_namemap[m_id][0]); //strlen(cns_namemap[m_id]);
-    char *cstr = new char[len];
-    strncpy(cstr, cns_namemap[m_id]+5, len);
-    return cstr;
+    return std::string(cns_namemap[m_id] + 5);
 }
 
-char* Constellation::getAbbreviation() const {
+std::string Constellation::getAbbreviation() const {
     if ( m_id < 0 ) {
-        return ((char*)"???");
+        return std::string("???");
     }
-    char *cstr = new char[3];
-    strncpy(cstr, cns_namemap[m_id], 3);
-    return cstr;
+    return std::string(cns_namemap[m_id], 3);
 }

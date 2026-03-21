@@ -1,5 +1,7 @@
 #include "hypatia/TimeOps.h"
 
+#include <string>
+
 #include "hypatia/CoordOps.h"
 
 #include <math.h>
@@ -929,10 +931,10 @@ int formatHMS( char* buf, double dayFrac, bool doSecs ) {
  *
  * @return formated string
  */
-char* TimeOps::formatTime( double dayFrac, bool doSecs ) {
-    char *buf = new char[9];
+std::string TimeOps::formatTime( double dayFrac, bool doSecs ) {
+    char buf[9];
     formatHMS( buf, dayFrac, doSecs );
-    return buf;
+    return std::string(buf);
 }
 
 
@@ -943,10 +945,10 @@ char* TimeOps::formatTime( double dayFrac, bool doSecs ) {
  *
  * @return ormatted string
  */
-char* TimeOps::formatMS( double _min ) {
-    char *buf = new char[7];
+std::string TimeOps::formatMS( double _min ) {
+    char buf[7];
     sprintf( buf, "%02d:%02.1f", int(_min), (_min - int(_min)) * TimeOps::SECONDS_PER_MINUTE );
-    return buf;
+    return std::string(buf);
 }
 
 //----------------------------------------------------------------------------
@@ -958,8 +960,8 @@ char* TimeOps::formatMS( double _min ) {
  *
  * @return formatted string
  */
-char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
-    char *clientBuf = new char[32];
+std::string TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
+    char clientBuf[32] = { 0 };
     
     int d, m, y;
     char tbuf[16] = { 0 };
@@ -1024,7 +1026,7 @@ char* TimeOps::formatDateTime( double _jd, DATE_FMT _fmt ) {
             *clientBuf = 0;
     };
     
-    return clientBuf;
+    return std::string(clientBuf);
 }
 
 

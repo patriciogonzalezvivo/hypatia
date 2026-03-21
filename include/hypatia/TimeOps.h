@@ -2,6 +2,7 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <string>
 
 #include "MathOps.h"
 #include "primitives/DateTime.h"
@@ -192,7 +193,7 @@ struct TimeOps {
      *
      * @return formated string
      */
-    static char* formatTime ( double _dayFrac, bool _doSecs = false );
+    static std::string formatTime ( double _dayFrac, bool _doSecs = false );
 
     /**
      * dayToHMS(): break the fractional part of a Julian day into hours, minutes,
@@ -264,7 +265,7 @@ struct TimeOps {
      *
      * @return formatted string
      */
-    static char* formatDateTime ( double _jd, DATE_FMT _fmt );
+    static std::string formatDateTime ( double _jd, DATE_FMT _fmt );
 
     /**
      * formatMS(): format a fractional minute into a text string (MM:SS.S)
@@ -273,7 +274,7 @@ struct TimeOps {
      *
      * @return ormatted string
      */
-    static char* formatMS( double _min );
+    static std::string formatMS( double _min );
     
     
     /**

@@ -9,6 +9,8 @@
 #pragma once
 #undef PI
 
+#include <string>
+
 enum DISTANCE_UNIT {
     KM, AU, LY, PC
 };
@@ -139,7 +141,7 @@ struct MathOps {
      * @return formated string
      *
      */
-    static char* formatAngle ( double _angle, ANGLE_UNIT _type, ANGLE_FMT _format );
+    static std::string formatAngle ( double _angle, ANGLE_UNIT _type, ANGLE_FMT _format );
       
     /**
      * normalize(): reduce an angle to the range (0 <= d < 360 or 0 <= d << TAO)

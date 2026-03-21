@@ -1,5 +1,7 @@
 #include "hypatia/Star.h"
 
+#include <string>
+
 #include "hypatia/CoordOps.h"
 #include <string.h>
 
@@ -1722,14 +1724,10 @@ int Star::getHIP() const {
     return sts_hip[m_id];
 }
 
-char*  Star::getName() const {
+std::string Star::getName() const {
     if ( m_id < 0 || m_id >= N_STARS )
-        return ((char*)"????");
-    
-    int len = strlen(sts_name[m_id]);
-    char *cstr = new char[len];
-    strncpy(cstr, sts_name[m_id]+5, len);
-    return cstr;
+        return std::string("????");
+    return std::string(sts_name[m_id] + 5);
 }
 
 double Star::getParalax() const {
