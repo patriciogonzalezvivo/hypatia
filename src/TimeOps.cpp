@@ -130,6 +130,12 @@ unsigned long TimeOps::nowSeconds() {
  * @return The Julian Day value
  */
 double TimeOps::now( TIME_TYPE _type ) {
+    if (_type == UTC) {
+        // Use sub-second precision to avoid discrete 1-second jumps in real-time mode
+        auto tp = std::chrono::system_clock::now();
+        double seconds = std::chrono::duration<double>(tp.time_since_epoch()).count();
+        return seconds / SECONDS_PER_DAY + JULIAN_EPOCH;
+    }
     return toJD( time(0), _type ) - TimeOps::JD_DIFF;
 }
 
