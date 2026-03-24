@@ -23,8 +23,8 @@ public:
 
     Equatorial  getEquatorialCentroid() const { return m_centroid; }
 
-    std::vector<int>        getStarIndices() const { return m_sIndices; }
-    std::vector<Equatorial> getBoundary() const { return m_boundary; }
+    const std::vector<int>&        getStarIndices() const { return m_sIndices; }
+    const std::vector<Equatorial>& getBoundary() const { return m_boundary; }
 
 protected:
     int                     m_id;
