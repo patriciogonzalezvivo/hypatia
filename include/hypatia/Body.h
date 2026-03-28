@@ -69,6 +69,7 @@ protected:
     BodyId      m_bodyId;
     
     bool        m_bHorizontal;
+    bool        m_retrograde;
 };
 
 inline std::ostream& operator<<(std::ostream& strm, const Body& b) {

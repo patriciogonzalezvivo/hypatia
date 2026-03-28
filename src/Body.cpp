@@ -23,10 +23,10 @@ static char* zodiacSigns[] = { (char*)"Ari", (char*)"Taurus", (char*)"Gemini", (
 //                         Sun,  Mercury, Venus, Earth,  Mars, Jupiter, Saturn, Uranus, Neptune, Pluto,   Moon, Sats
 static double period[] = { 0.0, 0.240846, 0.615,   1.0, 1.881,   11.86,  29.46,  84.01,   164.8, 248.1, 0.0751,  0.0 };
 
-Body::Body() : m_jcentury(0.0), m_ha(0.0), m_bodyId( NAB ) {
+Body::Body() : m_jcentury(0.0), m_ha(0.0), m_bodyId(NAB), m_retrograde(false) {
 }
 
-Body::Body( BodyId _body ) : m_jcentury(0.0), m_ha(0.0), m_bodyId( _body ) {
+Body::Body( BodyId _body ) : m_jcentury(0.0), m_ha(0.0), m_bodyId(_body), m_retrograde(false) {
 }
 
 Body::~Body() {
@@ -74,35 +74,7 @@ double Body::getPeriod(TIME_UNIT _unit) const {
  * @return true if the body is moving retrograde, false otherwise
  */
 bool Body::isRetrograde() const {
-    if (m_bodyId == SUN || m_bodyId == LUNA) {
-        return false;
-    }
-
-    // Current geocentric longitude
-    double lng1 = m_geocentric.getLongitude(RADS);
-
-    // Calculate previous position (1 hour earlier)
-    double delta_days = 1.0 / 24.0;
-    double current_jc = m_jcentury;
-    double prev_jc = current_jc - (delta_days / 36525.0);
-    double prev_jd = prev_jc * 36525.0 + 2451545.0;
-
-    Observer prev_obs;
-    prev_obs.setJD(prev_jd);
-
-    Body prev_body(m_bodyId);
-    prev_body.compute(prev_obs);
-
-    double lng0 = prev_body.getEclipticGeocentric().getLongitude(RADS);
-
-    // Calculate difference
-    double diff = lng1 - lng0;
-
-    // Normalize to -PI to PI
-    while (diff <= -MathOps::PI) diff += MathOps::TAU;
-    while (diff > MathOps::PI) diff -= MathOps::TAU;
-
-    return diff < 0.0;
+    return m_retrograde;
 }
 
 /**
@@ -133,8 +105,9 @@ void Body::compute( Observer& _obs ) {
     // is the last one (AltAzLoc), which depends on all the previous
     // calculations
     //
-    // if (m_jcentury != _obs.getJC()) 
-    {
+    if (m_jcentury != _obs.getJC()) {
+        double prevJC  = m_jcentury;
+        double prevLng = (m_bodyId != SUN && m_bodyId != LUNA) ? m_geocentric.getLongitude(RADS) : 0.0;
         m_jcentury = _obs.getJC();
 
         // choose appropriate method, based on planet
@@ -189,6 +162,16 @@ void Body::compute( Observer& _obs ) {
             m_horizontal[0] = 0.0;
             m_horizontal[1] = 0.0;
             m_bHorizontal = false;
+        }
+
+        // Cache retrograde status using consecutive-longitude comparison (no extra allocations)
+        if (m_bodyId != SUN && m_bodyId != LUNA && prevJC != 0.0) {
+            double currLng = m_geocentric.getLongitude(RADS);
+            double diff = currLng - prevLng;
+            while (diff <= -MathOps::PI) diff += MathOps::TAU;
+            while (diff > MathOps::PI)  diff -= MathOps::TAU;
+            double dt = m_jcentury - prevJC;
+            m_retrograde = (dt > 0.0) ? (diff < 0.0) : (diff > 0.0);
         }
     }
 }
